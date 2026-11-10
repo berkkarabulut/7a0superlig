@@ -364,8 +364,8 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .bench2.hov{border-color:var(--teal);background:#00c2a822}
 .grip{color:var(--mut);font-size:14px;cursor:grab}
 .dragging{opacity:.35}
-.ghost{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%) scale(1.08);opacity:.92;left:-999px;top:-999px;filter:drop-shadow(0 8px 12px #000a)}
-.ghost.slot{width:80px}
+.dragghost{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%) scale(1.08);opacity:.92;left:-999px;top:-999px;filter:drop-shadow(0 8px 12px #000a)}
+.dragghost.slot{width:80px}
 
 .ht,#lpbox{user-select:none;-webkit-user-select:none}
 @media(max-width:700px){
@@ -376,6 +376,12 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
   .lp .slot .nm{font-size:9.5px;max-width:74px}
   .lp .slot .tm{font-size:9px}
   .slot .prev{font-size:10px}
+}
+
+@media(max-width:700px){
+  .grid.draft .draw{flex-direction:column;align-items:stretch}
+  .grid.draft .drawbtns{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;width:100%;height:auto;flex:none}
+  .grid.draft .drawbtns .btn{flex:none;width:100%;min-height:44px;font-size:14px;padding:8px 6px}
 }
 </style>
 </head>
@@ -1121,7 +1127,7 @@ function enableDrag(root, onDrop, onTap){
       const src=el.dataset.drag, sx=e.clientX, sy=e.clientY; let ghost=null, hov=null;
       try { el.setPointerCapture(e.pointerId); } catch(_){}
       const target = ev => { const x=document.elementFromPoint(ev.clientX,ev.clientY); return x && x.closest ? x.closest("[data-drop]") : null; };
-      const move = ev => { if (!ghost && Math.hypot(ev.clientX-sx, ev.clientY-sy) > 8){ ghost=el.cloneNode(true); ghost.classList.add("ghost"); ghost.style.width=el.offsetWidth+"px"; document.body.appendChild(ghost); el.classList.add("dragging"); }
+      const move = ev => { if (!ghost && Math.hypot(ev.clientX-sx, ev.clientY-sy) > 8){ ghost=el.cloneNode(true); ghost.classList.add("dragghost"); ghost.style.width=el.offsetWidth+"px"; document.body.appendChild(ghost); el.classList.add("dragging"); }
         if (ghost){ ev.preventDefault(); ghost.style.left=ev.clientX+"px"; ghost.style.top=ev.clientY+"px";
           if (ev.clientY < 70) window.scrollBy(0,-14); else if (ev.clientY > window.innerHeight-70) window.scrollBy(0,14); const tg=target(ev); if (tg!==hov){ hov?.classList.remove("hov"); hov=tg; if (hov && hov!==el) hov.classList.add("hov"); } } };
       const end = ev => { el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", end); el.removeEventListener("pointercancel", cancel);

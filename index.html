@@ -375,8 +375,9 @@ const DATA = {"1980-81": [{"team": "Trabzonspor", "rank": 1, "note": "Şampiyon"
 
 // ---------- havuz ----------
 const POOL = [];
+function rankNote(season, rank){ return rank===1 ? `${season} sezonunu şampiyon bitirdi` : `${season} sezonunu ${rank}. bitirdi`; }
 for (const [season, teams] of Object.entries(DATA))
-  for (const t of teams) POOL.push({ season, team: t.team, rank: t.rank, note: t.note, players: t.players, id: season+"|"+t.team });
+  for (const t of teams) POOL.push({ season, team: t.team, rank: t.rank, note: rankNote(season, t.rank), players: t.players, id: season+"|"+t.team });
 
 const FORMATIONS = {
   "4-3-3": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["CM",27,48],["DM",50,56],["CM",73,48],["LW",16,22],["ST",50,15],["RW",84,22]],
@@ -512,7 +513,7 @@ function pickRef(season){ const y=+season.slice(0,4)+1; const c=REFS.filter(([,a
 const BENCH_SLOTS = ["BGK","BDF","BDF","BMF","BMF","BFW","BFW"];
 const MAXSUBS = 5;
 // zorluk eğrisi: grupta biraz destek, elemelerde turnuva baskısı (+ bize, - rakibe)
-let STAGE_BOOST = [1.5,1.5,1.5,-1.3,-2.2,-3.1,-4];
+let STAGE_BOOST = [3.2,3.2,3.2,-0.9,-1.6,-2.3,-3];
 const TALKS = [
   {t:"Sakin olun, kendi oyunumuzu oynayalım", e:"🧘", fx:{fav:[.4,.55,.05],even:[.4,.52,.08],dog:[.28,.6,.12]}},
   {t:"Bu maçı kazanmak zorundayız, sahada ölün!", e:"🔥", big:true, fx:{fav:[.25,.4,.35],even:[.45,.35,.2],dog:[.6,.25,.15]}},
@@ -677,6 +678,8 @@ function canPick(p){
 function minRest(extra){ return Math.max(0, S.slots.filter(s=>!s.p).length - extra); } // her boş yer için en az 1 M kalsın
 function pick(i){
   const p = S.cur.players[i]; if(!canPick(p)) return;
+  if (S.phase==="bench"){ let si = S.bench.findIndex(s=>!s.p && natural(p,s.pos)); if (si<0) si = S.bench.findIndex(s=>!s.p && fits(p,s.pos)); if (si<0) return;
+    S.sel = i; S.lastBench = p.n; return place(si); }
   S.sel = (S.sel===i) ? null : i; renderDraft();
 }
 function place(si){
@@ -694,7 +697,7 @@ function place(si){
   if (S.phase==="bench" && S.bench.every(s=>s.p)) return renderReady();
   roll();
 }
-function startBench(){ S.phase="bench"; S.bench = BENCH_SLOTS.map(pos=>({pos,p:null})); S.rerolls = REROLLS; S.forced=false; roll(); }
+function startBench(){ S.lastBench=null; S.phase="bench"; S.bench = BENCH_SLOTS.map(pos=>({pos,p:null})); S.rerolls = REROLLS; S.forced=false; roll(); }
 function skipBench(){ S.bench = S.bench.filter(s=>s.p); renderReady(); }
 const anyPickable = () => S.cur.players.some(canPick);
 const showR = r => S.almanac ? "?" : r;
@@ -733,6 +736,7 @@ function renderDraft(){
         <button class="btn ${(free||noNatural)&&S.rerolls>0?"blink":"ghost"}" onclick="reroll()" ${S.rerolls<=0?"disabled":""}>${S.rerolls>0?`🎲 Yeniden çek (${S.rerolls} hak)`:"Yeniden çekme hakkın bitti"}</button></div>
       </div>
       ${S.mode==="daily"?`<p>Bütçe: <span class="budget ${S.spent>DAILY_BUDGET?"over":""}">${S.spent} / ${DAILY_BUDGET} M</span> <span class="mut">· kalan ${DAILY_BUDGET-S.spent} M</span></p>`:""}
+      ${bp&&S.lastBench?`<div class="tacnote good" style="margin-bottom:8px">✓ ${esc(S.lastBench)} yedek kulübesine eklendi</div>`:""}
       <div id="restartbox"></div>
       ${S.forced?`<div class="card hint"><b>Bu takımdan hiçbir oyuncu boş yerlerine uymuyor ve yeniden çekme hakkın bitti.</b> İstediğin oyuncuyu istediğin boş yere zorunlu koyabilirsin: oyuncu −${FORCED} olur, takım gücü −${TEAM_OFF} düşer.</div>`:""}
       ${free&&S.rerolls>0?`<div class="card hint">Bu takımda boş yerlerine konabilecek oyuncu yok. <b>Yeniden çek (${S.rerolls} hak).</b></div>`:""}
@@ -751,7 +755,7 @@ function renderDraft(){
           <span class="rt">${inSquad(p.n)?'<span class="tag in">Kadronda</span>':canPick(p)?(natOK(p)?'<span class="tag ok">✓</span>':`<span class="tag nr">−${S.forced?FORCED:OFFPOS}</span>`):""}<span class="rv ${tier(p.r)}">${showR(p.r)}</span>${S.mode==="daily"?`<span class="price">${price(p.r)} M</span>`:""}</span>
         </button>`).join("")}</div>
       <div class="row" style="margin:8px 0"><button class="chip" onclick="openMultiReport('${esc(t.season)}','${esc(t.team).replace(/'/g,"\\'")}')">🚩 Bu kadroda hata bildir</button></div>
-      <p class="mut" style="font-size:13px">Boş yerler: ${[...openPos()].join(", ")} · Oyuncuya dokun, sahada nereye koyacağını seç. Sarı: asıl mevkisi. Turuncu: mevki dışı (oyuncu −${OFFPOS}, takım gücü −${TEAM_OFF}). Kadro başına ${REROLLS} yeniden çekme hakkın var.</p>
+      <p class="mut" style="font-size:13px">Boş yerler: ${[...openPos()].join(", ")} · ${bp?"Yedek seçerken oyuncuya dokunman yeter, kulübede uygun yere kendisi geçer.":"Oyuncuya dokun, sahada nereye koyacağını seç."} Sarı: asıl mevkisi. Turuncu: mevki dışı (oyuncu −${OFFPOS}, takım gücü −${TEAM_OFF}). Kadro başına ${REROLLS} yeniden çekme hakkın var.</p>
       ${S.almanac?"":`<div class="legend"><span class="rv r90">90+</span><span class="rv r87">87-89</span><span class="rv r84">84-86</span><span class="rv r80">80-83</span><span class="rv r70">&lt;80</span></div>`}
     </div>
     <div class="side">${pitchHTML()}${bp?benchHTML():""}${statsHTML()}</div>
@@ -830,7 +834,7 @@ function scorer(pl){
   for (let i=0;i<pl.length;i++){ r-=w[i]; if(r<=0) return pl[i]; }
   return pl[0];
 }
-const lam = (att,def) => Math.max(0.15, Math.min(4.5, 1.25*Math.exp((att-def)/7)));
+const lam = (att,def) => { const d=att-def, k=d/9 + Math.sign(d)*Math.max(0,Math.abs(d)-6)*0.03; return Math.max(0.2, Math.min(2.7, 1.08*Math.exp(k))); };
 function simGoals(A,B,pa,pb){
   const g1 = poisson(lam(A.att,B.def)), g2 = poisson(lam(B.att,A.def));
   const ev = [...Array(g1)].map(()=>({m:1+Math.floor(Math.random()*90),side:0,p:scorer(pa)}))
@@ -881,8 +885,8 @@ function makeMatch(A,B,pa,pb,o={}){
   const defOf = (s,m) => (s?B.def:A.def)+adj[s]+ment[s].def-late(s,m);
   const step = (m, mult) => { for (const s of [0,1]) { const o2=1-s;
       if (m===61 && STYLES[sty[s]]?.late && !tired[s]){ tired[s]=true; ev.push({m,side:s,type:"flow",text:T("tired",{t:tn[s]})}); }
-      const f = Math.pow(0.65,red[s]) * Math.pow(1.4,red[o2]) * mult;
-      const pg = lam(attOf(s,m), defOf(o2,m))*f/90*0.92;
+      const f = Math.pow(0.65,red[s]) * Math.pow(1.3,red[o2]) * mult, lead = g[s]-g[o2];
+      const pg = lam(attOf(s,m), defOf(o2,m))*f/90*0.92 * (lead>=4?0.35:lead>=3?0.55:1);
       const x = Math.random();
       if (x < pg){ const p=shooter(s), k=TXT["g_"+sty[s]]&&Math.random()<.5?"g_"+sty[s]:"goal"; g[s]++; ev.push({m,side:s,type:"goal",p,text:T(k,{p})}); }
       else if (x < pg*2.3){ const p=shooter(s), k=rnd(["save","save","post","wide","wide"]); ev.push({m,side:s,type:k,p,text:T(k,{p,gk:gk(o2)})}); }
@@ -1144,7 +1148,7 @@ async function runMatch(){
   const T=S.T, i=T.i, isKo = i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
   const pw = {...teamPower(L, T.style)};
-  const boost = STAGE_BOOST[i]||0; if (boost>0){ pw.att+=boost; pw.def+=boost; }
+  const boost = STAGE_BOOST[i]||0; if (boost>0){ pw.att+=boost*0.5; pw.def+=boost; }
   const opw = {...o.pw}; if (boost<0){ opw.att-=boost; opw.def-=boost; }
   const pickSub = (role, used) => { const b=bestSub(T, role, used); if(!b) return null; return {...b, r:Math.round(effR(T,b,role)), pos:LINE(role), role}; };
   const M = makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
@@ -1466,7 +1470,7 @@ function renderSquads(sel){
   $("squads").innerHTML = `<h1>Kadrolar</h1><p class="mut" style="font-size:13px">Yanlış bir şey mi gördün? Oyuncunun yanındaki ⚠️ ile ya da kadronun altındaki 🚩 Bildir ile birden fazla oyuncuyu seçip bildir, düzeltelim.</p>
     <div class="scrollx" style="margin:12px 0 18px">${seasons.map(s=>`<button class="chip ${s===sel?"on":""}" onclick="renderSquads('${s}')">${s}</button>`).join("")}</div>
     <div class="plist" style="grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr))">${DATA[sel].map(t=>`
-      <div class="card" style="border-top:4px solid ${kitC(t.team)[0]}"><h2>${t.rank}. ${kit(t.team)}${esc(t.team)}</h2><div class="mut" style="font-size:12px;margin:-6px 0 8px">${esc(t.note||"")}${COACH[sel+"|"+t.team]?` · TD: ${esc(COACH[sel+"|"+t.team])}`:""}</div>
+      <div class="card" style="border-top:4px solid ${kitC(t.team)[0]}"><h2>${t.rank}. ${kit(t.team)}${esc(t.team)}</h2><div class="mut" style="font-size:12px;margin:-6px 0 8px">${esc(rankNote(sel,t.rank))}${COACH[sel+"|"+t.team]?` · TD: ${esc(COACH[sel+"|"+t.team])}`:""}</div>
       <table>${t.players.map(p=>`<tr><td><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span></td><td>${esc(p.n)}${p.r>=LEGEND?'<span class="seal">★</span>':""}</td><td class="rt" style="text-align:right"><span class="rv ${tierAlways(p.r)}">${p.r}</span></td><td style="width:28px"><button class="repbtn" title="Hata bildir" onclick="openReport('${sel}','${esc(t.team)}','${esc(p.n).replace(/'/g,"\\'")}')">⚠️</button></td></tr>`).join("")}</table>
       <div class="row" style="margin-top:8px"><button class="chip" style="font-size:12px" onclick="openMultiReport('${sel}','${esc(t.team)}')">🚩 Bildir</button><button class="chip" style="font-size:12px" onclick="openReport('${sel}','${esc(t.team)}','')">➕ Eksik oyuncu bildir</button></div></div>`).join("")}
     </div>`;

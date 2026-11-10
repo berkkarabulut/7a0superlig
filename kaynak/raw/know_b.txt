@@ -1,0 +1,239 @@
+#1995|Fenerbahçe
+GK 84 Rüştü Reçber
+DF 84 Jes Høgh
+DF 80 Ogün Temizkanoğlu
+DF 79 Tayfun Korkut
+DF 79 Uche Okechukwu
+MF 82 Bülent Uygun
+FW 85 Elvir Bolić
+FW 82 Aykut Kocaman
+#1995|Trabzonspor
+DF 81 Kemalettin Şentürk
+MF 84 Ünal Karaman
+MF 85 Abdullah Ercan
+MF 83 Orhan Çıkırıkçı
+MF 82 Hamdi Aslan
+FW 88 Hami Mandıralı
+FW 85 Shota Arveladze
+FW 80 Soner Boz
+#1995|Beşiktaş
+GK 82 Raimond Aumann
+DF 83 Recep Çetin
+DF 82 Alpay Özalan
+DF 81 Gökhan Keskin
+MF 85 Mehmet Özdilek
+MF 87 Sergen Yalçın
+MF 82 Oktay Derelioğlu
+FW 84 Ertuğrul Sağlam
+FW 84 Feyyaz Uçar
+#1996|Beşiktaş
+DF 83 Recep Çetin
+DF 83 Alpay Özalan
+DF 80 Gökhan Keskin
+MF 85 Mehmet Özdilek
+MF 87 Sergen Yalçın
+MF 82 Oktay Derelioğlu
+FW 85 Ertuğrul Sağlam
+#1996|Fenerbahçe
+GK 84 Rüştü Reçber
+DF 84 Jes Høgh
+DF 80 Uche Okechukwu
+DF 79 Tayfun Korkut
+MF 87 Jay-Jay Okocha
+MF 81 Ali Güneş
+FW 85 Elvir Bolić
+FW 82 Kemalettin Şentürk
+#1997|Galatasaray
+GK 83 Hayrettin Demirbaş
+DF 85 Bülent Korkmaz
+DF 81 Hakan Ünsal
+DF 81 Ergün Penbe
+DF 80 Vedat İnceefe
+DF 82 Gheorghe Popescu
+MF 91 Gheorghe Hagi
+MF 85 Tugay Kerimoğlu
+MF 83 Okan Buruk
+MF 82 Ümit Davala
+MF 82 Suat Kaya
+FW 89 Hakan Şükür
+FW 84 Arif Erdem
+#1997|Fenerbahçe
+GK 85 Rüştü Reçber
+DF 84 Jes Høgh
+DF 80 Uche Okechukwu
+DF 79 Ogün Temizkanoğlu
+MF 87 Jay-Jay Okocha
+MF 82 Kemalettin Şentürk
+FW 85 Elvir Bolić
+#1997|Trabzonspor
+MF 84 Abdullah Ercan
+MF 83 Hami Mandıralı
+MF 82 Orhan Çıkırıkçı
+FW 82 Fatih Tekke
+#1998|Beşiktaş
+GK 82 Fevzi Tuncay
+DF 83 Alpay Özalan
+DF 82 Rahim Zafer
+MF 86 Sergen Yalçın
+MF 83 Tayfur Havutçu
+MF 82 Mehmet Özdilek
+MF 83 Daniel Amokachi
+FW 84 Oktay Derelioğlu
+FW 83 Nihat Kahveci
+#1998|Fenerbahçe
+GK 85 Rüştü Reçber
+DF 84 Jes Høgh
+DF 80 Uche Okechukwu
+MF 82 Ogün Temizkanoğlu
+FW 85 Elvir Bolić
+#1999|Galatasaray
+GK 86 Cláudio Taffarel
+DF 85 Bülent Korkmaz
+DF 84 Gheorghe Popescu
+DF 82 Hakan Ünsal
+DF 81 Capone
+DF 81 Fatih Akyel
+MF 90 Gheorghe Hagi
+MF 86 Emre Belözoğlu
+MF 85 Okan Buruk
+MF 84 Ümit Davala
+MF 84 Ergün Penbe
+MF 82 Suat Kaya
+FW 89 Hakan Şükür
+FW 85 Arif Erdem
+FW 82 Hasan Şaş
+#1999|Beşiktaş
+GK 82 Fevzi Tuncay
+DF 83 Alpay Özalan
+DF 82 Rahim Zafer
+MF 83 Tayfur Havutçu
+MF 82 Mehmet Özdilek
+FW 84 Oktay Derelioğlu
+FW 85 Nihat Kahveci
+FW 82 Ahmet Dursun
+#1999|Gaziantepspor
+MF 82 İbrahim Üzülmez
+#2000|Fenerbahçe
+GK 85 Rüştü Reçber
+DF 83 Ümit Özat
+DF 82 Abdullah Ercan
+DF 81 Uche Okechukwu
+MF 84 Ogün Temizkanoğlu
+MF 84 Serhat Akın
+MF 82 Haim Revivo
+FW 85 Kennet Andersson
+#2000|Galatasaray
+GK 86 Cláudio Taffarel
+DF 85 Bülent Korkmaz
+DF 84 Gheorghe Popescu
+DF 82 Hakan Ünsal
+DF 81 Capone
+MF 90 Gheorghe Hagi
+MF 87 Emre Belözoğlu
+MF 85 Okan Buruk
+MF 84 Ümit Davala
+MF 84 Ergün Penbe
+FW 88 Mário Jardel
+FW 85 Hasan Şaş
+FW 84 Arif Erdem
+#2000|Gaziantepspor
+MF 82 İbrahim Üzülmez
+#2001|Galatasaray
+DF 84 Bülent Korkmaz
+DF 81 Ergün Penbe
+DF 82 Hakan Ünsal
+MF 84 Hasan Şaş
+MF 83 Sergen Yalçın
+FW 84 Arif Erdem
+FW 82 Serkan Aykut
+GK 83 Faryd Mondragón
+#2001|Fenerbahçe
+GK 84 Rüştü Reçber
+DF 83 Ümit Özat
+MF 85 Serhat Akın
+MF 84 Ogün Temizkanoğlu
+MF 82 Haim Revivo
+FW 85 Kennet Andersson
+#2001|Beşiktaş
+GK 82 Fevzi Tuncay
+DF 82 Rahim Zafer
+MF 84 Tayfur Havutçu
+MF 83 İlhan Mansız
+MF 82 Ahmet Dursun
+FW 85 Nihat Kahveci
+DF 82 Ronaldo Guiaro
+#2002|Beşiktaş
+GK 83 Óscar Córdoba
+DF 83 Ronaldo Guiaro
+DF 82 Ibrahim Üzülmez
+MF 85 Tümer Metin
+MF 84 Tayfur Havutçu
+MF 83 Yasin Sülün
+MF 84 Sergen Yalçın
+FW 86 Pascal Nouma
+FW 83 Ilhan Mansız
+FW 83 Daniel Pancu
+DF 82 Antônio Carlos Zago
+#2002|Galatasaray
+GK 84 Faryd Mondragón
+DF 84 Bülent Korkmaz
+DF 81 Ergün Penbe
+MF 84 Hasan Şaş
+FW 82 Arif Erdem
+MF 81 Cihan Haspolatlı
+#2002|Gençlerbirliği
+GK 80 Ömer Çatkıç
+DF 81 Ümit Karan
+#2003|Fenerbahçe
+GK 84 Rüştü Reçber
+DF 84 Ümit Özat
+DF 83 Fábio Luciano
+DF 81 Önder Turacı
+MF 87 Alex de Souza
+MF 84 Serhat Akın
+MF 83 Pierre van Hooijdonk
+FW 86 Tuncay Şanlı
+FW 84 Ortega
+#2003|Trabzonspor
+GK 82 Tolga Zengin
+DF 82 Hüseyin Çimşir
+MF 84 Gökdeniz Karadeniz
+MF 82 Erol Bulut
+FW 86 Fatih Tekke
+FW 83 Ibrahima Yattara
+#2003|Beşiktaş
+GK 82 Óscar Córdoba
+DF 83 Ronaldo Guiaro
+DF 82 Ibrahim Üzülmez
+MF 84 Ahmed Hassan
+MF 84 Tümer Metin
+MF 83 Yasin Sülün
+FW 84 İlhan Mansız
+FW 83 Daniel Pancu
+DF 82 Antônio Carlos Zago
+#2004|Fenerbahçe
+GK 84 Rüştü Reçber
+DF 84 Ümit Özat
+DF 83 Fábio Luciano
+DF 82 Önder Turacı
+MF 88 Alex de Souza
+MF 84 Mehmet Aurélio
+MF 83 Selçuk Şahin
+MF 85 Nicolas Anelka
+FW 86 Tuncay Şanlı
+FW 83 Márcio Nobre
+#2004|Trabzonspor
+GK 82 Tolga Zengin
+DF 82 Hüseyin Çimşir
+MF 85 Gökdeniz Karadeniz
+FW 88 Fatih Tekke
+FW 83 Ibrahima Yattara
+#2004|Galatasaray
+DF 83 Bülent Korkmaz
+DF 82 Hakan Ünsal
+MF 84 Hasan Şaş
+FW 86 Necati Ateş
+FW 85 Hakan Şükür
+DF 81 Ergün Penbe
+MF 81 Ayhan Akman
+DF 80 Sabri Sarıoğlu

@@ -1,0 +1,743 @@
+#2004|Galatasaray
+GK 82 Faryd Mondragón
+#2005|Galatasaray
+GK 82 Faryd Mondragón
+DF 82 Rigobert Song
+DF 81 Stjepan Tomas
+DF 80 Sabri Sarıoğlu
+DF 80 Ergün Penbe
+MF 82 Ayhan Akman
+MF 83 Hasan Şaş
+MF 81 Arda Turan
+FW 84 Necati Ateş
+FW 84 Ümit Karan
+FW 84 Hakan Şükür
+#2005|Fenerbahçe
+GK 82 Volkan Demirel
+DF 82 Ümit Özat
+DF 83 Fábio Luciano
+DF 81 Önder Turacı
+MF 87 Alex de Souza
+MF 84 Stephen Appiah
+MF 83 Mehmet Aurélio
+MF 82 Selçuk Şahin
+FW 85 Tuncay Şanlı
+FW 86 Nicolas Anelka
+FW 81 Márcio Nobre
+#2005|Beşiktaş
+DF 81 İbrahim Toraman
+DF 81 Gökhan Zan
+DF 81 İbrahim Üzülmez
+MF 83 Ahmed Hassan
+MF 83 Tümer Metin
+MF 81 Koray Avcı
+MF 81 Tayfur Havutçu
+FW 83 Ailton
+#2006|Fenerbahçe
+GK 83 Volkan Demirel
+DF 84 Diego Lugano
+DF 82 Edu Dracena
+DF 81 Önder Turacı
+DF 82 Ümit Özat
+MF 88 Alex de Souza
+MF 84 Stephen Appiah
+MF 83 Mehmet Aurélio
+MF 82 Selçuk Şahin
+FW 85 Tuncay Şanlı
+FW 84 Mateja Kežman
+FW 82 Semih Şentürk
+#2006|Beşiktaş
+GK 80 Hakan Arıkan
+DF 81 İbrahim Toraman
+DF 81 Gökhan Zan
+DF 81 İbrahim Üzülmez
+MF 83 Matías Delgado
+MF 83 Ahmed Hassan
+MF 82 Tümer Metin
+MF 81 Koray Avcı
+FW 84 Bobô
+#2006|Galatasaray
+GK 82 Faryd Mondragón
+DF 82 Rigobert Song
+DF 81 Stjepan Tomas
+DF 80 Sabri Sarıoğlu
+MF 82 Ayhan Akman
+MF 82 Hasan Şaş
+MF 83 Arda Turan
+MF 81 Carrusca
+FW 83 Necati Ateş
+FW 84 Ümit Karan
+FW 83 Hakan Şükür
+#2007|Galatasaray
+GK 80 Aykut Erçetin
+DF 82 Servet Çetin
+DF 81 Emre Güngör
+DF 80 Hakan Balta
+DF 80 Sabri Sarıoğlu
+MF 85 Arda Turan
+MF 84 Lincoln
+MF 81 Ayhan Akman
+MF 80 Mehmet Topal
+FW 85 Ümit Karan
+FW 83 Shabani Nonda
+FW 82 Hakan Şükür
+#2007|Fenerbahçe
+GK 83 Volkan Demirel
+DF 85 Diego Lugano
+DF 82 Edu Dracena
+DF 82 Gökhan Gönül
+DF 85 Roberto Carlos
+MF 89 Alex de Souza
+MF 83 Mehmet Aurélio
+MF 82 Kazım Kazım
+FW 84 Deivid
+FW 84 Semih Şentürk
+FW 83 Mateja Kežman
+#2007|Beşiktaş
+GK 80 Hakan Arıkan
+DF 81 İbrahim Toraman
+DF 81 Gökhan Zan
+DF 80 Rodrigo Tello
+MF 83 Matías Delgado
+MF 81 Serdar Özkan
+MF 81 Tümer Metin
+FW 84 Bobô
+FW 83 Mert Nobre
+#2008|Beşiktaş
+GK 80 Hakan Arıkan
+DF 81 İbrahim Toraman
+DF 81 İbrahim Üzülmez
+DF 80 İsmail Köybaşı
+MF 82 Fabian Ernst
+MF 82 Rodrigo Tello
+MF 81 Yusuf Şimşek
+MF 81 Ekrem Dağ
+FW 84 Bobô
+FW 83 Mert Nobre
+#2008|Sivasspor
+FW 84 Mehmet Yıldız
+FW 82 Abdurrahman Dereli
+FW 81 Pini Balili
+#2008|Trabzonspor
+GK 82 Tolga Zengin
+DF 80 Serkan Balcı
+DF 80 Ferhat Öztorun
+MF 82 Hüseyin Çimşir
+MF 83 Gustavo Colman
+FW 84 Gökhan Ünal
+FW 83 Umut Bulut
+FW 81 Jajá
+#2009|Bursaspor
+GK 82 Dimitar Ivankov
+DF 81 Ömer Erdoğan
+DF 81 İbrahim Öztürk
+DF 80 Ali Tandoğan
+DF 80 Gökçek Vederson
+MF 84 Volkan Şen
+MF 83 Ozan İpek
+MF 84 Pablo Batalla
+MF 81 Mustafa Keçeli
+FW 82 Turgay Bahadır
+FW 83 Sercan Yıldırım
+#2009|Fenerbahçe
+GK 83 Volkan Demirel
+DF 85 Diego Lugano
+DF 81 Bekir İrtegün
+DF 82 Gökhan Gönül
+DF 82 André Santos
+MF 89 Alex de Souza
+MF 84 Emre Belözoğlu
+MF 82 Cristian Baroni
+FW 84 Daniel Güiza
+FW 83 Semih Şentürk
+#2009|Galatasaray
+GK 81 Leo Franco
+DF 82 Servet Çetin
+DF 80 Hakan Balta
+DF 80 Sabri Sarıoğlu
+MF 85 Arda Turan
+MF 84 Elano
+MF 82 Abdul Kader Keïta
+MF 81 Mehmet Topal
+MF 82 Ayhan Akman
+FW 84 Harry Kewell
+FW 84 Milan Baroš
+#2010|Fenerbahçe
+GK 83 Volkan Demirel
+DF 84 Diego Lugano
+DF 82 Joseph Yobo
+DF 81 Bekir İrtegün
+DF 82 Gökhan Gönül
+DF 82 André Santos
+MF 88 Alex de Souza
+MF 84 Emre Belözoğlu
+MF 82 Cristian Baroni
+MF 82 Mehmet Topuz
+FW 85 Mamadou Niang
+FW 82 Miroslav Stoch
+#2010|Trabzonspor
+GK 83 Onur Kıvrak
+DF 81 Giray Kaçar
+DF 81 Serkan Balcı
+DF 80 Engin Baytar
+MF 84 Selçuk İnan
+MF 83 Gustavo Colman
+MF 82 Alanzinho
+FW 85 Burak Yılmaz
+FW 83 Umut Bulut
+FW 83 Teófilo Gutiérrez
+#2010|Bursaspor
+GK 82 Dimitar Ivankov
+DF 81 Ömer Erdoğan
+DF 81 İbrahim Öztürk
+DF 80 Ali Tandoğan
+DF 79 Serdar Aziz
+MF 83 Volkan Şen
+MF 82 Ozan İpek
+MF 83 Pablo Batalla
+FW 83 Sercan Yıldırım
+#2011|Galatasaray
+GK 85 Fernando Muslera
+DF 82 Emmanuel Eboué
+DF 81 Semih Kaya
+DF 81 Tomáš Ujfaluši
+DF 80 Hakan Balta
+MF 84 Felipe Melo
+MF 84 Selçuk İnan
+MF 82 Albert Riera
+MF 80 Emre Çolak
+MF 80 Aydın Yılmaz
+FW 84 Johan Elmander
+#2011|Fenerbahçe
+GK 83 Volkan Demirel
+DF 81 Bekir İrtegün
+DF 82 Joseph Yobo
+DF 82 Gökhan Gönül
+DF 80 Egemen Korkmaz
+MF 87 Alex de Souza
+MF 82 Cristian Baroni
+MF 82 Mehmet Topuz
+MF 81 Miroslav Stoch
+FW 84 Moussa Sow
+FW 82 Semih Şentürk
+#2011|Trabzonspor
+GK 83 Onur Kıvrak
+DF 81 Giray Kaçar
+DF 81 Serkan Balcı
+MF 83 Gustavo Colman
+MF 82 Alanzinho
+MF 82 Halil Altıntop
+MF 80 Paulo Henrique
+FW 87 Burak Yılmaz
+#2012|Galatasaray
+GK 85 Fernando Muslera
+DF 82 Emmanuel Eboué
+DF 82 Semih Kaya
+DF 81 Dany Nounkeu
+DF 80 Hakan Balta
+MF 84 Felipe Melo
+MF 84 Selçuk İnan
+MF 83 Hamit Altıntop
+MF 88 Wesley Sneijder
+MF 81 Nordin Amrabat
+FW 87 Burak Yılmaz
+FW 87 Didier Drogba
+FW 83 Umut Bulut
+#2012|Fenerbahçe
+GK 83 Volkan Demirel
+DF 81 Bekir İrtegün
+DF 81 Egemen Korkmaz
+DF 82 Gökhan Gönül
+DF 80 Hasan Ali Kaldırım
+MF 82 Mehmet Topal
+MF 82 Cristian Baroni
+MF 84 Raul Meireles
+MF 82 Caner Erkin
+FW 84 Dirk Kuyt
+FW 83 Moussa Sow
+FW 82 Pierre Webó
+#2012|Beşiktaş
+GK 80 Cenk Gönen
+DF 81 Tomáš Sivok
+DF 80 İbrahim Toraman
+DF 80 İsmail Köybaşı
+MF 83 Manuel Fernandes
+MF 82 Oğuzhan Özyakup
+MF 82 Olcay Şahan
+MF 80 Veli Kavlak
+FW 84 Hugo Almeida
+FW 81 Filip Hološko
+FW 80 Mustafa Pektemek
+#2013|Fenerbahçe
+GK 83 Volkan Demirel
+DF 81 Bekir İrtegün
+DF 81 Joseph Yobo
+DF 82 Gökhan Gönül
+DF 80 Hasan Ali Kaldırım
+MF 82 Mehmet Topal
+MF 85 Emre Belözoğlu
+MF 83 Raul Meireles
+MF 81 Alper Potuk
+FW 84 Dirk Kuyt
+FW 84 Emmanuel Emenike
+FW 83 Moussa Sow
+#2013|Galatasaray
+GK 85 Fernando Muslera
+DF 82 Emmanuel Eboué
+DF 82 Semih Kaya
+DF 81 Dany Nounkeu
+MF 84 Felipe Melo
+MF 84 Selçuk İnan
+MF 83 Hamit Altıntop
+MF 87 Wesley Sneijder
+MF 81 Bruma
+FW 87 Didier Drogba
+FW 86 Burak Yılmaz
+FW 82 Umut Bulut
+#2013|Beşiktaş
+GK 81 Tolga Zengin
+DF 81 Tomáš Sivok
+DF 80 Pedro Franco
+MF 83 Atiba Hutchinson
+MF 82 Oğuzhan Özyakup
+MF 82 Olcay Şahan
+MF 82 Gökhan Töre
+MF 80 Veli Kavlak
+FW 84 Hugo Almeida
+FW 80 Mustafa Pektemek
+#2014|Galatasaray
+GK 85 Fernando Muslera
+DF 82 Aurélien Chedjou
+DF 82 Semih Kaya
+DF 81 Alex Telles
+DF 80 Sabri Sarıoğlu
+MF 84 Felipe Melo
+MF 84 Selçuk İnan
+MF 87 Wesley Sneijder
+MF 81 Yasin Öztekin
+MF 81 Olcan Adın
+FW 86 Burak Yılmaz
+#2014|Fenerbahçe
+GK 83 Volkan Demirel
+DF 83 Bruno Alves
+DF 81 Gökhan Gönül
+DF 81 Caner Erkin
+MF 82 Mehmet Topal
+MF 84 Diego Ribas
+MF 82 Raul Meireles
+MF 82 Volkan Şen
+MF 81 Alper Potuk
+FW 84 Emmanuel Emenike
+FW 83 Fernandão
+#2014|Beşiktaş
+GK 81 Tolga Zengin
+DF 81 Serdar Kurtuluş
+DF 81 Ersan Gülüm
+DF 80 Ramon Motta
+DF 80 İsmail Köybaşı
+MF 84 Atiba Hutchinson
+MF 84 José Sosa
+MF 83 Oğuzhan Özyakup
+MF 82 Olcay Şahan
+MF 82 Gökhan Töre
+FW 85 Demba Ba
+FW 82 Cenk Tosun
+#2015|Beşiktaş
+GK 81 Tolga Zengin
+DF 82 Andreas Beck
+DF 82 Marcelo Guedes
+DF 81 Rhodolfo
+DF 80 Adriano
+MF 84 Atiba Hutchinson
+MF 83 Oğuzhan Özyakup
+MF 85 José Sosa
+MF 82 Olcay Şahan
+FW 87 Ricardo Quaresma
+FW 87 Mario Gómez
+FW 83 Cenk Tosun
+#2015|Fenerbahçe
+GK 83 Volkan Demirel
+DF 83 Simon Kjær
+DF 82 Bruno Alves
+DF 81 Gökhan Gönül
+DF 81 Caner Erkin
+MF 82 Mehmet Topal
+MF 83 Ozan Tufan
+MF 82 Souza
+MF 85 Nani
+MF 83 Diego Ribas
+FW 86 Robin van Persie
+FW 83 Fernandão
+#2015|Konyaspor
+GK 80 Serkan Kırıntılı
+DF 79 Ali Turan
+DF 80 Jagoš Vuković
+DF 80 Nejc Skubic
+DF 78 Selim Ay
+MF 79 Ali Çamdalı
+MF 80 Ömer Ali Şahiner
+MF 80 Amir Hadžiahmetović
+MF 79 Volkan Fındıklı
+FW 80 Moryké Fofana
+FW 82 Dimitar Rangelov
+#2016|Beşiktaş
+GK 84 Fabri
+DF 82 Andreas Beck
+DF 82 Marcelo Guedes
+DF 81 Duško Tošić
+DF 81 Adriano
+DF 81 Gökhan Gönül
+MF 84 Atiba Hutchinson
+MF 83 Oğuzhan Özyakup
+MF 85 Anderson Talisca
+FW 87 Ricardo Quaresma
+FW 85 Cenk Tosun
+FW 84 Vincent Aboubakar
+FW 82 Ryan Babel
+#2016|Başakşehir
+GK 81 Volkan Babacan
+DF 80 Júnior Caiçara
+DF 81 Alexandru Epureanu
+DF 79 Uğur Uçar
+MF 84 Emre Belözoğlu
+MF 81 Mahmut Tekdemir
+MF 82 Edin Višća
+MF 82 Márcio Mossoró
+FW 84 Emmanuel Adebayor
+FW 83 Cengiz Ünder
+#2016|Fenerbahçe
+GK 83 Volkan Demirel
+DF 83 Simon Kjær
+DF 83 Martin Škrtel
+DF 80 Hasan Ali Kaldırım
+DF 80 Şener Özbayraklı
+MF 82 Mehmet Topal
+MF 82 Souza
+MF 82 Ozan Tufan
+MF 82 Jeremain Lens
+MF 81 Alper Potuk
+FW 84 Robin van Persie
+FW 82 Moussa Sow
+#2017|Fenerbahçe
+GK 83 Volkan Demirel
+DF 83 Martin Škrtel
+DF 81 Roman Neustädter
+DF 81 Mauricio Isla
+DF 80 Hasan Ali Kaldırım
+MF 82 Mehmet Topal
+MF 82 Souza
+MF 84 Giuliano
+MF 83 Mathieu Valbuena
+MF 81 Nabil Dirar
+FW 82 Roberto Soldado
+#2017|Başakşehir
+GK 81 Volkan Babacan
+DF 80 Júnior Caiçara
+DF 81 Alexandru Epureanu
+DF 80 Joseph Attamah
+DF 81 Gaël Clichy
+MF 83 Emre Belözoğlu
+MF 81 Mahmut Tekdemir
+MF 82 Gökhan İnler
+MF 82 Edin Višća
+MF 82 Eljero Elia
+FW 83 Emmanuel Adebayor
+#2018|Galatasaray
+GK 85 Fernando Muslera
+DF 81 Mariano
+DF 81 Marcão
+DF 80 Christian Luyindama
+DF 80 Yuto Nagatomo
+MF 82 Fernando Reges
+MF 83 Younès Belhanda
+MF 82 Sofiane Feghouli
+MF 81 Selçuk İnan
+FW 83 Mbaye Diagne
+FW 81 Henry Onyekuru
+FW 80 Eren Derdiyok
+#2018|Başakşehir
+GK 82 Mert Günok
+DF 80 Júnior Caiçara
+DF 81 Alexandru Epureanu
+DF 80 Carlos Ponck
+DF 81 Gaël Clichy
+MF 81 Mahmut Tekdemir
+MF 82 Gökhan İnler
+MF 82 Edin Višća
+MF 82 İrfan Can Kahveci
+MF 81 Arda Turan
+FW 82 Robinho
+#2018|Beşiktaş
+GK 82 Loris Karius
+DF 82 Domagoj Vida
+DF 81 Gökhan Gönül
+DF 80 Caner Erkin
+MF 83 Gary Medel
+MF 84 Atiba Hutchinson
+MF 82 Oğuzhan Özyakup
+MF 81 Tolgay Arslan
+MF 84 Adem Ljajić
+FW 85 Ricardo Quaresma
+FW 84 Burak Yılmaz
+#2019|Başakşehir
+GK 82 Mert Günok
+DF 80 Júnior Caiçara
+DF 80 Carlos Ponck
+DF 81 Alexandru Epureanu
+DF 80 Gaël Clichy
+MF 81 Mahmut Tekdemir
+MF 82 İrfan Can Kahveci
+MF 83 Edin Višća
+MF 80 Deniz Türüç
+FW 83 Demba Ba
+FW 82 Enzo Crivelli
+#2019|Trabzonspor
+GK 83 Uğurcan Çakır
+DF 80 Filip Novák
+DF 80 João Pereira
+DF 79 Gastón Campi
+DF 79 Majid Hosseini
+MF 82 José Sosa
+MF 81 Abdülkadir Ömür
+MF 80 Ogenyi Onazi
+FW 84 Alexander Sørloth
+FW 83 Anthony Nwakaeme
+FW 80 Caleb Ekuban
+#2019|Beşiktaş
+GK 82 Loris Karius
+DF 82 Domagoj Vida
+DF 81 Gökhan Gönül
+DF 80 Caner Erkin
+DF 79 Víctor Ruiz
+MF 83 Atiba Hutchinson
+MF 82 Mohamed Elneny
+MF 83 Adem Ljajić
+FW 83 Burak Yılmaz
+FW 80 Güven Yalçın
+FW 80 Kevin N'Koudou
+#2020|Beşiktaş
+GK 80 Ersin Destanoğlu
+DF 81 Valentin Rosier
+DF 81 Domagoj Vida
+DF 80 Welinton
+DF 80 Ridvan Yılmaz
+MF 83 Atiba Hutchinson
+MF 82 Josef de Souza
+MF 81 Necip Uysal
+MF 84 Rachid Ghezzal
+FW 84 Cyle Larin
+FW 81 Güven Yalçın
+#2020|Galatasaray
+GK 84 Fernando Muslera
+DF 81 Marcão
+DF 80 Christian Luyindama
+DF 80 Ömer Bayram
+DF 79 Şener Özbayraklı
+MF 81 Taylan Antalyalı
+MF 82 Sofiane Feghouli
+MF 82 Younès Belhanda
+MF 80 Arda Turan
+FW 83 Kerem Aktürkoğlu
+FW 82 Mostafa Mohamed
+FW 80 Ryan Babel
+#2020|Fenerbahçe
+GK 82 Altay Bayındır
+DF 81 Serdar Aziz
+DF 80 Attila Szalai
+DF 80 Marcel Tisserand
+DF 80 Caner Erkin
+MF 82 Luiz Gustavo
+MF 82 José Sosa
+MF 82 Mesut Özil
+MF 81 Mert Hakan Yandaş
+FW 83 Enner Valencia
+FW 80 Papiss Cissé
+#2021|Trabzonspor
+GK 84 Uğurcan Çakır
+DF 82 Marc Bartra
+DF 81 Stefano Denswil
+DF 81 Vitor Hugo
+DF 81 Bruno Peres
+MF 81 Manolis Siopis
+MF 81 Dorukhan Toköz
+MF 83 Abdülkadir Ömür
+MF 83 Anastasios Bakasetas
+MF 83 Marek Hamšík
+FW 83 Andreas Cornelius
+FW 82 Djaniny
+#2021|Fenerbahçe
+GK 82 Altay Bayındır
+DF 82 Kim Min-jae
+DF 81 Attila Szalai
+DF 80 Serdar Aziz
+DF 81 Ferdi Kadıoğlu
+MF 81 Mert Hakan Yandaş
+MF 83 İrfan Can Kahveci
+MF 81 Miha Zajc
+MF 81 Diego Rossi
+FW 84 Enner Valencia
+FW 81 Serdar Dursun
+#2021|Konyaspor
+GK 81 İbrahim Šehić
+DF 80 Francisco Calvo
+DF 79 Adil Demirbağ
+DF 79 Guilherme Sityá
+MF 80 Soner Dikmen
+MF 80 Amir Hadžiahmetović
+MF 80 Zymer Bytyqi
+MF 79 Konrad Michalak
+FW 82 Sokol Cikalleshi
+#2022|Galatasaray
+GK 84 Fernando Muslera
+DF 82 Victor Nelsson
+DF 82 Abdülkerim Bardakcı
+DF 81 Sacha Boey
+DF 80 Léo Dubois
+MF 84 Lucas Torreira
+MF 82 Sérgio Oliveira
+MF 85 Dries Mertens
+MF 81 Juan Mata
+FW 87 Mauro Icardi
+FW 84 Kerem Aktürkoğlu
+FW 82 Barış Alper Yılmaz
+#2022|Fenerbahçe
+GK 82 Altay Bayındır
+DF 81 Attila Szalai
+DF 81 Gustavo Henrique
+DF 81 Ferdi Kadıoğlu
+DF 80 Bright Osayi-Samuel
+MF 82 Willian Arão
+MF 81 İsmail Yüksek
+MF 82 Arda Güler
+MF 83 İrfan Can Kahveci
+FW 84 Enner Valencia
+FW 82 Joshua King
+FW 82 Michy Batshuayi
+#2022|Beşiktaş
+GK 82 Mert Günok
+DF 82 Romain Saïss
+DF 81 Eric Bailly
+DF 80 Arthur Masuaku
+MF 81 Gedson Fernandes
+MF 81 Salih Uçan
+MF 81 Amir Hadžiahmetović
+MF 82 Rachid Ghezzal
+MF 81 Dele Alli
+FW 84 Vincent Aboubakar
+FW 82 Cenk Tosun
+FW 81 Wout Weghorst
+#2023|Galatasaray
+GK 84 Fernando Muslera
+DF 82 Davinson Sánchez
+DF 82 Abdülkerim Bardakcı
+DF 81 Angeliño
+DF 80 Kaan Ayhan
+MF 84 Lucas Torreira
+MF 82 Kerem Demirbay
+MF 84 Hakim Ziyech
+MF 84 Dries Mertens
+MF 81 Tetê
+FW 88 Mauro Icardi
+FW 84 Kerem Aktürkoğlu
+FW 83 Barış Alper Yılmaz
+#2023|Fenerbahçe
+GK 84 Dominik Livaković
+DF 82 Alexander Djiku
+DF 81 Çağlar Söyüncü
+DF 81 Rodrigo Becão
+DF 81 Ferdi Kadıoğlu
+MF 84 Fred
+MF 81 İsmail Yüksek
+MF 84 Sebastian Szymański
+MF 85 Dušan Tadić
+MF 82 İrfan Can Kahveci
+FW 85 Edin Džeko
+FW 81 Cengiz Ünder
+#2023|Trabzonspor
+GK 83 Uğurcan Çakır
+DF 82 Stefan Savić
+DF 80 Pedro Malheiro
+DF 80 Eren Elmalı
+MF 81 Enis Bardhi
+MF 81 Edin Višća
+MF 82 Trézéguet
+MF 81 Anastasios Bakasetas
+MF 80 Abdülkadir Ömür
+FW 84 Paul Onuachu
+FW 82 Nicolas Pépé
+#2024|Galatasaray
+GK 83 Fernando Muslera
+DF 82 Davinson Sánchez
+DF 82 Abdülkerim Bardakcı
+DF 80 Ismail Jakobs
+DF 80 Kaan Ayhan
+MF 84 Lucas Torreira
+MF 84 Gabriel Sara
+MF 83 Dries Mertens
+MF 82 Yunus Akgün
+FW 89 Victor Osimhen
+FW 84 Barış Alper Yılmaz
+FW 83 Álvaro Morata
+#2024|Fenerbahçe
+GK 84 Dominik Livaković
+DF 83 Milan Škriniar
+DF 81 Çağlar Söyüncü
+DF 81 Jayden Oosterwolde
+DF 80 Mert Müldür
+MF 83 Fred
+MF 82 Sofyan Amrabat
+MF 83 Sebastian Szymański
+MF 84 Dušan Tadić
+FW 84 Edin Džeko
+FW 84 Youssef En-Nesyri
+FW 81 Allan Saint-Maximin
+#2024|Samsunspor
+GK 80 Okan Kocuk
+DF 80 Rick van Drongelen
+DF 79 Lubomír Šatka
+DF 78 Zeki Yavru
+DF 78 Logi Tómasson
+MF 81 Olivier Ntcham
+MF 80 Antoine Makoumbou
+MF 80 Carlo Holse
+MF 79 Emre Kılınç
+FW 81 Marius Mouandilmadji
+FW 79 Tanguy Coulibaly
+#2025|Galatasaray
+GK 84 Uğurcan Çakır
+DF 82 Davinson Sánchez
+DF 82 Abdülkerim Bardakcı
+DF 81 Wilfried Singo
+DF 80 Ismail Jakobs
+MF 84 Lucas Torreira
+MF 84 Gabriel Sara
+MF 85 İlkay Gündoğan
+MF 85 Leroy Sané
+MF 82 Yunus Akgün
+FW 89 Victor Osimhen
+FW 84 Barış Alper Yılmaz
+#2025|Fenerbahçe
+GK 85 Ederson
+DF 83 Milan Škriniar
+DF 81 Jayden Oosterwolde
+DF 81 Nélson Semedo
+DF 80 Archie Brown
+MF 82 Edson Álvarez
+MF 81 İsmail Yüksek
+MF 84 Marco Asensio
+MF 83 Anderson Talisca
+FW 84 Kerem Aktürkoğlu
+FW 84 Youssef En-Nesyri
+FW 82 Jhon Durán
+#2025|Trabzonspor
+GK 83 André Onana
+DF 81 Stefan Savić
+DF 80 Arseniy Batagov
+DF 79 Mustafa Eskihellaç
+DF 79 Wagner Pina
+MF 80 Okay Yokuşlu
+MF 80 Tim Jabol-Folcarelli
+MF 81 Ernest Muçi
+MF 80 Oleksandr Zubkov
+FW 84 Paul Onuachu
+FW 80 Felipe Augusto

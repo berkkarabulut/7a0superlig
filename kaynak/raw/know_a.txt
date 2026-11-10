@@ -1,0 +1,364 @@
+# 1980-1994. Format: header "#yıl|takım", satır "POS REYTING İsim"
+#1980|Trabzonspor
+GK 86 Şenol Güneş
+DF 80 Turgay Semercioğlu
+DF 80 Cemil Usta
+DF 78 Necati Özçağlayan
+DF 76 Ahmet Ceylan
+MF 78 Serdar Bali
+MF 79 Hüseyin Tok
+MF 77 Şenol Ustaömer
+MF 78 İskender Günen
+FW 82 Ali Kemal Denizci
+FW 81 Necmi Perekli
+#1980|Adanaspor
+FW 84 Bora Öztürk
+MF 76 Selahattin Karasu
+#1981|Beşiktaş
+GK 79 Adem İbrahimoğlu
+DF 82 Samet Aybaba
+DF 79 Ulvi Güveneroğlu
+DF 78 Kadir Akbulut
+MF 84 Rıza Çalımbay
+MF 81 Ziya Doğan
+MF 78 Fuat Yaman
+FW 81 Necdet Ergün
+#1981|Trabzonspor
+GK 86 Şenol Güneş
+DF 80 Turgay Semercioğlu
+DF 80 Cemil Usta
+DF 78 Necati Özçağlayan
+MF 78 Serdar Bali
+MF 79 Hüseyin Tok
+MF 78 Şenol Ustaömer
+MF 78 İskender Günen
+FW 82 Ali Kemal Denizci
+FW 81 Necmi Perekli
+#1981|Fenerbahçe
+DF 81 Müjdat Yetkiner
+DF 81 Cem Pamiroğlu
+DF 80 Alpaslan Eratlı
+MF 80 Engin Verel
+FW 85 Selçuk Yula
+#1982|Fenerbahçe
+DF 82 Müjdat Yetkiner
+DF 81 Cem Pamiroğlu
+DF 80 Erdoğan Arıca
+DF 79 Alpaslan Eratlı
+MF 81 Engin Verel
+FW 86 Selçuk Yula
+#1982|Trabzonspor
+GK 86 Şenol Güneş
+DF 80 Turgay Semercioğlu
+DF 80 Cemil Usta
+DF 78 Necati Özçağlayan
+MF 78 Serdar Bali
+MF 79 Hüseyin Tok
+MF 79 Şenol Ustaömer
+MF 79 İskender Günen
+FW 81 Ali Kemal Denizci
+FW 80 Necmi Perekli
+#1983|Trabzonspor
+GK 86 Şenol Güneş
+DF 80 Turgay Semercioğlu
+DF 80 Cemil Usta
+DF 78 Necati Özçağlayan
+MF 78 Serdar Bali
+MF 79 Hüseyin Tok
+MF 80 Şenol Ustaömer
+MF 79 İskender Günen
+FW 80 Ali Kemal Denizci
+FW 80 Hasan Şengün
+#1983|Fenerbahçe
+DF 82 Müjdat Yetkiner
+DF 81 Cem Pamiroğlu
+DF 80 Erdoğan Arıca
+MF 81 Engin Verel
+FW 87 Selçuk Yula
+#1984|Fenerbahçe
+GK 80 Yaşar Duran
+DF 82 Müjdat Yetkiner
+DF 81 Cem Pamiroğlu
+DF 79 Erdoğan Arıca
+DF 78 Abdülkerim Durmaz
+MF 81 Engin Verel
+MF 82 İlyas Tüfekçi
+FW 88 Selçuk Yula
+#1984|Beşiktaş
+GK 79 Zafer Öğer
+DF 82 Samet Aybaba
+DF 80 Ulvi Güveneroğlu
+DF 78 Kadir Akbulut
+MF 85 Rıza Çalımbay
+MF 81 Ziya Doğan
+MF 79 Mehmet Ekşi
+FW 85 Metin Tekin
+FW 80 Ali Gültiken
+#1984|Trabzonspor
+GK 86 Şenol Güneş
+DF 80 Turgay Semercioğlu
+DF 79 Cemil Usta
+DF 79 Bahaddin Güneş
+DF 78 Necati Özçağlayan
+MF 78 Serdar Bali
+MF 80 Şenol Ustaömer
+MF 79 İskender Günen
+FW 80 Hasan Şengün
+#1985|Beşiktaş
+GK 79 Zafer Öğer
+DF 82 Samet Aybaba
+DF 81 Ulvi Güveneroğlu
+DF 78 Kadir Akbulut
+DF 79 Gökhan Keskin
+MF 86 Rıza Çalımbay
+MF 81 Ziya Doğan
+MF 80 Mehmet Ekşi
+FW 87 Metin Tekin
+FW 82 Ali Gültiken
+FW 83 Feyyaz Uçar
+#1985|Galatasaray
+DF 81 Cüneyt Tanman
+DF 80 Erhan Önal
+DF 78 Ahmet Ceylan
+MF 81 Raşit Çetiner
+MF 79 Uğur Tütüneker
+MF 78 Muhammet Altıntaş
+FW 80 Erdal Keser
+#1985|Samsunspor
+GK 82 Fatih Uraz
+FW 86 Tanju Çolak
+FW 77 Mete Adanır
+#1986|Galatasaray
+GK 85 Zoran Simović
+DF 81 Cüneyt Tanman
+DF 80 Erhan Önal
+DF 79 Semih Yuvakuran
+DF 78 İsmail Demiriz
+DF 79 Yusuf Altıntaş
+MF 81 Uğur Tütüneker
+MF 78 Muhammet Altıntaş
+MF 79 Raşit Çetiner
+FW 81 Erdal Keser
+FW 80 İlyas Tüfekçi
+#1986|Beşiktaş
+GK 80 Zafer Öğer
+DF 82 Samet Aybaba
+DF 81 Ulvi Güveneroğlu
+DF 79 Gökhan Keskin
+DF 79 Recep Çetin
+MF 87 Rıza Çalımbay
+MF 81 Ziya Doğan
+MF 80 Mehmet Ekşi
+FW 87 Metin Tekin
+FW 83 Ali Gültiken
+FW 84 Feyyaz Uçar
+#1986|Samsunspor
+GK 83 Fatih Uraz
+FW 89 Tanju Çolak
+FW 77 Mete Adanır
+#1987|Beşiktaş
+GK 80 Zafer Öğer
+DF 82 Samet Aybaba
+DF 81 Ulvi Güveneroğlu
+DF 80 Gökhan Keskin
+DF 80 Recep Çetin
+MF 87 Rıza Çalımbay
+MF 80 Ziya Doğan
+MF 80 Mehmet Ekşi
+FW 88 Metin Tekin
+FW 84 Ali Gültiken
+FW 85 Feyyaz Uçar
+#1988|Beşiktaş
+GK 80 Zafer Öğer
+DF 82 Samet Aybaba
+DF 81 Ulvi Güveneroğlu
+DF 81 Gökhan Keskin
+DF 81 Recep Çetin
+MF 87 Rıza Çalımbay
+MF 80 Mehmet Ekşi
+FW 88 Metin Tekin
+FW 84 Ali Gültiken
+FW 86 Feyyaz Uçar
+FW 82 Les Ferdinand
+#1988|Galatasaray
+GK 85 Zoran Simović
+DF 81 Cüneyt Tanman
+DF 80 Erhan Önal
+DF 80 Semih Yuvakuran
+DF 79 İsmail Demiriz
+DF 79 Yusuf Altıntaş
+MF 82 Uğur Tütüneker
+MF 79 Muhammet Altıntaş
+MF 79 Arif Kocabıyık
+FW 90 Tanju Çolak
+FW 80 İlyas Tüfekçi
+#1989|Beşiktaş
+GK 82 Engin İpekoğlu
+DF 82 Ulvi Güveneroğlu
+DF 82 Gökhan Keskin
+DF 82 Recep Çetin
+DF 79 Kadir Akbulut
+MF 88 Rıza Çalımbay
+MF 83 Mehmet Özdilek
+FW 88 Metin Tekin
+FW 85 Ali Gültiken
+FW 87 Feyyaz Uçar
+#1989|Fenerbahçe
+GK 85 Harald Schumacher
+DF 80 Müjdat Yetkiner
+DF 79 İsmail Kartal
+MF 85 Oğuz Çetin
+MF 81 Hakan Tecimer
+MF 81 Şenol Ustaömer
+MF 82 Rıdvan Dilmen
+FW 87 Aykut Kocaman
+FW 81 Hasan Vezir
+#1989|Trabzonspor
+DF 79 Turgay Semercioğlu
+DF 78 Lemi Çelik
+MF 83 Ünal Karaman
+FW 84 Hami Mandıralı
+FW 81 Hasan Şengün
+#1990|Beşiktaş
+GK 83 Engin İpekoğlu
+DF 82 Ulvi Güveneroğlu
+DF 83 Gökhan Keskin
+DF 83 Recep Çetin
+DF 79 Kadir Akbulut
+MF 88 Rıza Çalımbay
+MF 84 Mehmet Özdilek
+MF 79 Zeki Önatlı
+FW 88 Metin Tekin
+FW 85 Ali Gültiken
+FW 88 Feyyaz Uçar
+#1990|Galatasaray
+GK 80 Hayrettin Demirbaş
+DF 82 Bülent Korkmaz
+DF 79 Erhan Önal
+DF 79 İsmail Demiriz
+DF 78 Cüneyt Tanman
+DF 78 Yusuf Altıntaş
+MF 82 Uğur Tütüneker
+MF 79 Muhammet Altıntaş
+FW 83 Roman Kosecki
+FW 90 Tanju Çolak
+#1990|Trabzonspor
+DF 79 Lemi Çelik
+DF 80 Ogün Temizkanoğlu
+MF 84 Ünal Karaman
+FW 86 Hami Mandıralı
+FW 81 Orhan Çıkırıkçı
+#1991|Beşiktaş
+GK 84 Engin İpekoğlu
+DF 83 Recep Çetin
+DF 83 Gökhan Keskin
+DF 82 Ulvi Güveneroğlu
+DF 79 Kadir Akbulut
+MF 88 Rıza Çalımbay
+MF 85 Mehmet Özdilek
+MF 80 Zeki Önatlı
+FW 88 Metin Tekin
+FW 85 Ali Gültiken
+FW 89 Feyyaz Uçar
+#1991|Fenerbahçe
+GK 82 Engin İpekoğlu
+DF 79 Semih Yuvakuran
+DF 79 Piotr Soczyński
+DF 80 Müjdat Yetkiner
+MF 86 Oğuz Çetin
+MF 81 Hakan Tecimer
+MF 82 Rıdvan Dilmen
+FW 89 Tanju Çolak
+FW 88 Aykut Kocaman
+#1991|Galatasaray
+GK 80 Hayrettin Demirbaş
+DF 83 Bülent Korkmaz
+DF 79 İsmail Demiriz
+DF 79 Hamza Hamzaoğlu
+MF 82 Uğur Tütüneker
+MF 82 Falko Götz
+MF 79 Muhammet Altıntaş
+FW 86 Roman Kosecki
+FW 80 Erdal Keser
+#1992|Galatasaray
+GK 80 Hayrettin Demirbaş
+DF 84 Bülent Korkmaz
+DF 80 Yusuf Tepekule
+DF 80 Hamza Hamzaoğlu
+MF 84 Tugay Kerimoğlu
+MF 82 Suat Kaya
+MF 81 Uğur Tütüneker
+MF 79 Mustafa Yücedağ
+FW 85 Hakan Şükür
+FW 79 Arif Erdem
+#1992|Beşiktaş
+GK 80 Jarosław Bako
+DF 83 Recep Çetin
+DF 82 Gökhan Keskin
+DF 81 Ulvi Güveneroğlu
+MF 86 Rıza Çalımbay
+MF 85 Mehmet Özdilek
+MF 85 Sergen Yalçın
+FW 86 Metin Tekin
+FW 84 Ali Gültiken
+FW 87 Feyyaz Uçar
+#1992|Trabzonspor
+DF 82 Ogün Temizkanoğlu
+DF 79 Lemi Çelik
+MF 85 Ünal Karaman
+MF 82 Abdullah Ercan
+FW 87 Hami Mandıralı
+FW 81 Orhan Çıkırıkçı
+#1993|Galatasaray
+GK 81 Hayrettin Demirbaş
+DF 85 Bülent Korkmaz
+DF 80 Yusuf Tepekule
+DF 80 Hamza Hamzaoğlu
+MF 85 Tugay Kerimoğlu
+MF 82 Suat Kaya
+MF 80 Uğur Tütüneker
+FW 87 Hakan Şükür
+FW 81 Arif Erdem
+FW 82 Kubilay Türkyılmaz
+#1993|Fenerbahçe
+GK 81 Engin İpekoğlu
+DF 80 Semih Yuvakuran
+DF 80 Ogün Temizkanoğlu
+MF 86 Oğuz Çetin
+MF 82 Aykut Kocaman
+FW 84 Tanju Çolak
+FW 83 Bülent Uygun
+#1993|Trabzonspor
+DF 80 Lemi Çelik
+DF 81 Kemalettin Şentürk
+MF 85 Ünal Karaman
+MF 83 Abdullah Ercan
+MF 81 Soner Boz
+FW 88 Hami Mandıralı
+FW 82 Orhan Çıkırıkçı
+#1994|Beşiktaş
+GK 84 Raimond Aumann
+DF 83 Recep Çetin
+DF 82 Gökhan Keskin
+MF 85 Mehmet Özdilek
+MF 87 Sergen Yalçın
+FW 86 Feyyaz Uçar
+FW 85 Metin Tekin
+FW 84 Ertuğrul Sağlam
+#1994|Trabzonspor
+DF 81 Ogün Temizkanoğlu
+DF 81 Kemalettin Şentürk
+MF 84 Ünal Karaman
+MF 84 Abdullah Ercan
+MF 82 Hamdi Aslan
+FW 89 Hami Mandıralı
+FW 82 Orhan Çıkırıkçı
+FW 82 Shota Arveladze
+#1994|Galatasaray
+GK 80 Hayrettin Demirbaş
+DF 85 Bülent Korkmaz
+DF 80 Hamza Hamzaoğlu
+MF 85 Tugay Kerimoğlu
+MF 82 Suat Kaya
+FW 86 Hakan Şükür
+FW 82 Arif Erdem

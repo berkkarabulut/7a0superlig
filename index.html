@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d1410">
+<meta name="theme-color" content="#14061f">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,7 +14,7 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d1410'/%3E%3Ctext x='50' y='64' font-size='42' font-weight='900' text-anchor='middle' fill='%23e30a17' font-family='Arial'%3E7-0%3C/text%3E%3C/svg%3E">
 <title>Süper Lig 7-0</title>
 <style>
-:root{--bg:#0d1410;--card:#16211b;--line:#24362b;--txt:#e9f2ec;--mut:#8ea697;--acc:#e30a17;--gold:#f2c14e;--grass:#1f6b3a;--grass2:#1b5f33;--win:#7ee08f;--loss:#ff7a7a}
+:root{--bg:#14061f;--card:#1f0a33;--card2:#2a0f45;--line:#3e1a5c;--txt:#ffffff;--mut:#c9a3e0;--acc:#e30a17;--acc2:#ff5a36;--gold:#ffb703;--teal:#00c2a8;--blue:#3d8bff;--grass:#1c6b3d;--grass2:#18603a;--win:#00d9b8;--loss:#ff4d6d;--cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
@@ -193,6 +195,73 @@ tr.me td{color:var(--gold);font-weight:700}
 .ach .card{opacity:.45}.ach .card.got{opacity:1;border-color:var(--gold)}
 .budget{font-weight:800}.budget.over{color:var(--loss)}
 .toggle{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+
+/* ===== TV YAYINI TEMASI ===== */
+body{font-family:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg)}
+h1,h2,h3,.logo,.score .tn,.score .big,.rec,.bh,.big,.stat b,.badge,nav button,.btn,.chip,.preview{font-family:var(--cond);letter-spacing:.3px}
+h1,h2,.score .tn,.bh,.badge{text-transform:uppercase}
+h1{font-weight:800}h2{font-weight:800}h3{font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);font-size:15px}
+header{background:linear-gradient(90deg,#1b0630,#2a0a44);border-bottom:3px solid var(--acc)}
+.logo{font-weight:800;font-size:26px;text-transform:uppercase}
+.logo b{background:var(--acc);color:#fff;padding:0 8px;border-radius:2px;margin-left:2px}
+nav button{text-transform:uppercase;font-weight:700;font-size:16px;letter-spacing:.6px}
+nav button.on{color:#fff;box-shadow:inset 0 -3px 0 var(--acc)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:4px}
+.btn{border-radius:3px;text-transform:uppercase;font-weight:700;font-size:17px;letter-spacing:.6px;background:linear-gradient(0deg,var(--acc),var(--acc2))}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:#fff}
+.btn.gold{background:var(--gold);color:#1d1200}
+.chip{border-radius:3px;background:var(--card2);border:1px solid var(--line);text-transform:uppercase;font-weight:700;letter-spacing:.4px}
+.chip.on{border-color:var(--gold);color:var(--gold);background:#2e1a05}
+.mode{border-left:4px solid var(--line)}.mode.on{border-left-color:var(--acc)}
+.pl{border-radius:2px;background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--line)}
+.pl.nat{border-color:var(--line);border-left-color:var(--teal)}
+.pl.nearp{border-left-color:#f08a24}
+.pl.sel{border-color:var(--gold);border-left-color:var(--gold);background:#2e1a05}
+.pl:hover:not(:disabled){border-left-color:var(--acc)}
+.pos{border-radius:2px;background:#3a1257;font-family:var(--cond);font-size:12px;letter-spacing:.4px}
+.pos.GK{color:#ffd166}.pos.DF{color:#7cc4ff}.pos.MF{color:#5ff0d5}.pos.FW{color:#ff7a8a}
+.tag{border-radius:2px}.tag.ok{background:#00c2a822;color:var(--teal)}
+.badge{border-radius:2px;background:var(--acc);color:#fff;font-size:12px}
+.rv{border-radius:2px;font-family:var(--cond);font-size:17px;min-width:34px}
+.rv.r90{background:linear-gradient(0deg,#e30a17,#ff5a36);color:#fff}.rv.r87{background:#ffb703;color:#1d1200}.rv.r84{background:#00c2a8;color:#00241f}
+.rv.r80{background:#3d8bff;color:#fff}.rv.r70{background:#4a3a5a;color:#e8dcf0}.rv.rq{background:#4a3a5a;color:#e8dcf0}
+.slot.full .dot{border:2px solid #fff;font-family:var(--cond);font-size:15px}
+.slot.full .dot.t-r90{background:linear-gradient(0deg,#e30a17,#ff5a36);color:#fff}.slot.full .dot.t-r87{background:#ffb703;color:#1d1200}
+.slot.full .dot.t-r84{background:#00c2a8;color:#00241f}.slot.full .dot.t-r80{background:#3d8bff;color:#fff}.slot.full .dot.t-r70{background:#4a3a5a;color:#fff}
+.slot.leg .dot{box-shadow:0 0 0 3px var(--gold)}
+.slot.ok .dot{background:var(--gold);color:#1d1200}
+.slot .nm{font-family:var(--cond);font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+.pitch{border-radius:4px;border:2px solid #3e1a5c;box-shadow:inset 0 0 0 2px #ffffff10}
+.stats{border-left:3px solid var(--acc)}
+.stat b{font-weight:800;font-size:24px}
+.score{background:#0d0216;border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:3px;padding:14px 10px;margin-top:6px}
+.score .tn{font-weight:800;font-size:20px;letter-spacing:.6px}
+.score .big{font-weight:800;font-size:54px;background:linear-gradient(0deg,#e30a17,#ff5a36);color:#fff;padding:0 16px;border-radius:2px;letter-spacing:4px;line-height:1.15}
+.clock{display:inline-block;margin-top:6px;background:#fff;color:#14061f;font-family:var(--cond);font-weight:800;font-size:16px;padding:1px 10px;border-radius:2px;text-transform:uppercase}
+.bar{background:#ffffff18}.bar i{background:var(--acc)}
+.pensc{color:#fff}
+.events li{border-bottom:1px solid var(--line)}
+.events li.ev-goal{background:#e30a1714;border-left:3px solid var(--acc)}
+.events li.away.ev-goal{border-left:0;border-right:3px solid var(--acc)}
+.events li.penh{background:#ffb70314;color:var(--gold)}
+.path span{border-radius:2px;background:#2a0f45;font-family:var(--cond);text-transform:uppercase;font-size:13px;letter-spacing:.4px}
+.path span.cur{background:var(--acc);color:#fff}
+.path span.W{background:#00c2a826;color:var(--win)}.path span.L{background:#ff4d6d26;color:var(--loss)}.path span.D{background:#ffb70326;color:var(--gold)}
+tr.me td{color:var(--gold)}
+th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
+.bm{border-radius:2px;background:#170528}.bt.me{background:#e30a1726;color:#fff}.bm.champ{border-color:var(--gold);color:var(--gold)}
+.hint{border-radius:3px;background:#2e1a05;border-color:#f08a24}
+.result .big,.rec{font-weight:800}.rec.gold{color:var(--gold)}
+.W{color:var(--win)}.L{color:var(--loss)}.D{color:var(--gold)}
+.leader{border-radius:3px;background:#ffb70318;border-color:#ffb70355}
+.online{border-radius:3px}
+.namebox input,.namebox select,.inp{background:#170528;border-radius:3px}
+.preview{font-weight:800;text-transform:uppercase;color:var(--gold)}
+.mbox{border-radius:4px;border-top:3px solid var(--acc)}
+.modal{background:#0b0012cc}
+.ach .card.got{border-color:var(--gold)}
+.chemlist{color:#7ff0dc}
+@media(max-width:700px){.btn{font-size:15px;padding:9px 10px;letter-spacing:.3px}.logo{font-size:22px}}
 </style>
 </head>
 <body>
@@ -805,25 +874,26 @@ function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,
 function fitText(c,txt,max){ let s=txt; while(c.measureText(s).width>max && s.length>3) s=s.slice(0,-2); return s===txt?s:s+"…"; }
 function makeShareCanvas(){
   const T=S.T, W=1080, H=1350, cv=document.createElement("canvas"); cv.width=W; cv.height=H; const c=cv.getContext("2d");
-  const F = "system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif";
-  c.fillStyle="#0d1410"; c.fillRect(0,0,W,H);
+  const F = "'Barlow Condensed','Arial Narrow',system-ui,sans-serif";
+  c.fillStyle="#14061f"; c.fillRect(0,0,W,H);
   // başlık
-  c.textAlign="left"; c.fillStyle="#e9f2ec"; c.font=`900 54px ${F}`; c.fillText("Süper Lig",60,100);
-  const w1=c.measureText("Süper Lig ").width; c.fillStyle="#e30a17"; c.fillText("7-0",60+w1,100);
-  c.textAlign="right"; c.fillStyle="#8ea697"; c.font=`600 28px ${F}`;
+  c.fillStyle="#e30a17"; c.fillRect(0,0,W,10);
+  c.textAlign="left"; c.fillStyle="#ffffff"; c.font=`800 58px ${F}`; c.fillText("SÜPER LİG",60,100);
+  const w1=c.measureText("SÜPER LİG ").width; c.fillStyle="#e30a17"; c.fillRect(60+w1-4,52,c.measureText("7-0").width+16,62); c.fillStyle="#fff"; c.fillText("7-0",60+w1+4,100);
+  c.textAlign="right"; c.fillStyle="#c9a3e0"; c.font=`600 28px ${F}`;
   c.fillText(S.mode==="daily"?`Günün meydan okuması · ${todayKey()}`:new Date().toLocaleDateString("tr-TR"),W-60,96);
   // sonuç
   const champ=!T.out, [wins]=record(), seven=wins===7;
-  c.textAlign="center"; c.fillStyle= seven?"#f2c14e": champ?"#7ee08f":"#ff7a7a"; c.font=`900 120px ${F}`;
+  c.textAlign="center"; c.fillStyle= seven?"#ffb703": champ?"#00d9b8":"#ff4d6d"; c.font=`900 120px ${F}`;
   c.fillText(recStr(),W/2,215);
   c.font=`800 36px ${F}`; c.fillText(fitText(c,(champ?"🏆 ":"")+myName()+" · "+resultTitle(),W-120),W/2,262);
-  c.fillStyle="#8ea697"; c.font=`600 26px ${F}`;
+  c.fillStyle="#c9a3e0"; c.font=`600 26px ${F}`;
   c.fillText(`Atılan ${T.gf}  ·  Yenen ${T.ga}`,W/2,296);
   // maç kutuları
   const bw=132, gap=12, bx=(W-(7*bw+6*gap))/2;
   for(let i=0;i<7;i++){ const r=T.res[i], x=bx+i*(bw+gap), y=310;
-    c.fillStyle = !r?"#1a2620": r.res==="W"?"#2f8a50": r.res==="D"?"#b8902e":"#b03a3a"; rr(c,x,y,bw,110,16); c.fill();
-    c.fillStyle= r?"#ffffff":"#5d6e64"; c.font=`700 22px ${F}`; c.fillText(SHORTST[i],x+bw/2,y+36);
+    c.fillStyle = !r?"#2a0f45": r.res==="W"?"#00a88f": r.res==="D"?"#d99a00":"#c40812"; rr(c,x,y,bw,110,16); c.fill();
+    c.fillStyle= r?"#ffffff":"#6b4f86"; c.font=`700 22px ${F}`; c.fillText(SHORTST[i],x+bw/2,y+36);
     c.font=`900 40px ${F}`; c.fillText(r?`${r.g1}-${r.g2}`:"–",x+bw/2,y+86);
     if(r&&r.pen){ c.font=`600 17px ${F}`; c.fillText(`pen ${r.pen[0]}-${r.pen[1]}`,x+bw/2,y+106); } }
   // saha
@@ -836,22 +906,23 @@ function makeShareCanvas(){
   c.beginPath(); c.moveTo(px+40,py+ph/2); c.lineTo(px+pw-40,py+ph/2); c.stroke();
   c.beginPath(); c.arc(W/2,py+ph/2,90,0,Math.PI*2); c.stroke();
   c.strokeRect(W/2-170,py+ph-120,340,120); c.strokeRect(W/2-170,py,340,120);
-  const col = r => r>=90?"#9b5de5":r>=87?"#f2c14e":r>=84?"#3fb96b":r>=80?"#3b8fd9":"#7d8a83";
+  const col = r => r>=90?"#9b5de5":r>=87?"#ffb703":r>=84?"#3fb96b":r>=80?"#3b8fd9":"#7d8a83";
   for(const s of S.slots){ const p=s.p, x=px+pw*s.x/100, y=py+ph*s.y/100;
     c.fillStyle=col(p.r); c.beginPath(); c.arc(x,y,38,0,Math.PI*2); c.fill();
-    c.lineWidth=4; c.strokeStyle= p.r>=LEGEND?"#f2c14e":"#ffffff"; c.stroke();
-    c.fillStyle= (p.r>=87&&p.r<90)?"#222":"#fff"; c.font=`900 30px ${F}`; c.fillText(S.almanac?"?":p.r,x,y+11);
+    c.lineWidth=4; c.strokeStyle= p.r>=LEGEND?"#ffb703":"#ffffff"; c.stroke();
+    c.fillStyle= (p.r>=84&&p.r<90)?"#1d1200":"#fff"; c.font=`900 30px ${F}`; c.fillText(S.almanac?"?":p.r,x,y+11);
     c.fillStyle="#fff"; c.shadowColor="rgba(0,0,0,.6)"; c.shadowBlur=6; c.font=`800 24px ${F}`; c.fillText(fitText(c,short(p.n),190),x,y+68);
     c.font=`600 18px ${F}`; c.fillStyle="rgba(255,255,255,.8)"; c.fillText(fitText(c,`${p.team} ${p.season.slice(2)}`,190),x,y+92); c.shadowBlur=0; }
   // alt bilgi
   const pw2=teamPower(T.me,S.style);
-  c.textAlign="left"; c.fillStyle="#e9f2ec"; c.font=`800 32px ${F}`;
+  c.textAlign="left"; c.fillStyle="#ffffff"; c.font=`800 32px ${F}`;
   c.fillText(`${S.form} · ${S.style}${S.almanac?" · Almanak":""}`,60,1275);
   c.textAlign="right"; c.fillText(S.almanac?"Genel ?":`Genel ${pw2.ovr}`,W-60,1275);
-  c.textAlign="center"; c.fillStyle="#8ea697"; c.font=`600 24px ${F}`; c.fillText("Sen de 11'ini kur, 7-0'ı dene",W/2,1322);
+  c.textAlign="center"; c.fillStyle="#c9a3e0"; c.font=`600 24px ${F}`; c.fillText("Sen de 11'ini kur, 7-0'ı dene",W/2,1322);
   return cv;
 }
-function openShare(){
+async function openShare(){
+  try { await document.fonts?.load?.("800 40px 'Barlow Condensed'"); } catch(e){}
   const cv = makeShareCanvas(), url = cv.toDataURL("image/png");
   S.shareUrl = url;
   const m = document.createElement("div"); m.id="sharebox"; m.className="modal";

@@ -50,6 +50,12 @@ h1{font-size:32px;margin:8px 0 6px}h2{margin:0 0 12px;font-size:20px}h3{margin:0
 .rv.r90{background:#9b5de530;color:#c9a2ff}.rv.r87{background:#f2c14e2a;color:#f2c14e}.rv.r84{background:#3fb96b2a;color:#7ee08f}
 .rv.r80{background:#3b8fd92a;color:#8cc4ff}.rv.r70{background:#ffffff12;color:#a9b4ad}.rv.rq{background:#ffffff12;color:#a9b4ad}
 .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+.namebox{display:flex;gap:8px;margin:16px 0 8px}
+.namebox input,.namebox select{background:#0f1813;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:13px 12px;font:inherit;font-size:17px;font-weight:700}
+.namebox input{flex:1;min-width:0;text-transform:none}.namebox select{max-width:46%}
+.namebox input:focus,.namebox select:focus{outline:2px solid var(--gold);border-color:transparent}
+.preview{font-size:30px;font-weight:900;color:var(--gold);min-height:40px;margin-top:6px;word-break:break-word}
+nav button.myteam{color:var(--gold);font-weight:800}
 .online{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--txt);background:#ffffff10;border:1px solid var(--line);padding:4px 10px;border-radius:999px;vertical-align:middle;margin-left:10px}
 .online i{width:8px;height:8px;border-radius:50%;background:#3fdc72;box-shadow:0 0 0 0 #3fdc7288;animation:livepulse 2s infinite}
 @keyframes livepulse{70%{box-shadow:0 0 0 7px #3fdc7200}100%{box-shadow:0 0 0 0 #3fdc7200}}
@@ -186,6 +192,7 @@ tr.me td{color:var(--gold);font-weight:700}
 <header>
   <div class="logo">Süper Lig <b>7-0</b> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> online</span></div>
   <nav>
+    <button id="myteam" class="myteam hidden" onclick="show('play');renderNameScreen(true)" title="Takım adını değiştir"></button>
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
     <button id="n-squads" onclick="show('squads')">Kadrolar</button>
     <button id="n-ach" onclick="show('ach')">Başarımlar</button>
@@ -263,6 +270,52 @@ function show(id){
   if (id==="how") renderHow();
 }
 
+// ---------- takım adı ----------
+const SUFFIXES = [
+ ["SK","Türkiye"],["JK","Türkiye"],["Spor","Türkiye"],["Gücü","Türkiye"],["Belediyespor","Türkiye"],["İdmanyurdu","Türkiye"],["A.Ş.","Türkiye"],["Kulübü","Türkiye"],
+ ["FC","İngiltere / dünya"],["AFC","İngiltere"],["United","İngiltere"],["City","İngiltere"],["Athletic","İngiltere"],["Rovers","İngiltere"],["Wanderers","İngiltere"],["Albion","İngiltere"],["Town","İngiltere"],
+ ["SV","Almanya"],["VfB","Almanya"],["VfL","Almanya"],["TSV","Almanya"],["TSG","Almanya"],["SC","Almanya / dünya"],["BSC","Almanya"],["SG","Almanya"],["1. FC","Almanya"],["Borussia","Almanya"],
+ ["AC","İtalya"],["AS","İtalya"],["SS","İtalya"],["US","İtalya"],["SSC","İtalya"],["ACF","İtalya"],["Calcio","İtalya"],
+ ["CF","İspanya"],["CD","İspanya"],["UD","İspanya"],["SD","İspanya"],["RCD","İspanya"],["Real","İspanya"],["Atlético","İspanya"],
+ ["OGC","Fransa"],["AJ","Fransa"],["RC","Fransa"],["Olympique","Fransa"],["Stade","Fransa"],["FCO","Fransa"],
+ ["SL","Portekiz"],["SC Braga","Portekiz"],["CS","Portekiz"],["GD","Portekiz"],
+ ["PSV","Hollanda"],["AFC Ajax","Hollanda"],["SBV","Hollanda"],["KV","Belçika"],["KRC","Belçika"],["RSC","Belçika"],["KAA","Belçika"],
+ ["IF","İsveç"],["IK","İsveç"],["AIK","İsveç"],["IFK","İsveç"],["BK","Danimarka"],["FF","İsveç"],["SK Brann","Norveç"],
+ ["FK","Sırbistan / Rusya"],["PFC","Bulgaristan / Rusya"],["NK","Hırvatistan"],["HNK","Hırvatistan"],["GNK","Hırvatistan"],["KS","Polonya"],["MKS","Polonya"],["FCSB","Romanya"],["ACS","Romanya"],
+ ["CA","Arjantin"],["CR","Brezilya"],["SE","Brezilya"],["EC","Brezilya"],["CSD","Arjantin"],["Club","Güney Amerika"],
+ ["SC Corinthians","Brezilya"],["Deportivo","Latin Amerika"],["Esporte Clube","Brezilya"],["Sporting","Portekiz / dünya"],["Dinamo","Doğu Avrupa"],["Spartak","Rusya"],["Lokomotiv","Rusya"],["Galaxy","ABD"],["FC Inter","dünya"]
+];
+const getTeam = () => store.get("team", null);
+const myName = () => { const t=getTeam(); return t ? (t.suffix ? `${t.name} ${t.suffix}` : t.name) : "Senin takımın"; };
+const NAME_RE = /^[A-Za-zÇĞİÖŞÜçğıöşüÂâÎîÛû0-9 .'-]{4,20}$/;
+function renderNameScreen(edit){
+  const cur = getTeam() || {name:"", suffix:"FC"};
+  $("play").innerHTML = `
+    <div class="card" style="max-width:520px;margin:30px auto;text-align:center">
+      <h1 style="margin-top:0">${edit?"Takımının adını değiştir":"Takımını kur ⚽"}</h1>
+      <p class="mut">Takımının adını yaz, yanından uzantısını seç. Bütün maçlarda, tabloda ve paylaşım görselinde bu ad yazacak.</p>
+      <div class="namebox">
+        <input id="tname" maxlength="20" placeholder="Örn: BERKO" value="${esc(cur.name)}" autocomplete="off">
+        <select id="tsuf">${SUFFIXES.map(([s,c])=>`<option value="${esc(s)}" ${s===cur.suffix?"selected":""}>${esc(s)} · ${esc(c)}</option>`).join("")}<option value="" ${cur.suffix===""?"selected":""}>Uzantısız</option></select>
+      </div>
+      <div class="preview" id="tprev"></div>
+      <p class="mut" id="terr" style="font-size:13px;min-height:18px"></p>
+      <div class="row" style="justify-content:center"><button class="btn" id="tgo" onclick="saveName()">${edit?"Kaydet":"Oynamaya başla"}</button>${edit?`<button class="btn ghost" onclick="renderStart()">Vazgeç</button>`:""}</div>
+    </div>`;
+  const upd = () => { const n=($("tname").value||"").trim(), s=$("tsuf").value||"", ok=NAME_RE.test(n);
+    $("tprev").textContent = n ? (s?`${n} ${s}`:n) : "";
+    $("terr").textContent = !n ? "En az 4 karakter" : ok ? "" : n.length<4 ? `En az 4 karakter (${n.length}/4)` : "Sadece harf, rakam, boşluk, nokta ve tire kullanabilirsin";
+    $("tgo").disabled = !ok; };
+  $("tname").oninput = upd; $("tsuf").onchange = upd; $("tname").onkeydown = e=>{ if(e.key==="Enter" && !$("tgo").disabled) saveName(); };
+  upd(); try{ $("tname").focus(); }catch(e){}
+}
+function saveName(){
+  const n=$("tname").value.trim().replace(/\s+/g," "), s=$("tsuf").value;
+  if (!NAME_RE.test(n)) return;
+  store.set("team", {name:n, suffix:s}); updateHeaderName(); renderStart();
+}
+function updateHeaderName(){ const el=$("myteam"); if(!el) return; const t=getTeam(); el.textContent = t ? "🛡️ "+myName() : ""; el.classList.toggle("hidden", !t); }
+
 // ---------- başlangıç ----------
 let S = { mode:"solo", form:"4-3-3", style:"Dengeli", almanac:false, speed:"Normal" };
 function renderStart(){
@@ -270,7 +323,7 @@ function renderStart(){
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);
   $("play").innerHTML = `
-    <h1>Efsane 11'ini kur, 7-0 yap.</h1>
+    <h1>${esc(myName())}, efsane 11'ini kur, 7-0 yap.</h1>
     <p class="mut">Süper Lig'de 1980'den bugüne her sezonun ilk 3'ü: ${seasons.length} sezon, ${POOL.length} takım, ${POOL.reduce((a,t)=>a+t.players.length,0)} oyuncu.
     Takım çek, her takımdan bir oyuncu seç, 11'i tamamla, turnuvaya çık. Hedef: 7 maç, 7 galibiyet, kalende tek gol yok.</p>
     <div class="modes">
@@ -545,11 +598,11 @@ function startTournament(){
   const others = shuffle(POOL);
   const group = others.slice(0,3).map(opp);
   const mePw = teamPower(me, S.style);
-  const ME = { name:"Senin 11'in", me:true, pw:mePw, pl:me };
+  const ME = { name:myName(), me:true, pw:mePw, pl:me };
   const R0 = [ME, ...others.slice(3,18).map(opp)];
   S.T = { me, mePw, group, R:[R0], M:[], i:0, res:[], table:null, W:0,D:0,L:0,gf:0,ga:0, out:null, done:false };
   // grup tablosu
-  const tbl = {}; ["Senin 11'in", ...group.map(g=>g.name)].forEach(n=>tbl[n]={n,O:0,G:0,B:0,M:0,A:0,Y:0,P:0});
+  const tbl = {}; [myName(), ...group.map(g=>g.name)].forEach(n=>tbl[n]={n,O:0,G:0,B:0,M:0,A:0,Y:0,P:0});
   S.T.table = tbl;
   // diğer grup maçları (rakipler birbiriyle)
   S.T.others = [[1,2],[0,2],[0,1]].map(([a,b])=>{ const x=group[a],y=group[b]; const r=simGoals(x.pw,y.pw,x.pl,y.pl); return {a:x.name,b:y.name,g1:r.g1,g2:r.g2}; });
@@ -562,7 +615,7 @@ function pathHTML(){
   const T=S.T; return `<div class="path">${STAGES.map((s,i)=>`<span class="${i<T.res.length?T.res[i].res:(i===T.i&&!T.done?"cur":"")}">${s}${i<T.res.length?` ${T.res[i].g1}-${T.res[i].g2}`:""}</span>`).join("")}</div>`;
 }
 function tableHTML(){
-  return `<table><tr><th>Grup</th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>P</th></tr>${sortedTable().map(r=>`<tr class="${r.n==="Senin 11'in"?"me":""}"><td>${esc(r.n)}</td><td>${r.O}</td><td>${r.G}</td><td>${r.B}</td><td>${r.M}</td><td>${r.A}</td><td>${r.Y}</td><td>${r.P}</td></tr>`).join("")}</table>`;
+  return `<table><tr><th>Grup</th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>P</th></tr>${sortedTable().map(r=>`<tr class="${r.n===myName()?"me":""}"><td>${esc(r.n)}</td><td>${r.O}</td><td>${r.G}</td><td>${r.B}</td><td>${r.M}</td><td>${r.A}</td><td>${r.Y}</td><td>${r.P}</td></tr>`).join("")}</table>`;
 }
 async function playNext(){
   const T=S.T, i=T.i, isKo = i>=3;
@@ -574,7 +627,7 @@ async function playNext(){
       <div>
         <div class="card">
           <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]}</div>
-          <div class="score"><div class="tn">Senin 11'in<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${S.style}</div></div>
+          <div class="score"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${S.style}</div></div>
             <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
             <div class="tn">${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${esc(o.t.note||"")}</div></div></div>
           <ul class="events" id="ev"></ul>
@@ -620,11 +673,11 @@ async function playNext(){
   T.res.push({res, g1:r.g1, g2:r.g2, pen, et:r.et, opp:o.name});
   let msg="";
   if (!isKo){
-    addTbl("Senin 11'in", r.g1, r.g2); addTbl(o.name, r.g2, r.g1);
+    addTbl(myName(), r.g1, r.g2); addTbl(o.name, r.g2, r.g1);
     const om = T.others[i]; addTbl(om.a,om.g1,om.g2); addTbl(om.b,om.g2,om.g1);
     msg = `<span class="mut">Gruptaki diğer maç: ${esc(om.a)} ${om.g1}-${om.g2} ${esc(om.b)}</span>`;
     $("tbl").innerHTML = tableHTML();
-    if (i===2){ const pos = sortedTable().findIndex(x=>x.n==="Senin 11'in"); if (pos>1) T.out = `Grupta ${pos+1}. oldun, elendin`; }
+    if (i===2){ const pos = sortedTable().findIndex(x=>x.n===myName()); if (pos>1) T.out = `Grupta ${pos+1}. oldun, elendin`; }
   } else {
     const k=i-3, ME=T.R[k][0];
     T.M[k]=[{a:ME,b:o,g1:r.g1,g2:r.g2,pen,et:r.et,w:res==="W"?ME:o}];
@@ -657,7 +710,7 @@ function finishBracket(){
     if (k===3 && !T.champ) T.champ=T.M[3][0].w;
   }
 }
-const shortName = n => n==="Senin 11'in" ? n : n.replace(/^(\d{2})(\d{2})-(\d{2}) /,"$2-$3 ");
+const shortName = n => n===myName() ? n : n.replace(/^(\d{2})(\d{2})-(\d{2}) /,"$2-$3 ");
 function bracketHTML(){
   const T=S.T, RN=["Son 16","Çeyrek final","Yarı final","Final"];
   const col = k => { const R=T.R[k]; if(!R) return `<div class="bcol"><div class="bh">${RN[k]}</div><div class="bbody"><div class="bm empty">—</div></div></div>`;
@@ -705,7 +758,7 @@ function resultTitle(){ const T=S.T, champ=!T.out, [w]=record();
   return w===7&&T.ga===0 ? "Efsane! Kalesini gole kapatarak 7-0" : w===7 ? "Efsane! 7'de 7" : champ&&T.L===0 ? "Yenilmez şampiyon" : champ ? "Şampiyon" : T.out; }
 function shareText(){
   const T=S.T, line = T.res.map(r=>r.res==="W"?"🟩":r.res==="D"?"🟨":"🟥").join("") + "⬛".repeat(7-T.res.length);
-  return `⚽ Süper Lig 7-0 · Benim sonucum: ${recStr()}\n${resultTitle()}\n${line}\n${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}\n${S.form} · ${S.style}${S.almanac?" · Almanak":""}${S.mode==="daily"?` · Günün meydan okuması (${todayKey()})`:""}\n11'im: ${S.slots.map(s=>short(s.p.n)).join(", ")}`;
+  return `⚽ Süper Lig 7-0 · ${myName()}: ${recStr()}\n${resultTitle()}\n${line}\n${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}\n${S.form} · ${S.style}${S.almanac?" · Almanak":""}${S.mode==="daily"?` · Günün meydan okuması (${todayKey()})`:""}\n11'im: ${S.slots.map(s=>short(s.p.n)).join(", ")}`;
 }
 function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
 function fitText(c,txt,max){ let s=txt; while(c.measureText(s).width>max && s.length>3) s=s.slice(0,-2); return s===txt?s:s+"…"; }
@@ -722,7 +775,7 @@ function makeShareCanvas(){
   const champ=!T.out, [wins]=record(), seven=wins===7;
   c.textAlign="center"; c.fillStyle= seven?"#f2c14e": champ?"#7ee08f":"#ff7a7a"; c.font=`900 120px ${F}`;
   c.fillText(recStr(),W/2,215);
-  c.font=`800 36px ${F}`; c.fillText(fitText(c,(champ?"🏆 ":"")+resultTitle(),W-120),W/2,262);
+  c.font=`800 36px ${F}`; c.fillText(fitText(c,(champ?"🏆 ":"")+myName()+" · "+resultTitle(),W-120),W/2,262);
   c.fillStyle="#8ea697"; c.font=`600 26px ${F}`;
   c.fillText(`Atılan ${T.gf}  ·  Yenen ${T.ga}`,W/2,296);
   // maç kutuları
@@ -862,7 +915,8 @@ function renderHow(){
    <p class="mut">Kadrolar o sezon ligi ilk 3'te bitiren takımlardan gelir. Reytingler nostaljik ve öznel değerlerdir.</p></div>`;
 }
 
-renderStart();
+if (getTeam()) renderStart(); else renderNameScreen(false);
+updateHeaderName();
 
 // ---------- anlık online sayacı (Firebase Realtime Database) ----------
 const FB_CONFIG = {

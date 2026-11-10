@@ -3,8 +3,33 @@ function talkCtx(T,o){ const me=teamPower(lineup(T),T.style), d=(me.att+me.def)-
 function preMatch(){
   const T=S.T, i=T.i, isKo=i>=3, o = isKo ? T.R[i-3][1] : T.group[i];
   T.o = o; T.ref = pickRef(o.t.season);
-  if (T.prepFor!==i){ T.prepFor=i; T.notes = autoFix(T); T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; }
+  if (T.prepFor!==i){ T.prepFor=i; T.notes = []; T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; }
   renderPre();
+  const miss = missingStarters(T);
+  if (miss.length && T.alerted!==i){ T.alerted=i; showMissAlert(miss); }
+}
+// ---- cezalı / sakat ilk 11 oyuncusu: kullanıcı değiştirmek zorunda ----
+const missingStarters = T => T.xi.map((s,k)=>({k,s})).filter(x=>isOut(T,x.s.p.n));
+const availBench = T => T.bench.filter(p=>!isOut(T,p.n));
+const mustFix = T => missingStarters(T).length>0 && availBench(T).length>0;
+const whyOut = (T,n) => T.outs[n].k==="susp" ? "🟥 kırmızı kart cezalısı" : `🚑 sakat (${T.outs[n].n} maç)`;
+function missBanner(T){
+  const m = missingStarters(T); if (!m.length) return "";
+  const can = availBench(T).length>0;
+  return `<div class="card missbox"><b>⚠️ ${m.length>1?`${m.length} oyuncun`:"Bir oyuncun"} bu maçta oynayamaz</b><br>${m.map(({k,s})=>`<b>${esc(s.p.n)}</b> (${NAME[s.pos]}) ${whyOut(T,s.p.n)}`).join("<br>")}
+    <div style="margin-top:6px">${can?"Maça başlamadan yerine bir yedek koymalısın: sahada kırmızı yanan oyuncuya, sonra yedeğe dokun ya da yedeği üstüne sürükle.":"Kulübede uygun yedek yok, bu maça eksik çıkacaksın."}</div>
+    ${can?`<div class="row" style="margin-top:8px"><button class="btn gold" onclick="autoFixMiss()">En uygun yedeği otomatik koy</button></div>`:""}</div>`;
+}
+function autoFixMiss(){ const T=S.T; T.notes = autoFix(T); document.getElementById("missmodal")?.remove?.(); renderPre(); }
+function showMissAlert(m){
+  if (!document.createElement) return;
+  const T=S.T, can=availBench(T).length>0, d=document.createElement("div"); d.id="missmodal"; d.className="modal";
+  d.innerHTML = `<div class="mbox" style="border:2px solid var(--loss)"><h3 style="margin-top:0">⚠️ Maç önü uyarısı</h3>
+    <p>${m.map(({s})=>`<b>${esc(s.p.n)}</b> (${NAME[s.pos]}) ${whyOut(T,s.p.n)}, bu maçta oynayamaz.`).join("<br>")}</p>
+    <p class="mut">${can?"Maça başlamadan yerine bir oyuncu koymak zorundasın.":"Kulübede uygun yedek yok, bu maça eksik çıkacaksın."}</p>
+    <div class="row">${can?`<button class="btn gold" onclick="autoFixMiss()">Otomatik en uygununu koy</button><button class="btn ghost" onclick="document.getElementById('missmodal').remove()">Kendim seçeceğim</button>`:`<button class="btn" onclick="document.getElementById('missmodal').remove()">Tamam</button>`}</div></div>`;
+  d.addEventListener("click", e=>{ if(e.target===d) d.remove(); });
+  document.body.appendChild(d);
 }
 function renderPre(){
   const T=S.T, i=T.i, o=T.o, isKo=i>=3, L=lineup(T), pw=teamPower(L,T.style), ctx=talkCtx(T,o), os=o.pw.style;
@@ -22,6 +47,7 @@ function renderPre(){
         <div class="stats" style="margin-top:4px"><div class="stat"><b>${pw.att.toFixed(1)}</b><span>Hücumun</span></div><div class="stat"><b>${pw.def.toFixed(1)}</b><span>Savunman</span></div>
           <div class="stat"><b>${o.pw.att.toFixed(1)}</b><span>Rakip hücum</span></div><div class="stat"><b>${o.pw.def.toFixed(1)}</b><span>Rakip savunma</span></div></div>
         ${T.notes.length?`<div class="hint card" style="margin-top:10px">${T.notes.join("<br>")}</div>`:""}
+        ${missBanner(T)}
       </div>
       <div class="card" style="margin-top:14px">
         <h3>📋 Taktik</h3>
@@ -35,7 +61,7 @@ function renderPre(){
         ${T.talked ? `<div class="talkres">${T.talkRes}</div>` :
           `<div class="talks">${TALKS.map((t,k)=>`<button class="card talk" onclick="doTalk(${k})"><span style="font-size:22px">${t.e}</span><span>“${esc(t.t)}”</span></button>`).join("")}</div>`}
       </div>
-      <div class="row" style="margin-top:14px"><button class="btn ${T.talked?"gold":""}" onclick="runMatch()">${T.talked?"Maça çık ▶":"Konuşmadan maça çık ▶"}</button></div>
+      <div class="row" style="margin-top:14px">${mustFix(T) ? `<button class="btn" disabled>Önce eksik oyuncunun yerine birini koy</button>` : `<button class="btn ${T.talked?"gold":""}" onclick="runMatch()">${T.talked?"Maça çık ▶":"Konuşmadan maça çık ▶"}</button>`}</div>
     </div>
     <div class="card">
       <div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">İlk 11'ini ayarla</h3>${T.xi.some((s,k)=>s.p.n!==T.orig[k])?`<button class="chip" onclick="resetXi()">↺ Kurduğum 11'e dön</button>`:""}</div>

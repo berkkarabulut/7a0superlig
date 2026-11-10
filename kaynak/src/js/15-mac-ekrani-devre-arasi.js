@@ -3,7 +3,7 @@ const MENTS = { "Aynen devam":{att:0,def:0}, "Hücuma geç":{att:2,def:-2}, "Sko
 function halfTime(M, a, b){
   return new Promise(res => {
     const T=S.T; let style=T.style, ment="Aynen devam", sel=null, msg=null;
-    const cur = k => { let n=T.matchXi[k]; if(!n) return null; let ch=true; while(ch){ ch=false; for (const s of M.subs) if (s.out.n===n){ n=s.in.n; ch=true; } } return M.onPitch().find(q=>q.n===n) || null; };
+    const cur = k => slotPlayer(M,T,k);
     const benchAv = () => { const used=new Set(M.pl[0].map(p=>p.n)); return T.bench.map((p,i)=>({p,i})).filter(x=>!isOut(T,x.p.n)&&!used.has(x.p.n)); };
     const doSub = (k, bi) => { const outP=cur(k), bp=T.bench[bi], pos=T.xi[k].pos; if(!outP||!bp) return;
       if (M.subsLeft()<=0){ msg=["bad","Değişiklik hakkın bitti"]; return; }
@@ -42,6 +42,13 @@ function halfTime(M, a, b){
     try{ $("after").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){}
   });
 }
+// maç sırasında bir mevkide şu an kim oynuyor (değişiklik zincirini takip eder)
+function slotPlayer(M,T,k){ let n=T.matchXi[k]; if(!n) return null; let ch=true; while(ch){ ch=false; for (const s of M.subs) if (s.out.n===n){ n=s.in.n; ch=true; } } return M.onPitch().find(q=>q.n===n) || null; }
+function onPitchHTML(M,T){
+  return T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k); if(!p) return `<div class="row" style="gap:6px;padding:2px 0;opacity:.6"><span class="pos ${LINE(s.pos)}">${LABEL[s.pos]}</span>— boş (oyundan çıktı)</div>`;
+    const pen=penOf(p,s.pos), subIn=M.subs.some(x=>x.in.n===p.n);
+    return `<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${LINE(s.pos)}">${LABEL[s.pos]}</span>${subIn?"🔁 ":""}${esc(p.n)}<span class="rt">${pen?`<b class="neg" style="margin-right:4px">−${pen}</b>`:""}<span class="rv ${tier(p.r)} ${pen?"drop":""}">${showR(p.r)}</span></span></div>`; }).join("");
+}
 async function runMatch(){
   const T=S.T, i=T.i, isKo = i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
@@ -68,7 +75,7 @@ async function runMatch(){
       </div>
       <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}
         <p class="mut" style="font-size:12px;margin-top:10px">Sahadaki 11'in</p>
-        <div style="font-size:13px">${L.map(p=>`<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${p.pos}">${LABEL[p.role]}</span>${esc(p.n)}<span class="rt"><span class="rv ${tier(p.r)}">${showR(p.r)}</span></span></div>`).join("")}</div>
+        <div style="font-size:13px" id="onpitch">${onPitchHTML(M,T)}</div>
         <p class="mut" style="font-size:12px;margin-top:10px">Rakibin 11'i</p>
         <div style="font-size:13px">${o.pl.slice(0,16).map(p=>`<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${p.pos}">${roles(p).map(r=>LABEL[r]).join("/")}</span>${esc(p.n)}<span class="rt"><span class="rv ${tier(p.r)}">${showR(p.r)}</span></span></div>`).join("")}</div>
       </div>
@@ -81,6 +88,7 @@ async function runMatch(){
     while (ei<M.ev.length && M.ev[ei].m<=m){
       const e=M.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); }
       add(`<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
+      if (e.type==="red"||e.type==="inj"||e.type==="sub"){ const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
       if (e.type==="red"||e.type==="inj"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }
       if (ms){ if (e.type==="goal") await sleep(ms*12); else if (e.type!=="flow") await sleep(ms*3); }
     }
@@ -92,6 +100,7 @@ async function runMatch(){
   M.run(1,45); await anim(1,45);
   $("clk").textContent="Devre arası"; add(`<li class="penh"><span>⏸️ ${esc(T.ref)} ilk yarıyı bitirdi: ${a}-${b}</span></li>`);
   if (ms){ const h = await halfTime(M,a,b); if (h.style!==T.style || h.ment!=="Aynen devam") add(`<li class="penh"><span>📋 İkinci yarı planı: ${STYLES[h.style].e} ${esc(h.style)} · ${esc(h.ment)}</span></li>`); $("mystyle").textContent=`${S.form} · ${STYLES[h.style].e} ${h.style}`; }
+  { const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
   M.run(46,90); await anim(46,90);
   let et=false;
   if (isKo && M.g[0]===M.g[1]){ et=true; len=120; add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await sleep(ms*18); M.run(91,120,0.85); await anim(91,120); }

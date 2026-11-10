@@ -10,13 +10,13 @@ for(let g=0;g<games;g++){try{startDraft();let k=0;
  if(new Set([...S.slots,...S.bench].map(z=>z.p.n)).size!==S.slots.length+S.bench.length) throw "tekrar eden oyuncu";
  S.speed="Anında";startTournament();
  if(S.T.group.map(x=>x.t.rank).join()!=="1,2,3") throw "torba hatası";
- preMatch();
+ preMatch(); if(mustFix(S.T)) autoFixMiss();
  while(!S.T.out&&S.T.i<7){ if(Math.random()<.7){doTalk(Math.floor(Math.random()*4));talks++}
    ten+= lineup(S.T).length<11?1:0;
    await runMatch(); ms++; const r=S.T.res.at(-1); goals+=r.g1+r.g2;
    susp+=Object.values(S.T.outs).filter(o=>o.k==="susp").length; inj+=Object.values(S.T.outs).filter(o=>o.k==="inj").length;
    if(S.T.out||S.T.i>=7) break;
-   if(S.T.i===3&&!S.T.R) setupR16(); preMatch(); }
+   if(S.T.i===3&&!S.T.R) setupR16(); preMatch(); if(mustFix(S.T)) autoFixMiss(); }
  finish(); const T=S.T; stats[T.out||"şampiyon"]=(stats[T.out||"şampiyon"]||0)+1;
  if(T.res.length>3){ if(!T.champ) throw "şampiyon yok"; if(!T.out && !T.champ.me) throw "biz kazandık ama şampiyon başka";
    if(T.res.length>4 && T.res[4].opp!==T.M[0][1].w.name) throw "çeyrek rakibi yanlış"; }

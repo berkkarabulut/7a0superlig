@@ -2,7 +2,8 @@
 .lp .slot.selx .shirt svg{filter:drop-shadow(0 0 6px #ffb703) drop-shadow(0 0 2px #ffb703)}
 .lp .slot.selx .nm{background:var(--gold);color:#1d1200}
 .lp .slot.hov .shirt{transform:scale(1.18)}.lp .slot.hov .nm{background:var(--teal);color:#00241f}
-.lp .slot.outx{opacity:.55}
+.lp .slot.outx .shirt svg{filter:drop-shadow(0 0 6px #ff4d6d) drop-shadow(0 0 2px #ff4d6d)}
+.lp .slot.outx .nm{background:#ff4d6d;color:#fff}
 .lp .slot .tm{display:block!important;font:700 10px var(--cond);letter-spacing:.4px}
 .slot .prev{margin-top:1px;font:800 11px var(--cond);padding:0 4px;border-radius:2px;display:inline-block}
 .slot .prev.good{background:#00c2a8;color:#00241f}.slot .prev.bad{background:#ff4d6d;color:#fff}

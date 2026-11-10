@@ -101,6 +101,16 @@ def run(name, vp, b):
         click("#play .talk")
         chk("07c-konusma", ".talkres", "#play .btn.gold")
     step("06-mac-onu", s6)
+    def s6b():
+        pg.evaluate("()=>{ const T=S.T; T.outs[T.xi[3].p.n]={k:'susp',n:1}; T.prepFor=-1; T.alerted=-1; preMatch(); }"); time.sleep(0.4)
+        chk("07d-kirmizi-uyari", "#missmodal .btn.gold", "#missmodal .btn.ghost")
+        click("#missmodal .btn.ghost"); time.sleep(0.3)
+        if pg.evaluate("()=>!!document.querySelector('#play .btn[disabled]')") is False: fails.append(f"[{name}] kırmızı uyarı: maça çık butonu kilitli değil")
+        chk("07e-kirmizi-banner", ".missbox .btn.gold")
+        click(".missbox .btn.gold"); time.sleep(0.3)
+        if pg.evaluate("()=>mustFix(S.T)"): fails.append(f"[{name}] kırmızı uyarı: otomatik koy çalışmadı")
+        chk("07f-duzeldi", "#play .btn.gold, #play .btn:not([disabled])")
+    step("06b-kirmizi", s6b)
     # 7) maç + devre arası
     def s7():
         pg.evaluate("()=>{ runMatch(); }"); time.sleep(1)

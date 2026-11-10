@@ -46,3 +46,4 @@
   .clock{font-size:12px;padding:1px 6px}
 }
 
+.missbox{border:2px solid var(--loss);background:#ff4d6d14;margin-top:10px}

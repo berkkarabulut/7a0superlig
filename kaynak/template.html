@@ -991,7 +991,7 @@ function startTournament(){
   const gTeams = pots.map(p=>p[0]);
   const rest = others.filter(t=>!gTeams.includes(t));
   const group = gTeams.map(opp);
-  const T = { xi, bench, mor:{}, outs:{}, penOrder:null, style:S.style, group, pots, R:null, rest15: rest.slice(0,15), M:[], i:0, res:[], table:null, W:0,D:0,L:0,gf:0,ga:0, out:null, done:false };
+  const T = { xi, bench, orig: xi.map(s=>s.p.n), mor:{}, outs:{}, penOrder:null, style:S.style, group, pots, R:null, rest15: rest.slice(0,15), M:[], i:0, res:[], table:null, W:0,D:0,L:0,gf:0,ga:0, out:null, done:false };
   S.T = T;
   T.me = lineup(T); T.mePw = teamPower(T.me, T.style);
   const tbl = {}; [myName(), ...group.map(g=>g.name)].forEach(n=>tbl[n]={n,O:0,G:0,B:0,M:0,A:0,Y:0,P:0});
@@ -1069,7 +1069,8 @@ function renderPre(){
       <div class="row" style="margin-top:14px"><button class="btn ${T.talked?"gold":""}" onclick="runMatch()">${T.talked?"Maça çık ▶":"Konuşmadan maça çık ▶"}</button></div>
     </div>
     <div class="card">
-      <h3>İlk 11 <span class="mut" style="font-weight:400;text-transform:none;letter-spacing:0">· değiştirmek için oyuncuya, sonra yedeğe dokun</span></h3>
+      <div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">İlk 11'ini ayarla</h3>${T.xi.some((s,k)=>s.p.n!==T.orig[k])?`<button class="chip" onclick="resetXi()">↺ Kurduğum 11'e dön</button>`:""}</div>
+      <p class="mut" style="font-size:13px;margin:4px 0 8px">Her maçtan önce değiştirebilirsin: önce ilk 11'den bir oyuncuya, sonra yerine girecek yedeğe dokun. Maç içindeki değişiklikler sonraki maça taşınmaz.</p>
       <div class="lineup">${T.xi.map((s,k)=>`<button class="lrow ${T.selXi===k?"sel":""} ${s.p&&isOut(T,s.p.n)?"outp":""}" onclick="selXi(${k})"><span class="pos ${LINE(s.pos)}">${LABEL[s.pos]}</span>
         <span class="ln">${esc(s.p.n)} ${stat(s.p)}</span>${mor(s.p.n)}${penOf(s.p,s.pos)?`<span class="tag nr">−${penOf(s.p,s.pos)}</span>`:""}<span class="rv ${tier(Math.round(effR(T,s.p,s.pos)))}">${showR(Math.round(effR(T,s.p,s.pos)))}</span></button>`).join("")}</div>
       <h3 style="margin-top:14px">Yedekler</h3>
@@ -1082,6 +1083,9 @@ function renderPre(){
   </div>`;
 }
 function setStyleT(k){ S.T.style=k; renderPre(); }
+function resetXi(){ const T=S.T;
+  T.xi.forEach((s,k)=>{ const n=T.orig[k]; if (s.p.n===n) return; const bi=T.bench.findIndex(p=>p.n===n); if (bi<0 || isOut(T,n)) return; const cur=s.p; s.p=T.bench[bi]; T.bench[bi]=cur; });
+  T.notes = autoFix(T); T.selXi=null; renderPre(); }
 function selXi(k){ const T=S.T; T.selXi = T.selXi===k ? null : k; renderPre(); }
 function swapIn(k){ const T=S.T, s=T.xi[T.selXi], b=T.bench[k]; if(!s||!b||isOut(T,b.n)) return; T.bench[k]=s.p; s.p=b; T.selXi=null; renderPre(); }
 function doTalk(k){
@@ -1217,7 +1221,7 @@ async function runMatch(){
   for (const n of Object.keys(T.outs)) { T.outs[n].n--; if (T.outs[n].n<=0) delete T.outs[n]; }
   for (const n of r.reds) T.outs[n] = {k:"susp", n:1};
   for (const n of r.injs) T.outs[n] = {k:"inj", n: Math.random()<0.6?1:2};
-  for (const s of r.subs){ const slot=T.xi.find(x=>x.p&&x.p.n===s.out.n), bi=T.bench.findIndex(p=>p.n===s.in.n); if(slot&&bi>=0){ const bp=T.bench[bi]; T.bench[bi]=slot.p; slot.p=bp; } }
+  // maç içi değişiklikler kalıcı değil: bir sonraki maça senin kurduğun 11 ile çıkılır (sakat/cezalı olan maç önünde otomatik değişir)
   afterMorale(T,res,r);
   T.gf+=r.g1; T.ga+=r.g2; if(r.g1>r.g2)T.W++; else if(r.g1<r.g2)T.L++; else T.D++;
   T.res.push({res, g1:r.g1, g2:r.g2, pen, et:r.et, opp:o.name, team:o.t.team});

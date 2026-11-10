@@ -50,6 +50,8 @@ h1{font-size:32px;margin:8px 0 6px}h2{margin:0 0 12px;font-size:20px}h3{margin:0
 .rv.r90{background:#9b5de530;color:#c9a2ff}.rv.r87{background:#f2c14e2a;color:#f2c14e}.rv.r84{background:#3fb96b2a;color:#7ee08f}
 .rv.r80{background:#3b8fd92a;color:#8cc4ff}.rv.r70{background:#ffffff12;color:#a9b4ad}.rv.rq{background:#ffffff12;color:#a9b4ad}
 .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+.drawbtns{gap:8px;flex-wrap:nowrap}.btn.restart{padding:12px 14px;color:var(--mut)}
+@media(max-width:700px){.drawbtns{width:100%;flex-wrap:wrap}.drawbtns .btn{flex:1 1 100%}}
 .leader{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#f2c14e18;border:1px solid #f2c14e55;color:var(--txt);border-radius:999px;padding:4px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-left:6px;vertical-align:middle}
 .repbtn{background:none;border:0;cursor:pointer;opacity:.45;font-size:13px;padding:2px}.repbtn:hover{opacity:1}
 .inp{width:100%;background:#0f1813;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit;margin-top:8px}
@@ -366,6 +368,14 @@ function startDraft(){
   S.rolls = 0; S.rerolls = REROLLS; S.used = new Set(); S.drawn = new Set(); S.spent = 0; S.counted = S.mode==="daily" && !store.get("daily:"+todayKey(), null);
   roll();
 }
+function askRestart(){
+  const n = S.slots.filter(s=>s.p).length;
+  if (!n) { renderStart(); return; }
+  $("restartbox").innerHTML = `<div class="card hint" style="border-color:#e30a17;background:#2a1012">
+    <b>Baştan başlamak istiyor musun?</b> Kadrona aldığın ${n} oyuncu silinecek, diziliş ve tarz seçimine döneceksin.${S.mode==="daily"?" Günün meydan okumasında yine aynı takım sırası gelir.":""}
+    <div class="row" style="margin-top:10px"><button class="btn" onclick="renderStart()">Evet, baştan başla</button><button class="btn ghost" onclick="$('restartbox').innerHTML=''">Vazgeç</button></div></div>`;
+  try { $("restartbox").scrollIntoView({block:"center",behavior:"smooth"}); } catch(e){}
+}
 function reroll(){
   if (S.rerolls<=0) return;
   S.rerolls--; roll();
@@ -436,9 +446,12 @@ function renderDraft(){
         <div><span class="badge">${filled+1}. oyuncu · ${S.mode==="daily"?"Günün meydan okuması":"Tek oyunculu"}${S.almanac?" · Almanak":""}</span>
           <h2 style="margin:8px 0 0">${esc(t.season)} ${esc(t.team)}</h2>
           <div class="mut" style="font-size:13px">${esc(t.note||"")}</div></div>
-        <button class="btn ${(free||noNatural)&&S.rerolls>0?"blink":"ghost"}" onclick="reroll()" ${S.rerolls<=0?"disabled":""}>${S.rerolls>0?`🎲 Yeniden çek (${S.rerolls} hak)`:"Yeniden çekme hakkın bitti"}</button>
+        <div class="row drawbtns">
+        <button class="btn ghost restart" onclick="askRestart()">↺ Baştan başla</button>
+        <button class="btn ${(free||noNatural)&&S.rerolls>0?"blink":"ghost"}" onclick="reroll()" ${S.rerolls<=0?"disabled":""}>${S.rerolls>0?`🎲 Yeniden çek (${S.rerolls} hak)`:"Yeniden çekme hakkın bitti"}</button></div>
       </div>
       ${S.mode==="daily"?`<p>Bütçe: <span class="budget ${S.spent>DAILY_BUDGET?"over":""}">${S.spent} / ${DAILY_BUDGET} M</span> <span class="mut">· kalan ${DAILY_BUDGET-S.spent} M</span></p>`:""}
+      <div id="restartbox"></div>
       ${S.forced?`<div class="card hint"><b>Bu takımdan hiçbir oyuncu boş yerlerine uymuyor ve yeniden çekme hakkın bitti.</b> İstediğin oyuncuyu istediğin boş yere zorunlu koyabilirsin: oyuncu −${FORCED} olur, takım gücü −${TEAM_OFF} düşer.</div>`:""}
       ${free&&S.rerolls>0?`<div class="card hint">Bu takımda boş yerlerine konabilecek oyuncu yok. <b>Yeniden çek (${S.rerolls} hak).</b></div>`:""}
       ${noNatural&&!free&&!S.forced?`<div class="card hint">Bu takımda boş yerlerine <b>asıl mevkisinde</b> oynayacak oyuncu yok. Mevki dışı koyarsan −${OFFPOS} reyting kaybedersin. ${S.rerolls>0?`<b>Yeniden çekmeni öneririz (${S.rerolls} hakkın var).</b>`:`<b>Yeniden çekme hakkın bitti</b>, birini mevki dışı koymak zorundasın. Takımın zorlanacak.`}</div>`:""}

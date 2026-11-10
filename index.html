@@ -323,6 +323,10 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .score .big.flash{animation:flash .9s ease-out}
 @keyframes flash{0%{transform:scale(1.25);box-shadow:0 0 0 0 #ffb703cc}100%{transform:scale(1);box-shadow:0 0 0 18px #ffb70300}}
 .events li.ev-flow{opacity:.7;font-size:13px}
+.events li.ev-sub{color:var(--teal)}
+.tacnote{margin-top:6px;padding:6px 10px;border-radius:3px;font:700 14px var(--cond);letter-spacing:.4px;text-transform:uppercase}
+.tacnote.good{background:#00c2a81f;color:var(--win)}.tacnote.bad{background:#ff4d6d1f;color:var(--loss)}
+.ht{border-top:3px solid var(--gold)}
 .events li.ev-inj{color:#ffd6a0}
 @media(max-width:700px){
   .grid.draft{display:flex;flex-direction:column;gap:8px;align-items:stretch}
@@ -378,6 +382,12 @@ const FORMATIONS = {
   "4-3-3": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["CM",27,48],["DM",50,56],["CM",73,48],["LW",16,22],["ST",50,15],["RW",84,22]],
   "4-4-2": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["LM",13,44],["CM",38,50],["CM",62,50],["RM",87,44],["ST",37,18],["ST",63,18]],
   "3-5-2": [["GK",50,90],["CB",25,73],["CB",50,76],["CB",75,73],["LWB",10,46],["CM",30,48],["DM",50,57],["CM",70,48],["RWB",90,46],["ST",37,18],["ST",63,18]],
+  "4-2-3-1": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["DM",36,57],["DM",64,57],["LW",15,33],["AM",50,37],["RW",85,33],["ST",50,14]],
+  "4-1-4-1": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["DM",50,59],["LM",13,40],["CM",36,44],["CM",64,44],["RM",87,40],["ST",50,14]],
+  "4-4-1-1": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["LM",13,47],["CM",37,52],["CM",63,52],["RM",87,47],["AM",50,32],["ST",50,13]],
+  "4-3-1-2": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["CM",27,53],["DM",50,59],["CM",73,53],["AM",50,36],["ST",37,16],["ST",63,16]],
+  "3-4-3": [["GK",50,90],["CB",25,74],["CB",50,77],["CB",75,74],["LWB",11,48],["CM",37,52],["CM",63,52],["RWB",89,48],["LW",17,22],["ST",50,14],["RW",83,22]],
+  "5-3-2": [["GK",50,90],["LWB",9,62],["CB",30,75],["CB",50,78],["CB",70,75],["RWB",91,62],["CM",28,47],["DM",50,54],["CM",72,47],["ST",37,17],["ST",63,17]],
 };
 const ACCEPT = { GK:["GK"], RB:["RB"], LB:["LB"], CB:["CB"], DM:["DM","CM"], CM:["CM","DM","AM"], AM:["AM","CM"],
   RM:["RM","RW"], LM:["LM","LW"], RW:["RW","RM"], LW:["LW","LM"], ST:["ST"], RWB:["RB","RM","RW"], LWB:["LB","LM","LW"],
@@ -399,10 +409,39 @@ const nearFit = (p, slotRole) => !natural(p,slotRole) && !roles(p).includes("GK"
 const fits = (p, slotRole) => natural(p,slotRole) || nearFit(p,slotRole) || (S.forced && !inSquad(p.n));
 const penaltyFor = (p, slotRole) => natural(p,slotRole) ? 0 : nearFit(p,slotRole) ? OFFPOS : FORCED;
 const STYLES = {
-  "Hücum":   { att: 2.5, def: -2,  d: "Önde bas, çok at çok ye" },
-  "Dengeli": { att: 0,   def: 0,   d: "Ne şiş yansın ne kebap" },
-  "Savunma": { att: -2,  def: 2.5, d: "Kaleyi kapat, kontrada vur" },
+  "Dengeli":       { att: 0,   def: 0,   e:"⚖️", d: "Ne şiş yansın ne kebap" },
+  "Topa sahip ol": { att: 0.3, def: 0.4,  e:"🎯", key:"mf", w:0.35, d: "Pas pas pas. Orta sahan iyiyse uçar, kontraya açık verir" },
+  "Önde baskı":    { att: 2.5, def: 0.5, e:"⚡", late:true, d: "Rakibi kendi yarısında boğ, 60'tan sonra yorulursun" },
+  "Kontra atak":   { att: -0.3,def: 1,   e:"🏹", key:"fw", w:0.3, d: "Geride bekle, hızlı çık. Önde basanlara karşı ölümcül" },
+  "Kanat oyunu":   { att: 0.5, def: -0.5,e:"🪽", key:"wg", w:0.45, d: "Kanatların ve beklerin iyiyse ortalar yağar" },
+  "Uzun top":      { att: 0,   def: 0.2, e:"🚀", key:"fw", w:0.25, d: "Basit ve sağlam, güçlü forvet ister. Baskıyı atlatır" },
+  "Otobüsü çek":   { att: -2.3,def: 3.5, e:"🚌", d: "Kaleyi kapat, golü duran toptan bul" },
 };
+// saldıran tarz -> savunan tarz : hücum bonusu
+const COUNTER = {
+  "Kontra atak":   { "Önde baskı":1.5, "Topa sahip ol":1, "Kanat oyunu":0.5 },
+  "Önde baskı":    { "Topa sahip ol":1.5, "Dengeli":0.5, "Uzun top":-1.5 },
+  "Uzun top":      { "Önde baskı":1.2 },
+  "Topa sahip ol": { "Otobüsü çek":1, "Dengeli":0.5, "Kontra atak":-1 },
+  "Kanat oyunu":   { "Otobüsü çek":1.5, "Topa sahip ol":0.5, "Kontra atak":-0.5 },
+  "Otobüsü çek":   { "Kanat oyunu":-1 },
+};
+const ctrOf = (a,b) => (COUNTER[a]||{})[b]||0;
+const beats = st => Object.keys(STYLES).filter(k=>ctrOf(k,st)>0).sort((a,b)=>ctrOf(b,st)-ctrOf(a,st));
+const COACH_STYLE = { "Fatih Terim":"Önde baskı","Christoph Daum":"Önde baskı","Okan Buruk":"Önde baskı","Jorge Jesus":"Önde baskı","Mircea Lucescu":"Topa sahip ol",
+  "Zico":"Topa sahip ol","Frank Rijkaard":"Topa sahip ol","Ersun Yanal":"Topa sahip ol","Abdullah Avcı":"Topa sahip ol","Gheorghe Hagi":"Topa sahip ol","Vítor Pereira":"Topa sahip ol",
+  "Gordon Milne":"Kanat oyunu","Ertuğrul Sağlam":"Kanat oyunu","Slaven Bilić":"Kanat oyunu","Mustafa Denizli":"Kontra atak","Şenol Güneş":"Kontra atak","Aykut Kocaman":"Kontra atak",
+  "José Mourinho":"Otobüsü çek","Dick Advocaat":"Dengeli","Roberto Mancini":"Dengeli","Jupp Derwall":"Dengeli","Karl-Heinz Feldkamp":"Uzun top","Branko Stanković":"Uzun top",
+  "Eric Gerets":"Önde baskı","Jean Tigana":"Kontra atak","Bülent Uygun":"Kontra atak","Thomas Reis":"Önde baskı","İsmail Kartal":"Kanat oyunu","Sergen Yalçın":"Topa sahip ol" };
+function oppStyle(t){ const c=coachOf(t); if (COACH_STYLE[c]) return COACH_STYLE[c]; const ks=Object.keys(STYLES); let h=0; for (const ch of t.id) h=(h*31+ch.charCodeAt(0))>>>0; return ks[h%ks.length]; }
+function styleMod(style, players){
+  const st = STYLES[style] || STYLES["Dengeli"]; if (!st.key) return {att:st.att, def:st.def};
+  const a = arr => arr.length ? avg(arr) : 82;
+  const isW = p => ["RW","LW","RM","LM","RWB","LWB","RB","LB"].includes(p.role || roles(p)[0]);
+  const v = {mf:a(players.filter(p=>p.pos==="MF").map(p=>p.r)), fw:a(players.filter(p=>p.pos==="FW").map(p=>p.r)), wg:a(players.filter(isW).map(p=>p.r))}[st.key];
+  const sk = Math.max(-2.5, Math.min(2, (v-84)*st.w));
+  return {att: st.att+sk, def: st.def+sk*0.4};
+}
 const STAGES = ["Grup 1. maç","Grup 2. maç","Grup 3. maç","Son 16","Çeyrek final","Yarı final","Final"];
 const LEGEND = 88;
 const DAILY_BUDGET = 70;
@@ -574,7 +613,7 @@ function renderStart(){
       <h3>Diziliş</h3>
       <div class="row">${Object.keys(FORMATIONS).map(f=>`<button class="chip ${f===S.form?"on":""}" onclick="S.form='${f}';renderStart()">${f}</button>`).join("")}</div>
       <h3 style="margin-top:16px">Oyun tarzı</h3>
-      <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderStart()">${k} <span class="mut" style="font-weight:400">· ${v.d}</span></button>`).join("")}</div>
+      <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderStart()">${v.e} ${k} <span class="mut" style="font-weight:400">· ${v.d}</span></button>`).join("")}</div>
       <h3 style="margin-top:16px">Ayarlar</h3>
       <div class="row">
         <label class="toggle"><input type="checkbox" ${S.almanac?"checked":""} onchange="S.almanac=this.checked"> <b>Almanak modu</b> <span class="mut">· reytingler gizli, sadece isim ve mevki</span></label>
@@ -747,9 +786,9 @@ function teamPower(players, style){
   let att = fw*0.5 + mf*0.35 + df*0.15;
   let def = gk*0.35 + df*0.45 + mf*0.2;
   const chem = players[0]?.key ? chemistry(players).total : 0;
-  const st = STYLES[style] || STYLES["Dengeli"];
+  const st = styleMod(style, players);
   const off = players.filter(p=>p.off).length, pen = off*TEAM_OFF;
-  return { att: att+st.att+chem-pen, def: def+st.def+chem-pen, chem, off, ovr: Math.round(avg(players.map(p=>p.r))) };
+  return { att: att+st.att+chem-pen, def: def+st.def+chem-pen, chem, off, style: STYLES[style]?style:"Dengeli", ovr: Math.round(avg(players.map(p=>p.r))) };
 }
 const myPlayers = () => S.slots.filter(s=>s.p).map(s=>({...s.p,pos:LINE(s.pos),role:s.pos}));
 const oppPlayers = t => t.players.map(p=>({...p,pos:p.p[0]}));
@@ -807,12 +846,27 @@ const TXT = {
   flow:["{p} sol kanattan bindirdi, orta kesildi","{p} ceza sahası önünde faul yaptırdı","{t} topu ayağında tutuyor, pas trafiği artıyor","{p} uzun topla arkaya sarktı ama ofsayt","{p} topu kornere gönderdi","Orta sahada sert ikili mücadeleler, {ref} oyunu akıttı","{p} çalımla birini geçti, ikincisine takıldı","{p} kafayla indirdi, savunma uzaklaştırdı","{t} baskıyı artırdı"],
   injO:["{p} sakatlandı, yerine yedek oyuncu girdi"], injS:["{p} sakatlandı, oyuna devam edemiyor. 🔁 Yerine {q} girdi"], injN:["{p} sakatlandı, değişiklik yapılamıyor, takım 10 kişi"]
 };
+Object.assign(TXT, {
+  "g_Kontra atak":["Hızlı çıktılar! 3'e 2 yakaladılar, {p} bitirdi: GOL!","Kontra! Top 3 pasta öbür kaleye gitti, {p} affetmedi: GOL!"],
+  "g_Kanat oyunu":["Kanattan ortayı yaptılar, {p} kafayı vurdu: GOL!","Bek bindirdi, ortaya çevirdi, {p} tamamladı: GOL!"],
+  "g_Uzun top":["Uzun top, {p} savunmanın arkasına sarktı… GOL!","Kaleci uzun vurdu, indirme, {p} vurdu: GOL!"],
+  "g_Topa sahip ol":["Pas pas pas… 20 paslık atağın sonunda {p}: GOL!","Tiki-taka! {p} son vuruşu yaptı: GOL!"],
+  "g_Önde baskı":["Önde bastılar, top kapıldı, {p} affetmedi: GOL!","Baskı meyvesini verdi! {p} hatayı cezalandırdı: GOL!"],
+  "g_Otobüsü çek":["Duran top! {p} kafayı vurdu: GOL!","Tek pozisyon, tek gol: {p}!"],
+  "f_Önde baskı":["{t} rakibi kendi yarı sahasına hapsetti","{p} rakip stopere bastı, top taca"],
+  "f_Topa sahip ol":["{t} topu kendi arasında dolaştırıyor, rakip topa dokunamıyor","{p} geriye pasla oyunu yeniden kurdu"],
+  "f_Kontra atak":["{t} geride bekliyor, kontra fırsatı kolluyor","{p} hızlı çıktı ama son pas olmadı"],
+  "f_Kanat oyunu":["{p} kanattan ortaladı, kaleci kurtardı","{t} sürekli kanatlardan yükleniyor"],
+  "f_Uzun top":["{t} uzun toplarla oynuyor, {p} hava topunu kazandı","{p} uzun topu göğsüyle yumuşattı"],
+  "f_Otobüsü çek":["{t} 11 kişi kendi yarı sahasında, otobüs park halinde","{p} topu tribüne gönderdi, rahatlama"],
+  tired:["{t} yoruldu, baskının dozu düştü","{t} ayakta zor duruyor, önde basmayı bıraktı"]
+});
 TXT.penG=["{ref} beyaz noktayı gösterdi! {p} topun başında… GOL!"]; TXT.penS=["Penaltı! {gk} kurtardı, {p} gol atamadı"]; TXT.penM=["{ref} penaltı verdi, {p} topu auta attı"];
 const fill = (k, o) => rnd(TXT[k]).replace("{p}", o.p?short(o.p.n):"").replace("{gk}", o.gk?short(o.gk.n):"kaleci").replace(/\{ref\}/g, o.ref||"Hakem").replace("{q}", o.q?short(o.q.n):"").replace("{t}", o.t||"");
 function wpick(list, wf){ const w=list.map(wf), s=w.reduce((a,b)=>a+b,0); let r=Math.random()*s; for(let i=0;i<list.length;i++){ r-=w[i]; if(r<=0) return list[i]; } return list[0]; }
-function matchEngine(A,B,pa,pb,ko,o={}){
+function makeMatch(A,B,pa,pb,o={}){
   const pl=[pa.slice(),pb.slice()], ev=[], g=[0,0], red=[o.startRed||0,0], yel=[{},{}], out=[new Set(),new Set()], adj=[0,0], reds=[], injs=[], subs=[];
-  const ref=o.ref||"Hakem"; let nsub=0;
+  const ref=o.ref||"Hakem", sty=[A.style||"Dengeli", B.style||"Dengeli"], ment=[{att:0,def:0},{att:0,def:0}], tired=[false,false], tn=[o.myName||"", o.oppName||""]; let nsub=0;
   const av = s => pl[s].filter(p=>!out[s].has(p.n));
   const gk = s => av(s).find(p=>p.pos==="GK") || {n:"Kaleci",r:65,pos:"GK"};
   const shooter = s => wpick(av(s).filter(p=>p.pos!=="GK"), p=>({FW:5,MF:2.4,DF:0.7}[p.pos]||1)*Math.max(1,p.r-60));
@@ -820,13 +874,17 @@ function matchEngine(A,B,pa,pb,ko,o={}){
   const taker = s => { if (s===0 && o.penOrder){ const n=o.penOrder.find(n=>av(0).some(p=>p.n===n)); if(n) return av(0).find(p=>p.n===n); }
     return wpick(av(s).filter(q=>q.pos!=="GK"),q=>({FW:4,MF:2,DF:.5}[q.pos]||1)*q.r); };
   const T = (k,x) => fill(k,{...x,ref});
+  const late = (s,m) => STYLES[sty[s]]?.late && m>60 ? 2 : 0;
+  const attOf = (s,m) => (s?B.att:A.att)+adj[s]+ment[s].att+ctrOf(sty[s],sty[1-s])-late(s,m);
+  const defOf = (s,m) => (s?B.def:A.def)+adj[s]+ment[s].def-late(s,m);
   const step = (m, mult) => { for (const s of [0,1]) { const o2=1-s;
+      if (m===61 && STYLES[sty[s]]?.late && !tired[s]){ tired[s]=true; ev.push({m,side:s,type:"flow",text:T("tired",{t:tn[s]})}); }
       const f = Math.pow(0.65,red[s]) * Math.pow(1.4,red[o2]) * mult;
-      const pg = lam((s?B.att:A.att)+adj[s], (s?A.def:B.def)+adj[o2])*f/90*0.92;
+      const pg = lam(attOf(s,m), defOf(o2,m))*f/90*0.92;
       const x = Math.random();
-      if (x < pg){ const p=shooter(s); g[s]++; ev.push({m,side:s,type:"goal",p,text:T("goal",{p})}); }
+      if (x < pg){ const p=shooter(s), k=TXT["g_"+sty[s]]&&Math.random()<.5?"g_"+sty[s]:"goal"; g[s]++; ev.push({m,side:s,type:"goal",p,text:T(k,{p})}); }
       else if (x < pg*2.3){ const p=shooter(s), k=rnd(["save","save","post","wide","wide"]); ev.push({m,side:s,type:k,p,text:T(k,{p,gk:gk(o2)})}); }
-      else if (Math.random() < 0.05){ const p=shooter(s); ev.push({m,side:s,type:"flow",p,text:T("flow",{p,t:s?o.oppName:o.myName})}); }
+      else if (Math.random() < 0.05){ const p=shooter(s), k=TXT["f_"+sty[s]]&&Math.random()<.4?"f_"+sty[s]:"flow"; ev.push({m,side:s,type:"flow",p,text:T(k,{p,t:tn[s]})}); }
       if (Math.random() < 0.11/90*f){ const p=taker(s), k=gk(o2), y=Math.random();
         if (y < 0.76+(p.r-k.r)/250){ g[s]++; ev.push({m,side:s,type:"goal",pen:true,p,text:T("penG",{p})}); }
         else if (y < 0.93){ ev.push({m,side:s,type:"penS",p,text:T("penS",{p,gk:k})}); }
@@ -842,11 +900,21 @@ function matchEngine(A,B,pa,pb,ko,o={}){
           if (sub){ nsub++; pl[0].push(sub); adj[0]+=(sub.r-p.r)/11; subs.push({out:p,in:sub}); ev.push({m,side:0,type:"inj",p,text:T("injS",{p,q:sub})}); }
           else { red[0]++; ev.push({m,side:0,type:"inj",p,text:T("injN",{p})}); } } }
   } };
-  for (let m=1;m<=90;m++) step(m,1);
-  let et=false;
-  if (ko && g[0]===g[1]){ et=true; for (let m=91;m<=120;m++) step(m,0.85); }
-  ev.sort((a,b)=>a.m-b.m);
-  return { g1:g[0], g2:g[1], ev, et, len: et?120:90, red, reds, injs, subs, onPitch: av(0) };
+  return {
+    ev, g, pl,
+    run(m0,m1,mult=1){ for (let m=m0;m<=m1;m++) step(m,mult); },
+    onPitch: () => av(0),
+    subsLeft: () => MAXSUBS-nsub,
+    sub(outP, inP, m){ if (nsub>=MAXSUBS || out[0].has(outP.n)) return false; nsub++; out[0].add(outP.n); pl[0].push(inP); adj[0]+=(inP.r-outP.r)/11; subs.push({out:outP,in:inP});
+      ev.push({m,side:0,type:"sub",p:inP,text:`🔁 Değişiklik: ${short(outP.n)} çıktı, ${short(inP.n)} girdi`}); return true; },
+    setTactic(style, mentality){ if (style && style!==sty[0]){ sty[0]=style; A={...teamPower(av(0),style)}; adj[0]=0; } if (mentality) ment[0]=mentality; },
+    result(et){ return { g1:g[0], g2:g[1], ev, et, len: et?120:90, red, reds, injs, subs, onPitch: av(0) }; }
+  };
+}
+function matchEngine(A,B,pa,pb,ko,o={}){
+  const M = makeMatch(A,B,pa,pb,o); M.run(1,90); let et=false;
+  if (ko && M.g[0]===M.g[1]){ et=true; M.run(91,120,0.85); }
+  return M.result(et);
 }
 function penalties(gkA,gkB){
   const pA=0.75+(gkA-gkB)/300, pB=0.75+(gkB-gkA)/300; let a=0,b=0;
@@ -876,7 +944,7 @@ function shootout(plA, plB, orderA){
   }
   return {a,b,kicks};
 }
-function opp(t){ const pl=oppPlayers(t); return {name:t.season+" "+t.team, t, pl, pw:teamPower(pl,"Dengeli")}; }
+function opp(t){ const pl=oppPlayers(t), st=oppStyle(t); return {name:t.season+" "+t.team, t, pl, pw:teamPower(pl,st)}; }
 
 function addTbl(n,gf,ga){ const r=S.T.table[n]; r.O++; r.A+=gf; r.Y+=ga; if(gf>ga){r.G++;r.P+=3}else if(gf===ga){r.B++;r.P+=1}else r.M++; }
 function sortedTable(){ return Object.values(S.T.table).sort((a,b)=>b.P-a.P||(b.A-b.Y)-(a.A-a.Y)||b.A-a.A); }
@@ -917,9 +985,9 @@ function startTournament(){
   const gTeams = pots.map(p=>p[0]);
   const rest = others.filter(t=>!gTeams.includes(t));
   const group = gTeams.map(opp);
-  const T = { xi, bench, mor:{}, outs:{}, penOrder:null, group, pots, R:null, rest15: rest.slice(0,15), M:[], i:0, res:[], table:null, W:0,D:0,L:0,gf:0,ga:0, out:null, done:false };
+  const T = { xi, bench, mor:{}, outs:{}, penOrder:null, style:S.style, group, pots, R:null, rest15: rest.slice(0,15), M:[], i:0, res:[], table:null, W:0,D:0,L:0,gf:0,ga:0, out:null, done:false };
   S.T = T;
-  T.me = lineup(T); T.mePw = teamPower(T.me, S.style);
+  T.me = lineup(T); T.mePw = teamPower(T.me, T.style);
   const tbl = {}; [myName(), ...group.map(g=>g.name)].forEach(n=>tbl[n]={n,O:0,G:0,B:0,M:0,A:0,Y:0,P:0});
   T.table = tbl;
   T.others = [[1,2],[0,2],[0,1]].map(([a,b])=>{ const x=group[a],y=group[b]; const r=simGoals(x.pw,y.pw,x.pl,y.pl); return {a:x.name,b:y.name,g1:r.g1,g2:r.g2}; });
@@ -956,7 +1024,7 @@ function drawCeremony(title, note, items, doneTxt, onDone){
   $("kskip").onclick = async () => { if (busy) return; busy=true; while (k<items.length) await reveal(k++, true); done(); };
 }
 // ---------- maç önü: kadro + takım konuşması ----------
-function talkCtx(T,o){ const me=teamPower(lineup(T),S.style), d=(me.att+me.def)-(o.pw.att+o.pw.def); return d>3?"fav":d<-3?"dog":"even"; }
+function talkCtx(T,o){ const me=teamPower(lineup(T),T.style), d=(me.att+me.def)-(o.pw.att+o.pw.def); return d>3?"fav":d<-3?"dog":"even"; }
 function preMatch(){
   const T=S.T, i=T.i, isKo=i>=3, o = isKo ? T.R[i-3][1] : T.group[i];
   T.o = o; T.ref = pickRef(o.t.season);
@@ -964,7 +1032,7 @@ function preMatch(){
   renderPre();
 }
 function renderPre(){
-  const T=S.T, i=T.i, o=T.o, isKo=i>=3, L=lineup(T), pw=teamPower(L,S.style), ctx=talkCtx(T,o);
+  const T=S.T, i=T.i, o=T.o, isKo=i>=3, L=lineup(T), pw=teamPower(L,T.style), ctx=talkCtx(T,o), os=o.pw.style;
   const mor = n => { const v=T.mor[n]||0; return v>0?`<span class="mor up">▲${v}</span>`:v<0?`<span class="mor dn">▼${-v}</span>`:""; };
   const stat = p => isOut(T,p.n) ? `<span class="tag nr">${T.outs[p.n].k==="susp"?"🟥 cezalı":"🚑 sakat"}</span>` : "";
   const selP = T.selXi!=null ? T.xi[T.selXi] : null;
@@ -973,12 +1041,18 @@ function renderPre(){
     <div>
       <div class="card">
         <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px">${STAGES[i].toUpperCase()} · MAÇ ÖNÜ</div>
-        <div class="score pre"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${S.style}</div></div>
+        <div class="score pre"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
           <div><div class="big vs">VS</div><div class="clock">⚖️ ${esc(T.ref)}</div></div>
-          <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${esc(o.t.note||"")}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
+          <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[os].e} ${esc(os)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
         <div class="stats" style="margin-top:4px"><div class="stat"><b>${pw.att.toFixed(1)}</b><span>Hücumun</span></div><div class="stat"><b>${pw.def.toFixed(1)}</b><span>Savunman</span></div>
           <div class="stat"><b>${o.pw.att.toFixed(1)}</b><span>Rakip hücum</span></div><div class="stat"><b>${o.pw.def.toFixed(1)}</b><span>Rakip savunma</span></div></div>
         ${T.notes.length?`<div class="hint card" style="margin-top:10px">${T.notes.join("<br>")}</div>`:""}
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>📋 Taktik</h3>
+        <p class="mut" style="font-size:13px;margin-top:0">Rakibin oyun tarzı: <b style="color:var(--txt)">${STYLES[os].e} ${esc(os)}</b>${coachOf(o.t)&&COACH_STYLE[coachOf(o.t)]?` (${esc(coachOf(o.t))} böyle oynatır)`:""}. ${beats(os).length?`Buna karşı etkili: <b style="color:var(--win)">${beats(os).map(esc).join(", ")}</b>.`:""}</p>
+        <div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===T.style?"on":""}" onclick="setStyleT('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>
+        <p class="mut" style="font-size:13px;margin:8px 0 0">${STYLES[T.style].e} <b style="color:var(--txt)">${esc(T.style)}:</b> ${esc(STYLES[T.style].d)}. ${ctrOf(T.style,os)>0?`<span style="color:var(--win)">✓ Rakibe karşı avantajlısın.</span>`:ctrOf(os,T.style)>0?`<span style="color:var(--loss)">⚠ Rakibin tarzı buna karşı avantajlı.</span>`:""}</p>
       </div>
       <div class="card" style="margin-top:14px">
         <h3>🗣️ Soyunma odası konuşması</h3>
@@ -1001,6 +1075,7 @@ function renderPre(){
     </div>
   </div>`;
 }
+function setStyleT(k){ S.T.style=k; renderPre(); }
 function selXi(k){ const T=S.T; T.selXi = T.selXi===k ? null : k; renderPre(); }
 function swapIn(k){ const T=S.T, s=T.xi[T.selXi], b=T.bench[k]; if(!s||!b||isOut(T,b.n)) return; T.bench[k]=s.p; s.p=b; T.selXi=null; renderPre(); }
 function doTalk(k){
@@ -1036,22 +1111,49 @@ function choosePens(avail){
   });
 }
 // ---------- maç ----------
+const MENTS = { "Aynen devam":{att:0,def:0}, "Hücuma geç":{att:2,def:-2}, "Skoru koru":{att:-2,def:2} };
+function halfTime(M, a, b){
+  return new Promise(res => {
+    const T=S.T; let style=T.style, ment="Aynen devam", selOut=null, done=null;
+    const draw = () => {
+      const onP = M.onPitch(), used = new Set(M.pl[0].map(p=>p.n)), bench = T.bench.filter(p=>!isOut(T,p.n)&&!used.has(p.n));
+      const outP = selOut ? onP.find(p=>p.n===selOut) : null;
+      $("after").innerHTML = `<div class="card ht"><h3 style="margin-top:0">⏸️ Devre arası · ${a}-${b}</h3>
+        <p class="mut" style="margin:0 0 8px;font-size:13px">${a<b?"Gerideysin. Hücuma geçmenin ya da tarzı değiştirmenin tam zamanı.":a>b?"Öndesin. Skoru korumak isteyebilirsin.":"Eşitlik var. İkinci yarı için planın ne?"} Rakip: ${STYLES[T.o.pw.style].e} ${esc(T.o.pw.style)}</p>
+        <div class="ph">Oyun tarzı</div><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,T.o.pw.style)>0?" ✓":ctrOf(T.o.pw.style,k)>0?" ⚠":""}</button>`).join("")}</div>
+        <div class="ph" style="margin-top:10px">Anlayış</div><div class="row">${Object.keys(MENTS).map(k=>`<button class="chip ${k===ment?"on":""}" onclick="window.__hm('${k}')">${k}${MENTS[k].att?` <span class="mut">(${MENTS[k].att>0?"+":""}${MENTS[k].att} hücum, ${MENTS[k].def>0?"+":""}${MENTS[k].def} savunma)</span>`:""}</button>`).join("")}</div>
+        <div class="ph" style="margin-top:10px">Oyuncu değişikliği <span class="mut" style="text-transform:none">· ${M.subsLeft()} hakkın var</span></div>
+        ${done?`<p>${done}</p>`:M.subsLeft()&&bench.length?`<div class="lineup">${onP.map(p=>`<button class="lrow ${selOut===p.n?"sel":""}" onclick="window.__ho('${esc(p.n).replace(/'/g,"\\'")}')"><span class="pos ${p.pos}">${LABEL[p.role]||p.pos}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.r)}">${showR(p.r)}</span></button>`).join("")}</div>
+          ${outP?`<div class="mut" style="margin:8px 0 4px">${esc(short(outP.n))} yerine kim girsin?</div><div class="lineup">${bench.slice().sort((x,y)=>effR(T,y,outP.role)-effR(T,x,outP.role)).map((p,k)=>{ const r=Math.round(effR(T,p,outP.role)); return `<button class="lrow bench can" onclick="window.__hi(${T.bench.indexOf(p)})"><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span>${penOf(p,outP.role)?`<span class="tag nr">−${penOf(p,outP.role)}</span>`:`<span class="tag ok">✓</span>`}<span class="rv ${tier(r)}">${showR(r)}</span></button>`; }).join("")}</div>`:`<div class="mut" style="font-size:13px">Çıkacak oyuncuya dokun.</div>`}`
+          :`<p class="mut">Değişiklik yapamazsın.</p>`}
+        <div class="row" style="margin-top:12px"><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button></div></div>`;
+      try{ $("after").scrollIntoView({block:"center",behavior:"smooth"}); }catch(e){} };
+    window.__hs = k => { style=k; draw(); };
+    window.__hm = k => { ment=k; draw(); };
+    window.__ho = n => { selOut = selOut===n ? null : n; draw(); };
+    window.__hi = bi => { const outP=M.onPitch().find(p=>p.n===selOut), bp=T.bench[bi]; if(!outP||!bp) return;
+      const inP = {...bp, r:Math.round(effR(T,bp,outP.role)), pos:LINE(outP.role), role:outP.role};
+      if (M.sub(outP, inP, 46)) done = `🔁 ${esc(outP.n)} çıktı, ${esc(bp.n)} girdi.`; selOut=null; draw(); };
+    window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; res({style,ment}); };
+    draw();
+  });
+}
 async function runMatch(){
   const T=S.T, i=T.i, isKo = i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
-  const pw = teamPower(L, S.style);
+  const pw = {...teamPower(L, T.style)};
   const pickSub = (role, used) => { const b=bestSub(T, role, used); if(!b) return null; return {...b, r:Math.round(effR(T,b,role)), pos:LINE(role), role}; };
-  const r = matchEngine(pw, o.pw, L, o.pl, isKo, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
-  const mc = kitC(o.t.team);
+  const M = makeMatch(pw, o.pw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid">
       <div>
         <div class="card">
           <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]} · Hakem: ${esc(T.ref)}</div>
-          <div class="score"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${S.style}</div></div>
+          <div class="score"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400" id="mystyle">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
             <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
-            <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${esc(o.t.note||"")}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
+            <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[o.pw.style].e} ${esc(o.pw.style)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
+          ${ctrOf(T.style,o.pw.style)>0?`<div class="tacnote good">✓ Tarzın rakibe karşı avantajlı (${esc(T.style)} > ${esc(o.pw.style)})</div>`:ctrOf(o.pw.style,T.style)>0?`<div class="tacnote bad">⚠ Rakibin tarzı sana karşı avantajlı (${esc(o.pw.style)} > ${esc(T.style)})</div>`:""}
           <ul class="events" id="ev"></ul>
           <div id="after" style="margin-top:14px"></div>
         </div>
@@ -1064,24 +1166,29 @@ async function runMatch(){
         <div style="font-size:13px">${o.pl.slice(0,16).map(p=>`<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${p.pos}">${roles(p).map(r=>LABEL[r]).join("/")}</span>${esc(p.n)}<span class="rt"><span class="rv ${tier(p.r)}">${showR(p.r)}</span></span></div>`).join("")}</div>
       </div>
     </div>`;
-  const ms = SPEEDS[S.speed]; let a=0,b=0, ei=0;
-  const ICON={goal:"⚽",save:"🧤",post:"🥅",wide:"↗️",penS:"🧤",penM:"❌",yellow:"🟨",red:"🟥",inj:"🚑",flow:"·"};
+  const ms = SPEEDS[S.speed]; let a=0,b=0, ei=0, len=90;
+  const ICON={goal:"⚽",save:"🧤",post:"🥅",wide:"↗️",penS:"🧤",penM:"❌",yellow:"🟨",red:"🟥",inj:"🚑",flow:"·",sub:""};
   const add = h => { const el=$("ev"); el.insertAdjacentHTML("beforeend", h); if(el.scrollTop!==undefined) el.scrollTop=el.scrollHeight; };
-  const redsTxt = ()=>{ const rr=[missing,0]; r.ev.slice(0,ei).forEach(e=>{ if(e.type==="red"||(e.type==="inj"&&e.side===0&&/10 kişi/.test(e.text))) rr[e.side]++; }); return rr; };
-  add(`<li class="penh"><span>🟢 Hakem ${esc(T.ref)} başlama düdüğünü çaldı</span></li>`);
-  if (missing) $("rc").innerHTML = `Senin takım ${11-missing} kişi`;
-  for (let m=1;m<=r.len;m++){
-    if (m===91){ add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await sleep(ms*18); }
-    while (ei<r.ev.length && r.ev[ei].m===m){
-      const e=r.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); }
+  const redsTxt = ()=>{ const rr=[missing,0]; M.ev.slice(0,ei).forEach(e=>{ if(e.type==="red"||(e.type==="inj"&&e.side===0&&/10 kişi/.test(e.text))) rr[e.side]++; }); return rr; };
+  const anim = async (m0,m1) => { for (let m=m0;m<=m1;m++){
+    while (ei<M.ev.length && M.ev[ei].m<=m){
+      const e=M.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); }
       add(`<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
       if (e.type==="red"||e.type==="inj"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }
       if (ms){ if (e.type==="goal") await sleep(ms*12); else if (e.type!=="flow") await sleep(ms*3); }
     }
-    if (ms){ $("clk").textContent=(m>90?"Uzatma ":"")+m+"'"; $("bar").style.width=(m/r.len*100)+"%";
-      if (m===45||m===105){ $("clk").textContent=m===45?"Devre arası":"Uzatma devresi"; if(m===45) add(`<li class="penh"><span>⏸️ ${esc(T.ref)} ilk yarıyı bitirdi: ${a}-${b}</span></li>`); await sleep(ms*14); }
-      await sleep(ms); }
-  }
+    if (ms){ $("clk").textContent=(m>90?"Uzatma ":"")+m+"'"; $("bar").style.width=(m/len*100)+"%";
+      if (m===105){ $("clk").textContent="Uzatma devresi"; await sleep(ms*14); }
+      await sleep(ms); } } };
+  add(`<li class="penh"><span>🟢 Hakem ${esc(T.ref)} başlama düdüğünü çaldı</span></li>`);
+  if (missing) $("rc").innerHTML = `Senin takım ${11-missing} kişi`;
+  M.run(1,45); await anim(1,45);
+  $("clk").textContent="Devre arası"; add(`<li class="penh"><span>⏸️ ${esc(T.ref)} ilk yarıyı bitirdi: ${a}-${b}</span></li>`);
+  if (ms){ const h = await halfTime(M,a,b); if (h.style!==T.style || h.ment!=="Aynen devam") add(`<li class="penh"><span>📋 İkinci yarı planı: ${STYLES[h.style].e} ${esc(h.style)} · ${esc(h.ment)}</span></li>`); $("mystyle").textContent=`${S.form} · ${STYLES[h.style].e} ${h.style}`; }
+  M.run(46,90); await anim(46,90);
+  let et=false;
+  if (isKo && M.g[0]===M.g[1]){ et=true; len=120; add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await sleep(ms*18); M.run(91,120,0.85); await anim(91,120); }
+  const r = M.result(et);
   $("clk").textContent= r.et ? "Uzatmalar bitti" : "Maç sonu"; $("bar").style.width="100%";
   add(`<li class="penh"><span>🏁 ${esc(T.ref)} son düdüğü çaldı</span></li>`);
   let pen=null, res = r.g1>r.g2?"W":r.g1<r.g2?"L":"D";
@@ -1362,9 +1469,10 @@ function renderSquads(sel){
 }
 function renderHow(){
   $("how").innerHTML = `<h1>Nasıl oynanır</h1><div class="card" style="line-height:1.6">
-   <h3>1. Kadronu kur</h3><p>Diziliş (4-3-3, 4-4-2, 3-5-2) ve tarz (Hücum, Dengeli, Savunma) seç. Her çekilişte bir sezon-takım gelir. Oyuncuya dokunursun, sahada oynayabileceği yerler yanar, hangisine koyacağını sen seçersin (sağ bek sağ beke, kanat oyuncusu kanada ya da forvete gibi). Yakın bir mevkiye de koyabilirsin ama mevki dışı oynayan oyuncu ${OFFPOS} reyting kaybeder ve takımın hücumu ile savunması ${TEAM_OFF} puan düşer, kazanmak çok zorlaşır. Kadro başına ${REROLLS} yeniden çekme hakkın var. Kura sadece işine yarayacak oyuncusu olan takımları getirir. Bir oyuncuyu kadroya bir kez alabilirsin, başka sezonla tekrar gelirse seçilemez. Beğenmezsen yeniden çek. Reytingi ${LEGEND} ve üstü olan oyuncular efsanedir ve altın yıldız taşır. Aynı takım-sezondan oyuncu topladıkça kimya bonusu alırsın.</p>
+   <h3>1. Kadronu kur</h3><p>Diziliş (9 seçenek) ve oyun tarzı seç. Her çekilişte bir sezon-takım gelir. Oyuncuya dokunursun, sahada oynayabileceği yerler yanar, hangisine koyacağını sen seçersin (sağ bek sağ beke, kanat oyuncusu kanada ya da forvete gibi). Yakın bir mevkiye de koyabilirsin ama mevki dışı oynayan oyuncu ${OFFPOS} reyting kaybeder ve takımın hücumu ile savunması ${TEAM_OFF} puan düşer, kazanmak çok zorlaşır. Kadro başına ${REROLLS} yeniden çekme hakkın var. Kura sadece işine yarayacak oyuncusu olan takımları getirir. Bir oyuncuyu kadroya bir kez alabilirsin, başka sezonla tekrar gelirse seçilemez. Beğenmezsen yeniden çek. Reytingi ${LEGEND} ve üstü olan oyuncular efsanedir ve altın yıldız taşır. Aynı takım-sezondan oyuncu topladıkça kimya bonusu alırsın.</p>
    <h3>2. Turnuvayı oyna</h3><p>7 maç: 4 takımlı grupta 3 maç, ilk 2'ye girersen Son 16, çeyrek final, yarı final ve final. Maçlar dakika dakika oynanır, goller atan oyuncu ve dakikasıyla düşer. Reyting, diziliş ve tarz sonucu etkiler ama sürpriz her zaman olabilir. Maçta direkten dönen toplar, kurtarışlar, penaltılar, sarı ve kırmızı kartlar olur. Kırmızı gören takım 10 kişi kalır ve zorlanır. Eleme maçı berabere biterse 30 dakika uzatma oynanır, yine eşitlik olursa penaltılara gidilir.</p>
    <h3>Yedekler, kura ve maç önü</h3><p>İlk 11'den sonra 7 yedek seçersin (1 kaleci, 2 defans, 2 orta saha, 2 forvet). Turnuva kurayla başlar: her torbadan (şampiyonlar, ikinciler, üçüncüler) bir takım grubuna düşer, Son 16'da da rakibin kurayla belli olur. Topları tek tek çekebilir ya da kurayı atlayabilirsin. Her maçtan önce takımına bir konuşma yaparsın: oyuncuların morali yükselir ya da düşer, moral reytinge yansır. Kırmızı kart gören oyuncu bir sonraki maçta cezalıdır, sakatlanan oyuncu 1-2 maç yoktur ve maç içinde yedeğin girer (en fazla ${MAXSUBS} değişiklik). Maç önünde ilk 11'e dokunup yedekle değiştirebilirsin. Eleme maçı penaltılara kalırsa oyun durur ve penaltıcılarını sen sıralarsın. Her maçın bir hakemi, her rakibin teknik direktörü var.</p>
+   <h3>Taktik</h3><p>7 oyun tarzı var: Dengeli, Topa sahip ol, Önde baskı, Kontra atak, Kanat oyunu, Uzun top ve Otobüsü çek. Bazı tarzlar birbirini yener: kontra önde basana, önde baskı topa sahip olana, uzun top önde basana, kanat oyunu ve topa sahip olmak otobüse karşı etkilidir. Tarzın gücü kadrona da bağlı: topa sahip olmak iyi orta saha, kanat oyunu iyi kanat ve bekler, kontra ve uzun top iyi forvet ister. Önde baskı 60. dakikadan sonra yorar. Rakiplerin de tarzı var, çoğu teknik direktörüne göre. Maç önünde rakibin tarzını görüp kendi tarzını seçersin. Devre arasında oyun durur: tarzı değiştirebilir, hücuma geçebilir ya da skoru korumaya çekilebilir, oyuncu değiştirebilirsin (Anında hızda devre arası atlanır).</p>
    <h3>Kimya</h3><p>Aynı sezon-takımdan oyuncular, aynı kulüpten 3 ve üstü oyuncu ve efsane ikililer (Hagi ile Hakan Şükür, Metin, Ali ve Feyyaz, Sneijder ile Drogba, Alex ile Tuncay gibi) takımına bonus verir. Toplam kimya en fazla +5 olur.</p>
    <h3>3. 7-0 yap</h3><p>Sonucun bir skor gibi yazılır: kazandığın maç sayısı, tire, kazanamadığın maç sayısı. Penaltıyla kazanılan eleme maçları galibiyet sayılır, elenirsen kalan maçlar kayıp sayılır. 7 maçın 7'sini de kazanırsan 7-0 yaparsın. Bir de gol yemeden yaparsan "Kalede kilit" başarımı açılır.</p>
    <h3>Modlar</h3><p><b>Tek oyunculu:</b> sınırsız oyun. <b>Günün Meydan Okuması:</b> herkese o gün aynı takım sırası ve ${DAILY_BUDGET} M bütçe gelir, her oyuncunun reytingine göre bir fiyatı vardır, günde bir kez sayılır. <b>Almanak:</b> zor mod, reytingleri görmeden sadece isim ve mevkiyle kurarsın.</p>

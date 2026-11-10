@@ -50,6 +50,9 @@ h1{font-size:32px;margin:8px 0 6px}h2{margin:0 0 12px;font-size:20px}h3{margin:0
 .rv.r90{background:#9b5de530;color:#c9a2ff}.rv.r87{background:#f2c14e2a;color:#f2c14e}.rv.r84{background:#3fb96b2a;color:#7ee08f}
 .rv.r80{background:#3b8fd92a;color:#8cc4ff}.rv.r70{background:#ffffff12;color:#a9b4ad}.rv.rq{background:#ffffff12;color:#a9b4ad}
 .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+.online{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--txt);background:#ffffff10;border:1px solid var(--line);padding:4px 10px;border-radius:999px;vertical-align:middle;margin-left:10px}
+.online i{width:8px;height:8px;border-radius:50%;background:#3fdc72;box-shadow:0 0 0 0 #3fdc7288;animation:livepulse 2s infinite}
+@keyframes livepulse{70%{box-shadow:0 0 0 7px #3fdc7200}100%{box-shadow:0 0 0 0 #3fdc7200}}
 .chemlist{font-size:12px;margin-top:8px;color:#b9e6c5;line-height:1.5}
 .events li.ev-save span:last-child,.events li.ev-post span:last-child,.events li.ev-wide span:last-child{color:var(--mut)}
 .events li.ev-goal{font-weight:700}.events li.ev-red{color:#ff8a8a}
@@ -181,7 +184,7 @@ tr.me td{color:var(--gold);font-weight:700}
 </head>
 <body>
 <header>
-  <div class="logo">Süper Lig <b>7-0</b></div>
+  <div class="logo">Süper Lig <b>7-0</b> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> online</span></div>
   <nav>
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
     <button id="n-squads" onclick="show('squads')">Kadrolar</button>
@@ -860,6 +863,35 @@ function renderHow(){
 }
 
 renderStart();
+
+// ---------- anlık online sayacı (Firebase Realtime Database) ----------
+const FB_CONFIG = {
+  apiKey: "AIzaSyAyukQnm1cLDRt9uq-lD4kXIv2YuKBgDH4",
+  authDomain: "superlig70-5e30a.firebaseapp.com",
+  databaseURL: "https://superlig70-5e30a-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "superlig70-5e30a",
+  appId: "1:202497077193:web:e89a7e289d76e60e3c8218"
+};
+function loadScript(src){ return new Promise((ok,no)=>{ const s=document.createElement("script"); s.src=src; s.async=true; s.onload=ok; s.onerror=no; document.head.appendChild(s); }); }
+async function startPresence(){
+  try {
+    const V="10.12.2";
+    await loadScript(`https://www.gstatic.com/firebasejs/${V}/firebase-app-compat.js`);
+    await loadScript(`https://www.gstatic.com/firebasejs/${V}/firebase-database-compat.js`);
+    const app = firebase.initializeApp(FB_CONFIG), db = firebase.database(app);
+    const list = db.ref("presence");
+    db.ref(".info/connected").on("value", snap => {
+      if (snap.val() !== true) return;
+      const me = list.push();
+      me.onDisconnect().remove().then(()=> me.set({ t: firebase.database.ServerValue.TIMESTAMP }));
+    });
+    list.on("value", snap => {
+      const n = Math.max(1, snap.numChildren());
+      $("onlineN").textContent = n; $("online").classList.remove("hidden");
+    }, () => $("online").classList.add("hidden"));
+  } catch(e) { /* sayaç yüklenemezse oyun normal çalışır */ }
+}
+if (typeof location!=="undefined" && location.protocol.startsWith("http")) setTimeout(startPresence, 300);
 </script>
 </body>
 </html>

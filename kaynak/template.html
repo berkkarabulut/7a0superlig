@@ -50,6 +50,11 @@ h1{font-size:32px;margin:8px 0 6px}h2{margin:0 0 12px;font-size:20px}h3{margin:0
 .rv.r90{background:#9b5de530;color:#c9a2ff}.rv.r87{background:#f2c14e2a;color:#f2c14e}.rv.r84{background:#3fb96b2a;color:#7ee08f}
 .rv.r80{background:#3b8fd92a;color:#8cc4ff}.rv.r70{background:#ffffff12;color:#a9b4ad}.rv.rq{background:#ffffff12;color:#a9b4ad}
 .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+.leader{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#f2c14e18;border:1px solid #f2c14e55;color:var(--txt);border-radius:999px;padding:4px 10px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-left:6px;vertical-align:middle}
+.repbtn{background:none;border:0;cursor:pointer;opacity:.45;font-size:13px;padding:2px}.repbtn:hover{opacity:1}
+.inp{width:100%;background:#0f1813;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit;margin-top:8px}
+.col{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+@media(max-width:700px){.leader{display:block;margin:6px 0 0}.leader.hidden{display:none}}
 .namebox{display:flex;gap:8px;margin:16px 0 8px}
 .namebox input,.namebox select{background:#0f1813;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:13px 12px;font:inherit;font-size:17px;font-weight:700}
 .namebox input{flex:1;min-width:0;text-transform:none}.namebox select{max-width:46%}
@@ -190,10 +195,11 @@ tr.me td{color:var(--gold);font-weight:700}
 </head>
 <body>
 <header>
-  <div class="logo">Süper Lig <b>7-0</b> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> online</span></div>
+  <div class="logo">Süper Lig <b>7-0</b> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> online</span> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
   <nav>
     <button id="myteam" class="myteam hidden" onclick="show('play');renderNameScreen(true)" title="Takım adını değiştir"></button>
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
+    <button id="n-rank" onclick="show('rank')">Sıralama</button>
     <button id="n-squads" onclick="show('squads')">Kadrolar</button>
     <button id="n-ach" onclick="show('ach')">Başarımlar</button>
     <button id="n-how" onclick="show('how')">Nasıl oynanır</button>
@@ -201,6 +207,7 @@ tr.me td{color:var(--gold);font-weight:700}
 </header>
 <main>
   <section id="play"></section>
+  <section id="rank" class="hidden"></section>
   <section id="squads" class="hidden"></section>
   <section id="ach" class="hidden"></section>
   <section id="how" class="hidden"></section>
@@ -264,8 +271,9 @@ const sleep = ms => new Promise(r=>setTimeout(r,ms));
 const $ = id => document.getElementById(id);
 
 function show(id){
-  for (const s of ["play","squads","ach","how"]) { $(s).classList.toggle("hidden", s!==id); $("n-"+s).classList.toggle("on", s===id); }
+  for (const s of ["play","rank","squads","ach","how"]) { $(s).classList.toggle("hidden", s!==id); $("n-"+s).classList.toggle("on", s===id); }
   if (id==="squads") renderSquads();
+  if (id==="rank") renderRank(todayKey(), S.mode==="solo"?"solo":"daily");
   if (id==="ach") renderAch();
   if (id==="how") renderHow();
 }
@@ -309,9 +317,14 @@ function renderNameScreen(edit){
   $("tname").oninput = upd; $("tsuf").onchange = upd; $("tname").onkeydown = e=>{ if(e.key==="Enter" && !$("tgo").disabled) saveName(); };
   upd(); try{ $("tname").focus(); }catch(e){}
 }
-function saveName(){
+async function saveName(){
   const n=$("tname").value.trim().replace(/\s+/g," "), s=$("tsuf").value;
   if (!NAME_RE.test(n)) return;
+  const full = s ? `${n} ${s}` : n;
+  $("tgo").disabled=true; $("terr").textContent="Kontrol ediliyor…";
+  try { const ok = await Promise.race([reserveName(full), new Promise((_,no)=>setTimeout(()=>no("zaman"),6000))]);
+    if (!ok){ $("terr").textContent=`"${full}" adı başka biri tarafından alınmış, başka bir ad ya da uzantı dene.`; $("tgo").disabled=false; return; } }
+  catch(e){ /* sunucuya ulaşılamazsa adı yine kaydet */ }
   store.set("team", {name:n, suffix:s}); updateHeaderName(); renderStart();
 }
 function updateHeaderName(){ const el=$("myteam"); if(!el) return; const t=getTeam(); el.textContent = t ? "🛡️ "+myName() : ""; el.classList.toggle("hidden", !t); }
@@ -733,7 +746,20 @@ function finish(){
               seven ? `7 maçın 7'sini de kazandın. Bir de gol yemeden yapabilir misin?` :
               champ ? `Kupayı kaldırdın ama ${7-wins} maçı kazanamadın. 7-0 için hepsini kazanmalısın.` : "Kadroyu değiştirip bir daha dene.";
   const unlocked = checkAch({champ,perfect,unbeaten,seven});
-  if (S.mode==="daily" && S.counted){ store.set("daily:"+todayKey(), {title:recStr()+" · "+title, spent:S.spent, ovr:teamPower(T.me,S.style).ovr, perfect}); S.counted=false; }
+  let submitP = null, soloP = null;
+  const resTxt = champ ? "Şampiyon" : T.out.replace(" elendin","").replace(/^Grupta \d\. oldun,?/,"Grup");
+  if (S.mode==="solo") soloP = submitSolo({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
+  if (S.mode==="daily" && S.counted){ store.set("daily:"+todayKey(), {title:recStr()+" · "+title, spent:S.spent, ovr:teamPower(T.me,S.style).ovr, perfect}); S.counted=false;
+    submitP = submitDaily({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: S.spent, ovr: teamPower(T.me,S.style).ovr, res: resTxt }); }
+  if (soloP) soloP.then(async r => { const el=$("solorank"); if(!el) return;
+    if (!r){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
+    try { const db=await fb(), rows=rowsOf((await db.ref("solo/"+todayKey()).once("value")).val()), pos=rows.findIndex(x=>x.id===r.key)+1;
+      el.innerHTML = (r.better ? `🔥 Günün en iyi sonucun güncellendi! Tek oyunculu tabloda <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım).`
+        : `Bugünkü en iyin hâlâ <b>${r.old.w}-${7-r.old.w}</b>, tabloda <b style="color:var(--gold)">${pos}. sıradasın</b>.`) + ` <a href="#" onclick="S.rankMode='solo';show('rank');return false">Tabloyu gör</a>`; } catch(e){} });
+  if (submitP) submitP.then(async id => { const el=$("dailyrank"); if(!el) return;
+    if (!id){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
+    try { const db=await fb(), s=await db.ref("daily/"+todayKey()).once("value"); const rows=Object.entries(s.val()||{}).map(([k,v])=>({id:k,...v})).sort(rankSort);
+      const pos=rows.findIndex(r=>r.id===id)+1; el.innerHTML=`🏅 Meydan okuma sıralamasında <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım). <a href="#" onclick="show('rank');return false">Sıralamayı gör</a>`; } catch(e){} });
   const hist = store.get("hist", []); hist.unshift({d:Date.now(), title:recStr()+" · "+title, mode:S.mode}); store.set("hist", hist.slice(0,50));
   $("play").innerHTML = `${pathHTML()}
     <div class="card result">
@@ -741,6 +767,8 @@ function finish(){
       <div class="big ${champ?"W":"L"}" style="font-size:28px">${esc(title)}</div>
       <p class="mut">${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}${S.mode==="daily"?` · Bütçe ${S.spent}/${DAILY_BUDGET} M`:""}${S.almanac?" · Almanak":""}</p>
       <p>${sub}</p>
+      ${S.mode==="solo"?`<p id="solorank" class="mut">Günün tek oyunculu tablosuna bakılıyor…</p>`:""}
+      ${S.mode==="daily"?`<p id="dailyrank" class="mut">${submitP?"Sıralamaya ekleniyor…":"Bugünkü hakkını kullanmıştın, bu oyun sıralamaya sayılmadı."}</p>`:""}
       ${unlocked.length?`<p>Yeni başarım: ${unlocked.map(a=>`<b style="color:var(--gold)">${esc(a)}</b>`).join(", ")}</p>`:""}
       <div class="row" style="justify-content:center;margin-top:12px">
         <button class="btn" onclick="startTournament()">Aynı kadroyla tekrar</button>
@@ -898,11 +926,12 @@ function renderAch(){
 // ---------- kadrolar ----------
 function renderSquads(sel){
   const seasons = Object.keys(DATA); sel = sel || seasons.at(-1);
-  $("squads").innerHTML = `<h1>Kadrolar</h1>
+  $("squads").innerHTML = `<h1>Kadrolar</h1><p class="mut" style="font-size:13px">Yanlış bir şey mi gördün? Oyuncunun yanındaki ⚠️ ile bildir, düzeltelim.</p>
     <div class="scrollx" style="margin:12px 0 18px">${seasons.map(s=>`<button class="chip ${s===sel?"on":""}" onclick="renderSquads('${s}')">${s}</button>`).join("")}</div>
     <div class="plist" style="grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr))">${DATA[sel].map(t=>`
       <div class="card"><h2>${t.rank}. ${esc(t.team)}</h2><div class="mut" style="font-size:12px;margin:-6px 0 8px">${esc(t.note||"")}</div>
-      <table>${t.players.map(p=>`<tr><td><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span></td><td>${esc(p.n)}${p.r>=LEGEND?'<span class="seal">★</span>':""}</td><td class="rt" style="text-align:right"><span class="rv ${tierAlways(p.r)}">${p.r}</span></td></tr>`).join("")}</table></div>`).join("")}
+      <table>${t.players.map(p=>`<tr><td><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span></td><td>${esc(p.n)}${p.r>=LEGEND?'<span class="seal">★</span>':""}</td><td class="rt" style="text-align:right"><span class="rv ${tierAlways(p.r)}">${p.r}</span></td><td style="width:28px"><button class="repbtn" title="Hata bildir" onclick="openReport('${sel}','${esc(t.team)}','${esc(p.n).replace(/'/g,"\\'")}')">⚠️</button></td></tr>`).join("")}</table>
+      <button class="chip" style="margin-top:8px;font-size:12px" onclick="openReport('${sel}','${esc(t.team)}','')">➕ Eksik oyuncu bildir</button></div>`).join("")}
     </div>`;
 }
 function renderHow(){
@@ -927,23 +956,117 @@ const FB_CONFIG = {
   appId: "1:202497077193:web:e89a7e289d76e60e3c8218"
 };
 function loadScript(src){ return new Promise((ok,no)=>{ const s=document.createElement("script"); s.src=src; s.async=true; s.onload=ok; s.onerror=no; document.head.appendChild(s); }); }
-async function startPresence(){
-  try {
+let FB=null, FBready=null;
+function fb(){
+  if (!FBready) FBready = (async()=>{
+    if (!(typeof location!=="undefined" && location.protocol.startsWith("http"))) throw new Error("offline");
     const V="10.12.2";
     await loadScript(`https://www.gstatic.com/firebasejs/${V}/firebase-app-compat.js`);
     await loadScript(`https://www.gstatic.com/firebasejs/${V}/firebase-database-compat.js`);
-    const app = firebase.initializeApp(FB_CONFIG), db = firebase.database(app);
-    const list = db.ref("presence");
+    const app = firebase.initializeApp(FB_CONFIG); FB = firebase.database(app); return FB;
+  })();
+  return FBready;
+}
+const TS = () => firebase.database.ServerValue.TIMESTAMP;
+const nameKey = n => n.toLocaleLowerCase("tr-TR").replace(/[^a-z0-9çğıöşü]/g,"");
+async function startPresence(){
+  try {
+    const db = await fb(), list = db.ref("presence");
     db.ref(".info/connected").on("value", snap => {
       if (snap.val() !== true) return;
       const me = list.push();
-      me.onDisconnect().remove().then(()=> me.set({ t: firebase.database.ServerValue.TIMESTAMP }));
+      me.onDisconnect().remove().then(()=> me.set({ t: TS() }));
     });
-    list.on("value", snap => {
-      const n = Math.max(1, snap.numChildren());
-      $("onlineN").textContent = n; $("online").classList.remove("hidden");
-    }, () => $("online").classList.add("hidden"));
-  } catch(e) { /* sayaç yüklenemezse oyun normal çalışır */ }
+    list.on("value", snap => { $("onlineN").textContent = Math.max(1, snap.numChildren()); $("online").classList.remove("hidden"); },
+      () => $("online").classList.add("hidden"));
+    watchLeader();
+  } catch(e) { /* sunucu yoksa oyun normal çalışır */ }
+}
+// ---------- günlük sıralama ----------
+const rankSort = (a,b) => b.w-a.w || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf || a.spent-b.spent || a.t-b.t;
+let LB = {};
+const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan"}, solo:{path:"solo", title:"Tek oyunculu", short:"Tek"} };
+const rowsOf = v => Object.entries(v||{}).map(([id,x])=>({id,...x})).sort(rankSort);
+function watchLeader(){
+  fb().then(db => { for (const m of ["daily","solo"]) db.ref(MODES[m].path+"/"+todayKey()).on("value", s => {
+    LB[m+":"+todayKey()] = rowsOf(s.val()); paintLeader();
+    if (!$("rank").classList.contains("hidden") && (S.rankDay||todayKey())===todayKey()) renderRank(todayKey(), S.rankMode||"daily");
+  }); }).catch(()=>{});
+}
+function paintLeader(){
+  const d=LB["daily:"+todayKey()]||[], s=LB["solo:"+todayKey()]||[], el=$("leader"), parts=[];
+  if (d.length) parts.push(`<span class="mut">Meydan:</span> ${esc(d[0].name)} <b>${d[0].w}-${7-d[0].w}</b>`);
+  if (s.length) parts.push(`<span class="mut">Tek:</span> ${esc(s[0].name)} <b>${s[0].w}-${7-s[0].w}</b>`);
+  el.innerHTML = parts.length ? "👑 "+parts.join(" · ") : ""; el.classList.toggle("hidden", !parts.length);
+}
+async function submitSolo(entry){
+  try {
+    const db = await fb(), key = nameKey(entry.name), ref = db.ref("solo/"+todayKey()+"/"+key);
+    const old = (await ref.once("value")).val();
+    const better = !old || rankSort({...entry,t:0},{...old,t:0}) < 0;
+    if (better) await ref.set({...entry, games:(old?.games||0)+1, t: TS()});
+    else await ref.child("games").set((old.games||0)+1).catch(()=>{});
+    store.set("soloId:"+todayKey(), key); return {key, better, old};
+  } catch(e){ return null; }
+}
+async function submitDaily(entry){
+  try {
+    const db = await fb(), ref = db.ref("daily/"+todayKey()).push();
+    await ref.set({...entry, t: TS()}); store.set("dailyId:"+todayKey(), ref.key); return ref.key;
+  } catch(e){ return null; }
+}
+function dayKeyOffset(d){ const x=new Date(); x.setDate(x.getDate()+d); return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0"); }
+async function renderRank(day, mode){
+  mode = mode || S.rankMode || "daily"; S.rankDay = day; S.rankMode = mode; const today=todayKey(), yest=dayKeyOffset(-1), M=MODES[mode];
+  $("rank").innerHTML = `<h1>Günün sıralaması</h1>
+    <div class="row" style="margin:10px 0 6px">${Object.entries(MODES).map(([k,v])=>`<button class="chip ${k===mode?"on":""}" onclick="renderRank('${day}','${k}')">${k==="daily"?"🗓️":"🎮"} ${v.title}</button>`).join("")}</div>
+    <div class="row" style="margin:6px 0 16px"><button class="chip ${day===today?"on":""}" onclick="renderRank('${today}','${mode}')">Bugün</button><button class="chip ${day===yest?"on":""}" onclick="renderRank('${yest}','${mode}')">Dün</button></div>
+    <div class="card" id="rankbox"><p class="mut">Yükleniyor…</p></div>
+    <p class="mut" style="font-size:13px">${mode==="daily"
+      ? "Meydan okumada herkes aynı takımlarla ve aynı bütçeyle oynar. Günde sadece ilk oyun sayılır. Sıralama: galibiyet sayısı, averaj, atılan gol, sonra harcanan bütçe (az olan önde)."
+      : "Tek oyunculuda istediğin kadar oynarsın, tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."}</p>`;
+  try {
+    const db = await fb(); let rows = LB[mode+":"+day];
+    if (!rows || day!==today){ rows = rowsOf((await db.ref(M.path+"/"+day).once("value")).val()); LB[mode+":"+day]=rows; }
+    const mine = store.get((mode==="daily"?"dailyId:":"soloId:")+day, null);
+    $("rankbox").innerHTML = rows.length ? `<div style="overflow-x:auto"><table><tr><th>#</th><th>Takım</th><th>Sonuç</th><th>A-Y</th>${mode==="daily"?"<th>Bütçe</th>":"<th>Oyun</th>"}<th>Genel</th></tr>${rows.map((r,i)=>`<tr class="${r.id===mine?"me":""}"><td>${i===0?"👑":i+1}</td><td>${esc(r.name)}</td><td><b>${r.w}-${7-r.w}</b> <small class="mut">${esc(r.res||"")}</small></td><td>${r.gf}-${r.ga}</td><td>${mode==="daily"?r.spent+" M":(r.games||1)}</td><td>${r.ovr}</td></tr>`).join("")}</table></div>`
+      : `<p class="mut">${day===today?"Bugün henüz kimse oynamadı. İlk sen ol!":"O gün kimse oynamamış."}</p>`;
+  } catch(e){ $("rankbox").innerHTML = `<p class="mut">Sıralamaya şu an ulaşılamıyor. İnternet bağlantını kontrol et.</p>`; }
+}
+// ---------- hata bildir ----------
+const REPORT_TYPES = ["O sezon bu takımda oynamadı","Mevkisi yanlış","Reytingi yanlış","İsmi yanlış yazılmış","Diğer"];
+function openReport(season, team, player){
+  const m = document.createElement("div"); m.id="repbox"; m.className="modal";
+  const isMissing = !player;
+  m.innerHTML = `<div class="mbox"><div class="row" style="justify-content:space-between"><h3 style="margin:0">⚠️ ${isMissing?"Eksik oyuncu bildir":"Hata bildir"}</h3><button class="chip" onclick="closeReport()">✕</button></div>
+    <p class="mut" style="margin:8px 0">${esc(season)} ${esc(team)}${player?` · <b style="color:var(--txt)">${esc(player)}</b>`:""}</p>
+    ${isMissing?`<input id="rp_name" class="inp" maxlength="60" placeholder="Eksik oyuncunun adı soyadı">
+      <select id="rp_pos" class="inp">${Object.entries(NAME).filter(([k])=>!["RWB","LWB"].includes(k)).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>`
+    :`<div class="col">${REPORT_TYPES.map((r,i)=>`<label class="toggle"><input type="radio" name="rp_t" value="${i}" ${i===0?"checked":""}> ${r}</label>`).join("")}</div>`}
+    <textarea id="rp_msg" class="inp" rows="3" maxlength="300" placeholder="${isMissing?"Not (isteğe bağlı): kaç maç oynadı, kaynak vs.":"Doğrusu ne? Örn: o sezon Kocaelispor'daydı / sağ bek oynardı"}"></textarea>
+    <div class="row" style="margin-top:10px"><button class="btn" id="rp_send" onclick="sendReport('${esc(season)}','${esc(team).replace(/'/g,"\\'")}','${esc(player||"").replace(/'/g,"\\'")}')">Gönder</button></div>
+    <p class="mut" id="rp_info" style="font-size:13px;margin:8px 0 0"></p></div>`;
+  m.addEventListener("click", e=>{ if(e.target===m) closeReport(); });
+  document.body.appendChild(m);
+}
+function closeReport(){ document.getElementById("repbox")?.remove(); }
+async function sendReport(season, team, player){
+  const btn=$("rp_send"), info=$("rp_info"); btn.disabled=true; info.textContent="Gönderiliyor…";
+  const isMissing=!player;
+  const rec = { season, team, player: isMissing ? (($("rp_name").value||"").trim().slice(0,60)) : player,
+    type: isMissing ? "Eksik oyuncu · "+NAME[$("rp_pos").value] : REPORT_TYPES[+document.querySelector('input[name="rp_t"]:checked').value],
+    msg: ($("rp_msg").value||"").trim().slice(0,300), by: myName() };
+  if (isMissing && rec.player.length<3){ info.textContent="Oyuncunun adını yaz."; btn.disabled=false; return; }
+  try { const db = await fb(); await db.ref("reports").push({...rec, t: TS()}); info.innerHTML="Teşekkürler! Bildirimin ulaştı ✓"; setTimeout(closeReport, 1400); }
+  catch(e){ info.textContent="Gönderilemedi, internet bağlantını kontrol edip tekrar dene."; btn.disabled=false; }
+}
+// ---------- takım adı rezervasyonu ----------
+async function reserveName(full){
+  const key = nameKey(full), mine = store.get("myNames", []);
+  if (mine.includes(key)) return true;
+  const db = await fb(), ref = db.ref("names/"+key);
+  const s = await ref.once("value"); if (s.exists()) return false;
+  await ref.set({ n: full, t: TS() }); store.set("myNames", [...mine, key]); return true;
 }
 if (typeof location!=="undefined" && location.protocol.startsWith("http")) setTimeout(startPresence, 300);
 </script>

@@ -1,0 +1,92 @@
+# Birden fazla CSS dosyasında bilerek tanımlanan sınıflar (tema/mobil üzerine yazmaları).
+# Yeni bir sınıf buraya ancak bilinçli bir üzerine yazmaysa eklenir.
+D: 01-temel.css, 02-tema-tv.css
+DF: 01-temel.css, 02-tema-tv.css
+FW: 01-temel.css, 02-tema-tv.css
+GK: 01-temel.css, 02-tema-tv.css
+L: 01-temel.css, 02-tema-tv.css
+MF: 01-temel.css, 02-tema-tv.css
+W: 01-temel.css, 02-tema-tv.css
+ach: 01-temel.css, 02-tema-tv.css
+away: 01-temel.css, 02-tema-tv.css
+bad: 05-mac-onu-mac.css, 06-surukle-birak.css
+badge: 01-temel.css, 02-tema-tv.css
+bar: 01-temel.css, 02-tema-tv.css
+bench: 03-saha-forma-kulube.css, 05-mac-onu-mac.css
+bh: 01-temel.css, 02-tema-tv.css
+big: 01-temel.css, 02-tema-tv.css, 04-kura.css, 05-mac-onu-mac.css
+bm: 01-temel.css, 02-tema-tv.css
+bn: 03-saha-forma-kulube.css, 05-mac-onu-mac.css
+brow: 03-saha-forma-kulube.css, 05-mac-onu-mac.css
+bslot: 03-saha-forma-kulube.css, 05-mac-onu-mac.css
+bt: 01-temel.css, 02-tema-tv.css
+btn: 01-temel.css, 02-tema-tv.css, 07-mobil-duzeltmeler.css
+card: 01-temel.css, 02-tema-tv.css
+champ: 01-temel.css, 02-tema-tv.css
+chemlist: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css
+chip: 01-temel.css, 02-tema-tv.css
+clock: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css
+cur: 01-temel.css, 02-tema-tv.css
+dot: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css, 05-mac-onu-mac.css
+draft: 01-temel.css, 05-mac-onu-mac.css, 07-mobil-duzeltmeler.css
+draw: 01-temel.css, 07-mobil-duzeltmeler.css
+drawbtns: 01-temel.css, 07-mobil-duzeltmeler.css
+ev-goal: 01-temel.css, 02-tema-tv.css
+events: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css
+full: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css, 06-surukle-birak.css
+ghost: 01-temel.css, 02-tema-tv.css
+gold: 01-temel.css, 02-tema-tv.css
+good: 05-mac-onu-mac.css, 06-surukle-birak.css
+got: 01-temel.css, 02-tema-tv.css
+grid: 01-temel.css, 05-mac-onu-mac.css, 07-mobil-duzeltmeler.css
+hint: 01-temel.css, 02-tema-tv.css
+ht: 05-mac-onu-mac.css, 07-mobil-duzeltmeler.css
+inp: 01-temel.css, 02-tema-tv.css
+leader: 01-temel.css, 02-tema-tv.css
+leg: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css
+logo: 01-temel.css, 02-tema-tv.css
+lp: 06-surukle-birak.css, 07-mobil-duzeltmeler.css
+mbox: 01-temel.css, 02-tema-tv.css
+me: 01-temel.css, 02-tema-tv.css
+modal: 01-temel.css, 02-tema-tv.css
+mode: 01-temel.css, 02-tema-tv.css
+namebox: 01-temel.css, 02-tema-tv.css
+nat: 01-temel.css, 02-tema-tv.css
+nm: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css, 05-mac-onu-mac.css, 06-surukle-birak.css, 07-mobil-duzeltmeler.css
+offp: 01-temel.css, 03-saha-forma-kulube.css
+ok: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css
+on: 01-temel.css, 02-tema-tv.css
+online: 01-temel.css, 02-tema-tv.css
+path: 01-temel.css, 02-tema-tv.css
+penh: 01-temel.css, 02-tema-tv.css
+pensc: 01-temel.css, 02-tema-tv.css
+pitch: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css, 05-mac-onu-mac.css, 07-mobil-duzeltmeler.css
+pl: 01-temel.css, 02-tema-tv.css
+pos: 01-temel.css, 02-tema-tv.css
+prev: 06-surukle-birak.css, 07-mobil-duzeltmeler.css
+preview: 01-temel.css, 02-tema-tv.css
+r70: 01-temel.css, 02-tema-tv.css
+r80: 01-temel.css, 02-tema-tv.css
+r84: 01-temel.css, 02-tema-tv.css
+r87: 01-temel.css, 02-tema-tv.css
+r90: 01-temel.css, 02-tema-tv.css
+rb: 03-saha-forma-kulube.css, 05-mac-onu-mac.css, 06-surukle-birak.css
+rec: 01-temel.css, 02-tema-tv.css
+result: 01-temel.css, 02-tema-tv.css
+rq: 01-temel.css, 02-tema-tv.css
+rv: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css, 06-surukle-birak.css
+score: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css
+sel: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css
+shirt: 03-saha-forma-kulube.css, 05-mac-onu-mac.css, 06-surukle-birak.css, 07-mobil-duzeltmeler.css
+side: 01-temel.css, 05-mac-onu-mac.css
+slot: 01-temel.css, 02-tema-tv.css, 03-saha-forma-kulube.css, 05-mac-onu-mac.css, 06-surukle-birak.css, 07-mobil-duzeltmeler.css
+stat: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css
+stats: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css
+t-r70: 01-temel.css, 02-tema-tv.css
+t-r80: 01-temel.css, 02-tema-tv.css
+t-r84: 01-temel.css, 02-tema-tv.css
+t-r87: 01-temel.css, 02-tema-tv.css
+t-r90: 01-temel.css, 02-tema-tv.css
+tag: 01-temel.css, 02-tema-tv.css
+tm: 01-temel.css, 03-saha-forma-kulube.css, 05-mac-onu-mac.css, 06-surukle-birak.css, 07-mobil-duzeltmeler.css
+tn: 01-temel.css, 02-tema-tv.css, 05-mac-onu-mac.css

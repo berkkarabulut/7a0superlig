@@ -1,0 +1,48 @@
+/* maç önü */
+.score.pre .vs{font-size:40px;padding:0 14px}
+.talks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.talk{display:flex;gap:10px;align-items:center;text-align:left;cursor:pointer;font:600 15px "Barlow",system-ui;color:var(--txt);border-left:3px solid var(--acc);padding:10px}
+.talk:hover{background:var(--card2)}
+.talkres{background:#0d0216;border-left:3px solid var(--gold);padding:10px 12px;border-radius:3px}
+.lineup{display:flex;flex-direction:column;gap:4px}
+.lrow{display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:2px;padding:6px 8px;color:var(--txt);font:500 14px "Barlow",system-ui;text-align:left;cursor:pointer}
+.lrow .ln{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lrow.sel{border-color:var(--gold);border-left-color:var(--gold);background:#2e1a05}
+.lrow.outp{opacity:.6}
+.lrow.bench:disabled{cursor:default;opacity:.75}
+.lrow.can{border-left-color:var(--teal);background:#00c2a814}
+.mor{font:800 13px var(--cond)}.mor.up{color:var(--win)}.mor.dn{color:var(--loss)}
+.pnum{min-width:20px;height:20px;border-radius:50%;background:var(--gold);color:#1d1200;font:800 13px var(--cond);display:grid;place-items:center}
+.pnum:empty{background:#ffffff14}
+.penpick{border-top:3px solid var(--gold)}
+.mlist{max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:2px;background:#170528;padding:6px;border-radius:3px}
+.score .big.flash{animation:flash .9s ease-out}
+@keyframes flash{0%{transform:scale(1.25);box-shadow:0 0 0 0 #ffb703cc}100%{transform:scale(1);box-shadow:0 0 0 18px #ffb70300}}
+.events li.ev-flow{opacity:.7;font-size:13px}
+.events li.ev-sub{color:var(--teal)}
+.tacnote{margin-top:6px;padding:6px 10px;border-radius:3px;font:700 14px var(--cond);letter-spacing:.4px;text-transform:uppercase}
+.tacnote.good{background:#00c2a81f;color:var(--win)}.tacnote.bad{background:#ff4d6d1f;color:var(--loss)}
+.ht{border-top:3px solid var(--gold)}
+.events li.ev-inj{color:#ffd6a0}
+@media(max-width:700px){
+  .grid.draft{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+  .grid.draft>*{width:100%;min-width:0}
+  .grid.draft>.side{order:-1;position:sticky;top:0;z-index:30;background:var(--bg);padding:6px 0 8px;box-shadow:0 8px 14px -6px #000c}
+  .grid.draft .chemlist{display:none}
+  .grid.draft .stats{margin-top:6px;padding:4px 8px}.grid.draft .stat b{font-size:15px}.grid.draft .stat span{font-size:10px}
+  .pitch,.grid.draft .pitch{aspect-ratio:16/10.5;background-image:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" preserveAspectRatio="none"%3E%3Cg transform="translate%28400 0%29 rotate%2890%29"%3E%3Cg stroke="white" stroke-opacity=".38" stroke-width="1.6" fill="none"%3E%3Crect x="10" y="10" width="280" height="380" rx="2"/%3E%3Cline x1="10" y1="200" x2="290" y2="200"/%3E%3Ccircle cx="150" cy="200" r="38"/%3E%3Crect x="80" y="10" width="140" height="58"/%3E%3Crect x="117" y="10" width="66" height="20"/%3E%3Cpath d="M126.5 68 A30 30 0 0 0 173.5 68"/%3E%3Crect x="80" y="332" width="140" height="58"/%3E%3Crect x="117" y="370" width="66" height="20"/%3E%3Cpath d="M126.5 332 A30 30 0 0 1 173.5 332"/%3E%3Cpath d="M10 18 A8 8 0 0 0 18 10"/%3E%3Cpath d="M282 10 A8 8 0 0 0 290 18"/%3E%3Cpath d="M10 382 A8 8 0 0 1 18 390"/%3E%3Cpath d="M290 382 A8 8 0 0 0 282 390"/%3E%3Crect x="132" y="3" width="36" height="7" stroke-opacity=".6"/%3E%3Crect x="132" y="390" width="36" height="7" stroke-opacity=".6"/%3E%3C/g%3E%3Cg fill="white" fill-opacity=".45"%3E%3Ccircle cx="150" cy="200" r="2.4"/%3E%3Ccircle cx="150" cy="50" r="2"/%3E%3Ccircle cx="150" cy="350" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'), radial-gradient(ellipse at 50% 50%,#ffffff12,transparent 60%), radial-gradient(ellipse at -20% 50%,#0006,transparent 55%), repeating-linear-gradient(90deg,#1f7a44 0 8.33%,#1a6d3c 8.33% 16.66%)}
+  .slot{left:calc((100 - var(--y)) * 1%);top:calc(var(--x) * 1%);width:64px}
+  .grid.draft .slot{width:60px}
+  .shirt,.grid.draft .shirt{width:30px;height:29px}
+  .shirt .rb{font-size:11px;min-width:20px;padding:0 2px}
+  .grid.draft .dot,.dot{width:26px;height:26px;font-size:10px}
+  .slot .nm,.grid.draft .slot .nm{font-size:9px;max-width:62px;padding:0 3px}
+  .slot .tm{display:none}
+  .brow{gap:3px}.bslot{min-height:34px}.bslot .bn{font-size:8.5px}
+  .talks{grid-template-columns:1fr}
+  .score{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+  .score .tn{min-width:0;overflow-wrap:anywhere;font-size:14px}
+  .score.pre .vs{font-size:28px;padding:0 8px}
+  .clock{font-size:12px;padding:1px 6px}
+}
+

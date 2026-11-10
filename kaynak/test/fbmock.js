@@ -1,0 +1,10 @@
+(function(){ if(window.firebase&&window.firebase._mock) return;
+ const DB=window.__DB||(window.__DB={names:{"takenfc":{n:"TAKEN FC",t:1}},daily:{}});
+ const get=p=>p.split("/").filter(Boolean).reduce((o,k)=>o==null?undefined:o[k],DB);
+ const set=(p,v)=>{const ks=p.split("/").filter(Boolean);let o=DB;ks.slice(0,-1).forEach(k=>{o[k]=o[k]||{};o=o[k]});if(v==null)delete o[ks.at(-1)];else o[ks.at(-1)]=v;fire(p);};
+ const L=[];const fire=(ch)=>L.forEach(([p,cb])=>{ if(!p.startsWith(".info") && (ch.startsWith(p)||p.startsWith(ch))) cb(snap(p)); });
+ const snap=p=>({val:()=>p===".info/connected"?true:JSON.parse(JSON.stringify(get(p)??null)),exists:()=>get(p)!=null,numChildren:()=>Object.keys(get(p)||{}).length});
+ let c=0; const fix=v=>JSON.parse(JSON.stringify(v,(k,x)=>x&&x[".sv"]?Date.now():x));
+ const ref=p=>({key:p.split("/").at(-1),child(c){return ref(p+"/"+c)},push(v){const r=ref(p+"/id"+(++c)); if(v!==undefined){ return Object.assign(r.set(v),{key:r.key}); } return r;},set(v){set(p,fix(v));return Promise.resolve()},once(){return Promise.resolve(snap(p))},on(_,cb){L.push([p,cb]);cb(snap(p))},onDisconnect(){return{remove:()=>Promise.resolve()}}});
+ window.firebase={_mock:1,initializeApp:()=>({}),database:Object.assign(()=>({ref}),{ServerValue:{TIMESTAMP:{".sv":"timestamp"}}})};
+})();

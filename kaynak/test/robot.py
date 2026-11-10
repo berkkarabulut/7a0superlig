@@ -1,0 +1,163 @@
+#!/usr/bin/env python3
+"""Ekran robotu: siteyi bilgisayar ve telefon boyutunda baştan sona gezer.
+
+Her ekranda olması gereken butonların gerçekten görünür ve tıklanabilir
+olduğunu (ekranın içinde, başka bir şeyin altında kalmamış) kontrol eder,
+sayfada JavaScript hatası olup olmadığına bakar. Bir şey bozuksa 1 ile çıkar.
+
+Kullanım: python3 robot.py [index.html yolu]
+Ekran görüntüleri: /tmp/robot/
+"""
+import os, sys, time
+from playwright.sync_api import sync_playwright
+
+HTML = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "..", "..", "index.html"))
+SHOTS = "/tmp/robot"; os.makedirs(SHOTS, exist_ok=True)
+CHROME = "/usr/bin/google-chrome" if os.path.exists("/usr/bin/google-chrome") else None
+
+# görünür + ekranda + üstü kapalı değil
+CHECK_JS = """(sel) => {
+  const els=[...document.querySelectorAll(sel)];
+  if (!els.length) return "bulunamadı";
+  const el=els[0]; el.scrollIntoView({block:"center"});
+  const r=el.getBoundingClientRect(), cs=getComputedStyle(el);
+  if (cs.display==="none"||cs.visibility==="hidden"||+cs.opacity===0) return "gizli";
+  if (r.width<4||r.height<4) return "boyutu sıfır ("+Math.round(r.width)+"x"+Math.round(r.height)+")";
+  if (r.right<1||r.left>innerWidth-1||r.bottom<1||r.top>innerHeight-1) return "ekranın dışında ("+Math.round(r.left)+","+Math.round(r.top)+")";
+  if (r.left<-2||r.right>innerWidth+2) return "yatayda taşıyor";
+  const x=Math.min(innerWidth-2,Math.max(1,r.left+r.width/2)), y=Math.min(innerHeight-2,Math.max(1,r.top+r.height/2));
+  const hit=document.elementFromPoint(x,y);
+  if (!hit || !(hit===el || el.contains(hit) || hit.contains(el))) return "üstü kapalı ("+(hit?hit.tagName+"."+hit.className:"yok")+")";
+  return "ok";
+}"""
+
+FILL = """(n)=>{ let k=0; while(S.phase==="xi"&&k++<80){ if(n!=null && S.slots.filter(z=>z.p).length>=n) break; let i=S.cur.players.findIndex(p=>canPick(p)&&openSlots().some(z=>natural(p,z.pos))); if(i<0){roll();continue} pick(i); place(curSlots().findIndex(z=>!z.p&&natural(S.cur.players[i],z.pos))) } }"""
+BENCH = """(n)=>{ let k=0; while(S.phase==="bench"&&S.bench.some(z=>!z.p)&&k++<80){ if(n!=null && S.bench.filter(z=>z.p).length>=n) break; let i=S.cur.players.findIndex(p=>canPick(p)&&openSlots().some(z=>natural(p,z.pos))); if(i<0){ if(S.rerolls>0){reroll();continue} break;} pick(i);} }"""
+
+fails = []
+
+
+def run(name, vp, b):
+    pg = b.new_page(viewport=vp)
+    errs = []
+    pg.on("pageerror", lambda e: errs.append(str(e)))
+    pg.goto("file://" + HTML); time.sleep(0.8)
+    pg.evaluate("()=>localStorage.clear()"); pg.reload(); time.sleep(1)
+
+    def chk(screen, *sels):
+        for s in sels:
+            res = pg.evaluate(CHECK_JS, s)
+            if res != "ok":
+                fails.append(f"[{name}] {screen}: '{s}' {res}")
+        pg.screenshot(path=f"{SHOTS}/{name}-{screen}.png")
+
+    def click(sel):
+        pg.evaluate("(s)=>{ const e=document.querySelector(s); e.scrollIntoView({block:'center'}); }", sel); time.sleep(0.15)
+        pg.locator(sel).first.click(timeout=4000); time.sleep(0.35)
+
+    def step(screen, fn):
+        try: fn()
+        except Exception as e: fails.append(f"[{name}] {screen}: adım çalışmadı -> {str(e).splitlines()[0][:160]}")
+
+    # 1) takım adı
+    def s1():
+        chk("01-takim-adi", "input", "#tgo")
+        pg.fill("input", "ROBOT"); click("#tgo"); time.sleep(0.6)
+    step("01-takim-adi", s1)
+    # 2) başlangıç
+    def s2():
+        chk("02-baslangic", ".mode", "#play .chip", "#play .btn", "#n-play", "#n-rank", "#n-squads")
+    step("02-baslangic", s2)
+    # 3) kadro kurma
+    def s3():
+        pg.evaluate("()=>startDraft()"); pg.evaluate(FILL, 3); time.sleep(0.3)
+        chk("03-kadro", ".drawbtns .restart", ".drawbtns .btn:not(.restart)", ".pl:not([disabled])", ".pitch")
+        pg.evaluate("()=>{ const i=S.cur.players.findIndex(canPick); pick(i); }"); time.sleep(0.3)
+        chk("03b-oyuncu-secili", "#selcard .chip")
+        click(".drawbtns .restart"); chk("03c-bastan-basla", "#restartbox .btn", "#restartbox .btn.ghost")
+        click("#restartbox .btn.ghost")
+    step("03-kadro", s3)
+    # 4) yedekler
+    def s4():
+        pg.evaluate(FILL, None); time.sleep(0.3)
+        chk("04-yedek", ".benchintro .btn", ".bench", ".pl:not([disabled])")
+        pg.evaluate(BENCH, None); time.sleep(0.3)
+        if pg.evaluate("()=>S.phase==='bench'"): pg.evaluate("()=>skipBench()")
+        time.sleep(0.3)
+        chk("05-hazir", "#play .chip", "#play .btn")
+    step("04-yedek", s4)
+    # 5) kura
+    def s5():
+        pg.evaluate("()=>{ SPEEDS['Hızlı']=8; S.speed='Hızlı'; startTournament(); }"); time.sleep(0.3)
+        chk("06-kura", "#kdraw", "#kskip")
+        click("#kdraw"); time.sleep(1.4); click("#kskip"); time.sleep(0.5)
+        chk("06b-kura-bitti", "#kgo"); click("#kgo")
+    step("05-kura", s5)
+    # 6) maç önü
+    def s6():
+        chk("07-mac-onu", "#play .talk", "#play .chip", "#lpbox [data-drag^='x:']", "#lpbox [data-drag^='b:']", "#play .btn")
+        click("#lpbox [data-drag='b:0']"); click("#lpbox [data-drag='x:9']")
+        chk("07b-degisiklik", ".tacnote", "button[onclick='resetXi()']")
+        click("#play .talk")
+        chk("07c-konusma", ".talkres", "#play .btn.gold")
+    step("06-mac-onu", s6)
+    # 7) maç + devre arası
+    def s7():
+        pg.evaluate("()=>{ runMatch(); }"); time.sleep(1)
+        chk("08-mac", "#sc", "#clk", "#ev")
+        pg.wait_for_selector("#htbox", timeout=40000); time.sleep(0.5)
+        chk("09-devre-arasi", "#htbox .chip", "#htbox [data-drag^='x:']", "#htbox [data-drag^='b:']", "#htbox .btn.gold")
+        for k in (8, 3):
+            click("#htbox [data-drag^='b:']"); click(f"#htbox [data-drop='x:{k}']")
+        if pg.locator("#htbox").count() == 0: fails.append(f"[{name}] devre arası: değişiklikten sonra panel kapandı")
+        chk("09b-devre-arasi-2-degisiklik", "#htbox .btn.gold")
+        click("#htbox .btn.gold")
+        pg.wait_for_function("()=>/Sonraki maç|Sonucu gör/.test(document.getElementById('after')?.textContent||'')", timeout=40000)
+        chk("10-mac-sonu", "#after .btn")
+    step("07-mac", s7)
+    # 8) penaltı seçimi (eleme maçını zorla berabere bitir)
+    def s8():
+        pg.evaluate("""()=>{ const T=S.T; T.i=3; setupR16(); T.prepFor=-1; preMatch(); S.speed='Anında';
+          const mk=window.makeMatch; window.makeMatch=(...a)=>{ const M=mk(...a); const run=M.run; M.run=(m0,m1,mu)=>{ run(m0,m1,mu); M.g[0]=M.g[1]=0; for(let i=M.ev.length-1;i>=0;i--) if(M.ev[i].type==='goal') M.ev.splice(i,1); }; return M; };
+          runMatch(); }""")
+        pg.wait_for_selector(".penpick", timeout=40000); time.sleep(0.4)
+        chk("11-penalti", ".penpick .lrow", ".penpick .btn.ghost")
+        click(".penpick .btn.ghost")
+        chk("11b-penalti-sirali", ".penpick .btn.gold"); click(".penpick .btn.gold")
+        pg.wait_for_function("()=>/Sonraki maç|Sonucu gör/.test(document.getElementById('after')?.textContent||'')", timeout=40000)
+    step("08-penalti", s8)
+    # 9) sonuç + paylaş
+    def s9():
+        pg.evaluate("()=>{ S.T.out=S.T.out||'Son 16\\'da elendin'; finish(); }"); time.sleep(0.8)
+        chk("12-sonuc", ".result .btn", ".result .btn.ghost", ".result .btn.gold", ".site a")
+        click(".result .btn.gold"); time.sleep(1.2)
+        chk("13-paylas", "#sharebox .btn", "#sharebox canvas, #sharebox img")
+        pg.evaluate("()=>closeShare()")
+    step("09-sonuc", s9)
+    # 10) sekmeler
+    def s10():
+        click("#n-squads"); time.sleep(0.4)
+        chk("14-kadrolar", "#squads .chip", "#squads .repbtn")
+        pg.evaluate("()=>{ const b=[...document.querySelectorAll('#squads .chip')].find(x=>x.textContent.includes('Bildir')); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
+        chk("15-bildir", "#repbox .mr_cb", "#mr_send"); pg.evaluate("()=>closeReport()")
+        click("#n-rank"); time.sleep(0.4); chk("16-siralama", "#rank")
+        click("#n-ach"); time.sleep(0.3); chk("17-basarimlar", "#ach .card")
+        click("#n-how"); time.sleep(0.3); chk("18-nasil", "#how .card")
+    step("10-sekmeler", s10)
+
+    real = [e for e in errs if "firebase" not in e.lower()]
+    for e in real: fails.append(f"[{name}] JavaScript hatası: {e[:200]}")
+    pg.close()
+
+
+with sync_playwright() as p:
+    b = p.chromium.launch(executable_path=CHROME, args=["--no-sandbox"]) if CHROME else p.chromium.launch()
+    run("bilgisayar", {"width": 1280, "height": 860}, b)
+    run("telefon", {"width": 390, "height": 844}, b)
+    b.close()
+
+if fails:
+    print(f"❌ ROBOT: {len(fails)} sorun")
+    for f in fails: print("   " + f)
+    sys.exit(1)
+print("✅ ROBOT: bilgisayar ve telefonda tüm ekranlar ve butonlar sağlam")

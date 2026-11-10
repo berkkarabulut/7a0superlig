@@ -511,6 +511,8 @@ const REFS = [["Yusuf Namoğlu",1978,1990],["Erman Toroğlu",1980,1992],["Necmi 
 function pickRef(season){ const y=+season.slice(0,4)+1; const c=REFS.filter(([,a,b])=>a<=y+2&&b>=y-2); return rnd(c.length?c:REFS)[0]; }
 const BENCH_SLOTS = ["BGK","BDF","BDF","BMF","BMF","BFW","BFW"];
 const MAXSUBS = 5;
+// zorluk eğrisi: grupta biraz destek, elemelerde turnuva baskısı (+ bize, - rakibe)
+let STAGE_BOOST = [1.5,1.5,1.5,-1.3,-2.2,-3.1,-4];
 const TALKS = [
   {t:"Sakin olun, kendi oyunumuzu oynayalım", e:"🧘", fx:{fav:[.4,.55,.05],even:[.4,.52,.08],dog:[.28,.6,.12]}},
   {t:"Bu maçı kazanmak zorundayız, sahada ölün!", e:"🔥", big:true, fx:{fav:[.25,.4,.35],even:[.45,.35,.2],dog:[.6,.25,.15]}},
@@ -1142,8 +1144,10 @@ async function runMatch(){
   const T=S.T, i=T.i, isKo = i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
   const pw = {...teamPower(L, T.style)};
+  const boost = STAGE_BOOST[i]||0; if (boost>0){ pw.att+=boost; pw.def+=boost; }
+  const opw = {...o.pw}; if (boost<0){ opw.att-=boost; opw.def-=boost; }
   const pickSub = (role, used) => { const b=bestSub(T, role, used); if(!b) return null; return {...b, r:Math.round(effR(T,b,role)), pos:LINE(role), role}; };
-  const M = makeMatch(pw, o.pw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
+  const M = makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid">

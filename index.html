@@ -349,6 +349,34 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
   .score.pre .vs{font-size:28px;padding:0 8px}
   .clock{font-size:12px;padding:1px 6px}
 }
+
+.lp .slot.full{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.lp .slot.selx .shirt svg{filter:drop-shadow(0 0 6px #ffb703) drop-shadow(0 0 2px #ffb703)}
+.lp .slot.selx .nm{background:var(--gold);color:#1d1200}
+.lp .slot.hov .shirt{transform:scale(1.18)}.lp .slot.hov .nm{background:var(--teal);color:#00241f}
+.lp .slot.outx{opacity:.55}
+.lp .slot .tm{display:block!important;font:700 10px var(--cond);letter-spacing:.4px}
+.slot .prev{margin-top:1px;font:800 11px var(--cond);padding:0 4px;border-radius:2px;display:inline-block}
+.slot .prev.good{background:#00c2a8;color:#00241f}.slot .prev.bad{background:#ff4d6d;color:#fff}
+.rv.rb.drop{background:#ff4d6d!important;color:#fff!important;box-shadow:0 0 0 2px #fff}
+.neg{color:#ff6b84}
+.bench2{cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.bench2.hov{border-color:var(--teal);background:#00c2a822}
+.grip{color:var(--mut);font-size:14px;cursor:grab}
+.dragging{opacity:.35}
+.ghost{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%) scale(1.08);opacity:.92;left:-999px;top:-999px;filter:drop-shadow(0 8px 12px #000a)}
+.ghost.slot{width:80px}
+
+.ht,#lpbox{user-select:none;-webkit-user-select:none}
+@media(max-width:700px){
+  .pitch.lp{aspect-ratio:3/4.1;background:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" preserveAspectRatio="none"%3E%3Cg stroke="white" stroke-opacity=".38" stroke-width="1.6" fill="none"%3E%3Crect x="10" y="10" width="280" height="380" rx="2"/%3E%3Cline x1="10" y1="200" x2="290" y2="200"/%3E%3Ccircle cx="150" cy="200" r="38"/%3E%3Crect x="80" y="10" width="140" height="58"/%3E%3Crect x="117" y="10" width="66" height="20"/%3E%3Cpath d="M126.5 68 A30 30 0 0 0 173.5 68"/%3E%3Crect x="80" y="332" width="140" height="58"/%3E%3Crect x="117" y="370" width="66" height="20"/%3E%3Cpath d="M126.5 332 A30 30 0 0 1 173.5 332"/%3E%3Cpath d="M10 18 A8 8 0 0 0 18 10"/%3E%3Cpath d="M282 10 A8 8 0 0 0 290 18"/%3E%3Cpath d="M10 382 A8 8 0 0 1 18 390"/%3E%3Cpath d="M290 382 A8 8 0 0 0 282 390"/%3E%3Crect x="132" y="3" width="36" height="7" stroke-opacity=".6"/%3E%3Crect x="132" y="390" width="36" height="7" stroke-opacity=".6"/%3E%3C/g%3E%3Cg fill="white" fill-opacity=".45"%3E%3Ccircle cx="150" cy="200" r="2.4"/%3E%3Ccircle cx="150" cy="50" r="2"/%3E%3Ccircle cx="150" cy="350" r="2"/%3E%3C/g%3E%3C/svg%3E') center/100% 100% no-repeat, radial-gradient(ellipse at 50% 50%,#ffffff12,transparent 60%), radial-gradient(ellipse at 50% 120%,#0006,transparent 55%),
+  repeating-linear-gradient(0deg,#1f7a44 0 8.33%,#1a6d3c 8.33% 16.66%)}
+  .lp .slot{left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:74px}
+  .lp .shirt{width:34px;height:33px}
+  .lp .slot .nm{font-size:9.5px;max-width:74px}
+  .lp .slot .tm{font-size:9px}
+  .slot .prev{font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -702,7 +730,7 @@ function skipBench(){ S.bench = S.bench.filter(s=>s.p); renderReady(); }
 const anyPickable = () => S.cur.players.some(canPick);
 const showR = r => S.almanac ? "?" : r;
 
-const SHIRT = (c,r) => `<div class="shirt"><svg viewBox="0 0 40 38"><path d="M13 3 Q20 8 27 3 L37 8 L40 17 L33 19 L32 37 L8 37 L7 19 L0 17 L3 8 Z" fill="${c[0]}" stroke="${c[1]}" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 9 L20 37" stroke="${c[1]}" stroke-width="3" opacity=".55"/></svg><span class="rv rb ${tier(r)}">${showR(r)}</span></div>`;
+const SHIRT = (c,r,drop) => `<div class="shirt"><svg viewBox="0 0 40 38"><path d="M13 3 Q20 8 27 3 L37 8 L40 17 L33 19 L32 37 L8 37 L7 19 L0 17 L3 8 Z" fill="${c[0]}" stroke="${c[1]}" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 9 L20 37" stroke="${c[1]}" stroke-width="3" opacity=".55"/></svg><span class="rv rb ${tier(r)} ${drop?"drop":""}">${showR(r)}</span></div>`;
 function pitchHTML(){
   const selP = (S.sel!=null && S.cur && S.phase!=="bench") ? S.cur.players[S.sel] : null;
   return `<div class="pitch">${S.slots.map((s,si)=>{ const ok = selP && !s.p && fits(selP,s.pos); return `
@@ -907,7 +935,7 @@ function makeMatch(A,B,pa,pb,o={}){
           else { red[0]++; ev.push({m,side:0,type:"inj",p,text:T("injN",{p})}); } } }
   } };
   return {
-    ev, g, pl,
+    ev, g, pl, subs,
     run(m0,m1,mult=1){ for (let m=m0;m<=m1;m++) step(m,mult); },
     onPitch: () => av(0),
     subsLeft: () => MAXSUBS-nsub,
@@ -984,7 +1012,7 @@ function autoFix(T){
 }
 function startTournament(){
   RNG = Math.random;
-  const xi = S.slots.map(s=>({pos:s.pos, p:{...s.p, r:s.p.base}}));
+  const xi = S.slots.map(s=>({pos:s.pos, x:s.x, y:s.y, p:{...s.p, r:s.p.base}}));
   const bench = (S.bench||[]).filter(s=>s.p).map(s=>({...s.p}));
   const others = shuffle(POOL);
   const pots = [1,2,3].map(r=>others.filter(t=>t.rank===r));
@@ -1034,7 +1062,7 @@ function talkCtx(T,o){ const me=teamPower(lineup(T),T.style), d=(me.att+me.def)-
 function preMatch(){
   const T=S.T, i=T.i, isKo=i>=3, o = isKo ? T.R[i-3][1] : T.group[i];
   T.o = o; T.ref = pickRef(o.t.season);
-  if (T.prepFor!==i){ T.prepFor=i; T.notes = autoFix(T); T.talked=false; T.talkRes=null; T.selXi=null; }
+  if (T.prepFor!==i){ T.prepFor=i; T.notes = autoFix(T); T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; }
   renderPre();
 }
 function renderPre(){
@@ -1070,24 +1098,67 @@ function renderPre(){
     </div>
     <div class="card">
       <div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">İlk 11'ini ayarla</h3>${T.xi.some((s,k)=>s.p.n!==T.orig[k])?`<button class="chip" onclick="resetXi()">↺ Kurduğum 11'e dön</button>`:""}</div>
-      <p class="mut" style="font-size:13px;margin:4px 0 8px">Her maçtan önce değiştirebilirsin: önce ilk 11'den bir oyuncuya, sonra yerine girecek yedeğe dokun. Maç içindeki değişiklikler sonraki maça taşınmaz.</p>
-      <div class="lineup">${T.xi.map((s,k)=>`<button class="lrow ${T.selXi===k?"sel":""} ${s.p&&isOut(T,s.p.n)?"outp":""}" onclick="selXi(${k})"><span class="pos ${LINE(s.pos)}">${LABEL[s.pos]}</span>
-        <span class="ln">${esc(s.p.n)} ${stat(s.p)}</span>${mor(s.p.n)}${penOf(s.p,s.pos)?`<span class="tag nr">−${penOf(s.p,s.pos)}</span>`:""}<span class="rv ${tier(Math.round(effR(T,s.p,s.pos)))}">${showR(Math.round(effR(T,s.p,s.pos)))}</span></button>`).join("")}</div>
+      <p class="mut" style="font-size:13px;margin:4px 0 8px">Oyuncuyu sürükleyip başka bir mevkiye ya da yedeğin üstüne bırak, veya önce birine sonra diğerine dokun. Kırmızı reyting: oyuncu mevkisi dışında, gücü düşüyor. Maç içindeki değişiklikler sonraki maça taşınmaz.</p>
+      <div id="lpbox">${xiPitch()}
+      ${T.msg?`<div class="tacnote ${T.msg[0]}" style="margin-top:6px">${T.msg[1]}</div>`:""}
       <h3 style="margin-top:14px">Yedekler</h3>
-      ${T.bench.length?`<div class="lineup">${T.bench.map((p,k)=>{ const can = selP && !isOut(T,p.n); const pen = selP?penOf(p,selP.pos):0;
-        return `<button class="lrow bench ${can?"can":""}" ${can?`onclick="swapIn(${k})"`:"disabled"}><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span><span class="ln">${esc(p.n)} ${stat(p)}</span>${mor(p.n)}
-          ${can?`<span class="tag ${pen?"nr":"ok"}">${pen?`−${pen}`:"✓"}</span>`:""}<span class="rv ${tier(p.base)}">${showR(p.base)}</span></button>`; }).join("")}</div>`:`<p class="mut">Yedek seçmedin.</p>`}
+      ${T.bench.length?`<div class="lineup">${T.bench.map((p,k)=>{ const sel=T.sel==="b:"+k;
+        return `<div class="lrow bench2 ${sel?"sel":""} ${isOut(T,p.n)?"outp":""}" data-drag="b:${k}" data-drop="b:${k}"><span class="grip">⠿</span><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span><span class="ln">${esc(p.n)} ${stat(p)}</span>${mor(p.n)}<span class="rv ${tier(p.base)}">${showR(p.base)}</span></div>`; }).join("")}</div>`:`<p class="mut">Yedek seçmedin.</p>`}
+      </div>
       <p class="mut" style="font-size:12px;margin-top:10px">Rakibin 11'i</p>
       <div style="font-size:13px">${o.pl.slice(0,16).map(p=>`<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${p.pos}">${roles(p).map(r=>LABEL[r]).join("/")}</span>${esc(p.n)}<span class="rt"><span class="rv ${tier(p.r)}">${showR(p.r)}</span></span></div>`).join("")}</div>
     </div>
   </div>`;
+  T.msg=null;
+  enableDrag($("lpbox"), doMove, tapSel);
 }
+// ---------- sürükle bırak / dokun seç ----------
+function enableDrag(root, onDrop, onTap){
+  if (!root || !root.querySelectorAll) return;
+  root.querySelectorAll("[data-drag]").forEach(el => {
+    el.addEventListener("pointerdown", e => {
+      if (e.button>0) return;
+      const src=el.dataset.drag, sx=e.clientX, sy=e.clientY; let ghost=null, hov=null;
+      try { el.setPointerCapture(e.pointerId); } catch(_){}
+      const target = ev => { const x=document.elementFromPoint(ev.clientX,ev.clientY); return x && x.closest ? x.closest("[data-drop]") : null; };
+      const move = ev => { if (!ghost && Math.hypot(ev.clientX-sx, ev.clientY-sy) > 8){ ghost=el.cloneNode(true); ghost.classList.add("ghost"); ghost.style.width=el.offsetWidth+"px"; document.body.appendChild(ghost); el.classList.add("dragging"); }
+        if (ghost){ ev.preventDefault(); ghost.style.left=ev.clientX+"px"; ghost.style.top=ev.clientY+"px";
+          if (ev.clientY < 70) window.scrollBy(0,-14); else if (ev.clientY > window.innerHeight-70) window.scrollBy(0,14); const tg=target(ev); if (tg!==hov){ hov?.classList.remove("hov"); hov=tg; if (hov && hov!==el) hov.classList.add("hov"); } } };
+      const end = ev => { el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", end); el.removeEventListener("pointercancel", cancel);
+        hov?.classList.remove("hov"); el.classList.remove("dragging");
+        if (ghost){ ghost.remove(); const tg=target(ev); if (tg && tg.dataset.drop!==src) onDrop(src, tg.dataset.drop); }
+        else onTap(src); };
+      const cancel = () => { el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", end); el.removeEventListener("pointercancel", cancel); ghost?.remove(); hov?.classList.remove("hov"); el.classList.remove("dragging"); };
+      el.addEventListener("pointermove", move); el.addEventListener("pointerup", end); el.addEventListener("pointercancel", cancel);
+    });
+  });
+}
+const pAt = id => { const T=S.T, [k,i]=id.split(":"); return k==="x" ? T.xi[+i]?.p : T.bench[+i]; };
+function xiPitch(){
+  const T=S.T, sel=T.sel, selP = sel ? pAt(sel) : null;
+  return `<div class="pitch lp">${T.xi.map((s,k)=>{ const p=s.p, pen=penOf(p,s.pos), r=Math.round(effR(T,p,s.pos)), out=isOut(T,p.n), me=sel==="x:"+k;
+    let prev=""; if (selP && !me){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
+    return `<div class="slot full ${me?"selx":""} ${out?"outx":""} ${p.r>=LEGEND?"leg":""}" style="--x:${s.x};--y:${s.y}" data-drag="x:${k}" data-drop="x:${k}">
+      ${SHIRT(kitC(p.team), r, pen>0)}<div class="nm">${out?(T.outs[p.n].k==="susp"?"🟥 ":"🚑 "):""}${esc(short(p.n))}</div><div class="tm">${LABEL[s.pos]}${pen?` <b class="neg">−${pen}</b>`:""}</div>${prev}</div>`; }).join("")}</div>`;
+}
+function doMove(a,b){
+  const T=S.T; T.sel=null; if (!a||!b||a===b) return renderPre();
+  const [ta,ia]=a.split(":"), [tb,ib]=b.split(":");
+  if (ta==="b" && tb==="b") return renderPre();
+  if (ta==="x" && tb==="x"){ const A=T.xi[+ia], B=T.xi[+ib]; [A.p,B.p]=[B.p,A.p]; T.msg=["good",`↔ ${esc(short(A.p.n))} ${NAME[A.pos]}, ${esc(short(B.p.n))} ${NAME[B.pos]} oldu`]; }
+  else { const xk = ta==="x" ? +ia : +ib, bk = ta==="b" ? +ia : +ib, bp=T.bench[bk], s=T.xi[xk];
+    if (isOut(T,bp.n)){ T.msg=["bad",`${esc(bp.n)} ${T.outs[bp.n].k==="susp"?"cezalı":"sakat"}, oynayamaz`]; return renderPre(); }
+    T.bench[bk]=s.p; s.p=bp; const pen=penOf(bp,s.pos);
+    T.msg=[pen?"bad":"good", `🔁 ${esc(short(bp.n))} ${NAME[s.pos]} mevkisine girdi${pen?` (mevki dışı, −${pen})`:""}`]; }
+  renderPre();
+}
+function tapSel(id){ const T=S.T; if (!T.sel){ T.sel=id; return renderPre(); } if (T.sel===id){ T.sel=null; return renderPre(); } const a=T.sel; doMove(a,id); }
 function setStyleT(k){ S.T.style=k; renderPre(); }
 function resetXi(){ const T=S.T;
   T.xi.forEach((s,k)=>{ const n=T.orig[k]; if (s.p.n===n) return; const bi=T.bench.findIndex(p=>p.n===n); if (bi<0 || isOut(T,n)) return; const cur=s.p; s.p=T.bench[bi]; T.bench[bi]=cur; });
   T.notes = autoFix(T); T.selXi=null; renderPre(); }
 function selXi(k){ const T=S.T; T.selXi = T.selXi===k ? null : k; renderPre(); }
-function swapIn(k){ const T=S.T, s=T.xi[T.selXi], b=T.bench[k]; if(!s||!b||isOut(T,b.n)) return; T.bench[k]=s.p; s.p=b; T.selXi=null; renderPre(); }
+function swapIn(k){ const T=S.T; if (T.selXi==null) return; const a="x:"+T.selXi; T.selXi=null; doMove(a,"b:"+k); }
 function doTalk(k){
   const T=S.T, t=TALKS[k], fx=t.fx[talkCtx(T,T.o)]; let up=0, dn=0; const lines=[];
   for (const s of T.xi){ if(!s.p) continue; const n=s.p.n, x=Math.random(); let d = x<fx[0] ? (t.big&&Math.random()<.4?2:1) : x<fx[0]+fx[1] ? 0 : -1;
@@ -1124,33 +1195,50 @@ function choosePens(avail){
 const MENTS = { "Aynen devam":{att:0,def:0}, "Hücuma geç":{att:2,def:-2}, "Skoru koru":{att:-2,def:2} };
 function halfTime(M, a, b){
   return new Promise(res => {
-    const T=S.T; let style=T.style, ment="Aynen devam", selOut=null, done=null;
+    const T=S.T; let style=T.style, ment="Aynen devam", sel=null, msg=null;
+    const cur = k => { let n=T.matchXi[k]; if(!n) return null; let ch=true; while(ch){ ch=false; for (const s of M.subs) if (s.out.n===n){ n=s.in.n; ch=true; } } return M.onPitch().find(q=>q.n===n) || null; };
+    const benchAv = () => { const used=new Set(M.pl[0].map(p=>p.n)); return T.bench.map((p,i)=>({p,i})).filter(x=>!isOut(T,x.p.n)&&!used.has(x.p.n)); };
+    const doSub = (k, bi) => { const outP=cur(k), bp=T.bench[bi], pos=T.xi[k].pos; if(!outP||!bp) return;
+      if (M.subsLeft()<=0){ msg=["bad","Değişiklik hakkın bitti"]; return; }
+      const inP = {...bp, r:Math.round(effR(T,bp,pos)), pos:LINE(pos), role:pos};
+      if (M.sub(outP, inP, 46)){ const pen=penOf(bp,pos); msg=[pen?"bad":"good", `🔁 ${esc(short(outP.n))} çıktı, ${esc(short(bp.n))} girdi${pen?` (mevki dışı, −${pen})`:""}`]; } };
+    const move = (x,y) => { sel=null; const [ta,ia]=x.split(":"), [tb,ib]=y.split(":"); if (ta===tb) return draw();
+      const k = ta==="x"?+ia:+ib, bi = ta==="b"?+ia:+ib; doSub(k,bi); draw(); };
+    const tap = id => { if (!sel){ sel=id; return draw(); } if (sel===id){ sel=null; return draw(); } const x=sel; move(x,id); };
     const draw = () => {
-      const onP = M.onPitch(), used = new Set(M.pl[0].map(p=>p.n)), bench = T.bench.filter(p=>!isOut(T,p.n)&&!used.has(p.n));
-      const outP = selOut ? onP.find(p=>p.n===selOut) : null;
-      $("after").innerHTML = `<div class="card ht"><h3 style="margin-top:0">⏸️ Devre arası · ${a}-${b}</h3>
-        <p class="mut" style="margin:0 0 8px;font-size:13px">${a<b?"Gerideysin. Hücuma geçmenin ya da tarzı değiştirmenin tam zamanı.":a>b?"Öndesin. Skoru korumak isteyebilirsin.":"Eşitlik var. İkinci yarı için planın ne?"} Rakip: ${STYLES[T.o.pw.style].e} ${esc(T.o.pw.style)}</p>
-        <div class="ph">Oyun tarzı</div><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,T.o.pw.style)>0?" ✓":ctrOf(T.o.pw.style,k)>0?" ⚠":""}</button>`).join("")}</div>
+      const selP = sel ? (sel[0]==="b" ? T.bench[+sel.split(":")[1]] : cur(+sel.split(":")[1])) : null, os=T.o.pw.style;
+      const pitch = `<div class="pitch lp">${T.xi.map((s,k)=>{ const p=cur(k), me=sel==="x:"+k;
+        if (!p) return `<div class="slot" style="--x:${s.x};--y:${s.y}"><div class="dot">🟥</div></div>`;
+        const pen=penOf(p,s.pos); let prev=""; if (selP && sel[0]==="b"){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
+        return `<div class="slot full ${me?"selx":""}" style="--x:${s.x};--y:${s.y}" data-drag="x:${k}" data-drop="x:${k}">${SHIRT(kitC(p.team), p.r, pen>0)}<div class="nm">${esc(short(p.n))}</div><div class="tm">${LABEL[s.pos]}${pen?` <b class="neg">−${pen}</b>`:""}</div>${prev}</div>`; }).join("")}</div>`;
+      const bl = benchAv();
+      $("after").innerHTML = `<div class="card ht" id="htbox"><h3 style="margin-top:0">⏸️ Devre arası · ${a}-${b}</h3>
+        <p class="mut" style="margin:0 0 8px;font-size:13px">${a<b?"Gerideysin. Hücuma geçmenin ya da tarzı değiştirmenin tam zamanı.":a>b?"Öndesin. Skoru korumak isteyebilirsin.":"Eşitlik var. İkinci yarı için planın ne?"} Rakip: ${STYLES[os].e} ${esc(os)}</p>
+        <div class="ph">Oyun tarzı</div><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>
         <div class="ph" style="margin-top:10px">Anlayış</div><div class="row">${Object.keys(MENTS).map(k=>`<button class="chip ${k===ment?"on":""}" onclick="window.__hm('${k}')">${k}${MENTS[k].att?` <span class="mut">(${MENTS[k].att>0?"+":""}${MENTS[k].att} hücum, ${MENTS[k].def>0?"+":""}${MENTS[k].def} savunma)</span>`:""}</button>`).join("")}</div>
-        <div class="ph" style="margin-top:10px">Oyuncu değişikliği <span class="mut" style="text-transform:none">· ${M.subsLeft()} hakkın var</span></div>
-        ${done?`<p>${done}</p>`:M.subsLeft()&&bench.length?`<div class="lineup">${onP.map(p=>`<button class="lrow ${selOut===p.n?"sel":""}" onclick="window.__ho('${esc(p.n).replace(/'/g,"\\'")}')"><span class="pos ${p.pos}">${LABEL[p.role]||p.pos}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.r)}">${showR(p.r)}</span></button>`).join("")}</div>
-          ${outP?`<div class="mut" style="margin:8px 0 4px">${esc(short(outP.n))} yerine kim girsin?</div><div class="lineup">${bench.slice().sort((x,y)=>effR(T,y,outP.role)-effR(T,x,outP.role)).map((p,k)=>{ const r=Math.round(effR(T,p,outP.role)); return `<button class="lrow bench can" onclick="window.__hi(${T.bench.indexOf(p)})"><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span>${penOf(p,outP.role)?`<span class="tag nr">−${penOf(p,outP.role)}</span>`:`<span class="tag ok">✓</span>`}<span class="rv ${tier(r)}">${showR(r)}</span></button>`; }).join("")}</div>`:`<div class="mut" style="font-size:13px">Çıkacak oyuncuya dokun.</div>`}`
-          :`<p class="mut">Değişiklik yapamazsın.</p>`}
+        <div class="ph" style="margin-top:10px">Oyuncu değişikliği <span class="mut" style="text-transform:none">· ${M.subsLeft()} hakkın kaldı</span></div>
+        <p class="mut" style="font-size:13px;margin:0 0 6px">Yedeği sahadaki oyuncunun üstüne sürükle ya da önce yedeğe sonra çıkacak oyuncuya dokun. İstediğin kadar değişiklik yap, bitince ikinci yarıyı başlat.</p>
+        ${pitch}
+        ${msg?`<div class="tacnote ${msg[0]}" style="margin-top:6px">${msg[1]}</div>`:""}
+        ${M.subs.length?`<div class="mut" style="font-size:13px;margin-top:6px">${M.subs.map(s=>`🔁 ${esc(short(s.out.n))} → ${esc(short(s.in.n))}`).join(" · ")}</div>`:""}
+        <div class="ph" style="margin-top:10px">Kulübe</div>
+        ${bl.length&&M.subsLeft()?`<div class="lineup">${bl.map(({p,i})=>`<div class="lrow bench2 ${sel==="b:"+i?"sel":""}" data-drag="b:${i}" data-drop="b:${i}"><span class="grip">⠿</span><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.base)}">${showR(p.base)}</span></div>`).join("")}</div>`:`<p class="mut">${M.subsLeft()?"Kulübede girebilecek oyuncu kalmadı.":"Değişiklik hakkın bitti."}</p>`}
         <div class="row" style="margin-top:12px"><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button></div></div>`;
-      try{ $("after").scrollIntoView({block:"center",behavior:"smooth"}); }catch(e){} };
+      msg=null;
+      enableDrag($("htbox"), move, tap); };
     window.__hs = k => { style=k; draw(); };
     window.__hm = k => { ment=k; draw(); };
-    window.__ho = n => { selOut = selOut===n ? null : n; draw(); };
-    window.__hi = bi => { const outP=M.onPitch().find(p=>p.n===selOut), bp=T.bench[bi]; if(!outP||!bp) return;
-      const inP = {...bp, r:Math.round(effR(T,bp,outP.role)), pos:LINE(outP.role), role:outP.role};
-      if (M.sub(outP, inP, 46)) done = `🔁 ${esc(outP.n)} çıktı, ${esc(bp.n)} girdi.`; selOut=null; draw(); };
+    window.__ho = n => { const k=T.xi.findIndex((s,kk)=>cur(kk)?.n===n); if(k>=0){ sel="x:"+k; draw(); } };
+    window.__hi = bi => { if (sel && sel[0]==="x") move(sel,"b:"+bi); };
     window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; res({style,ment}); };
     draw();
+    try{ $("after").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){}
   });
 }
 async function runMatch(){
   const T=S.T, i=T.i, isKo = i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
+  T.matchXi = T.xi.map(s=>isOut(T,s.p.n)?null:s.p.n);
   const pw = {...teamPower(L, T.style)};
   const boost = STAGE_BOOST[i]||0; if (boost>0){ pw.att+=boost*0.5; pw.def+=boost; }
   const opw = {...o.pw}; if (boost<0){ opw.att-=boost; opw.def-=boost; }

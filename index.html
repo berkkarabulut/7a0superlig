@@ -50,6 +50,9 @@ h1{font-size:32px;margin:8px 0 6px}h2{margin:0 0 12px;font-size:20px}h3{margin:0
 .rv.r90{background:#9b5de530;color:#c9a2ff}.rv.r87{background:#f2c14e2a;color:#f2c14e}.rv.r84{background:#3fb96b2a;color:#7ee08f}
 .rv.r80{background:#3b8fd92a;color:#8cc4ff}.rv.r70{background:#ffffff12;color:#a9b4ad}.rv.rq{background:#ffffff12;color:#a9b4ad}
 .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+.chemlist{font-size:12px;margin-top:8px;color:#b9e6c5;line-height:1.5}
+.events li.ev-save span:last-child,.events li.ev-post span:last-child,.events li.ev-wide span:last-child{color:var(--mut)}
+.events li.ev-goal{font-weight:700}.events li.ev-red{color:#ff8a8a}
 .events li.penh{justify-content:center;font-weight:800;color:var(--gold);background:#f2c14e10}
 .events li.pm span:last-child{opacity:.75}
 .pensc{font-size:16px;color:var(--gold);letter-spacing:0;margin-top:-4px}
@@ -392,14 +395,34 @@ function renderDraft(){
 }
 
 // ---------- güç ----------
+const DUOS = [
+  ["Gheorghe Hagi","Hakan Şükür"],["Gheorghe Hagi","Gheorghe Popescu"],["Hakan Şükür","Arif Erdem"],["Tugay Kerimoğlu","Hakan Şükür"],["Okan Buruk","Hakan Şükür"],["Ümit Davala","Hakan Şükür"],["Cláudio Taffarel","Bülent Korkmaz"],
+  ["Metin Tekin","Ali Gültiken"],["Metin Tekin","Feyyaz Uçar"],["Ali Gültiken","Feyyaz Uçar"],["Rıza Çalımbay","Metin Tekin"],["Rıza Çalımbay","Mehmet Özdilek"],["Sergen Yalçın","Oktay Derelioğlu"],["Sergen Yalçın","Nihat Kahveci"],
+  ["Tanju Çolak","Uğur Tütüneker"],["Aykut Kocaman","Rıdvan Dilmen"],["Aykut Kocaman","Oğuz Çetin"],["Harald Schumacher","Müjdat Yetkiner"],["Elvir Bolić","Jay-Jay Okocha"],["Rüştü Reçber","Ogün Temizkanoğlu"],
+  ["Alex de Souza","Tuncay Şanlı"],["Alex de Souza","Mehmet Aurélio"],["Alex de Souza","Stephen Appiah"],["Alex de Souza","Emre Belözoğlu"],["Diego Lugano","Edu Dracena"],["Volkan Demirel","Diego Lugano"],
+  ["Wesley Sneijder","Didier Drogba"],["Wesley Sneijder","Burak Yılmaz"],["Didier Drogba","Burak Yılmaz"],["Felipe Melo","Selçuk İnan"],["Fernando Muslera","Semih Kaya"],
+  ["Ricardo Quaresma","Mario Gómez"],["Ricardo Quaresma","Cenk Tosun"],["Ricardo Quaresma","Anderson Talisca"],["Atiba Hutchinson","Oğuzhan Özyakup"],["José Sosa","Mario Gómez"],
+  ["Şenol Güneş","Turgay Semercioğlu"],["Hami Mandıralı","Shota Arveladze"],["Hami Mandıralı","Ünal Karaman"],["Gökdeniz Karadeniz","Fatih Tekke"],["Burak Yılmaz","Umut Bulut"],
+  ["Pablo Batalla","Volkan Şen"],["Pablo Batalla","Ozan İpek"],["Mauro Icardi","Dries Mertens"],["Victor Osimhen","Barış Alper Yılmaz"],["Lucas Torreira","Gabriel Sara"],["Edin Džeko","Dušan Tadić"],
+  ["Anthony Nwakaeme","Abdülkadir Ömür"],["Marek Hamšík","Anastasios Bakasetas"],["Emre Belözoğlu","Edin Višća"],["Mehmet Yıldız","Abdurrahman Dereli"],["Tanju Çolak","Fatih Uraz"]
+];
+function chemistry(players){
+  const parts=[]; let total=0;
+  const ks={}; players.forEach(p=>ks[p.key]=(ks[p.key]||0)+1);
+  for (const [k,n] of Object.entries(ks)) if(n>1){ const v=(n-1)*0.5; total+=v; parts.push(`${k.replace("|"," ")} (${n} oyuncu) +${v}`); }
+  const cl={}; players.forEach(p=>cl[p.team]=(cl[p.team]||0)+1);
+  for (const [c,n] of Object.entries(cl)) if(n>=3){ const v=n>=5?2:n===4?1.5:1; total+=v; parts.push(`${c} kulüp bağı (${n}) +${v}`); }
+  const names=new Set(players.map(p=>p.n));
+  for (const [a,b] of DUOS) if(names.has(a)&&names.has(b)){ total+=1; parts.push(`Efsane ikili: ${short(a)} & ${short(b)} +1`); }
+  return { total: Math.min(5,total), parts };
+}
 function teamPower(players, style){
   const allAvg = avg(players.map(p=>p.r)) - 3;
   const by = k => { const a = players.filter(p=>p.pos===k).map(p=>p.r); return a.length ? avg(a) : allAvg; };
   const gk = by("GK"), df = by("DF"), mf = by("MF"), fw = by("FW");
   let att = fw*0.5 + mf*0.35 + df*0.15;
   let def = gk*0.35 + df*0.45 + mf*0.2;
-  let chem = 0;
-  if (players[0]?.key){ const c={}; players.forEach(p=>c[p.key]=(c[p.key]||0)+1); chem = Math.min(3, Object.values(c).reduce((a,n)=>a+(n-1)*0.5,0)); }
+  const chem = players[0]?.key ? chemistry(players).total : 0;
   const st = STYLES[style] || STYLES["Dengeli"];
   const off = players.filter(p=>p.off).length, pen = off*TEAM_OFF;
   return { att: att+st.att+chem-pen, def: def+st.def+chem-pen, chem, off, ovr: Math.round(avg(players.map(p=>p.r))) };
@@ -415,7 +438,8 @@ function statsHTML(){
     <div class="stat"><b>${A?"?":pw.def.toFixed(1)}</b><span>Savunma</span></div>
     <div class="stat"><b>+${pw.chem.toFixed(1)}</b><span>Kimya</span></div>
     ${pw.off?`<div class="stat" style="color:#f0a050"><b>−${pw.off*TEAM_OFF}</b><span>Mevki dışı (${pw.off})</span></div>`:""}
-    <div class="stat"><b>${S.form}</b><span>${S.style}</span></div></div>`;
+    <div class="stat"><b>${S.form}</b><span>${S.style}</span></div></div>
+    ${(()=>{ const c=chemistry(pl); return c.parts.length?`<div class="chemlist">⚗️ Kimya${c.total>=5?" (en fazla +5)":""}: ${c.parts.map(esc).join(" · ")}</div>`:`<div class="chemlist mut">⚗️ Kimya için aynı kulüpten 3+ oyuncu ya da efsane ikililer topla.</div>`; })()}`;
 }
 function renderReady(){
   $("play").innerHTML = `
@@ -446,6 +470,43 @@ function simGoals(A,B,pa,pb){
   const ev = [...Array(g1)].map(()=>({m:1+Math.floor(Math.random()*90),side:0,p:scorer(pa)}))
      .concat([...Array(g2)].map(()=>({m:1+Math.floor(Math.random()*90),side:1,p:scorer(pb)})));
   ev.sort((a,b)=>a.m-b.m); return {g1,g2,ev};
+}
+const TXT = {
+  goal:["GOL! {p} ağları sarstı","GOL! {p} fileleri havalandırdı","GOL! {p} kaleciyi avladı","GOL! {p} topu köşeye gönderdi"],
+  post:["{p} şutunu çekti, top direkten döndü","{p} vurdu, top üst direkte patladı"],
+  save:["{gk} kurtardı! {p} vuruşunda kaleciyi geçemedi","{p} karşı karşıya kaldı, {gk} geçit vermedi","{gk} uçtu, {p} şutunu kornere çeldi"],
+  wide:["{p} kafayı vurdu, top az farkla auta","{p} uzaktan denedi, top dışarıda","{p} vole vurdu, top yandan auta"],
+  penG:["Penaltı! {p} topun başında… GOL!"], penS:["Penaltı! {gk} kurtardı, {p} gol atamadı"], penM:["Penaltı! {p} topu auta attı"],
+  y:["{p} sarı kart gördü"], yr:["{p} ikinci sarıdan kırmızı gördü, takımı 10 kişi"], r:["Direkt kırmızı! {p} oyundan atıldı"]
+};
+const fill = (k, o) => rnd(TXT[k]).replace("{p}", o.p?short(o.p.n):"").replace("{gk}", o.gk?short(o.gk.n):"kaleci");
+function wpick(list, wf){ const w=list.map(wf), s=w.reduce((a,b)=>a+b,0); let r=Math.random()*s; for(let i=0;i<list.length;i++){ r-=w[i]; if(r<=0) return list[i]; } return list[0]; }
+function matchEngine(A,B,pa,pb,ko){
+  const pl=[pa,pb], ev=[], g=[0,0], red=[0,0], yel=[{},{}], out=[new Set(),new Set()];
+  const base=[lam(A.att,B.def), lam(B.att,A.def)];
+  const av = s => pl[s].filter(p=>!out[s].has(p.n));
+  const gk = s => av(s).find(p=>p.pos==="GK") || {n:"Kaleci",r:65,pos:"GK"};
+  const shooter = s => wpick(av(s).filter(p=>p.pos!=="GK"), p=>({FW:5,MF:2.4,DF:0.7}[p.pos]||1)*Math.max(1,p.r-60));
+  const booker = s => wpick(av(s), p=>({DF:3,MF:2.5,FW:1,GK:0.15}[p.pos]||1));
+  const step = (m, mult) => { for (const s of [0,1]) { const o=1-s;
+      const f = Math.pow(0.65,red[s]) * Math.pow(1.4,red[o]) * mult, pg = base[s]*f/90*0.92;
+      const x = Math.random();
+      if (x < pg){ const p=shooter(s); g[s]++; ev.push({m,side:s,type:"goal",p,text:fill("goal",{p})}); }
+      else if (x < pg*2.3){ const p=shooter(s), k=rnd(["save","save","post","wide","wide"]); ev.push({m,side:s,type:k,p,text:fill(k,{p,gk:gk(o)})}); }
+      if (Math.random() < 0.11/90*f){ const p=wpick(av(s).filter(q=>q.pos!=="GK"),q=>({FW:4,MF:2,DF:.5}[q.pos]||1)*q.r), k=gk(o), y=Math.random();
+        if (y < 0.76+(p.r-k.r)/250){ g[s]++; ev.push({m,side:s,type:"goal",pen:true,p,text:fill("penG",{p})}); }
+        else if (y < 0.93){ ev.push({m,side:s,type:"penS",p,text:fill("penS",{p,gk:k})}); }
+        else ev.push({m,side:s,type:"penM",p,text:fill("penM",{p})}); }
+      if (Math.random() < 1.8/90){ const p=booker(s);
+        if (yel[s][p.n]){ if (Math.random()<0.18){ out[s].add(p.n); red[s]++; ev.push({m,side:s,type:"red",p,text:fill("yr",{p})}); } }
+        else { yel[s][p.n]=1; ev.push({m,side:s,type:"yellow",p,text:fill("y",{p})}); } }
+      if (Math.random() < 0.012/90){ const p=booker(s); if(!out[s].has(p.n)){ out[s].add(p.n); red[s]++; ev.push({m,side:s,type:"red",p,text:fill("r",{p})}); } }
+  } };
+  for (let m=1;m<=90;m++) step(m,1);
+  let et=false;
+  if (ko && g[0]===g[1]){ et=true; for (let m=91;m<=120;m++) step(m,0.85); }
+  ev.sort((a,b)=>a.m-b.m);
+  return { g1:g[0], g2:g[1], ev, et, len: et?120:90, red };
 }
 function penalties(gkA,gkB){
   const pA=0.75+(gkA-gkB)/300, pB=0.75+(gkB-gkA)/300; let a=0,b=0;
@@ -503,7 +564,7 @@ function tableHTML(){
 async function playNext(){
   const T=S.T, i=T.i, isKo = i>=3;
   const o = isKo ? T.R[i-3][1] : T.group[i];
-  const r = simGoals(T.mePw, o.pw, T.me, o.pl);
+  const r = matchEngine(T.mePw, o.pw, T.me, o.pl, isKo);
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid">
@@ -511,7 +572,7 @@ async function playNext(){
         <div class="card">
           <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]}</div>
           <div class="score"><div class="tn">Senin 11'in<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${S.style}</div></div>
-            <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div></div>
+            <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
             <div class="tn">${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${esc(o.t.note||"")}</div></div></div>
           <ul class="events" id="ev"></ul>
           <div id="after" style="margin-top:14px"></div>
@@ -524,15 +585,20 @@ async function playNext(){
       </div>
     </div>`;
   const ms = SPEEDS[S.speed]; let a=0,b=0, ei=0;
-  for (let m=1;m<=90;m++){
+  const ICON={goal:"⚽",save:"🧤",post:"🥅",wide:"↗️",penS:"🧤",penM:"❌",yellow:"🟨",red:"🟥"};
+  const redsTxt = ()=>{ const rr=[0,0]; r.ev.slice(0,ei).forEach(e=>{ if(e.type==="red") rr[e.side]++; }); return rr; };
+  for (let m=1;m<=r.len;m++){
+    if (m===91){ $("ev").insertAdjacentHTML("beforeend", `<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await sleep(ms*15); }
     while (ei<r.ev.length && r.ev[ei].m===m){
-      const e=r.ev[ei++]; if(e.side===0)a++; else b++;
-      $("sc").textContent=`${a}-${b}`;
-      $("ev").insertAdjacentHTML("beforeend", `<li class="${e.side?"away":""}"><span class="m">${e.m}'</span><span>⚽ ${esc(e.p.n)}</span></li>`);
+      const e=r.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; }
+      $("ev").insertAdjacentHTML("beforeend", `<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
+      if (e.type==="red"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }
+      const evl=$("ev"); if(evl.scrollTop!==undefined) evl.scrollTop=evl.scrollHeight;
+      if (ms && e.type==="goal") await sleep(ms*4);
     }
-    if (ms){ $("clk").textContent=m+"'"; $("bar").style.width=(m/90*100)+"%"; if (m===45){ $("clk").textContent="Devre arası"; await sleep(ms*8); } await sleep(ms); }
+    if (ms){ $("clk").textContent=(m>90?"Uzatma ":"")+m+"'"; $("bar").style.width=(m/r.len*100)+"%"; if (m===45||m===105){ $("clk").textContent=m===45?"Devre arası":"Uzatma devresi"; await sleep(ms*8); } await sleep(ms); }
   }
-  $("clk").textContent="Maç sonu"; $("bar").style.width="100%";
+  $("clk").textContent= r.et ? "Uzatmalar bitti" : "Maç sonu"; $("bar").style.width="100%";
   let pen=null, res = r.g1>r.g2?"W":r.g1<r.g2?"L":"D";
   if (isKo && r.g1===r.g2){
     const so = shootout(T.me, o.pl); pen=[so.a,so.b];
@@ -548,7 +614,7 @@ async function playNext(){
     $("ev").insertAdjacentHTML("beforeend", `<li class="penh"><span>${res==="W"?"✅ Penaltılarla kazandın":"💔 Penaltılarla kaybettin"} (${pen[0]}-${pen[1]})</span></li>`);
   }
   T.gf+=r.g1; T.ga+=r.g2; if(r.g1>r.g2)T.W++; else if(r.g1<r.g2)T.L++; else T.D++;
-  T.res.push({res, g1:r.g1, g2:r.g2, pen, opp:o.name});
+  T.res.push({res, g1:r.g1, g2:r.g2, pen, et:r.et, opp:o.name});
   let msg="";
   if (!isKo){
     addTbl("Senin 11'in", r.g1, r.g2); addTbl(o.name, r.g2, r.g1);
@@ -558,7 +624,7 @@ async function playNext(){
     if (i===2){ const pos = sortedTable().findIndex(x=>x.n==="Senin 11'in"); if (pos>1) T.out = `Grupta ${pos+1}. oldun, elendin`; }
   } else {
     const k=i-3, ME=T.R[k][0];
-    T.M[k]=[{a:ME,b:o,g1:r.g1,g2:r.g2,pen,w:res==="W"?ME:o}];
+    T.M[k]=[{a:ME,b:o,g1:r.g1,g2:r.g2,pen,et:r.et,w:res==="W"?ME:o}];
     simRound(k,1);
     $("brk").innerHTML = bracketHTML();
     if (res==="L") T.out = ({3:"Son 16'da",4:"Çeyrek finalde",5:"Yarı finalde",6:"Finalde"})[i]+" elendin";
@@ -568,9 +634,11 @@ async function playNext(){
   $("after").innerHTML = `${msg}<div class="row" style="margin-top:10px"><button class="btn ${last?"gold":""}" onclick="${last?"finish()":"playNext()"}">${last?"Sonucu gör":"Sonraki maç: "+STAGES[T.i]}</button></div>`;
 }
 function simMatch(a,b){
-  const r=simGoals(a.pw,b.pw,a.pl,b.pl); let pen=null, w = r.g1>r.g2?a:b;
+  const r=simGoals(a.pw,b.pw,a.pl,b.pl); let pen=null, et=false;
+  if (r.g1===r.g2){ et=true; r.g1+=poisson(lam(a.pw.att,b.pw.def)/3*0.85); r.g2+=poisson(lam(b.pw.att,a.pw.def)/3*0.85); }
+  let w = r.g1>r.g2?a:b;
   if (r.g1===r.g2){ const ga=a.pl.find(p=>p.pos==="GK")?.r||75, gb=b.pl.find(p=>p.pos==="GK")?.r||75; pen=penalties(ga,gb); w = pen[0]>pen[1]?a:b; }
-  return {a,b,g1:r.g1,g2:r.g2,pen,w};
+  return {a,b,g1:r.g1,g2:r.g2,pen,et,w};
 }
 function simRound(k,from){
   const T=S.T, R=T.R[k]; T.M[k]=T.M[k]||[];
@@ -591,14 +659,14 @@ function bracketHTML(){
   const T=S.T, RN=["Son 16","Çeyrek final","Yarı final","Final"];
   const col = k => { const R=T.R[k]; if(!R) return `<div class="bcol"><div class="bh">${RN[k]}</div><div class="bbody"><div class="bm empty">—</div></div></div>`;
     const ms=[]; for(let j=0;j<R.length/2;j++){ const m=T.M[k]&&T.M[k][j], a=R[2*j], b=R[2*j+1];
-      const line=(x,g,p,isW)=>`<div class="bt ${x.me?"me":""} ${m?(isW?"w":"l"):""}"><span>${esc(shortName(x.name))}</span><b>${m?g+(p!=null?` <small>(${p})</small>`:""):""}</b></div>`;
+      const line=(x,g,p,isW)=>`<div class="bt ${x.me?"me":""} ${m?(isW?"w":"l"):""}"><span>${esc(shortName(x.name))}</span><b>${m?g+(p!=null?` <small>(${p})</small>`:(m.et?` <small>uz.</small>`:"")):""}</b></div>`;
       ms.push(`<div class="bm">${line(a,m?.g1,m?.pen?.[0],m&&m.w===a)}${line(b,m?.g2,m?.pen?.[1],m&&m.w===b)}</div>`); }
     return `<div class="bcol"><div class="bh">${RN[k]}</div><div class="bbody">${ms.join("")}</div></div>`; };
   const champ = T.champ ? `<div class="bcol"><div class="bh">Şampiyon</div><div class="bbody"><div class="bm champ ${T.champ.me?"me":""}">🏆 ${esc(shortName(T.champ.name))}</div></div></div>` : "";
   return `<div class="bracket">${[0,1,2,3].map(col).join("")}${champ}</div>`;
 }
 function ourMatchesHTML(){
-  return `<table>${S.T.res.map((r,i)=>`<tr><td class="mut" style="white-space:nowrap">${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}" style="white-space:nowrap"><b>${r.g1}-${r.g2}</b>${r.pen?` <small>(pen. ${r.pen[0]}-${r.pen[1]})</small>`:""}</td></tr>`).join("")}</table>`;
+  return `<table>${S.T.res.map((r,i)=>`<tr><td class="mut" style="white-space:nowrap">${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}" style="white-space:nowrap"><b>${r.g1}-${r.g2}</b>${r.et&&!r.pen?` <small>(uz.)</small>`:""}${r.pen?` <small>(uz., pen. ${r.pen[0]}-${r.pen[1]})</small>`:""}</td></tr>`).join("")}</table>`;
 }
 function finish(){
   const T=S.T; T.done=true;
@@ -784,7 +852,8 @@ function renderSquads(sel){
 function renderHow(){
   $("how").innerHTML = `<h1>Nasıl oynanır</h1><div class="card" style="line-height:1.6">
    <h3>1. Kadronu kur</h3><p>Diziliş (4-3-3, 4-4-2, 3-5-2) ve tarz (Hücum, Dengeli, Savunma) seç. Her çekilişte bir sezon-takım gelir. Oyuncuya dokunursun, sahada oynayabileceği yerler yanar, hangisine koyacağını sen seçersin (sağ bek sağ beke, kanat oyuncusu kanada ya da forvete gibi). Yakın bir mevkiye de koyabilirsin ama mevki dışı oynayan oyuncu ${OFFPOS} reyting kaybeder ve takımın hücumu ile savunması ${TEAM_OFF} puan düşer, kazanmak çok zorlaşır. Kadro başına ${REROLLS} yeniden çekme hakkın var. Kura sadece işine yarayacak oyuncusu olan takımları getirir. Bir oyuncuyu kadroya bir kez alabilirsin, başka sezonla tekrar gelirse seçilemez. Beğenmezsen yeniden çek. Reytingi ${LEGEND} ve üstü olan oyuncular efsanedir ve altın yıldız taşır. Aynı takım-sezondan oyuncu topladıkça kimya bonusu alırsın.</p>
-   <h3>2. Turnuvayı oyna</h3><p>7 maç: 4 takımlı grupta 3 maç, ilk 2'ye girersen Son 16, çeyrek final, yarı final ve final. Maçlar dakika dakika oynanır, goller atan oyuncu ve dakikasıyla düşer. Reyting, diziliş ve tarz sonucu etkiler ama sürpriz her zaman olabilir.</p>
+   <h3>2. Turnuvayı oyna</h3><p>7 maç: 4 takımlı grupta 3 maç, ilk 2'ye girersen Son 16, çeyrek final, yarı final ve final. Maçlar dakika dakika oynanır, goller atan oyuncu ve dakikasıyla düşer. Reyting, diziliş ve tarz sonucu etkiler ama sürpriz her zaman olabilir. Maçta direkten dönen toplar, kurtarışlar, penaltılar, sarı ve kırmızı kartlar olur. Kırmızı gören takım 10 kişi kalır ve zorlanır. Eleme maçı berabere biterse 30 dakika uzatma oynanır, yine eşitlik olursa penaltılara gidilir.</p>
+   <h3>Kimya</h3><p>Aynı sezon-takımdan oyuncular, aynı kulüpten 3 ve üstü oyuncu ve efsane ikililer (Hagi ile Hakan Şükür, Metin, Ali ve Feyyaz, Sneijder ile Drogba, Alex ile Tuncay gibi) takımına bonus verir. Toplam kimya en fazla +5 olur.</p>
    <h3>3. 7-0 yap</h3><p>Sonucun bir skor gibi yazılır: kazandığın maç sayısı, tire, kazanamadığın maç sayısı. Penaltıyla kazanılan eleme maçları galibiyet sayılır, elenirsen kalan maçlar kayıp sayılır. 7 maçın 7'sini de kazanırsan 7-0 yaparsın. Bir de gol yemeden yaparsan "Kalede kilit" başarımı açılır.</p>
    <h3>Modlar</h3><p><b>Tek oyunculu:</b> sınırsız oyun. <b>Günün Meydan Okuması:</b> herkese o gün aynı takım sırası ve ${DAILY_BUDGET} M bütçe gelir, her oyuncunun reytingine göre bir fiyatı vardır, günde bir kez sayılır. <b>Almanak:</b> zor mod, reytingleri görmeden sadece isim ve mevkiyle kurarsın.</p>
    <p class="mut">Kadrolar o sezon ligi ilk 3'te bitiren takımlardan gelir. Reytingler nostaljik ve öznel değerlerdir.</p></div>`;

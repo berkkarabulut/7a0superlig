@@ -1,5 +1,7 @@
 // ---------- her ekranda ana sayfaya çıkış ----------
-const exitBtn = (what) => `<button class="exitc" onclick="askExit('${what||""}')">✕ Ana sayfa</button>`;
+const exitBtn = (what) => `<button class="exitc" onclick="askExit('${what||""}')">← Ana sayfa</button>`;
+const topBar = (what) => `<div class="pathbar">${exitBtn(what)}</div>`;
+const toTop = () => { try { window.scrollTo(0,0); } catch(e){} };
 function askExit(what){
   if (typeof document==="undefined" || !document.createElement) return goHome();
   if (!what) return goHome();

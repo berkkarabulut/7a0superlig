@@ -1,4 +1,5 @@
 function finish(){
+  toTop();
   const T=S.T; T.done=true;
   if (T.R && T.i>3 || (T.R && T.res.length>3)) finishBracket();
   const champ = !T.out, [wins] = record(), seven = wins===7, perfect = seven && T.ga===0, unbeaten = champ && T.L===0;

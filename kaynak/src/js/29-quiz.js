@@ -7,6 +7,7 @@ function quizBest11(t){
   return xi;
 }
 function startQuiz(practice){
+  toTop();
   const day = todayKey(), seed = practice ? Math.floor(Math.random()*1e9) : [...("quiz"+day)].reduce((a,c)=>a*31+c.charCodeAt(0),11);
   const R = seeded(seed), pick = a => a[Math.floor(R()*a.length)];
   const pool = POOL.filter(t=>t.players.length>=11), qs = [], used = new Set();
@@ -36,7 +37,7 @@ function quizEnd(){
   const prev = store.get("quiz:"+Q.day, null); if (!Q.practice && !prev) store.set("quiz:"+Q.day, {score, marks});
   const line = marks.map(m=>m?"🟩":"🟥").join("");
   S.quizShare = Lines(`🧠 Süper Lig 7-0 · Bu kadro hangi sezon?\n${Q.practice?"Pratik":todayKey()}: ${score}/${QN} ${line}\n${SITE}`);
-  $("play").innerHTML = `<div class="card result"><div class="rec ${score===QN?"gold":score>=3?"W":"L"}">${score}/${QN}</div><div style="font-size:28px">${line}</div>
+  $("play").innerHTML = `${topBar("")}<div class="card result"><div class="rec ${score===QN?"gold":score>=3?"W":"L"}">${score}/${QN}</div><div style="font-size:28px">${line}</div>
     <p>${score===QN?"Ansiklopedi gibisin! 🧠":score>=3?"Fena değil, futbolu biliyorsun.":"Bir daha dene, kadroları Kadrolar sekmesinden çalışabilirsin 😄"}</p>
     ${!Q.practice&&prev?`<p class="mut">Bugünkü ilk sonucun ${prev.score}/${QN} olarak kaldı. Yarın yeni sorular gelecek.</p>`:!Q.practice?`<p class="mut">Yarın yeni sorular gelecek.</p>`:""}
     <div class="col" style="text-align:left;max-width:520px;margin:10px auto">${Q.qs.map((q,i)=>`<div>${marks[i]?"✅":"❌"} ${kit(q.t.team)}${q.t.season} ${esc(q.t.team)}</div>`).join("")}</div>

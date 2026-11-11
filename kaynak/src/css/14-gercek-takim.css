@@ -1,6 +1,5 @@
 
 /* ===== gerçek takımla oyna ===== */
-.rl-top{margin:4px 0 6px}
 .rl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
 .rl-card{display:flex;flex-direction:column;gap:3px;text-align:left;cursor:pointer;padding:12px 14px}
 .rl-card:hover{border-color:var(--gold)}

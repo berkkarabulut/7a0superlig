@@ -21,7 +21,7 @@ async function trackVisit(){
 function onConsentGranted(){ if (typeof IS_WEB!=="undefined" && IS_WEB) fb().then(db=>db.ref(`stats/${todayKey()}/u/${visitorId()}`).set(true)).catch(()=>{}); }
 async function renderStats(){
   show("play");
-  $("play").innerHTML = `<h1>📊 Site istatistikleri</h1><div class="card" id="statbox"><p class="mut">Yükleniyor…</p></div>`;
+  $("play").innerHTML = `${topBar("")}<h1>📊 Site istatistikleri</h1><div class="card" id="statbox"><p class="mut">Yükleniyor…</p></div>`;
   try {
     const db = await fb(), days = [...Array(14)].map((_,i)=>dayKeyOffset(-i));
     const rows = await Promise.all(days.map(async d => ({d, v:(await db.ref("stats/"+d).once("value")).val()||{}})));

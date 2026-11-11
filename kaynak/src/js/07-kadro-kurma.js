@@ -1,5 +1,6 @@
 // ---------- kura ----------
 function startDraft(){
+  toTop();
   if (S.mode==="daily"){ const k=todayKey(); RNG = seeded([...k].reduce((a,c)=>a*31+c.charCodeAt(0),7)); S.deck = shuffle(POOL).slice(0,40); S.deckI = 0; }
   else { if (S.challenge){ S.form = S.challenge.form; S.seed = S.challenge.seed; } else S.seed = Math.floor(Math.random()*2e9);
     RNG = seeded(S.seed); S.deck = shuffle(POOL); S.deckI = 0; }

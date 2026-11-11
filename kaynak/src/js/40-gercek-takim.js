@@ -37,7 +37,7 @@ function renderRealPicker(club){
   S.realClub = club || S.realClub || "Tümü";
   const clubs = ["Tümü","Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(1,5);
   const list = POOL.filter(t => S.realClub==="Tümü" || (S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub)).slice().reverse();
-  $("play").innerHTML = `<div class="rl-top"><button class="btn ghost" onclick="renderStart()">← Geri</button></div>
+  $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
     <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
     <div class="row" style="margin:10px 0 14px">${clubs.map(c=>`<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${c}</button>`).join("")}</div>
@@ -47,7 +47,7 @@ function renderRealPicker(club){
         <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${t.season} ${esc(t.team)}</b><span class="rl-rk rk${t.rank}">${t.rank}.</span></span>
         <span class="mut rl-s">${b ? `${b.form} · ilk 11 ortalaması <b>${avg}</b> · ${t.players.length} oyuncu` : "🔒 Kadro eksik · yakında"}</span>
         ${coach?`<span class="mut rl-s">Teknik direktör: ${esc(coach)}</span>`:""}</button>`; }).join("")}</div>`;
-  window.scrollTo && window.scrollTo(0,0);
+  toTop();
 }
 function realFill(form){
   const t = POOL.find(x=>x.id===S.realId), a = realAssign(t, form); if (!a) return false;

@@ -1,5 +1,6 @@
 // ---------- kura töreni ----------
 function drawCeremony(title, note, items, doneTxt, onDone){
+  toTop();
   let k=0, busy=false;
   const nm = t => esc(t.season.slice(2)+" "+t.team);
   const resHTML = r => Array.isArray(r) ? `${kit(r[0].team)}${nm(r[0])} <span class="mut">–</span> ${kit(r[1].team)}${nm(r[1])}` : `${kit(r.team)}${nm(r)}${coachOf(r)?`<div class="mut" style="font-size:12px;font-weight:500">TD: ${esc(coachOf(r))}</div>`:""}`;

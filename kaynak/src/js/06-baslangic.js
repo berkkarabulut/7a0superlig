@@ -11,8 +11,8 @@ function renderStart(){
     ${challengeBanner()}
     <div id="installbox" class="row" style="margin:6px 0">${installHTML()}</div>
     <div class="modes">
-      <button class="card mode ${S.homePick&&S.mode==="solo"?"on":""}" onclick="pickMode('solo')"><b>Tek oyunculu</b><span class="mut">Sınırsız oyun. İstediğin kadar kur, istediğin kadar dene.</span></button>
-      <button class="card mode ${S.homePick&&S.mode==="daily"?"on":""}" onclick="pickMode('daily')"><b>Günün Meydan Okuması</b><span class="mut">Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.${daily?` <br>Bugünkü sonucun: <b style="color:var(--gold)">${esc(daily.title)}</b>`:""}<br>${streakHTML()}</span></button>
+      <button class="card mode ${S.homePick&&S.mode==="solo"?"on":""}" onclick="pickMode('solo')"><b><span class="mi">🎮</span> Tek oyunculu</b><span class="mut">Sınırsız oyun. İstediğin kadar kur, istediğin kadar dene.</span></button>
+      <button class="card mode ${S.homePick&&S.mode==="daily"?"on":""}" onclick="pickMode('daily')"><b><span class="mi">🗓️</span> Günün Meydan Okuması</b><span class="mut">Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.${daily?` <br>Bugünkü sonucun: <b style="color:var(--gold)">${esc(daily.title)}</b>`:""}<br>${streakHTML()}</span></button>
       <button class="card mode realcard" onclick="renderRealPicker()"><b>🏟️ Gerçek takımla oyna</b><span class="mut">Bir sezonun gerçek kadrosunu seç, onunla turnuvaya çık. 1998-99 Galatasaray ile 7-0 yapabilir misin?</span></button>
       <button class="card mode" onclick="startQuiz(false)"><b>🧠 Bu kadro hangi sezon?</b><span class="mut">Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.${store.get("quiz:"+todayKey(),null)?` <br>Bugünkü skorun: <b style="color:var(--gold)">${store.get("quiz:"+todayKey()).score}/5</b>`:""}</span></button>
       <button class="card mode invcard" onclick="openInvite()"><b>📨 Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>

@@ -46,8 +46,8 @@ function statsHTML(){
     ${(()=>{ const c=chemistry(pl); return c.parts.length?`<div class="chemlist">⚗️ Kimya${c.total>=5?" (en fazla +5)":""}: ${c.parts.map(esc).join(" · ")}</div>`:`<div class="chemlist mut">⚗️ Kimya için aynı kulüpten 3+ oyuncu ya da efsane ikililer topla.</div>`; })()}`;
 }
 function renderReady(){
-  S.phase = "ready"; S.sel = null;
-  $("play").innerHTML = `
+  const fresh = S.phase !== "ready"; S.phase = "ready"; S.sel = null;
+  $("play").innerHTML = `${topBar("Kurduğun kadro silinecek.")}
   <div class="grid">
     <div>${S.mode==="real"?realFormHTML():""}<h1>11'in hazır.</h1>
       <p class="mut">Turnuva 7 maç: önce grup kurası çekilir, 4 takımlı grupta 3 maç oynarsın, ilk 2'ye girersen Son 16 kurası, çeyrek final, yarı final ve final gelir. Her maç öncesi takımına konuşma yapar, kadronu ayarlarsın. Elemelerde beraberlikte uzatma, sonra penaltı: penaltıcılarını sen seçersin.</p>
@@ -60,5 +60,6 @@ function renderReady(){
     </div>
     <div class="side rd-side"><p class="mut rd-hint">✋ Değişiklik için bir oyuncuya, sonra yerine geçeceği oyuncuya dokun.</p>${pitchHTML()}${benchHTML()}${statsHTML()}</div>
   </div>`;
+  if (fresh) toTop();
 }
 

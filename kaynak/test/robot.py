@@ -50,6 +50,7 @@ def run(name, vp, b):
     pg.goto("file://" + HTML); time.sleep(0.8)
     pg.evaluate("()=>localStorage.clear()")
     if os.environ.get("DIL"): pg.evaluate("(d)=>localStorage.setItem('sl70:dil', JSON.stringify(d))", os.environ["DIL"])
+    pg.evaluate("()=>localStorage.setItem('sl70:cerez', JSON.stringify({a:true,t:1}))")
     pg.reload(); time.sleep(1)
 
     def chk(screen, *sels):
@@ -216,6 +217,17 @@ def run(name, vp, b):
         if "?r=" not in pg.evaluate("()=>$('inv_txt').value"): fails.append(f"[{name}] davet linkinde ?r= yok")
         pg.evaluate("()=>closeInvite()")
     step("16-davet", s16)
+    def s17():
+        pg.evaluate("()=>{localStorage.removeItem('sl70:cerez');showConsent(false)}"); time.sleep(0.3)
+        chk("33-cerez", "#cerezbar #cz_ok", "#cerezbar #cz_no", "#cerezbar a[href='gizlilik.html']")
+        click("#cz_no"); time.sleep(0.2)
+        if pg.locator("#cerezbar").count(): fails.append(f"[{name}] çerez bandı kapanmadı")
+        if pg.evaluate("()=>consentOK()"): fails.append(f"[{name}] 'sadece gerekli' yine de izin verdi")
+        pg.evaluate("()=>window.scrollTo(0,document.body.scrollHeight)"); time.sleep(0.2)
+        chk("34-alt-bilgi", "footer.ftr a[href='gizlilik.html']")
+        pg.evaluate("()=>openConsent()"); time.sleep(0.2); click("#cz_ok"); time.sleep(0.2)
+        if not pg.evaluate("()=>consentOK()"): fails.append(f"[{name}] çerez kabulü kaydedilmedi")
+    step("17-cerez", s17)
 
     if os.environ.get("HARVEST"):
         try:

@@ -1,0 +1,10 @@
+
+/* ===== çerez bildirimi + alt bilgi ===== */
+.cerezbar{position:fixed;left:12px;right:12px;bottom:12px;z-index:9000;max-width:760px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  background:var(--card,#1d0a30);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:6px;padding:12px 14px;box-shadow:0 10px 40px #000c;font-size:14px;line-height:1.4}
+.cerezbar .cztxt{flex:1 1 320px}
+.cerezbar .cztxt a{color:var(--gold)}
+.cerezbar .czbtn{display:flex;gap:8px;flex-wrap:wrap}
+.ftr{text-align:center;font-size:13px;color:var(--mut,#a99bbd);padding:26px 12px 90px;opacity:.85}
+.ftr a{color:inherit;text-decoration:underline;cursor:pointer}
+@media(max-width:700px){ .cerezbar{left:8px;right:8px;bottom:8px;font-size:13px} .cerezbar .czbtn{width:100%} .cerezbar .czbtn .btn{flex:1} }

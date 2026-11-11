@@ -9,7 +9,7 @@ async function trackVisit(){
   try {
     const db = await fb(), day = todayKey();
     bump("v");
-    db.ref(`stats/${day}/u/${visitorId()}`).set(true).catch(()=>{});
+    if (consentOK()) db.ref(`stats/${day}/u/${visitorId()}`).set(true).catch(()=>{});
     let src = "direkt";
     try { const r = document.referrer ? new URL(document.referrer).host : ""; if (r && r !== location.host) src = r.replace(/^www\./,""); } catch(e){}
     if (/[?&]m=/.test(location.search)) src = "meydan-linki";
@@ -18,6 +18,7 @@ async function trackVisit(){
     bump("dev/"+(window.innerWidth<=700?"telefon":"bilgisayar"));
   } catch(e){}
 }
+function onConsentGranted(){ if (typeof IS_WEB!=="undefined" && IS_WEB) fb().then(db=>db.ref(`stats/${todayKey()}/u/${visitorId()}`).set(true)).catch(()=>{}); }
 async function renderStats(){
   show("play");
   $("play").innerHTML = `<h1>📊 Site istatistikleri</h1><div class="card" id="statbox"><p class="mut">Yükleniyor…</p></div>`;

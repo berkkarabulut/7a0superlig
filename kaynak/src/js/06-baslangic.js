@@ -20,10 +20,6 @@ function renderStart(){
       <div class="row">${Object.keys(FORMATIONS).map(f=>`<button class="chip ${f===S.form?"on":""}" onclick="S.form='${f}';renderStart()">${f}</button>`).join("")}</div>
       <h3 style="margin-top:16px">Oyun tarzı</h3>
       <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderStart()">${v.e} ${k} <span class="mut" style="font-weight:400">· ${v.d}</span></button>`).join("")}</div>
-      <h3 style="margin-top:16px">Dil · Language · Idioma</h3>
-      <div class="row">${langChips()}</div>
-      <h3 style="margin-top:16px">Tema</h3>
-      <div class="row">${themeChips()}</div>
       <h3 style="margin-top:16px">Ayarlar</h3>
       <div class="row">
         <label class="toggle"><input type="checkbox" ${S.almanac?"checked":""} onchange="S.almanac=this.checked"> <b>Almanak modu</b> <span class="mut">· reytingler gizli, sadece isim ve mevki</span></label>

@@ -28,7 +28,7 @@ const DICT_ROWS = [
  ["Günün Meydan Okuması","Daily Challenge","Reto del día"],["Herkese bugün aynı takımlar ve 70 M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.","Everyone gets the same teams today and a 70 M budget. Every player has a price. Only your first game of the day counts.","Hoy todos tienen los mismos equipos y 70 M de presupuesto. Cada jugador tiene un precio. Solo cuenta tu primera partida del día."],
  ["Bugünkü sonucun:","Today's result:","Tu resultado de hoy:"],["Bugünkü skorun:","Today's score:","Tu puntuación de hoy:"],["Bu kadro hangi sezon?","Which season is this squad?","¿De qué temporada es esta plantilla?"],
  ["Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.","Daily quiz: see the XI and guess the team and season. 5 questions.","Quiz diario: mira el once y adivina equipo y temporada. 5 preguntas."],
- ["Diziliş","Formation","Formación"],["Oyun tarzı","Playing style","Estilo de juego"],["Tema","Theme","Tema"],["Dil","Language","Idioma"],["Ayarlar","Settings","Ajustes"],["Almanak modu","Almanac mode","Modo almanaque"],["reytingler gizli, sadece isim ve mevki","ratings hidden, names and positions only","valoraciones ocultas, solo nombres y posiciones"],
+ ["Diziliş","Formation","Formación"],["Oyun tarzı","Playing style","Estilo de juego"],["Tema","Theme","Tema"],["Ayarlar","Settings","Ajustes"],["Açık","On","Activado"],["Kapalı","Off","Desactivado"],["Almanak modu","Almanac mode","Modo almanaque"],["reytingler gizli, sadece isim ve mevki","ratings hidden, names and positions only","valoraciones ocultas, solo nombres y posiciones"],
  ["Kuraya başla","Start the draw","Empezar el sorteo"],["Günün meydan okumasına başla","Start the daily challenge","Empezar el reto del día"],["Tekrar oyna (sayılmaz)","Play again (won't count)","Jugar otra vez (no cuenta)"],
  ["TV Yayını","TV Broadcast","Retransmisión TV"],["Klasik Yeşil","Classic Green","Verde clásico"],["Gece Mavisi","Midnight Blue","Azul noche"],
  ["Seri başlat: her gün meydan okumayı oyna","Start a streak: play the challenge every day","Empieza una racha: juega el reto cada día"],["bugün oynamazsan bozulur!","play today or you'll lose it!","¡juega hoy o la perderás!"],
@@ -219,7 +219,7 @@ const RX = [
  [/^11'im: (.+)$/, m => (LI===0?"My XI: ":"Mi once: ")+m[1]],
 ];
 // "kenar" sembollerini ayırıp çekirdeği çevir
-const EDGE = /^([⚗\s ·•✕↺▶✓⚠✅❌⚽🔁🟥🟨🚑📋🎲🧠⚔️🔥📒🗓️🎮👑🏅📸📤⬇️🧘🤝☝️🎯⚡🏹🪽🚀🚌⚖️🌙🟩📺🎱🥅🗣️🏁🟢⏸️⏱️💔🚩➕📲️‍]*)([\s\S]*?)([\s ▶✓⚠…️]*)$/u;
+const EDGE = /^([⚙🔊🔇🌐⚗\s ·•✕↺▶✓⚠✅❌⚽🔁🟥🟨🚑📋🎲🧠⚔️🔥📒🗓️🎮👑🏅📸📤⬇️🧘🤝☝️🎯⚡🏹🪽🚀🚌⚖️🌙🟩📺🎱🥅🗣️🏁🟢⏸️⏱️💔🚩➕📲️‍]*)([\s\S]*?)([\s ▶✓⚠…️]*)$/u;
 function tcore(s){
   if (!s) return s;
   if (DICT[s]) return DICT[s][LI];

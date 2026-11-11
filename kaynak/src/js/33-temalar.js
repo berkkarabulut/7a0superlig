@@ -15,5 +15,5 @@ function applyTheme(){
   el.textContent = Object.keys(m).length ? BASE_CSS.replace(/#([0-9a-fA-F]{6})(?=[0-9a-fA-F]{2}\b|\b)/g, (all,h) => m[h.toLowerCase()] ? "#"+m[h.toLowerCase()] : all) : BASE_CSS;
   try { document.querySelector('meta[name="theme-color"]').setAttribute("content", THEMES[curTheme()].meta); } catch(e){}
 }
-function setTheme(k){ store.set("tema", k); applyTheme(); if (!$("play").classList.contains("hidden") && document.querySelector(".modes")) renderStart(); }
+function setTheme(k){ store.set("tema", k); applyTheme(); if (document.getElementById("setbox")) openSettings(); }
 function themeChips(){ return Object.entries(THEMES).map(([k,v])=>`<button class="chip ${k===curTheme()?"on":""}" onclick="setTheme('${k}')">${v.ad}</button>`).join(""); }

@@ -194,6 +194,15 @@ def run(name, vp, b):
         if not pg.evaluate("()=>!!document.querySelector('.modes')"): fails.append(f"[{name}] çıkış: ana sayfaya dönmedi")
         chk("26c-ana-sayfa", ".modes .mode")
     step("13-cikis", s13)
+    def s14():
+        chk("27-ayarlar-butonu", "#n-settings"); click("#n-settings"); time.sleep(0.3)
+        chk("28-ayarlar", "#setbox .chip[onclick^=setLang]", "#setbox .chip[onclick^=setTheme]", "#setbox .chip[onclick*=sound]")
+        click("#setbox .chip[onclick=\"setTheme('gece')\"]"); time.sleep(0.3)
+        if pg.evaluate("()=>curTheme()") != "gece": fails.append(f"[{name}] ayarlar: tema değişmedi")
+        chk("28b-ayarlar-gece", "#setbox .chip[onclick^=setTheme]")
+        click("#setbox .chip[onclick=\"setTheme('tv')\"]"); pg.evaluate("()=>closeSettings()")
+        if pg.locator("#play .chip[onclick^=setTheme]").count(): fails.append(f"[{name}] tema seçimi hâlâ ana ekranda")
+    step("14-ayarlar", s14)
 
     if os.environ.get("HARVEST"):
         try:

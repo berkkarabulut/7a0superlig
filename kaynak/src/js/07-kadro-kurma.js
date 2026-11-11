@@ -95,7 +95,7 @@ function renderDraft(){
   const natOK = p => canPick(p) && openSlots().some(s=>natural(p,s.pos));
   const natList = t.players.filter(natOK);
   const noNatural = natList.length===0;
-  $("play").innerHTML = `
+  $("play").innerHTML = `<div class="pathbar">${exitBtn(S.slots.some(s=>s.p)?"Kurduğun kadro silinecek.":"")}</div>
   <div class="grid draft">
     <div>
       ${bp&&filled===0?`<div class="card hint benchintro"><b>11'in tamam! 🎉 Şimdi yedek kulübesini kur.</b> 7 yedek seçeceksin: 1 kaleci, 2 defans, 2 orta saha, 2 forvet. Kırmızı kart cezası ya da sakatlıkta bunlar oyuna girer, maç öncesi istediğinle değiştirebilirsin. Yedeklerde mevki dışı yok, sadece kendi mevkisindeki oyuncuyu koyabilirsin.

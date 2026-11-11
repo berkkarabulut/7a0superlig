@@ -50,6 +50,11 @@ function onPitchHTML(M,T){
     return `<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${LINE(s.pos)}">${LABEL[s.pos]}</span>${subIn?"🔁 ":""}${esc(p.n)}<span class="rt">${pen?`<b class="neg" style="margin-right:4px">−${pen}</b>`:""}<span class="rv ${tier(p.r)} ${pen?"drop":""}">${showR(p.r)}</span></span></div>`; }).join("");
 }
 async function runMatch(){
+  const rid = S.runId = (S.runId||0)+1;
+  try { await runMatchInner(rid); } catch(e){ if (e!=="iptal") throw e; }
+}
+async function runMatchInner(rid){
+  const nap = async ms => { await sleep(ms); if (S.runId!==rid) throw "iptal"; };
   const T=S.T, i=T.i, isKo = i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
   T.matchXi = T.xi.map(s=>isOut(T,s.p.n)?null:s.p.n);
@@ -90,20 +95,20 @@ async function runMatch(){
       add(`<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
       if (e.type==="red"||e.type==="inj"||e.type==="sub"){ const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
       if (e.type==="red"||e.type==="inj"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }
-      if (ms){ if (e.type==="goal") await sleep(ms*12); else if (e.type!=="flow") await sleep(ms*3); }
+      if (ms){ if (e.type==="goal") await nap(ms*12); else if (e.type!=="flow") await nap(ms*3); }
     }
     if (ms){ $("clk").textContent=(m>90?"Uzatma ":"")+m+"'"; $("bar").style.width=(m/len*100)+"%";
-      if (m===105){ $("clk").textContent="Uzatma devresi"; await sleep(ms*14); }
-      await sleep(ms); } } };
+      if (m===105){ $("clk").textContent="Uzatma devresi"; await nap(ms*14); }
+      await nap(ms); } } };
   add(`<li class="penh"><span>🟢 Hakem ${esc(T.ref)} başlama düdüğünü çaldı</span></li>`); sfx("start");
   if (missing) $("rc").innerHTML = `Senin takım ${11-missing} kişi`;
   M.run(1,45); await anim(1,45);
   $("clk").textContent="Devre arası"; sfx("half"); add(`<li class="penh"><span>⏸️ ${esc(T.ref)} ilk yarıyı bitirdi: ${a}-${b}</span></li>`);
-  if (ms){ const h = await halfTime(M,a,b); if (h.style!==T.style || h.ment!=="Aynen devam") add(`<li class="penh"><span>📋 İkinci yarı planı: ${STYLES[h.style].e} ${esc(h.style)} · ${esc(h.ment)}</span></li>`); $("mystyle").textContent=`${S.form} · ${STYLES[h.style].e} ${h.style}`; }
+  if (ms){ const h = await halfTime(M,a,b); if (S.runId!==rid) throw "iptal"; if (h.style!==T.style || h.ment!=="Aynen devam") add(`<li class="penh"><span>📋 İkinci yarı planı: ${STYLES[h.style].e} ${esc(h.style)} · ${esc(h.ment)}</span></li>`); $("mystyle").textContent=`${S.form} · ${STYLES[h.style].e} ${h.style}`; }
   { const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
   M.run(46,90); await anim(46,90);
   let et=false;
-  if (isKo && M.g[0]===M.g[1]){ et=true; len=120; add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await sleep(ms*18); M.run(91,120,0.85); await anim(91,120); }
+  if (isKo && M.g[0]===M.g[1]){ et=true; len=120; add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await nap(ms*18); M.run(91,120,0.85); await anim(91,120); }
   const r = M.result(et);
   $("clk").textContent= r.et ? "Uzatmalar bitti" : "Maç sonu"; $("bar").style.width="100%";
   add(`<li class="penh"><span>🏁 ${esc(T.ref)} son düdüğü çaldı</span></li>`); sfx("end");
@@ -111,11 +116,11 @@ async function runMatch(){
   let pen=null, res = r.g1>r.g2?"W":r.g1<r.g2?"L":"D";
   if (isKo && r.g1===r.g2){
     $("clk").textContent="Penaltılar";
-    const order = await choosePens(r.onPitch);
+    const order = await choosePens(r.onPitch); if (S.runId!==rid) throw "iptal";
     const so = shootout(r.onPitch, o.pl, order); pen=[so.a,so.b];
     add(`<li class="penh"><span>🥅 Penaltı atışları</span></li>`);
     for (const k of so.kicks){
-      if (ms) await sleep(Math.max(ms*12, 450));
+      if (ms) await nap(Math.max(ms*12, 450));
       $("sc").innerHTML = `${a}-${b}<div class="pensc">(${k.a}-${k.b})</div>`;
       add(`<li class="${k.side?"away":""} ${k.goal?"pg":"pm"}"><span class="m">${k.a}-${k.b}</span><span>${k.goal?"⚽":"❌"} ${esc(k.p.n)}${k.goal?"":` <small class="mut">${k.save?"kaleci kurtardı":"kaçırdı"}</small>`}</span></li>`);
     }

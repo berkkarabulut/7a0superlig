@@ -22,7 +22,7 @@ function startQuiz(practice){
 function renderQuiz(){
   const Q=S.Q, q=Q.qs[Q.i], done=Q.ans.length>Q.i, xi=quizBest11(q.t);
   const lines = ["FW","MF","DF","GK"].map(l=>xi.filter(p=>p.p[0]===l));
-  $("play").innerHTML = `<div class="card quiz"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🧠 Bu kadro hangi sezon?</h2><span class="badge">${Q.i+1}/${QN}${Q.practice?" · pratik":""}</span></div>
+  $("play").innerHTML = `<div class="pathbar">${exitBtn(Q.practice?"":"Yarıda bırakırsan bugünkü quiz sayılmaz, tekrar başlayınca aynı sorular gelir.")}</div><div class="card quiz"><div class="row" style="justify-content:space-between"><h2 style="margin:0">🧠 Bu kadro hangi sezon?</h2><span class="badge">${Q.i+1}/${QN}${Q.practice?" · pratik":""}</span></div>
     <p class="mut" style="margin:6px 0 10px">İpucu: ${q.t.rank===1?"o sezonun şampiyonu":`ligi ${q.t.rank}. bitirdi`}${coachOf(q.t)?` · teknik direktörü ${esc(coachOf(q.t)).replace(/(?<=\S)\S+/g,m=>m.replace(/./g,"•"))}`:""}</p>
     <div class="qpitch">${lines.map(ps=>`<div class="qline">${ps.map(p=>`<span class="qp"><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r])[0]}</span>${esc(p.n)}</span>`).join("")}</div>`).join("")}</div>
     <div class="qopts">${q.opts.map((o,k)=>{ const cls = done ? (o===q.t?"right":(Q.ans[Q.i]===k?"wrong":"")) : "";

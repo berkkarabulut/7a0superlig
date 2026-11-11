@@ -89,13 +89,13 @@ def run(name, vp, b):
     # 5) kura
     def s5():
         pg.evaluate("()=>{ SPEEDS['Hızlı']=8; S.speed='Hızlı'; startTournament(); }"); time.sleep(0.3)
-        chk("06-kura", "#kdraw", "#kskip")
+        chk("06-kura", "#kdraw", "#kskip", ".exitc")
         click("#kdraw"); time.sleep(1.4); click("#kskip"); time.sleep(0.5)
         chk("06b-kura-bitti", "#kgo"); click("#kgo")
     step("05-kura", s5)
     # 6) maç önü
     def s6():
-        chk("07-mac-onu", "#play .talk", "#play .chip", "#lpbox [data-drag^='x:']", "#lpbox [data-drag^='b:']", "#play .btn")
+        chk("07-mac-onu", ".exitc", "#play .talk", "#play .chip", "#lpbox [data-drag^='x:']", "#lpbox [data-drag^='b:']", "#play .btn")
         click("#lpbox [data-drag='b:0']"); click("#lpbox [data-drag='x:9']")
         chk("07b-degisiklik", ".tacnote", "button[onclick='resetXi()']")
         click("#play .talk")
@@ -163,7 +163,7 @@ def run(name, vp, b):
         else: chk("21-ses-butonu", "#sndbtn")
         click("#n-play"); pg.evaluate("()=>renderStart()"); time.sleep(0.3)
         pg.evaluate("()=>{ const b=[...document.querySelectorAll('.mode')].find(x=>x.textContent.includes('hangi sezon')); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
-        chk("22-quiz", ".qopt", ".qpitch")
+        chk("22-quiz", ".qopt", ".qpitch", ".exitc")
         for i in range(5):
             click(".qopt"); chk(f"22b-quiz-{i}", ".quiz .btn.gold"); click(".quiz .btn.gold")
         chk("23-quiz-sonuc", ".result .btn.gold", ".result .btn.ghost")
@@ -176,6 +176,16 @@ def run(name, vp, b):
         pg.evaluate("()=>startDraft()"); b = pg.evaluate("()=>[S.form, S.seed, S.cur.id]")
         if a[0]!="4-4-2" or a!=b: fails.append(f"[{name}] meydan linki: aynı kura gelmedi {a} {b}")
     step("12-meydan", s12)
+    def s13():
+        pg.evaluate("()=>{ S.challenge=null; startDraft(); }"); pg.evaluate(FILL, None); pg.evaluate(BENCH, None)
+        pg.evaluate("()=>{ if(S.phase==='bench') skipBench(); SPEEDS['Hızlı']=40; S.speed='Hızlı'; startTournament(); }"); time.sleep(0.3)
+        pg.evaluate("()=>{ $('kskip').click(); }"); time.sleep(0.5); pg.evaluate("()=>{ $('kgo').click(); }"); time.sleep(0.4)
+        pg.evaluate("()=>{ if (mustFix(S.T)) autoFixMiss(); document.getElementById('missmodal')?.remove(); runMatch(); }"); time.sleep(1.2)
+        chk("26-mac-ici-cikis", ".exitc"); click(".exitc"); time.sleep(0.3)
+        chk("26b-cikis-onay", "#exitmodal .btn", "#exitmodal .btn.ghost"); click("#exitmodal .btn:not(.ghost)"); time.sleep(2.5)
+        if not pg.evaluate("()=>!!document.querySelector('.modes')"): fails.append(f"[{name}] çıkış: ana sayfaya dönmedi")
+        chk("26c-ana-sayfa", ".modes .mode")
+    step("13-cikis", s13)
 
     real = [e for e in errs if "firebase" not in e.lower()]
     for e in real: fails.append(f"[{name}] JavaScript hatası: {e[:200]}")

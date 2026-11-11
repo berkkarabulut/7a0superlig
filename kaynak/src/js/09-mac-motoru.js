@@ -128,7 +128,7 @@ function addTbl(n,gf,ga){ const r=S.T.table[n]; r.O++; r.A+=gf; r.Y+=ga; if(gf>g
 function sortedTable(){ return Object.values(S.T.table).sort((a,b)=>b.P-a.P||(b.A-b.Y)-(a.A-a.Y)||b.A-a.A); }
 
 function pathHTML(){
-  const T=S.T; return `<div class="path">${STAGES.map((s,i)=>`<span class="${i<T.res.length?T.res[i].res:(i===T.i&&!T.done?"cur":"")}">${s}${i<T.res.length?` ${T.res[i].g1}-${T.res[i].g2}`:""}</span>`).join("")}</div>`;
+  const T=S.T; return `<div class="pathbar">${exitBtn(T.done?"":"Turnuvan yarıda kalacak, bu kadroyla oynadıkların kaybolur.")}</div><div class="path">${STAGES.map((s,i)=>`<span class="${i<T.res.length?T.res[i].res:(i===T.i&&!T.done?"cur":"")}">${s}${i<T.res.length?` ${T.res[i].g1}-${T.res[i].g2}`:""}</span>`).join("")}</div>`;
 }
 function tableHTML(){
   return `<table><tr><th>Grup</th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>P</th></tr>${sortedTable().map(r=>`<tr class="${r.n===myName()?"me":""}"><td>${esc(r.n)}</td><td>${r.O}</td><td>${r.G}</td><td>${r.B}</td><td>${r.M}</td><td>${r.A}</td><td>${r.Y}</td><td>${r.P}</td></tr>`).join("")}</table>`;

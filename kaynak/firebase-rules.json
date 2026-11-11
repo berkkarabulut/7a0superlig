@@ -16,7 +16,7 @@
       "$k": {
         ".read": true,
         ".write": "!data.exists()",
-        ".validate": "newData.hasChildren(['n','t']) && newData.child('n').isString() && newData.child('n').val().length >= 4 && newData.child('n').val().length <= 40 && newData.child('t').val() <= now"
+        ".validate": "newData.hasChildren(['n','t']) && newData.child('n').isString() && newData.child('n').val().length >= 4 && newData.child('n').val().length <= 40 && newData.child('t').val() <= now && !newData.child('n').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/)"
       }
     },
     "daily": {
@@ -24,7 +24,7 @@
         ".read": true,
         "$id": {
           ".write": "!data.exists()",
-          ".validate": "newData.hasChildren(['name','w','gf','ga','spent','ovr','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').isNumber() && newData.child('gf').val() <= 80 && newData.child('ga').isNumber() && newData.child('ga').val() <= 80 && newData.child('spent').isNumber() && newData.child('spent').val() <= 100 && newData.child('t').val() <= now"
+          ".validate": "newData.hasChildren(['name','w','gf','ga','spent','ovr','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').isNumber() && newData.child('gf').val() <= 80 && newData.child('ga').isNumber() && newData.child('ga').val() <= 80 && newData.child('spent').isNumber() && newData.child('spent').val() <= 100 && newData.child('t').val() <= now && !newData.child('name').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/)"
         }
       }
     },
@@ -33,7 +33,7 @@
         ".read": true,
         "$k": {
           ".write": true,
-          ".validate": "newData.hasChildren(['name','w','gf','ga','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').val() <= 80 && newData.child('ga').val() <= 80"
+          ".validate": "newData.hasChildren(['name','w','gf','ga','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').val() <= 80 && newData.child('ga').val() <= 80 && !newData.child('name').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/)"
         }
       }
     },

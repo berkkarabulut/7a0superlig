@@ -14,7 +14,8 @@ const SUFFIXES = [
  ["SC Corinthians","Brezilya"],["Deportivo","Latin Amerika"],["Esporte Clube","Brezilya"],["Sporting","Portekiz / dünya"],["Dinamo","Doğu Avrupa"],["Spartak","Rusya"],["Lokomotiv","Rusya"],["Galaxy","ABD"],["FC Inter","dünya"]
 ];
 const getTeam = () => store.get("team", null);
-const myName = () => { const t=getTeam(); return t ? (t.suffix ? `${t.name} ${t.suffix}` : t.name) : "Senin takımın"; };
+const myName = () => { const t=getTeam(); const n = t ? (t.suffix ? `${t.name} ${t.suffix}` : t.name) : "Senin takımın"; return badName(n) ? "Adsız Takım" : n; };
+const myTeamBad = () => { const t=getTeam(); return !!t && badName(t.suffix ? `${t.name} ${t.suffix}` : t.name); };
 const NAME_RE = /^[A-Za-zÇĞİÖŞÜçğıöşüÂâÎîÛû0-9 .'-]{4,20}$/;
 function renderNameScreen(edit){
   const cur = getTeam() || {name:"", suffix:"FC"};
@@ -30,17 +31,17 @@ function renderNameScreen(edit){
       <p class="mut" id="terr" style="font-size:13px;min-height:18px"></p>
       <div class="row" style="justify-content:center"><button class="btn" id="tgo" onclick="saveName()">${edit?"Kaydet":"Oynamaya başla"}</button>${edit?`<button class="btn ghost" onclick="renderStart()">Vazgeç</button>`:""}</div>
     </div>`;
-  const upd = () => { const n=($("tname").value||"").trim(), s=$("tsuf").value||"", ok=NAME_RE.test(n);
+  const upd = () => { const n=($("tname").value||"").trim(), s=$("tsuf").value||"", bad=badName(s?`${n} ${s}`:n), ok=NAME_RE.test(n) && !bad;
     $("tprev").textContent = n ? (s?`${n} ${s}`:n) : "";
-    $("terr").textContent = !n ? "En az 4 karakter" : ok ? "" : n.length<4 ? `En az 4 karakter (${n.length}/4)` : "Sadece harf, rakam, boşluk, nokta ve tire kullanabilirsin";
+    $("terr").textContent = !n ? (S.badNameMsg||"En az 4 karakter") : bad ? "Bu ad kullanılamaz. Küfür, hakaret ya da ırk/din/etnik köken içeren adlara izin vermiyoruz." : ok ? "" : n.length<4 ? `En az 4 karakter (${n.length}/4)` : "Sadece harf, rakam, boşluk, nokta ve tire kullanabilirsin";
     $("tgo").disabled = !ok; };
   $("tname").oninput = upd; $("tsuf").onchange = upd; $("tname").onkeydown = e=>{ if(e.key==="Enter" && !$("tgo").disabled) saveName(); };
   upd(); try{ $("tname").focus(); }catch(e){}
 }
 async function saveName(){
   const n=$("tname").value.trim().replace(/\s+/g," "), s=$("tsuf").value;
-  if (!NAME_RE.test(n)) return;
   const full = s ? `${n} ${s}` : n;
+  if (!NAME_RE.test(n) || badName(full)) return;
   $("tgo").disabled=true; $("terr").textContent="Kontrol ediliyor…";
   try { const ok = await Promise.race([reserveName(full), new Promise((_,no)=>setTimeout(()=>no("zaman"),6000))]);
     if (!ok){ $("terr").textContent=`"${full}" adı başka biri tarafından alınmış, başka bir ad ya da uzantı dene.`; $("tgo").disabled=false; return; } }

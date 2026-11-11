@@ -2,7 +2,7 @@
 const rankSort = (a,b) => b.w-a.w || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf || a.spent-b.spent || a.t-b.t;
 let LB = {};
 const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Tek oyunculu", short:"Tek", icon:"🎮"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
-const rowsOf = v => Object.entries(v||{}).map(([id,x])=>({id,...x})).sort(rankSort);
+const rowsOf = v => Object.entries(v||{}).map(([id,x])=>({id,...x})).filter(x=>!badName(x.name||"")).sort(rankSort);
 function watchLeader(){
   fb().then(db => { for (const m of ["daily","solo"]) db.ref(MODES[m].path+"/"+todayKey()).on("value", s => {
     LB[m+":"+todayKey()] = rowsOf(s.val()); paintLeader();
@@ -16,6 +16,7 @@ function paintLeader(){
   el.innerHTML = parts.length ? "👑 "+parts.join(" · ") : ""; el.classList.toggle("hidden", !parts.length);
 }
 async function submitSolo(entry){
+  if (myTeamBad() || badName(entry.name)) return null;
   try {
     const db = await fb(), key = nameKey(entry.name), ref = db.ref("solo/"+todayKey()+"/"+key);
     const old = (await ref.once("value")).val();
@@ -26,6 +27,7 @@ async function submitSolo(entry){
   } catch(e){ return null; }
 }
 async function submitDaily(entry){
+  if (myTeamBad() || badName(entry.name)) return null;
   try {
     const db = await fb(), ref = db.ref("daily/"+todayKey()).push();
     await ref.set({...entry, t: TS()}); store.set("dailyId:"+todayKey(), ref.key); return ref.key;

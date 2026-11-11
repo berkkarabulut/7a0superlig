@@ -228,6 +228,16 @@ def run(name, vp, b):
         pg.evaluate("()=>openConsent()"); time.sleep(0.2); click("#cz_ok"); time.sleep(0.2)
         if not pg.evaluate("()=>consentOK()"): fails.append(f"[{name}] çerez kabulü kaydedilmedi")
     step("17-cerez", s17)
+    def s18():
+        pg.evaluate("()=>renderNameScreen(true)"); time.sleep(0.3)
+        for bad in ["KÜRT", "S1KT1R", "Orospu"]:
+            pg.fill("#tname", bad); pg.dispatch_event("#tname", "input"); time.sleep(0.1)
+            if not pg.evaluate("()=>$('tgo').disabled"): fails.append(f"[{name}] küfür filtresi '{bad}' adına izin verdi")
+        chk("35-kufur-filtresi", "#terr")
+        pg.fill("#tname", "ROBOT"); pg.dispatch_event("#tname", "input"); time.sleep(0.1)
+        if pg.evaluate("()=>$('tgo').disabled"): fails.append(f"[{name}] küfür filtresi temiz adı engelledi")
+        pg.evaluate("()=>renderStart()")
+    step("18-kufur", s18)
 
     if os.environ.get("HARVEST"):
         try:

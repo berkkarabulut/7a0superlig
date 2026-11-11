@@ -2,7 +2,8 @@
 applyTheme();
 applyI18nData();
 readChallengeFromUrl();
-if (getTeam()) renderStart(); else renderNameScreen(false);
+if (myTeamBad()){ store.set("team", null); S.badNameMsg = "Takım adın kurallarımıza uymadığı için silindi, yeni bir ad seç."; renderNameScreen(false); }
+else if (getTeam()) renderStart(); else renderNameScreen(false);
 updateHeaderName();
 paintSoundBtn();
 startI18n();

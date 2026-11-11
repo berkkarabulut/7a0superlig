@@ -464,7 +464,7 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 </head>
 <body>
 <header class="hdr">
-  <div class="logo">Süper Lig <b>7-0</b> <button id="betabtn" class="betatag" onclick="openBeta()" title="Deneme sürümü · geri bildirim">BETA</button> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> <span lang="en">online</span></span> <button class="invmob" onclick="openInvite()" title="Davet et">📨</button> <button class="setmob" onclick="openSettings()" title="Ayarlar">⚙️</button> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
+  <div class="logo">Süper Lig <b>7-0</b> <button id="betabtn" class="betatag" onclick="openBeta()" title="Deneme sürümü · geri bildirim">BETA</button> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> <span lang="en">online</span></span> <button class="invmob" onclick="openInvite()" title="Davet et">📨</button> <button class="setmob" onclick="openSettings()" title="Ayarlar">⚙️</button></div>
   <nav>
     <button id="myteam" class="myteam hidden" onclick="show('play');renderNameScreen(true)" title="Takım adını değiştir"></button>
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
@@ -1772,7 +1772,7 @@ function watchLeader(){
   }); }).catch(()=>{});
 }
 function paintLeader(){
-  const d=LB["daily:"+todayKey()]||[], s=LB["solo:"+todayKey()]||[], el=$("leader"), parts=[];
+  const d=LB["daily:"+todayKey()]||[], s=LB["solo:"+todayKey()]||[], el=$("leader"), parts=[]; if (!el) return;
   if (d.length) parts.push(`<span class="mut">Meydan:</span> ${esc(d[0].name)} <b>${d[0].w}-${7-d[0].w}</b>`);
   if (s.length) parts.push(`<span class="mut">Tek:</span> ${esc(s[0].name)} <b>${s[0].w}-${7-s[0].w}</b>`);
   el.innerHTML = parts.length ? "👑 "+parts.join(" · ") : ""; el.classList.toggle("hidden", !parts.length);

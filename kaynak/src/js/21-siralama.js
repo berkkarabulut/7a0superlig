@@ -10,7 +10,7 @@ function watchLeader(){
   }); }).catch(()=>{});
 }
 function paintLeader(){
-  const d=LB["daily:"+todayKey()]||[], s=LB["solo:"+todayKey()]||[], el=$("leader"), parts=[];
+  const d=LB["daily:"+todayKey()]||[], s=LB["solo:"+todayKey()]||[], el=$("leader"), parts=[]; if (!el) return;
   if (d.length) parts.push(`<span class="mut">Meydan:</span> ${esc(d[0].name)} <b>${d[0].w}-${7-d[0].w}</b>`);
   if (s.length) parts.push(`<span class="mut">Tek:</span> ${esc(s[0].name)} <b>${s[0].w}-${7-s[0].w}</b>`);
   el.innerHTML = parts.length ? "👑 "+parts.join(" · ") : ""; el.classList.toggle("hidden", !parts.length);

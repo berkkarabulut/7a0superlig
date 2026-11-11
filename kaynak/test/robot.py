@@ -75,7 +75,10 @@ def run(name, vp, b):
     step("01-takim-adi", s1)
     # 2) başlangıç
     def s2():
-        chk("02-baslangic", ".mode", "#play .chip", "#play .btn", "#n-play", "#n-rank", "#n-squads")
+        chk("02-baslangic", ".mode", "#n-play", "#n-rank", "#n-squads")
+        if pg.locator("#setupcard").count(): fails.append(f"[{name}] ana sayfada mod seçilmeden diziliş kartı görünüyor")
+        click(".mode[onclick=\"pickMode('solo')\"]"); time.sleep(0.4)
+        chk("02b-mod-secildi", "#setupcard .chip", "#setupcard .btn")
     step("02-baslangic", s2)
     # 3) kadro kurma
     def s3():

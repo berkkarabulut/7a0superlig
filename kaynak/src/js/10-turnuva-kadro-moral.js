@@ -20,10 +20,10 @@ function autoFix(T){
   return notes;
 }
 function startTournament(){
-  RNG = Math.random;
+  RNG = S.seed!=null && S.mode!=="daily" ? seeded(S.seed*7+13) : Math.random;
   const xi = S.slots.map(s=>({pos:s.pos, x:s.x, y:s.y, p:{...s.p, r:s.p.base}}));
   const bench = (S.bench||[]).filter(s=>s.p).map(s=>({...s.p}));
-  const others = shuffle(POOL);
+  const others = shuffle(POOL); RNG = Math.random;
   const pots = [1,2,3].map(r=>others.filter(t=>t.rank===r));
   const gTeams = pots.map(p=>p[0]);
   const rest = others.filter(t=>!gTeams.includes(t));

@@ -139,7 +139,7 @@ def run(name, vp, b):
     # 9) sonuç + paylaş
     def s9():
         pg.evaluate("()=>{ S.T.out=S.T.out||'Son 16\\'da elendin'; finish(); }"); time.sleep(0.8)
-        chk("12-sonuc", ".result .btn", ".result .btn.ghost", ".result .btn.gold", ".site a")
+        chk("12-sonuc", ".result .btn", ".result .btn.ghost", ".result .btn.gold", ".site a", ".result button[onclick='shareChallenge()']")
         click(".result .btn.gold"); time.sleep(1.2)
         chk("13-paylas", "#sharebox .btn", "#sharebox canvas, #sharebox img")
         pg.evaluate("()=>closeShare()")
@@ -154,6 +154,32 @@ def run(name, vp, b):
         click("#n-ach"); time.sleep(0.3); chk("17-basarimlar", "#ach .card")
         click("#n-how"); time.sleep(0.3); chk("18-nasil", "#how .card")
     step("10-sekmeler", s10)
+    # 11) büyüme paketi
+    def s11():
+        click("#n-profile"); time.sleep(0.4); chk("19-profil", "#profile .stats", "#profile .album")
+        click("#n-rank"); time.sleep(0.3)
+        pg.evaluate("()=>renderRank(todayKey(),'week')"); time.sleep(0.4); chk("20-haftalik", "#rank .chip.on")
+        if pg.locator("#sndbtn").count()==0: fails.append(f"[{name}] ses butonu yok")
+        else: chk("21-ses-butonu", "#sndbtn")
+        click("#n-play"); pg.evaluate("()=>renderStart()"); time.sleep(0.3)
+        pg.evaluate("()=>{ const b=[...document.querySelectorAll('.mode')].find(x=>x.textContent.includes('hangi sezon')); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
+        chk("22-quiz", ".qopt", ".qpitch")
+        for i in range(5):
+            click(".qopt"); chk(f"22b-quiz-{i}", ".quiz .btn.gold"); click(".quiz .btn.gold")
+        chk("23-quiz-sonuc", ".result .btn.gold", ".result .btn.ghost")
+        pg.evaluate("()=>setStreamer(true,10)"); time.sleep(0.3)
+        pg.evaluate("()=>{ S.challenge=null; startDraft(); }"); time.sleep(0.4)
+        chk("24-yayinci", ".vnum", "#votebar .vote")
+        pg.evaluate("()=>setStreamer(false)")
+    step("11-buyume", s11)
+    def s12():
+        pg.goto("file://"+HTML+"?m=k3x9z&d=4-4-2&s=5-2&n=TESTCI"); time.sleep(1)
+        chk("25-meydan-banner", ".chal .btn.gold", ".chal .btn.ghost")
+        click(".chal .btn.gold"); time.sleep(0.4)
+        a = pg.evaluate("()=>[S.form, S.seed, S.cur.id]")
+        pg.evaluate("()=>startDraft()"); b = pg.evaluate("()=>[S.form, S.seed, S.cur.id]")
+        if a[0]!="4-4-2" or a!=b: fails.append(f"[{name}] meydan linki: aynı kura gelmedi {a} {b}")
+    step("12-meydan", s12)
 
     real = [e for e in errs if "firebase" not in e.lower()]
     for e in real: fails.append(f"[{name}] JavaScript hatası: {e[:200]}")

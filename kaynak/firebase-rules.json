@@ -7,7 +7,9 @@
       "$id": {
         ".write": true,
         ".validate": "newData.hasChildren(['t']) && newData.child('t').isNumber() && newData.child('t').val() <= now",
-        "$other": { ".validate": "$other === 't'" }
+        "$other": {
+          ".validate": "$other === 't'"
+        }
       }
     },
     "names": {
@@ -39,6 +41,45 @@
       "$id": {
         ".write": "!data.exists()",
         ".validate": "newData.hasChildren(['season','team','player','type','t']) && newData.child('player').val().length <= 60 && (!newData.child('msg').exists() || newData.child('msg').val().length <= 300) && newData.child('t').val() <= now"
+      }
+    },
+    "stats": {
+      ".read": true,
+      "$day": {
+        "v": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
+        },
+        "g": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
+        },
+        "f": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
+        },
+        "q": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
+        },
+        "u": {
+          "$uid": {
+            ".write": "!data.exists()",
+            ".validate": "newData.val() === true && $uid.length < 40"
+          }
+        },
+        "src": {
+          "$h": {
+            ".write": true,
+            ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1 && $h.length < 60"
+          }
+        },
+        "dev": {
+          "$d": {
+            ".write": true,
+            ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1 && ($d === 'telefon' || $d === 'bilgisayar')"
+          }
+        }
       }
     }
   }

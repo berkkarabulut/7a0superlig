@@ -1,7 +1,7 @@
 // ---------- günlük sıralama ----------
 const rankSort = (a,b) => b.w-a.w || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf || a.spent-b.spent || a.t-b.t;
 let LB = {};
-const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan"}, solo:{path:"solo", title:"Tek oyunculu", short:"Tek"} };
+const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Tek oyunculu", short:"Tek", icon:"🎮"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
 const rowsOf = v => Object.entries(v||{}).map(([id,x])=>({id,...x})).sort(rankSort);
 function watchLeader(){
   fb().then(db => { for (const m of ["daily","solo"]) db.ref(MODES[m].path+"/"+todayKey()).on("value", s => {
@@ -33,9 +33,9 @@ async function submitDaily(entry){
 }
 function dayKeyOffset(d){ const x=new Date(); x.setDate(x.getDate()+d); return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0"); }
 async function renderRank(day, mode){
-  mode = mode || S.rankMode || "daily"; S.rankDay = day; S.rankMode = mode; const today=todayKey(), yest=dayKeyOffset(-1), M=MODES[mode];
+  mode = mode || S.rankMode || "daily"; if (mode==="week") return renderWeek(); S.rankDay = day; S.rankMode = mode; const today=todayKey(), yest=dayKeyOffset(-1), M=MODES[mode];
   $("rank").innerHTML = `<h1>Günün sıralaması</h1>
-    <div class="row" style="margin:10px 0 6px">${Object.entries(MODES).map(([k,v])=>`<button class="chip ${k===mode?"on":""}" onclick="renderRank('${day}','${k}')">${k==="daily"?"🗓️":"🎮"} ${v.title}</button>`).join("")}</div>
+    <div class="row" style="margin:10px 0 6px">${Object.entries(MODES).map(([k,v])=>`<button class="chip ${k===mode?"on":""}" onclick="renderRank('${day}','${k}')">${v.icon} ${v.title}</button>`).join("")}</div>
     <div class="row" style="margin:6px 0 16px"><button class="chip ${day===today?"on":""}" onclick="renderRank('${today}','${mode}')">Bugün</button><button class="chip ${day===yest?"on":""}" onclick="renderRank('${yest}','${mode}')">Dün</button></div>
     <div class="card" id="rankbox"><p class="mut">Yükleniyor…</p></div>
     <p class="mut" style="font-size:13px">${mode==="daily"

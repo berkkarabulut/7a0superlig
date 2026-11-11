@@ -1,0 +1,30 @@
+
+/* ===== büyüme paketi: meydan linki, seri, haftalık, profil, albüm, quiz, gol efekti, yayıncı ===== */
+.chal{border:2px solid var(--gold);background:linear-gradient(90deg,#ffb7031a,transparent);margin:10px 0}
+.streak{display:inline-block;margin-top:6px;font:800 14px var(--cond);letter-spacing:.4px;color:#ff9f43}
+.streak.streak-cold{color:var(--mut);font-weight:600}
+.weekking{font:800 18px var(--cond);text-transform:uppercase;letter-spacing:.5px;color:var(--gold);margin-bottom:8px}
+.albbar{height:8px;background:#ffffff14;border-radius:4px;overflow:hidden;margin:4px 0 8px}.albbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#ff5a36)}
+.album{display:flex;flex-wrap:wrap;gap:4px;max-height:420px;overflow:auto}
+.alb{display:inline-flex;align-items:center;gap:5px;padding:2px 6px 2px 2px;border-radius:2px;background:#ffffff0a;font-size:12px;color:var(--mut)}
+.alb.has{background:#ffb70318;color:var(--txt)}.alb .rv{font-size:11px;min-width:22px;padding:0 3px}
+.quiz h2{font-size:22px}
+.qpitch{background:repeating-linear-gradient(0deg,#1f7a44 0 12.5%,#1a6d3c 12.5% 25%);border-radius:4px;padding:10px 6px;display:flex;flex-direction:column;gap:10px}
+.qline{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.qp{display:inline-flex;align-items:center;gap:4px;background:#0d0216d9;padding:3px 8px 3px 3px;border-radius:3px;font-weight:600;font-size:14px}
+.qopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
+.qopt{text-align:left;cursor:pointer;font:600 16px "Barlow",system-ui;color:var(--txt);border-left:3px solid var(--line);padding:12px}
+.qopt:hover:not(:disabled){border-left-color:var(--gold)}
+.qopt.right{border-color:var(--teal);background:#00c2a826}.qopt.wrong{border-color:var(--loss);background:#ff4d6d26}
+.golfx{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:800 72px var(--cond);letter-spacing:4px;pointer-events:none;animation:golfx 1.5s ease-out forwards;text-shadow:0 4px 18px #000}
+.golfx.golfx-me{color:var(--gold)}.golfx.golfx-op{color:#ffffffb0;font-size:48px}
+@keyframes golfx{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}15%{transform:translate(-50%,-50%) scale(1.25);opacity:1}70%{opacity:1}100%{transform:translate(-50%,-60%) scale(1);opacity:0}}
+.vnum{min-width:26px;height:26px;border-radius:3px;background:var(--gold);color:#1d1200;font:800 16px var(--cond);display:grid;place-items:center;flex:none}
+.vote{position:relative;overflow:hidden;background:#0d0216;border:1px solid var(--gold);border-radius:3px;padding:8px 10px;margin-bottom:8px;font:600 15px var(--cond);letter-spacing:.4px;text-transform:uppercase}
+.vote i{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);transition:width 1s linear}
+.vote.vote-end{border-color:var(--loss);color:#ff8fa3}
+body.yayinci{font-size:18px}
+body.yayinci .pl{font-size:18px;min-height:52px}
+body.yayinci .grid.draft .draw h2{font-size:28px}
+body.yayinci .events li{font-size:17px}
+#sndbtn{font-size:18px}

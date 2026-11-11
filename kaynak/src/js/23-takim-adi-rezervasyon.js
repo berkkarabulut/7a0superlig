@@ -6,4 +6,3 @@ async function reserveName(full){
   const s = await ref.once("value"); if (s.exists()) return false;
   await ref.set({ n: full, t: TS() }); store.set("myNames", [...mine, key]); return true;
 }
-if (typeof location!=="undefined" && location.protocol.startsWith("http")) setTimeout(startPresence, 300);

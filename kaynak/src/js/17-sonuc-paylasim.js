@@ -7,6 +7,8 @@ function finish(){
               seven ? `7 maçın 7'sini de kazandın. Bir de gol yemeden yapabilir misin?` :
               champ ? `Kupayı kaldırdın ama ${7-wins} maçı kazanamadın. 7-0 için hepsini kazanmalısın.` : "Kadroyu değiştirip bir daha dene.";
   const unlocked = checkAch({champ,perfect,unbeaten,seven});
+  const newLeg = recordProfile(T, champ, perfect); bump("f");
+  const stk = (S.mode==="daily" && S.counted) ? bumpStreak() : null;
   let submitP = null, soloP = null;
   const resTxt = champ ? "Şampiyon" : T.out.replace(" elendin","").replace(/^Grupta \d\. oldun,?/,"Grup");
   if (S.mode==="solo") soloP = submitSolo({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
@@ -31,12 +33,16 @@ function finish(){
       <p>${sub}</p>
       ${S.mode==="solo"?`<p id="solorank" class="mut">Günün tek oyunculu tablosuna bakılıyor…</p>`:""}
       ${S.mode==="daily"?`<p id="dailyrank" class="mut">${submitP?"Sıralamaya ekleniyor…":"Bugünkü hakkını kullanmıştın, bu oyun sıralamaya sayılmadı."}</p>`:""}
+      ${challengeResultHTML()}
+      ${stk?`<p>🔥 <b style="color:var(--gold)">${stk.n} gün</b> seri! Yarın da oyna, seriyi bozma.</p>`:""}
+      ${newLeg>0?`<p>📒 Albümüne <b style="color:var(--gold)">${newLeg} yeni efsane</b> eklendi. <a href="#" onclick="show('profile');return false">Albümü gör</a></p>`:""}
       ${unlocked.length?`<p>Yeni başarım: ${unlocked.map(a=>`<b style="color:var(--gold)">${esc(a)}</b>`).join(", ")}</p>`:""}
       <div class="row" style="justify-content:center;margin-top:12px">
         <button class="btn" onclick="startTournament()">Aynı kadroyla tekrar</button>
         <button class="btn ghost" onclick="renderStart()">Yeni kadro</button>
         <button class="btn gold" onclick="openShare()">📸 Paylaş</button>
-      </div><p class="mut" id="cp" style="font-size:12px"></p>
+        ${S.mode!=="daily"&&S.seed!=null?`<button class="btn gold" onclick="shareChallenge()">⚔️ Arkadaşına meydan oku</button>`:""}
+      </div><div id="chalout" style="max-width:520px;margin:8px auto 0"></div><p class="mut" id="cp" style="font-size:12px"></p>
     </div>
     ${T.res.length>3?`<div class="card" style="margin-top:16px"><h3>Eleme ağacı</h3>${bracketHTML()}</div>`:""}
     <div class="grid" style="margin-top:16px"><div class="card"><h3>Maçlarımız</h3><table>${T.res.map((r,i)=>`<tr><td>${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}"><b>${r.g1}-${r.g2}</b>${r.pen?` (pen. ${r.pen[0]}-${r.pen[1]})`:""}</td></tr>`).join("")}</table></div><div>${pitchHTML()}${benchHTML()}</div></div>`;

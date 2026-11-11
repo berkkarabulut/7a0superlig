@@ -16,10 +16,11 @@ const sleep = ms => new Promise(r=>setTimeout(r,ms));
 const $ = id => document.getElementById(id);
 
 function show(id){
-  for (const s of ["play","rank","squads","ach","how"]) { $(s).classList.toggle("hidden", s!==id); $("n-"+s).classList.toggle("on", s===id); }
+  for (const s of ["play","rank","squads","profile","ach","how"]) { $(s).classList.toggle("hidden", s!==id); $("n-"+s).classList.toggle("on", s===id); }
   if (id==="squads") renderSquads();
   if (id==="rank") renderRank(todayKey(), S.mode==="solo"?"solo":"daily");
   if (id==="ach") renderAch();
+  if (id==="profile") renderProfile();
   if (id==="how") renderHow();
 }
 

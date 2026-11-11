@@ -27,3 +27,8 @@ Kurallar:
 2. `build.py` CSS çakışması bulursa yeni stile parçaya özel bir ad verilir (ör. `sb-…`, `mo-…`).
 3. `calistir.sh` "TÜM TESTLER GEÇTİ" demeden `main`'e (canlıya) alınmaz.
 4. Ekran robotu bilgisayar ve telefon boyutunda her ekranı gezer, butonların görünür ve tıklanabilir olduğunu ve JavaScript hatası olmadığını kontrol eder. Ekran görüntüleri `/tmp/robot/` altına düşer.
+
+## Sitenin kökündeki diğer dosyalar
+- `og.png` · WhatsApp/Instagram link önizleme görseli (1200x630)
+- `icon-180/192/512.png`, `manifest.json`, `sw.js` · ana ekrana ekleme (PWA); service worker önce internetten çeker, yoksa önbellekten açar
+- İstatistik sayfası: siteyi `?istatistik` ile aç (ör. `.../7a0superlig/?istatistik`). Veriler Firebase `stats` altında; kurallar `firebase-rules.json`'da.

@@ -21,6 +21,4 @@ function renderHow(){
    <p class="mut">Kadrolar o sezon ligi ilk 3'te bitiren takımlardan gelir. Reytingler nostaljik ve öznel değerlerdir.</p></div>`;
 }
 
-if (getTeam()) renderStart(); else renderNameScreen(false);
-updateHeaderName();
 

@@ -11,8 +11,18 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SL 7-0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d1410'/%3E%3Ctext x='50' y='64' font-size='42' font-weight='900' text-anchor='middle' fill='%23e30a17' font-family='Arial'%3E7-0%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d1410'/%3E%3Ctext x='50' y='64' font-size='42' font-weight='900' text-anchor='middle' fill='%23e30a17' font-family='Arial'%3E7-0%3C/text%3E%3C/svg%3E">
-<title>Süper Lig 7-0</title>
+<link rel="apple-touch-icon" href="icon-180.png"><link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d1410'/%3E%3Ctext x='50' y='64' font-size='42' font-weight='900' text-anchor='middle' fill='%23e30a17' font-family='Arial'%3E7-0%3C/text%3E%3C/svg%3E">
+<title>Süper Lig 7-0 · Efsane 11'ini kur, 7-0 yap</title>
+<meta name="description" content="1980'den bugüne Süper Lig'in ilk 3'e giren takımlarından efsane 11'ini kur, turnuvada 7 maçın 7'sini kazan. Ücretsiz futbol draft oyunu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Süper Lig 7-0">
+<meta property="og:title" content="Süper Lig 7-0 · Efsane 11'ini kur, 7-0 yap">
+<meta property="og:description" content="Hagi, Alex, Quaresma, Metin-Ali-Feyyaz… 1980'den bugüne efsanelerle kadronu kur, turnuvada 7'de 7 yap. Arkadaşlarına meydan oku!">
+<meta property="og:image" content="https://berkkarabulut.github.io/7a0superlig/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://berkkarabulut.github.io/7a0superlig/og.png">
+<link rel="manifest" href="manifest.json">
 <style>/*CSS*/</style>
 </head>
 <body>
@@ -23,6 +33,7 @@
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
     <button id="n-rank" onclick="show('rank')">Sıralama</button>
     <button id="n-squads" onclick="show('squads')">Kadrolar</button>
+    <button id="n-profile" onclick="show('profile')">Profil</button>
     <button id="n-ach" onclick="show('ach')">Başarımlar</button>
     <button id="n-how" onclick="show('how')">Nasıl oynanır</button>
   </nav>
@@ -31,6 +42,7 @@
   <section id="play"></section>
   <section id="rank" class="hidden"></section>
   <section id="squads" class="hidden"></section>
+  <section id="profile" class="hidden"></section>
   <section id="ach" class="hidden"></section>
   <section id="how" class="hidden"></section>
 </main>

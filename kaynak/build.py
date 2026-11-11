@@ -27,23 +27,37 @@ def read(p):
         return f.read()
 
 
-def css_classes(css):
+def selectors(css):
     css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
-    out = set()
     for prelude in re.findall(r"([^{}]+)\{", css):
         prelude = prelude.strip()
         if prelude.startswith("@"):
             continue
-        out.update(re.findall(r"\.([A-Za-z_][\w-]*)", prelude))
-    return out
+        for sel in prelude.split(","):
+            if sel.strip():
+                yield sel.strip()
+
+
+def classes_in(s):
+    return re.findall(r"\.([A-Za-z_][\w-]*)", s)
 
 
 def collisions(files):
-    owners = {}
+    """Bir sınıf, kendi 'kapsamı' olmadan (seçicide o dosyaya ait bir sınıf yokken)
+    birden fazla dosyada stillenirse çakışma sayılır. Ör: 08'de '.alb .rv' serbest
+    (.alb 08'e ait), ama 06'da çıplak '.ghost' yazmak 01'deki '.btn.ghost' ile çakışır."""
+    seen, owners = set(), {}
     for f in files:
-        for c in css_classes(read(f)):
-            owners.setdefault(c, []).append(os.path.basename(f))
-    return {c: fs for c, fs in owners.items() if len(fs) > 1}
+        sels = list(selectors(read(f)))
+        allc = set(c for s in sels for c in classes_in(s))
+        own = allc - seen
+        for s in sels:
+            if any(c in own for c in classes_in(s)) and not all(c in own for c in classes_in(re.split(r"[\s>+~]+", s)[-1])):
+                continue  # bu dosyanın kendi sınıfıyla kapsanmış bir üzerine yazma
+            for c in classes_in(re.split(r"[\s>+~]+", s)[-1]):
+                owners.setdefault(c, set()).add(os.path.basename(f))
+        seen |= allc
+    return {c: sorted(fs) for c, fs in owners.items() if len(fs) > 1}
 
 
 def main():

@@ -86,7 +86,7 @@ async function runMatch(){
   const redsTxt = ()=>{ const rr=[missing,0]; M.ev.slice(0,ei).forEach(e=>{ if(e.type==="red"||(e.type==="inj"&&e.side===0&&/10 kişi/.test(e.text))) rr[e.side]++; }); return rr; };
   const anim = async (m0,m1) => { for (let m=m0;m<=m1;m++){
     while (ei<M.ev.length && M.ev[ei].m<=m){
-      const e=M.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); }
+      const e=M.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); sfx("goal", e.side===0); goalFx(e.side===0); }
       add(`<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
       if (e.type==="red"||e.type==="inj"||e.type==="sub"){ const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
       if (e.type==="red"||e.type==="inj"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }
@@ -95,10 +95,10 @@ async function runMatch(){
     if (ms){ $("clk").textContent=(m>90?"Uzatma ":"")+m+"'"; $("bar").style.width=(m/len*100)+"%";
       if (m===105){ $("clk").textContent="Uzatma devresi"; await sleep(ms*14); }
       await sleep(ms); } } };
-  add(`<li class="penh"><span>🟢 Hakem ${esc(T.ref)} başlama düdüğünü çaldı</span></li>`);
+  add(`<li class="penh"><span>🟢 Hakem ${esc(T.ref)} başlama düdüğünü çaldı</span></li>`); sfx("start");
   if (missing) $("rc").innerHTML = `Senin takım ${11-missing} kişi`;
   M.run(1,45); await anim(1,45);
-  $("clk").textContent="Devre arası"; add(`<li class="penh"><span>⏸️ ${esc(T.ref)} ilk yarıyı bitirdi: ${a}-${b}</span></li>`);
+  $("clk").textContent="Devre arası"; sfx("half"); add(`<li class="penh"><span>⏸️ ${esc(T.ref)} ilk yarıyı bitirdi: ${a}-${b}</span></li>`);
   if (ms){ const h = await halfTime(M,a,b); if (h.style!==T.style || h.ment!=="Aynen devam") add(`<li class="penh"><span>📋 İkinci yarı planı: ${STYLES[h.style].e} ${esc(h.style)} · ${esc(h.ment)}</span></li>`); $("mystyle").textContent=`${S.form} · ${STYLES[h.style].e} ${h.style}`; }
   { const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
   M.run(46,90); await anim(46,90);
@@ -106,7 +106,8 @@ async function runMatch(){
   if (isKo && M.g[0]===M.g[1]){ et=true; len=120; add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await sleep(ms*18); M.run(91,120,0.85); await anim(91,120); }
   const r = M.result(et);
   $("clk").textContent= r.et ? "Uzatmalar bitti" : "Maç sonu"; $("bar").style.width="100%";
-  add(`<li class="penh"><span>🏁 ${esc(T.ref)} son düdüğü çaldı</span></li>`);
+  add(`<li class="penh"><span>🏁 ${esc(T.ref)} son düdüğü çaldı</span></li>`); sfx("end");
+  T.scorers = T.scorers || {}; r.ev.filter(e=>e.side===0&&e.type==="goal"&&e.p).forEach(e=>{ T.scorers[e.p.n]=(T.scorers[e.p.n]||0)+1; });
   let pen=null, res = r.g1>r.g2?"W":r.g1<r.g2?"L":"D";
   if (isKo && r.g1===r.g2){
     $("clk").textContent="Penaltılar";

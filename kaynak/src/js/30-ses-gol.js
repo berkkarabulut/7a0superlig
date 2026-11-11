@@ -33,9 +33,4 @@ function goalFx(mine){
   const d = document.createElement("div"); d.className = "golfx "+(mine?"golfx-me":"golfx-op"); d.textContent = mine?"GOL!":"GOL…";
   box.style.position="relative"; box.appendChild(d); setTimeout(()=>d.remove(), 1500);
 }
-function paintSoundBtn(){
-  if (typeof document==="undefined" || typeof document.querySelector!=="function" || typeof document.createElement!=="function") return;
-  let b = $("sndbtn");
-  if (!b || !b.tagName){ const nav=document.querySelector("header nav"); if(!nav || !nav.prepend) return; b=document.createElement("button"); b.id="sndbtn"; b.title="Stadyum sesi"; b.onclick=()=>{ store.set("sound", !soundOn()); ac(); paintSoundBtn(); }; nav.prepend(b); }
-  b.textContent = soundOn() ? "🔊" : "🔇";
-}
+function paintSoundBtn(){ /* ses ayarı sadece ⚙️ Ayarlar menüsünde */ }

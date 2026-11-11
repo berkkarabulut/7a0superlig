@@ -1,4 +1,5 @@
 // ---------- açılış ----------
+applyTheme();
 readChallengeFromUrl();
 if (getTeam()) renderStart(); else renderNameScreen(false);
 updateHeaderName();

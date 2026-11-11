@@ -39,6 +39,12 @@ fails = []
 
 def run(name, vp, b):
     pg = b.new_page(viewport=vp)
+    if os.environ.get("HARVEST"):
+        hv = open(os.environ["HARVEST"], "a", encoding="utf-8")
+        pg.expose_function("__push", lambda t: hv.write(t.replace("\n"," ")+"\n"))
+        pg.add_init_script("""window.__T=new Set(); const put=t=>{ if(!window.__T.has(t)){ window.__T.add(t); try{ window.__push(t); }catch(e){} } }; const grab=()=>{ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n; while(n=w.nextNode()){ const t=n.nodeValue.trim(); if(t && !/^(script|style)$/i.test(n.parentNode.tagName)) put(t); }
+          document.querySelectorAll('[placeholder],[title]').forEach(e=>{ if(e.placeholder) put('[ph] '+e.placeholder); if(e.title) put('[title] '+e.title); }); };
+          document.addEventListener('DOMContentLoaded',()=>{ new MutationObserver(grab).observe(document.body,{subtree:true,childList:true,characterData:true}); grab(); });""")
     errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto("file://" + HTML); time.sleep(0.8)
@@ -187,6 +193,12 @@ def run(name, vp, b):
         chk("26c-ana-sayfa", ".modes .mode")
     step("13-cikis", s13)
 
+    if os.environ.get("HARVEST"):
+        try:
+            got = pg.evaluate("()=>[...(window.__T||[])]")
+            with open(os.environ["HARVEST"], "a", encoding="utf-8") as fh:
+                for t in got: fh.write(t.replace("\n"," ")+"\n")
+        except Exception as e: print("harvest", e)
     real = [e for e in errs if "firebase" not in e.lower()]
     for e in real: fails.append(f"[{name}] JavaScript hatası: {e[:200]}")
     pg.close()

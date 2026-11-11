@@ -438,11 +438,23 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 /* ===== beta etiketi ===== */
 .betatag{display:inline-block;vertical-align:middle;margin-left:8px;padding:2px 7px;border-radius:3px;border:1px solid var(--gold);background:#ffb7031f;color:var(--gold);font:800 12px var(--cond);letter-spacing:1px;cursor:pointer;line-height:1.4}
 .betatag:hover{background:var(--gold);color:#1d1200}
+
+/* ===== davet et ===== */
+.invbtn{white-space:nowrap}
+.invmob{display:none}
+.invwa{background:#25d366!important;color:#04220f!important;text-decoration:none}
+.invrow a{text-decoration:none}
+.invcard b{color:var(--gold)}
+@media(max-width:700px){
+  .invbtn{display:none!important}
+  .invmob{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;width:40px;height:36px;font-size:19px;background:#ffffff10;border:1px solid var(--line);border-radius:3px;cursor:pointer;color:var(--txt)}
+  .hdr .logo .invmob + .setmob{margin-left:0}
+}
 </style>
 </head>
 <body>
 <header class="hdr">
-  <div class="logo">Süper Lig <b>7-0</b> <button id="betabtn" class="betatag" onclick="openBeta()" title="Deneme sürümü · geri bildirim">BETA</button> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> <span lang="en">online</span></span> <button class="setmob" onclick="openSettings()" title="Ayarlar">⚙️</button> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
+  <div class="logo">Süper Lig <b>7-0</b> <button id="betabtn" class="betatag" onclick="openBeta()" title="Deneme sürümü · geri bildirim">BETA</button> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> <span lang="en">online</span></span> <button class="invmob" onclick="openInvite()" title="Davet et">📨</button> <button class="setmob" onclick="openSettings()" title="Ayarlar">⚙️</button> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
   <nav>
     <button id="myteam" class="myteam hidden" onclick="show('play');renderNameScreen(true)" title="Takım adını değiştir"></button>
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
@@ -451,6 +463,7 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
     <button id="n-profile" onclick="show('profile')">Profil</button>
     <button id="n-ach" onclick="show('ach')">Başarımlar</button>
     <button id="n-how" onclick="show('how')">Nasıl oynanır</button>
+    <button id="n-invite" class="invbtn" onclick="openInvite()">📨 Davet et</button>
     <button id="n-settings" class="setbtn" onclick="openSettings()">⚙️ Ayarlar</button>
   </nav>
 </header>
@@ -709,6 +722,7 @@ function renderStart(){
       <button class="card mode ${S.mode==="solo"?"on":""}" onclick="S.mode='solo';renderStart()"><b>Tek oyunculu</b><span class="mut">Sınırsız oyun. İstediğin kadar kur, istediğin kadar dene.</span></button>
       <button class="card mode ${S.mode==="daily"?"on":""}" onclick="S.mode='daily';renderStart()"><b>Günün Meydan Okuması</b><span class="mut">Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.${daily?` <br>Bugünkü sonucun: <b style="color:var(--gold)">${esc(daily.title)}</b>`:""}<br>${streakHTML()}</span></button>
       <button class="card mode" onclick="startQuiz(false)"><b>🧠 Bu kadro hangi sezon?</b><span class="mut">Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.${store.get("quiz:"+todayKey(),null)?` <br>Bugünkü skorun: <b style="color:var(--gold)">${store.get("quiz:"+todayKey()).score}/5</b>`:""}</span></button>
+      <button class="card mode invcard" onclick="openInvite()"><b>📨 Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
     <div class="card">
       <h3>Diziliş</h3>
@@ -1859,6 +1873,7 @@ async function trackVisit(){
     let src = "direkt";
     try { const r = document.referrer ? new URL(document.referrer).host : ""; if (r && r !== location.host) src = r.replace(/^www\./,""); } catch(e){}
     if (/[?&]m=/.test(location.search)) src = "meydan-linki";
+    else if (/[?&]r=/.test(location.search)) src = "davet-linki";
     bump("src/"+src.replace(/[.#$\[\]\/]/g,"_").slice(0,50));
     bump("dev/"+(window.innerWidth<=700?"telefon":"bilgisayar"));
   } catch(e){}
@@ -1871,8 +1886,8 @@ async function renderStats(){
     const rows = await Promise.all(days.map(async d => ({d, v:(await db.ref("stats/"+d).once("value")).val()||{}})));
     const src = {}; rows.forEach(r=>Object.entries(r.v.src||{}).forEach(([k,n])=>src[k]=(src[k]||0)+n));
     const n = x => x||0, uq = r => Object.keys(r.v.u||{}).length;
-    $("statbox").innerHTML = `<div style="overflow-x:auto"><table><tr><th>Gün</th><th>Ziyaret</th><th>Tekil kişi</th><th>Başlayan oyun</th><th>Biten oyun</th><th>Quiz</th><th>Telefon</th><th>Bilgisayar</th></tr>
-      ${rows.map(r=>`<tr><td>${r.d}</td><td>${n(r.v.v)}</td><td>${uq(r)}</td><td>${n(r.v.g)}</td><td>${n(r.v.f)}</td><td>${n(r.v.q)}</td><td>${n(r.v.dev?.telefon)}</td><td>${n(r.v.dev?.bilgisayar)}</td></tr>`).join("")}</table></div>
+    $("statbox").innerHTML = `<div style="overflow-x:auto"><table><tr><th>Gün</th><th>Ziyaret</th><th>Tekil kişi</th><th>Başlayan oyun</th><th>Biten oyun</th><th>Quiz</th><th>Davet tıklama</th><th>Telefon</th><th>Bilgisayar</th></tr>
+      ${rows.map(r=>`<tr><td>${r.d}</td><td>${n(r.v.v)}</td><td>${uq(r)}</td><td>${n(r.v.g)}</td><td>${n(r.v.f)}</td><td>${n(r.v.q)}</td><td>${n(r.v.dv)}</td><td>${n(r.v.dev?.telefon)}</td><td>${n(r.v.dev?.bilgisayar)}</td></tr>`).join("")}</table></div>
       <h3 style="margin-top:14px">Nereden geliyorlar (14 gün)</h3>
       <table>${Object.entries(src).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([k,v])=>`<tr><td>${esc(k.replace(/_/g,"."))}</td><td>${v}</td></tr>`).join("")||"<tr><td class='mut'>Henüz veri yok</td></tr>"}</table>`;
   } catch(e){ $("statbox").innerHTML = `<p class="mut">İstatistiklere ulaşılamadı. Firebase kurallarına "stats" bölümü eklendi mi?</p>`; }
@@ -2128,6 +2143,7 @@ function langChips(){ return Object.entries(LANGS).map(([k,v])=>`<button class="
 
 // [türkçe, english, español]
 const DICT_ROWS = [
+ ["Davet et","Invite","Invitar"],["📨 Davet et","📨 Invite","📨 Invitar"],["📨 Arkadaşını davet et","📨 Invite a friend","📨 Invita a un amigo"],["Arkadaşını davet et","Invite a friend","Invita a un amigo"],["Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.","Send the link on WhatsApp and see if they can go 7-0.","Mándale el enlace por WhatsApp a ver si hace 7-0."],["Linki gönder, bakalım o 7-0 yapabilecek mi.","Send the link and see if they can go 7-0.","Envía el enlace a ver si hace 7-0."],["🔗 Linki kopyala","🔗 Copy link","🔗 Copiar enlace"],["Linki kopyala","Copy link","Copiar enlace"],["Kopyalandı ✓ Şimdi istediğin yere yapıştır.","Copied ✓ Now paste it anywhere.","Copiado ✓ Pégalo donde quieras."],["Metni seçip kopyala.","Select the text and copy it.","Selecciona el texto y cópialo."],["Davet tıklama","Invite clicks","Clics de invitación"],
  // menü, genel
  ["Oyna","Play","Jugar"],["Sıralama","Rankings","Clasificación"],["Kadrolar","Squads","Plantillas"],["Profil","Profile","Perfil"],["Başarımlar","Achievements","Logros"],["Nasıl oynanır","How to play","Cómo jugar"],
  ["online","online","en línea"],["Meydan:","Challenge:","Reto:"],["Tek:","Solo:","Solo:"],["Vazgeç","Cancel","Cancelar"],["Tamam","OK","Vale"],["Gönder","Send","Enviar"],["Yükleniyor…","Loading…","Cargando…"],
@@ -2413,6 +2429,51 @@ async function sendBeta(){
   try { const db = await fb(); await db.ref("reports").push({season:"-", team:"-", player:"Geri bildirim", type:"Öneri / geri bildirim", msg, by: myName(), lang: LANG, t: TS()});
     info.textContent = L("Teşekkürler! Mesajın ulaştı ✓"); setTimeout(closeBeta, 1400); }
   catch(e){ info.textContent = L("Gönderilemedi, internet bağlantını kontrol edip tekrar dene."); btn.disabled=false; }
+}
+// ---------- arkadaşını davet et ----------
+// link: SITE_URL?r=ziyaretçiKimliği  → gelen ziyaret istatistikte "davet-linki" kaynağı olarak sayılır
+function inviteLink(){ return `${SITE_URL}?r=${visitorId()}`; }
+function inviteText(){
+  const p = profile(), b = p.best;
+  if (LANG==="en") return b===7 ? `I went 7-0 on Süper Lig 7-0 🏆 Can you do it? ⚽`
+    : b>=3 ? `I built my legends XI on Süper Lig 7-0, my best run is ${b}-${7-b} 😤 Can you go 7-0? ⚽`
+    : `Süper Lig 7-0: build your XI from Turkish league legends since 1980 and win 7 out of 7. Think you can? ⚽`;
+  if (LANG==="es") return b===7 ? `¡Hice 7-0 en Süper Lig 7-0 🏆 ¿Puedes tú? ⚽`
+    : b>=3 ? `Armé mi XI de leyendas en Süper Lig 7-0, mi mejor resultado es ${b}-${7-b} 😤 ¿Puedes hacer 7-0? ⚽`
+    : `Süper Lig 7-0: arma tu XI con leyendas de la liga turca desde 1980 y gana 7 de 7. ¿Te atreves? ⚽`;
+  return b===7 ? `Süper Lig 7-0'da 7'de 7 yaptım 🏆 Sen yapabilir misin? ⚽`
+    : b>=3 ? `Süper Lig 7-0'da efsane 11'imi kurdum, en iyi sonucum ${b}-${7-b} 😤 Sen 7-0 yapabilir misin? ⚽`
+    : `Süper Lig 7-0: 1980'den bugüne Süper Lig efsanelerinden 11'ini kur, 7 maçta 7 galibiyet al. Bakalım yapabilecek misin? ⚽`;
+}
+async function openInvite(){
+  if (typeof document==="undefined" || !document.createElement) return;
+  bump("dv");
+  const url = inviteLink(), txt = inviteText();
+  const touch = window.matchMedia && matchMedia("(pointer:coarse)").matches;
+  if (navigator.share && touch){
+    try { await navigator.share({title:"Süper Lig 7-0", text:txt, url}); return; }
+    catch(e){ if (e && e.name==="AbortError") return; }
+  }
+  document.getElementById("invbox")?.remove();
+  const full = txt+"\n"+url, enc = encodeURIComponent;
+  const d = document.createElement("div"); d.id="invbox"; d.className="modal";
+  d.innerHTML = `<div class="mbox"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📨 Arkadaşını davet et</h3><button class="chip" onclick="closeInvite()">✕</button></div>
+    <p class="mut">Linki gönder, bakalım o 7-0 yapabilecek mi.</p>
+    <textarea id="inv_txt" class="inp" rows="3" readonly onclick="this.select()">${esc(full)}</textarea>
+    <div class="row invrow" style="margin-top:10px">
+      <a class="btn invwa" href="https://wa.me/?text=${enc(full)}" target="_blank" rel="noopener" lang="en">WhatsApp</a>
+      <a class="btn ghost" href="https://twitter.com/intent/tweet?text=${enc(txt)}&url=${enc(url)}" target="_blank" rel="noopener" lang="en">X / Twitter</a>
+      <button class="btn ghost" id="inv_copy" onclick="copyInvite()">🔗 Linki kopyala</button>
+    </div>
+    <p class="mut" id="inv_info" style="font-size:13px;margin:8px 0 0"></p></div>`;
+  d.addEventListener("click", e=>{ if(e.target===d) closeInvite(); });
+  document.body.appendChild(d);
+}
+function closeInvite(){ document.getElementById("invbox")?.remove(); }
+async function copyInvite(){
+  const t = $("inv_txt"), info = $("inv_info");
+  try { await navigator.clipboard.writeText(t.value); info.textContent = L("Kopyalandı ✓ Şimdi istediğin yere yapıştır."); }
+  catch(e){ t.select(); try { document.execCommand("copy"); info.textContent = L("Kopyalandı ✓ Şimdi istediğin yere yapıştır."); } catch(_){ info.textContent = L("Metni seçip kopyala."); } }
 }
 // ---------- açılış ----------
 applyTheme();

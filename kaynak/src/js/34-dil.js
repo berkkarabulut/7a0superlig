@@ -10,6 +10,7 @@ function langChips(){ return Object.entries(LANGS).map(([k,v])=>`<button class="
 
 // [türkçe, english, español]
 const DICT_ROWS = [
+ ["Davet et","Invite","Invitar"],["📨 Davet et","📨 Invite","📨 Invitar"],["📨 Arkadaşını davet et","📨 Invite a friend","📨 Invita a un amigo"],["Arkadaşını davet et","Invite a friend","Invita a un amigo"],["Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.","Send the link on WhatsApp and see if they can go 7-0.","Mándale el enlace por WhatsApp a ver si hace 7-0."],["Linki gönder, bakalım o 7-0 yapabilecek mi.","Send the link and see if they can go 7-0.","Envía el enlace a ver si hace 7-0."],["🔗 Linki kopyala","🔗 Copy link","🔗 Copiar enlace"],["Linki kopyala","Copy link","Copiar enlace"],["Kopyalandı ✓ Şimdi istediğin yere yapıştır.","Copied ✓ Now paste it anywhere.","Copiado ✓ Pégalo donde quieras."],["Metni seçip kopyala.","Select the text and copy it.","Selecciona el texto y cópialo."],["Davet tıklama","Invite clicks","Clics de invitación"],
  // menü, genel
  ["Oyna","Play","Jugar"],["Sıralama","Rankings","Clasificación"],["Kadrolar","Squads","Plantillas"],["Profil","Profile","Perfil"],["Başarımlar","Achievements","Logros"],["Nasıl oynanır","How to play","Cómo jugar"],
  ["online","online","en línea"],["Meydan:","Challenge:","Reto:"],["Tek:","Solo:","Solo:"],["Vazgeç","Cancel","Cancelar"],["Tamam","OK","Vale"],["Gönder","Send","Enviar"],["Yükleniyor…","Loading…","Cargando…"],

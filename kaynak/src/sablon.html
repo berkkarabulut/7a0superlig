@@ -29,7 +29,7 @@
 </head>
 <body>
 <header class="hdr">
-  <div class="logo">Süper Lig <b>7-0</b> <button id="betabtn" class="betatag" onclick="openBeta()" title="Deneme sürümü · geri bildirim">BETA</button> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> <span lang="en">online</span></span> <button class="setmob" onclick="openSettings()" title="Ayarlar">⚙️</button> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
+  <div class="logo">Süper Lig <b>7-0</b> <button id="betabtn" class="betatag" onclick="openBeta()" title="Deneme sürümü · geri bildirim">BETA</button> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> <span lang="en">online</span></span> <button class="invmob" onclick="openInvite()" title="Davet et">📨</button> <button class="setmob" onclick="openSettings()" title="Ayarlar">⚙️</button> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
   <nav>
     <button id="myteam" class="myteam hidden" onclick="show('play');renderNameScreen(true)" title="Takım adını değiştir"></button>
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
@@ -38,6 +38,7 @@
     <button id="n-profile" onclick="show('profile')">Profil</button>
     <button id="n-ach" onclick="show('ach')">Başarımlar</button>
     <button id="n-how" onclick="show('how')">Nasıl oynanır</button>
+    <button id="n-invite" class="invbtn" onclick="openInvite()">📨 Davet et</button>
     <button id="n-settings" class="setbtn" onclick="openSettings()">⚙️ Ayarlar</button>
   </nav>
 </header>

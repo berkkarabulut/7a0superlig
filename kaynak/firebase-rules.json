@@ -79,6 +79,10 @@
             ".write": true,
             ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1 && ($d === 'telefon' || $d === 'bilgisayar')"
           }
+        },
+        "dv": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
         }
       }
     }

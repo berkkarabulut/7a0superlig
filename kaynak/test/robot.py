@@ -208,6 +208,14 @@ def run(name, vp, b):
         chk("29-beta", "#betabtn"); click("#betabtn"); time.sleep(0.3)
         chk("30-beta-pencere", "#fb_msg", "#fb_send"); pg.evaluate("()=>closeBeta()")
     step("15-beta", s15)
+    def s16():
+        ib = ".invmob" if name=="telefon" else "#n-invite"
+        pg.evaluate("()=>{show('play');renderStart()}"); time.sleep(0.3)
+        chk("31-davet-butonu", ib, "#play .invcard"); click(ib); time.sleep(0.4)
+        chk("32-davet-pencere", "#invbox .invwa", "#inv_copy", "#inv_txt")
+        if "?r=" not in pg.evaluate("()=>$('inv_txt').value"): fails.append(f"[{name}] davet linkinde ?r= yok")
+        pg.evaluate("()=>closeInvite()")
+    step("16-davet", s16)
 
     if os.environ.get("HARVEST"):
         try:

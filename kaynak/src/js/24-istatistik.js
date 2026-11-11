@@ -13,6 +13,7 @@ async function trackVisit(){
     let src = "direkt";
     try { const r = document.referrer ? new URL(document.referrer).host : ""; if (r && r !== location.host) src = r.replace(/^www\./,""); } catch(e){}
     if (/[?&]m=/.test(location.search)) src = "meydan-linki";
+    else if (/[?&]r=/.test(location.search)) src = "davet-linki";
     bump("src/"+src.replace(/[.#$\[\]\/]/g,"_").slice(0,50));
     bump("dev/"+(window.innerWidth<=700?"telefon":"bilgisayar"));
   } catch(e){}
@@ -25,8 +26,8 @@ async function renderStats(){
     const rows = await Promise.all(days.map(async d => ({d, v:(await db.ref("stats/"+d).once("value")).val()||{}})));
     const src = {}; rows.forEach(r=>Object.entries(r.v.src||{}).forEach(([k,n])=>src[k]=(src[k]||0)+n));
     const n = x => x||0, uq = r => Object.keys(r.v.u||{}).length;
-    $("statbox").innerHTML = `<div style="overflow-x:auto"><table><tr><th>Gün</th><th>Ziyaret</th><th>Tekil kişi</th><th>Başlayan oyun</th><th>Biten oyun</th><th>Quiz</th><th>Telefon</th><th>Bilgisayar</th></tr>
-      ${rows.map(r=>`<tr><td>${r.d}</td><td>${n(r.v.v)}</td><td>${uq(r)}</td><td>${n(r.v.g)}</td><td>${n(r.v.f)}</td><td>${n(r.v.q)}</td><td>${n(r.v.dev?.telefon)}</td><td>${n(r.v.dev?.bilgisayar)}</td></tr>`).join("")}</table></div>
+    $("statbox").innerHTML = `<div style="overflow-x:auto"><table><tr><th>Gün</th><th>Ziyaret</th><th>Tekil kişi</th><th>Başlayan oyun</th><th>Biten oyun</th><th>Quiz</th><th>Davet tıklama</th><th>Telefon</th><th>Bilgisayar</th></tr>
+      ${rows.map(r=>`<tr><td>${r.d}</td><td>${n(r.v.v)}</td><td>${uq(r)}</td><td>${n(r.v.g)}</td><td>${n(r.v.f)}</td><td>${n(r.v.q)}</td><td>${n(r.v.dv)}</td><td>${n(r.v.dev?.telefon)}</td><td>${n(r.v.dev?.bilgisayar)}</td></tr>`).join("")}</table></div>
       <h3 style="margin-top:14px">Nereden geliyorlar (14 gün)</h3>
       <table>${Object.entries(src).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([k,v])=>`<tr><td>${esc(k.replace(/_/g,"."))}</td><td>${v}</td></tr>`).join("")||"<tr><td class='mut'>Henüz veri yok</td></tr>"}</table>`;
   } catch(e){ $("statbox").innerHTML = `<p class="mut">İstatistiklere ulaşılamadı. Firebase kurallarına "stats" bölümü eklendi mi?</p>`; }

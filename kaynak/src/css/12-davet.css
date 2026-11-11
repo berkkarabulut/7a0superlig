@@ -1,0 +1,12 @@
+
+/* ===== davet et ===== */
+.invbtn{white-space:nowrap}
+.invmob{display:none}
+.invwa{background:#25d366!important;color:#04220f!important;text-decoration:none}
+.invrow a{text-decoration:none}
+.invcard b{color:var(--gold)}
+@media(max-width:700px){
+  .invbtn{display:none!important}
+  .invmob{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;width:40px;height:36px;font-size:19px;background:#ffffff10;border:1px solid var(--line);border-radius:3px;cursor:pointer;color:var(--txt)}
+  .hdr .logo .invmob + .setmob{margin-left:0}
+}

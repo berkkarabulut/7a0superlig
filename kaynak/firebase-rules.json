@@ -85,6 +85,15 @@
           ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
         }
       }
+    },
+    "real": {
+      "$day": {
+        ".read": true,
+        "$k": {
+          ".write": true,
+          ".validate": "newData.hasChildren(['name','w','gf','ga','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').val() <= 80 && newData.child('ga').val() <= 80 && !newData.child('name').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/) && (!newData.child('team').exists() || (newData.child('team').isString() && newData.child('team').val().length <= 40))"
+        }
+      }
     }
   }
 }

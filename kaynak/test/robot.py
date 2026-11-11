@@ -238,6 +238,15 @@ def run(name, vp, b):
         if pg.evaluate("()=>$('tgo').disabled"): fails.append(f"[{name}] küfür filtresi temiz adı engelledi")
         pg.evaluate("()=>renderStart()")
     step("18-kufur", s18)
+    def s19():
+        pg.evaluate("()=>{show('play');renderStart()}"); time.sleep(0.3)
+        chk("36-gercek-kart", "#play .realcard"); click("#play .realcard"); time.sleep(0.4)
+        chk("37-gercek-secim", "#play .rl-card:not(.rl-lock)", "#play .rl-lock")
+        click("#play .rl-card:not(.rl-lock)"); time.sleep(0.4)
+        chk("38-gercek-hazir", "#play .rl-info .chip[onclick^=realSetForm]")
+        if pg.evaluate("()=>S.slots.filter(s=>s.p).length") != 11: fails.append(f"[{name}] gerçek takım 11'i dolmadı")
+        pg.evaluate("()=>{S.mode='solo';renderStart()}")
+    step("19-gercek-takim", s19)
 
     if os.environ.get("HARVEST"):
         try:

@@ -11,14 +11,15 @@ function finish(){
   const stk = (S.mode==="daily" && S.counted) ? bumpStreak() : null;
   let submitP = null, soloP = null;
   const resTxt = champ ? "Şampiyon" : T.out.replace(" elendin","").replace(/^Grupta \d\. oldun,?/,"Grup");
+  if (S.mode==="real") soloP = submitReal({ name: myName(), team: realLabel(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
   if (S.mode==="solo") soloP = submitSolo({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
   if (S.mode==="daily" && S.counted){ store.set("daily:"+todayKey(), {title:recStr()+" · "+title, spent:S.spent, ovr:teamPower(T.me,S.style).ovr, perfect}); S.counted=false;
     submitP = submitDaily({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: S.spent, ovr: teamPower(T.me,S.style).ovr, res: resTxt }); }
   if (soloP) soloP.then(async r => { const el=$("solorank"); if(!el) return;
     if (!r){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
-    try { const db=await fb(), rows=rowsOf((await db.ref("solo/"+todayKey()).once("value")).val()), pos=rows.findIndex(x=>x.id===r.key)+1;
-      el.innerHTML = (r.better ? `🔥 Günün en iyi sonucun güncellendi! Tek oyunculu tabloda <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım).`
-        : `Bugünkü en iyin hâlâ <b>${r.old.w}-${7-r.old.w}</b>, tabloda <b style="color:var(--gold)">${pos}. sıradasın</b>.`) + ` <a href="#" onclick="S.rankMode='solo';show('rank');return false">Tabloyu gör</a>`; } catch(e){} });
+    try { const db=await fb(), rows=rowsOf((await db.ref((S.mode==="real"?"real/":"solo/")+todayKey()).once("value")).val()), pos=rows.findIndex(x=>x.id===r.key)+1;
+      el.innerHTML = (r.better ? `🔥 Günün en iyi sonucun güncellendi! ${S.mode==="real"?"Gerçek takım":"Tek oyunculu"} tabloda <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım).`
+        : `Bugünkü en iyin hâlâ <b>${r.old.w}-${7-r.old.w}</b>, tabloda <b style="color:var(--gold)">${pos}. sıradasın</b>.`) + ` <a href="#" onclick="S.rankMode='${S.mode==="real"?"real":"solo"}';show('rank');return false">Tabloyu gör</a>`; } catch(e){} });
   if (submitP) submitP.then(async id => { const el=$("dailyrank"); if(!el) return;
     if (!id){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
     try { const db=await fb(), s=await db.ref("daily/"+todayKey()).once("value"); const rows=Object.entries(s.val()||{}).map(([k,v])=>({id:k,...v})).sort(rankSort);
@@ -31,7 +32,7 @@ function finish(){
       <div class="site">⚽ SÜPER LİG 7-0 · <a href="https://${SITE}/" target="_blank">${SITE}</a></div>
       <p class="mut">${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}${S.mode==="daily"?` · Bütçe ${S.spent}/${DAILY_BUDGET} M`:""}${S.almanac?" · Almanak":""}</p>
       <p>${sub}</p>
-      ${S.mode==="solo"?`<p id="solorank" class="mut">Günün tek oyunculu tablosuna bakılıyor…</p>`:""}
+      ${S.mode==="solo"||S.mode==="real"?`<p id="solorank" class="mut">Günün sıralamasına bakılıyor…</p>`:""}
       ${S.mode==="daily"?`<p id="dailyrank" class="mut">${submitP?"Sıralamaya ekleniyor…":"Bugünkü hakkını kullanmıştın, bu oyun sıralamaya sayılmadı."}</p>`:""}
       ${challengeResultHTML()}
       ${stk?`<p>🔥 <b style="color:var(--gold)">${stk.n} gün</b> seri! Yarın da oyna, seriyi bozma.</p>`:""}
@@ -41,7 +42,7 @@ function finish(){
         <button class="btn" onclick="startTournament()">Aynı kadroyla tekrar</button>
         <button class="btn ghost" onclick="renderStart()">Yeni kadro</button>
         <button class="btn gold" onclick="openShare()">📸 Paylaş</button>
-        ${S.mode!=="daily"&&S.seed!=null?`<button class="btn gold" onclick="shareChallenge()">⚔️ Arkadaşına meydan oku</button>`:""}
+        ${S.mode!=="daily"&&S.mode!=="real"&&S.seed!=null?`<button class="btn gold" onclick="shareChallenge()">⚔️ Arkadaşına meydan oku</button>`:""}
       </div><div id="chalout" style="max-width:520px;margin:8px auto 0"></div><p class="mut" id="cp" style="font-size:12px"></p>
     </div>
     ${T.res.length>3?`<div class="card" style="margin-top:16px"><h3>Eleme ağacı</h3>${bracketHTML()}</div>`:""}
@@ -55,7 +56,7 @@ function resultTitle(){ const T=S.T, champ=!T.out, [w]=record();
 function shareText(){ return Lines(shareTextTr()); }
 function shareTextTr(){
   const T=S.T, line = T.res.map(r=>r.res==="W"?"🟩":r.res==="D"?"🟨":"🟥").join("") + "⬛".repeat(7-T.res.length);
-  return `⚽ Süper Lig 7-0 · ${myName()}: ${recStr()}\n${resultTitle()}\n${line}\n${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}\n${S.form} · ${S.style}${S.almanac?" · Almanak":""}${S.mode==="daily"?` · Günün meydan okuması (${todayKey()})`:""}\n11'im: ${S.slots.map(s=>short(s.p.n)).join(", ")}\n${SITE}`;
+  return `⚽ Süper Lig 7-0 · ${myName()}: ${recStr()}\n${S.mode==="real"?"🏟️ "+realLabel()+" ile\n":""}${resultTitle()}\n${line}\n${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}\n${S.form} · ${S.style}${S.almanac?" · Almanak":""}${S.mode==="daily"?` · Günün meydan okuması (${todayKey()})`:""}\n11'im: ${S.slots.map(s=>short(s.p.n)).join(", ")}\n${SITE}`;
 }
 function rr(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
 function fitText(c,txt,max){ let s=txt; while(c.measureText(s).width>max && s.length>3) s=s.slice(0,-2); return s===txt?s:s+"…"; }

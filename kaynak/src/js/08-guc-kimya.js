@@ -48,14 +48,14 @@ function statsHTML(){
 function renderReady(){
   $("play").innerHTML = `
   <div class="grid">
-    <div><h1>11'in hazır.</h1>
+    <div>${S.mode==="real"?realFormHTML():""}<h1>11'in hazır.</h1>
       <p class="mut">Turnuva 7 maç: önce grup kurası çekilir, 4 takımlı grupta 3 maç oynarsın, ilk 2'ye girersen Son 16 kurası, çeyrek final, yarı final ve final gelir. Her maç öncesi takımına konuşma yapar, kadronu ayarlarsın. Elemelerde beraberlikte uzatma, sonra penaltı: penaltıcılarını sen seçersin.</p>
       ${(S.bench||[]).length?"":`<p class="hint card">Yedeğin yok: kırmızı kart ya da sakatlıkta 10 kişi kalırsın.</p>`}
       ${S.mode==="daily"?`<p>Harcanan bütçe: <b>${S.spent} / ${DAILY_BUDGET} M</b>${S.counted?"":" · <span class='mut'>bugünkü hakkını kullandın, bu oyun sayılmaz</span>"}</p>`:""}
       <h3>Maç hızı</h3>
       <div class="row">${Object.keys(SPEEDS).map(k=>`<button class="chip ${k===S.speed?"on":""}" onclick="S.speed='${k}';renderReady()">${k}</button>`).join("")}</div>
       <div class="row" style="margin-top:18px"><button class="btn" onclick="startTournament()">Turnuvaya başla</button>
-      <button class="btn ghost" onclick="renderStart()">Baştan kur</button></div>
+      <button class="btn ghost" onclick="${S.mode==='real'?'renderRealPicker()':'renderStart()'}">${S.mode==='real'?'Başka takım seç':'Baştan kur'}</button></div>
     </div>
     <div class="side">${pitchHTML()}${benchHTML()}${statsHTML()}</div>
   </div>`;

@@ -1,7 +1,7 @@
 // ---------- günlük sıralama ----------
 const rankSort = (a,b) => b.w-a.w || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf || a.spent-b.spent || a.t-b.t;
 let LB = {};
-const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Tek oyunculu", short:"Tek", icon:"🎮"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
+const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Tek oyunculu", short:"Tek", icon:"🎮"}, real:{path:"real", title:"Gerçek takım", short:"Gerçek", icon:"🏟️"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
 const rowsOf = v => Object.entries(v||{}).map(([id,x])=>({id,...x})).filter(x=>!badName(x.name||"")).sort(rankSort);
 function watchLeader(){
   fb().then(db => { for (const m of ["daily","solo"]) db.ref(MODES[m].path+"/"+todayKey()).on("value", s => {
@@ -42,12 +42,13 @@ async function renderRank(day, mode){
     <div class="card" id="rankbox"><p class="mut">Yükleniyor…</p></div>
     <p class="mut" style="font-size:13px">${mode==="daily"
       ? "Meydan okumada herkes aynı takımlarla ve aynı bütçeyle oynar. Günde sadece ilk oyun sayılır. Sıralama: galibiyet sayısı, averaj, atılan gol, sonra harcanan bütçe (az olan önde)."
+      : mode==="real" ? "Gerçek takım modunda bir sezonun gerçek kadrosuyla oynarsın; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."
       : "Tek oyunculuda istediğin kadar oynarsın, tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."}</p>`;
   try {
     const db = await fb(); let rows = LB[mode+":"+day];
     if (!rows || day!==today){ rows = rowsOf((await db.ref(M.path+"/"+day).once("value")).val()); LB[mode+":"+day]=rows; }
-    const mine = store.get((mode==="daily"?"dailyId:":"soloId:")+day, null);
-    $("rankbox").innerHTML = rows.length ? `<div style="overflow-x:auto"><table><tr><th>#</th><th>Takım</th><th>Sonuç</th><th>A-Y</th>${mode==="daily"?"<th>Bütçe</th>":"<th>Oyun</th>"}<th>Genel</th></tr>${rows.map((r,i)=>`<tr class="${r.id===mine?"me":""}"><td>${i===0?"👑":i+1}</td><td>${esc(r.name)}</td><td><b>${r.w}-${7-r.w}</b> <small class="mut">${esc(r.res||"")}</small></td><td>${r.gf}-${r.ga}</td><td>${mode==="daily"?r.spent+" M":(r.games||1)}</td><td>${r.ovr}</td></tr>`).join("")}</table></div>`
+    const mine = store.get((mode==="daily"?"dailyId:":mode==="real"?"realId:":"soloId:")+day, null);
+    $("rankbox").innerHTML = rows.length ? `<div style="overflow-x:auto"><table><tr><th>#</th><th>Takım</th><th>Sonuç</th><th>A-Y</th>${mode==="daily"?"<th>Bütçe</th>":"<th>Oyun</th>"}<th>Genel</th></tr>${rows.map((r,i)=>`<tr class="${r.id===mine?"me":""}"><td>${i===0?"👑":i+1}</td><td>${esc(r.name)}${r.team?`<br><small class="mut">🏟️ ${esc(r.team)}</small>`:""}</td><td><b>${r.w}-${7-r.w}</b> <small class="mut">${esc(r.res||"")}</small></td><td>${r.gf}-${r.ga}</td><td>${mode==="daily"?r.spent+" M":(r.games||1)}</td><td>${r.ovr}</td></tr>`).join("")}</table></div>`
       : `<p class="mut">${day===today?"Bugün henüz kimse oynamadı. İlk sen ol!":"O gün kimse oynamamış."}</p>`;
   } catch(e){ $("rankbox").innerHTML = `<p class="mut">Sıralamaya şu an ulaşılamıyor. İnternet bağlantını kontrol et.</p>`; }
 }

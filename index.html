@@ -396,7 +396,7 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
   .grid.draft .drawbtns .btn{flex:none;width:100%;min-height:44px;font-size:14px;padding:8px 6px}
 }
 
-/* ===== büyüme paketi: meydan linki, seri, haftalık, profil, albüm, quiz, gol efekti, yayıncı ===== */
+/* ===== büyüme paketi: meydan linki, seri, haftalık, profil, albüm, quiz, gol efekti ===== */
 .chal{border:2px solid var(--gold);background:linear-gradient(90deg,#ffb7031a,transparent);margin:10px 0}
 .streak{display:inline-block;margin-top:6px;font:800 14px var(--cond);letter-spacing:.4px;color:#ff9f43}
 .streak.streak-cold{color:var(--mut);font-weight:600}
@@ -416,14 +416,6 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .golfx{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:800 72px var(--cond);letter-spacing:4px;pointer-events:none;animation:golfx 1.5s ease-out forwards;text-shadow:0 4px 18px #000}
 .golfx.golfx-me{color:var(--gold)}.golfx.golfx-op{color:#ffffffb0;font-size:48px}
 @keyframes golfx{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}15%{transform:translate(-50%,-50%) scale(1.25);opacity:1}70%{opacity:1}100%{transform:translate(-50%,-60%) scale(1);opacity:0}}
-.vnum{min-width:26px;height:26px;border-radius:3px;background:var(--gold);color:#1d1200;font:800 16px var(--cond);display:grid;place-items:center;flex:none}
-.vote{position:relative;overflow:hidden;background:#0d0216;border:1px solid var(--gold);border-radius:3px;padding:8px 10px;margin-bottom:8px;font:600 15px var(--cond);letter-spacing:.4px;text-transform:uppercase}
-.vote i{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);transition:width 1s linear}
-.vote.vote-end{border-color:var(--loss);color:#ff8fa3}
-body.yayinci{font-size:18px}
-body.yayinci .pl{font-size:18px;min-height:52px}
-body.yayinci .grid.draft .draw h2{font-size:28px}
-body.yayinci .events li{font-size:17px}
 #sndbtn{font-size:18px}
 </style>
 </head>
@@ -705,10 +697,6 @@ function renderStart(){
       <div class="row">
         <label class="toggle"><input type="checkbox" ${S.almanac?"checked":""} onchange="S.almanac=this.checked"> <b>Almanak modu</b> <span class="mut">· reytingler gizli, sadece isim ve mevki</span></label>
       </div>
-      <div class="row" style="margin-top:6px">
-        <label class="toggle"><input type="checkbox" ${streamer().on?"checked":""} onchange="setStreamer(this.checked)"> <b>📺 Yayıncı modu</b> <span class="mut">· büyük yazı, numaralı oyuncular, sohbet oylaması sayacı, klavyeden numarayla seçim</span></label>
-        ${streamer().on?`<span class="row" style="gap:6px">${[10,20,30,45].map(s=>`<button class="chip ${streamer().sec===s?"on":""}" onclick="setStreamer(null,${s})">${s} sn</button>`).join("")}</span>`:""}
-      </div>
       <div style="margin-top:20px" class="row">
         <button class="btn" onclick="startDraft()">${S.mode==="daily"?(daily?"Tekrar oyna (sayılmaz)":"Günün meydan okumasına başla"):"Kuraya başla"}</button>
       </div>
@@ -751,7 +739,7 @@ function roll(){
   }
   S.drawn.add(t.id); S.cur = t; S.rolls++; S.sel = null;
   updateForced();
-  renderDraft(); startVote();
+  renderDraft();
   try { if (window.innerWidth<=700) window.scrollTo({top:0,behavior:"smooth"}); } catch(e){}
 }
 const curSlots = () => S.phase==="bench" ? S.bench : S.slots;
@@ -827,7 +815,6 @@ function renderDraft(){
       </div>
       ${S.mode==="daily"?`<p>Bütçe: <span class="budget ${S.spent>DAILY_BUDGET?"over":""}">${S.spent} / ${DAILY_BUDGET} M</span> <span class="mut">· kalan ${DAILY_BUDGET-S.spent} M</span></p>`:""}
       ${bp&&S.lastBench?`<div class="tacnote good" style="margin-bottom:8px">✓ ${esc(S.lastBench)} yedek kulübesine eklendi</div>`:""}
-      <div id="votebar"></div>
       <div id="restartbox"></div>
       ${S.forced?`<div class="card hint"><b>Bu takımdan hiçbir oyuncu boş yerlerine uymuyor ve yeniden çekme hakkın bitti.</b> İstediğin oyuncuyu istediğin boş yere zorunlu koyabilirsin: oyuncu −${FORCED} olur, takım gücü −${TEAM_OFF} düşer.</div>`:""}
       ${free&&S.rerolls>0?`<div class="card hint">Bu takımda boş yerlerine konabilecek oyuncu yok. <b>Yeniden çek (${S.rerolls} hak).</b></div>`:""}
@@ -840,7 +827,7 @@ function renderDraft(){
           ${S.rerolls>0?`<div class="row" style="margin-top:8px"><button class="btn blink" onclick="reroll()">🎲 Yeniden çek (${S.rerolls} hak)</button></div>`:`<div style="margin-top:6px"><b>Yeniden çekme hakkın kalmadı.</b></div>`}</div>`}
       </div>`:""}
       <div class="plist">${t.players.map((p,i)=>`
-        <button class="pl ${S.sel===i?"sel":""} ${canPick(p)?(natOK(p)?"nat":"nearp"):""}" onclick="pick(${i})" ${canPick(p)?"":"disabled"}>${streamer().on?`<span class="vnum">${i+1}</span>`:""}
+        <button class="pl ${S.sel===i?"sel":""} ${canPick(p)?(natOK(p)?"nat":"nearp"):""}" onclick="pick(${i})" ${canPick(p)?"":"disabled"}>
           <span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span>
           <span>${esc(p.n)}${p.r>=LEGEND&&!S.almanac?'<span class="seal" title="Efsane">★</span>':""}</span>
           <span class="rt">${inSquad(p.n)?'<span class="tag in">Kadronda</span>':canPick(p)?(natOK(p)?'<span class="tag ok">✓</span>':`<span class="tag nr">−${S.forced?FORCED:OFFPOS}</span>`):""}<span class="rv ${tier(p.r)}">${showR(p.r)}</span>${S.mode==="daily"?`<span class="price">${price(p.r)} M</span>`:""}</span>
@@ -2074,27 +2061,8 @@ function paintSoundBtn(){
   if (!b || !b.tagName){ const nav=document.querySelector("header nav"); if(!nav || !nav.prepend) return; b=document.createElement("button"); b.id="sndbtn"; b.title="Stadyum sesi"; b.onclick=()=>{ store.set("sound", !soundOn()); ac(); paintSoundBtn(); }; nav.prepend(b); }
   b.textContent = soundOn() ? "🔊" : "🔇";
 }
-// ---------- yayıncı modu: büyük yazı, numaralı oyuncular, sohbet oylaması sayacı, klavye kısayolu ----------
-const streamer = () => store.get("streamer", {on:false, sec:20});
-function applyStreamerMode(){ try { document.body.classList.toggle("yayinci", streamer().on); } catch(e){} }
-function setStreamer(on, sec){ const s=streamer(); if (on!=null) s.on=on; if (sec) s.sec=sec; store.set("streamer", s); applyStreamerMode(); renderStart(); }
-let voteTimer = null, numBuf = "", numTO = null;
-function startVote(){
-  const s = streamer(); if (!s.on) return; clearInterval(voteTimer);
-  const el = $("votebar"); if (!el || !el.querySelector) return;
-  let left = s.sec; const paint = () => { el.innerHTML = left>0 ? `<div class="vote"><b>💬 SOHBET OYLAMASI</b> · numarayı yazın · <b>${left} sn</b><i style="width:${left/s.sec*100}%"></i></div>`
-    : `<div class="vote vote-end"><b>⏰ SÜRE DOLDU!</b> En çok yazılan numarayı seç (klavyeden numarayı da yazabilirsin)</div>`; };
-  paint(); voteTimer = setInterval(()=>{ left--; paint(); if (left<=0) clearInterval(voteTimer); }, 1000);
-}
-if (typeof document!=="undefined" && document.addEventListener) document.addEventListener("keydown", e => {
-  if (!streamer().on || !S.cur || !/^[0-9]$/.test(e.key) || ["INPUT","TEXTAREA"].includes(e.target.tagName)) return;
-  if ($("play").classList.contains("hidden") || !document.querySelector(".plist")) return;
-  numBuf += e.key; clearTimeout(numTO);
-  numTO = setTimeout(()=>{ const i = parseInt(numBuf,10)-1; numBuf=""; if (S.cur.players[i] && canPick(S.cur.players[i])) pick(i); }, 550);
-});
 // ---------- açılış ----------
 readChallengeFromUrl();
-applyStreamerMode();
 if (getTeam()) renderStart(); else renderNameScreen(false);
 updateHeaderName();
 paintSoundBtn();

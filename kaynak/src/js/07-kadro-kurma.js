@@ -34,7 +34,7 @@ function roll(){
   }
   S.drawn.add(t.id); S.cur = t; S.rolls++; S.sel = null;
   updateForced();
-  renderDraft(); startVote();
+  renderDraft();
   try { if (window.innerWidth<=700) window.scrollTo({top:0,behavior:"smooth"}); } catch(e){}
 }
 const curSlots = () => S.phase==="bench" ? S.bench : S.slots;
@@ -110,7 +110,6 @@ function renderDraft(){
       </div>
       ${S.mode==="daily"?`<p>Bütçe: <span class="budget ${S.spent>DAILY_BUDGET?"over":""}">${S.spent} / ${DAILY_BUDGET} M</span> <span class="mut">· kalan ${DAILY_BUDGET-S.spent} M</span></p>`:""}
       ${bp&&S.lastBench?`<div class="tacnote good" style="margin-bottom:8px">✓ ${esc(S.lastBench)} yedek kulübesine eklendi</div>`:""}
-      <div id="votebar"></div>
       <div id="restartbox"></div>
       ${S.forced?`<div class="card hint"><b>Bu takımdan hiçbir oyuncu boş yerlerine uymuyor ve yeniden çekme hakkın bitti.</b> İstediğin oyuncuyu istediğin boş yere zorunlu koyabilirsin: oyuncu −${FORCED} olur, takım gücü −${TEAM_OFF} düşer.</div>`:""}
       ${free&&S.rerolls>0?`<div class="card hint">Bu takımda boş yerlerine konabilecek oyuncu yok. <b>Yeniden çek (${S.rerolls} hak).</b></div>`:""}
@@ -123,7 +122,7 @@ function renderDraft(){
           ${S.rerolls>0?`<div class="row" style="margin-top:8px"><button class="btn blink" onclick="reroll()">🎲 Yeniden çek (${S.rerolls} hak)</button></div>`:`<div style="margin-top:6px"><b>Yeniden çekme hakkın kalmadı.</b></div>`}</div>`}
       </div>`:""}
       <div class="plist">${t.players.map((p,i)=>`
-        <button class="pl ${S.sel===i?"sel":""} ${canPick(p)?(natOK(p)?"nat":"nearp"):""}" onclick="pick(${i})" ${canPick(p)?"":"disabled"}>${streamer().on?`<span class="vnum">${i+1}</span>`:""}
+        <button class="pl ${S.sel===i?"sel":""} ${canPick(p)?(natOK(p)?"nat":"nearp"):""}" onclick="pick(${i})" ${canPick(p)?"":"disabled"}>
           <span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span>
           <span>${esc(p.n)}${p.r>=LEGEND&&!S.almanac?'<span class="seal" title="Efsane">★</span>':""}</span>
           <span class="rt">${inSquad(p.n)?'<span class="tag in">Kadronda</span>':canPick(p)?(natOK(p)?'<span class="tag ok">✓</span>':`<span class="tag nr">−${S.forced?FORCED:OFFPOS}</span>`):""}<span class="rv ${tier(p.r)}">${showR(p.r)}</span>${S.mode==="daily"?`<span class="price">${price(p.r)} M</span>`:""}</span>

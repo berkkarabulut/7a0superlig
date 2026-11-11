@@ -24,10 +24,6 @@ function renderStart(){
       <div class="row">
         <label class="toggle"><input type="checkbox" ${S.almanac?"checked":""} onchange="S.almanac=this.checked"> <b>Almanak modu</b> <span class="mut">· reytingler gizli, sadece isim ve mevki</span></label>
       </div>
-      <div class="row" style="margin-top:6px">
-        <label class="toggle"><input type="checkbox" ${streamer().on?"checked":""} onchange="setStreamer(this.checked)"> <b>📺 Yayıncı modu</b> <span class="mut">· büyük yazı, numaralı oyuncular, sohbet oylaması sayacı, klavyeden numarayla seçim</span></label>
-        ${streamer().on?`<span class="row" style="gap:6px">${[10,20,30,45].map(s=>`<button class="chip ${streamer().sec===s?"on":""}" onclick="setStreamer(null,${s})">${s} sn</button>`).join("")}</span>`:""}
-      </div>
       <div style="margin-top:20px" class="row">
         <button class="btn" onclick="startDraft()">${S.mode==="daily"?(daily?"Tekrar oyna (sayılmaz)":"Günün meydan okumasına başla"):"Kuraya başla"}</button>
       </div>

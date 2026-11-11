@@ -1,6 +1,5 @@
 // ---------- açılış ----------
 readChallengeFromUrl();
-applyStreamerMode();
 if (getTeam()) renderStart(); else renderNameScreen(false);
 updateHeaderName();
 paintSoundBtn();

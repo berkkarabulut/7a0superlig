@@ -127,7 +127,7 @@ def run(name, vp, b):
     step("07-mac", s7)
     # 8) penaltı seçimi (eleme maçını zorla berabere bitir)
     def s8():
-        pg.evaluate("""()=>{ const T=S.T; T.i=3; setupR16(); T.prepFor=-1; preMatch(); S.speed='Anında';
+        pg.evaluate("""()=>{ const T=S.T; T.i=3; setupR16(); T.prepFor=-1; preMatch(); if (mustFix(T)) autoFixMiss(); document.getElementById('missmodal')?.remove(); S.speed='Anında';
           const mk=window.makeMatch; window.makeMatch=(...a)=>{ const M=mk(...a); const run=M.run; M.run=(m0,m1,mu)=>{ run(m0,m1,mu); M.g[0]=M.g[1]=0; for(let i=M.ev.length-1;i>=0;i--) if(M.ev[i].type==='goal') M.ev.splice(i,1); }; return M; };
           runMatch(); }""")
         pg.wait_for_selector(".penpick", timeout=40000); time.sleep(0.4)
@@ -167,10 +167,6 @@ def run(name, vp, b):
         for i in range(5):
             click(".qopt"); chk(f"22b-quiz-{i}", ".quiz .btn.gold"); click(".quiz .btn.gold")
         chk("23-quiz-sonuc", ".result .btn.gold", ".result .btn.ghost")
-        pg.evaluate("()=>setStreamer(true,10)"); time.sleep(0.3)
-        pg.evaluate("()=>{ S.challenge=null; startDraft(); }"); time.sleep(0.4)
-        chk("24-yayinci", ".vnum", "#votebar .vote")
-        pg.evaluate("()=>setStreamer(false)")
     step("11-buyume", s11)
     def s12():
         pg.goto("file://"+HTML+"?m=k3x9z&d=4-4-2&s=5-2&n=TESTCI"); time.sleep(1)

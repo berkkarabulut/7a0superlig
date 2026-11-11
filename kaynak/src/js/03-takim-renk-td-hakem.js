@@ -1,6 +1,6 @@
 const SPEEDS = { "Yavaş": 220, "Normal": 140, "Hızlı": 50, "Anında": 0 };
 const IS_WEB = typeof location!=="undefined" && location.protocol.startsWith("http") && !/claudeusercontent|claude\.ai/.test(location.host);
-const SITE = IS_WEB ? (location.host+location.pathname).replace(/\/(index\.html)?$/,"") : "berkkarabulut.github.io/7a0superlig";
+const SITE = IS_WEB ? (location.host+location.pathname).replace(/\/(index\.html)?$/,"") : "7a0superlig.com";
 const SITE_URL = "https://"+SITE+"/";
 const COLORS = { "Galatasaray":["#a90432","#fdb912"], "Fenerbahçe":["#163962","#ffed00"], "Beşiktaş":["#111111","#ffffff"], "Trabzonspor":["#7b1e3a","#6cace4"],
   "Başakşehir":["#ed6b1f","#1a2b58"], "Samsunspor":["#e30613","#ffffff"], "Bursaspor":["#00873e","#ffffff"], "Konyaspor":["#00843d","#ffffff"], "Adanaspor":["#f58220","#ffffff"],

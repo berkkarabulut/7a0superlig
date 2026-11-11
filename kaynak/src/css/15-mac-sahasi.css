@@ -9,7 +9,7 @@
 .pitch.mp .mp-o .nm{background:#3a0d0dd9}
 .pitch.mp .mp-o{opacity:.95}
 .mp-lbl{position:absolute;left:6px;font:800 12px var(--cond);letter-spacing:.6px;text-transform:uppercase;background:#0d0216cc;padding:2px 7px;border-radius:3px;z-index:3}
-.mp-lt{top:6px;max-width:38%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mp-lb{bottom:6px;color:var(--gold)}
+.mp-lt{top:6px;max-width:32%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mp-lb{bottom:6px;color:var(--gold)}
 .mp-edit .slot.full{cursor:grab}
 
 @media(max-width:900px){
@@ -18,4 +18,16 @@
   .pitch.mp .slot{left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:76px}
   .pitch.mp .shirt{width:34px;height:32px;margin-bottom:11px}
   .pitch.mp .nm{font-size:9.5px;max-width:76px}
+}
+
+/* masaüstü: saha solda büyük, skor/anlatım sağda */
+@media(min-width:901px){
+  .mgrid{grid-template-columns:minmax(0,1fr) 460px}
+  .mgrid>.mside{order:-1}
+  .mgrid .pitch.mp{aspect-ratio:4/5;width:100%}
+  .mgrid .pitch.mp .slot{width:110px}
+  .mgrid .pitch.mp .shirt{width:50px;height:48px;margin-bottom:13px}
+  .mgrid .pitch.mp .shirt .rb{min-width:26px;height:20px;font-size:14px;line-height:20px;bottom:-11px}
+  .mgrid .pitch.mp .nm{font-size:12px;max-width:110px}
+  .mgrid .mp-lbl{font-size:14px}
 }

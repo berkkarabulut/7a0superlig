@@ -49,7 +49,7 @@ function oppXI(o){
   const pl=[...o.pl].sort((a,b)=>b.r-a.r), take=(g,n)=>pl.filter(p=>p.pos===g).slice(0,n);
   let xi=[...take("GK",1),...take("DF",4),...take("MF",4),...take("FW",2)];
   for (const p of pl){ if (xi.length>=11) break; if (!xi.includes(p) && p.pos!=="GK") xi.push(p); }
-  const Y={GK:6,DF:17,MF:29,FW:40}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
+  const Y={GK:7,DF:18,MF:30,FW:41}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
   return Object.entries(lines).flatMap(([g,ps])=>ps.map((p,i)=>({p, x: ps.length===1?50:12+i*76/(ps.length-1), y:Y[g]})));
 }
 // iki takım tek sahada: rakip üst yarı, sen alt yarı. edit=true iken (devre arası) senin oyuncuların sürüklenebilir.
@@ -57,7 +57,7 @@ function matchPitchHTML(M,T,o,ht){
   const sel = ht && ht.sel, selP = ht && ht.selP;
   const mine = new Set(T.xi.map(s=>kitC(s.p.team)[0])), oc0 = kitC(o.t.team), oc = mine.has(oc0[0]) ? [oc0[1], oc0[0]] : oc0; // aynı renkse rakip deplasman formasıyla
   const opp = oppXI(o).map(({p,x,y})=>`<div class="slot full mp-o" style="--x:${x};--y:${y}">${SHIRT(oc, p.r)}<div class="nm">${esc(p.n)}</div></div>`).join("");
-  const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = s.pos==="GK" ? 94 : 54+Math.max(0,Math.min(64,s.y-13))*30/64;
+  const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = s.pos==="GK" ? 92 : 54+Math.max(0,Math.min(64,s.y-13))*28/64;
     if (!p) return `<div class="slot mp-m" style="--x:${s.x};--y:${y}"><div class="dot">🟥</div></div>`;
     const pen=penOf(p,s.pos), subIn=M.subs.some(x=>x.in.n===p.n), act = ht ? `data-drag="x:${k}" data-drop="x:${k}"` : "";
     let prev=""; if (selP && sel && sel[0]==="b"){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
@@ -85,7 +85,7 @@ async function runMatchInner(rid){
   const M = makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
   $("play").innerHTML = `
     ${pathHTML()}
-    <div class="grid" id="mgrid">
+    <div class="grid mgrid" id="mgrid">
       <div>
         <div class="card">
           <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]} · Hakem: ${esc(T.ref)}</div>

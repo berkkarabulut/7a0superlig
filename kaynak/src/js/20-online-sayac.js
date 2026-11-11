@@ -1,4 +1,6 @@
 // ---------- anlık online sayacı (Firebase Realtime Database) ----------
+// Üstteki "N ONLINE" rozeti geçici olarak gizli. Geri getirmek için true yap. (Sayım arka planda devam ediyor.)
+const SHOW_ONLINE = false;
 const FB_CONFIG = {
   apiKey: "AIzaSyAyukQnm1cLDRt9uq-lD4kXIv2YuKBgDH4",
   authDomain: "superlig70-5e30a.firebaseapp.com",
@@ -28,7 +30,7 @@ async function startPresence(){
       const me = list.push();
       me.onDisconnect().remove().then(()=> me.set({ t: TS() }));
     });
-    list.on("value", snap => { $("onlineN").textContent = Math.max(1, snap.numChildren()); $("online").classList.remove("hidden"); },
+    list.on("value", snap => { $("onlineN").textContent = Math.max(1, snap.numChildren()); if (SHOW_ONLINE) $("online").classList.remove("hidden"); },
       () => $("online").classList.add("hidden"));
     watchLeader();
   } catch(e) { /* sunucu yoksa oyun normal çalışır */ }

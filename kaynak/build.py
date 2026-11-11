@@ -101,6 +101,10 @@ def main():
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"✅ derlendi: {os.path.relpath(out)}  ({len(css_files)} css, {len(js_files)} js, {len(html)//1024} KB)")
+    if "--cikti" not in args:
+        import subprocess
+        r = subprocess.run(["node", os.path.join(HERE, "sayfalar.js")])
+        if r.returncode: print("❌ kadro sayfaları üretilemedi"); return 1
     return 0
 
 

@@ -202,6 +202,10 @@ def run(name, vp, b):
         click("#setbox .chip[onclick=\"setTheme('tv')\"]"); pg.evaluate("()=>closeSettings()")
         if pg.locator("#play .chip[onclick^=setTheme]").count(): fails.append(f"[{name}] tema seçimi hâlâ ana ekranda")
     step("14-ayarlar", s14)
+    def s15():
+        chk("29-beta", "#betabtn"); click("#betabtn"); time.sleep(0.3)
+        chk("30-beta-pencere", "#fb_msg", "#fb_send"); pg.evaluate("()=>closeBeta()")
+    step("15-beta", s15)
 
     if os.environ.get("HARVEST"):
         try:

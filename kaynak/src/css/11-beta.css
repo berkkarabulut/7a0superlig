@@ -1,0 +1,4 @@
+
+/* ===== beta etiketi ===== */
+.betatag{display:inline-block;vertical-align:middle;margin-left:8px;padding:2px 7px;border-radius:3px;border:1px solid var(--gold);background:#ffb7031f;color:var(--gold);font:800 12px var(--cond);letter-spacing:1px;cursor:pointer;line-height:1.4}
+.betatag:hover{background:var(--gold);color:#1d1200}

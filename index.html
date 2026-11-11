@@ -427,11 +427,15 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 header{position:relative}
 .setbtn{white-space:nowrap}
 @media(max-width:700px){ .setbtn{position:absolute;right:12px;top:10px;font-size:14px!important;padding:6px 10px!important;border:1px solid var(--line)!important;border-radius:3px} }
+
+/* ===== beta etiketi ===== */
+.betatag{display:inline-block;vertical-align:middle;margin-left:8px;padding:2px 7px;border-radius:3px;border:1px solid var(--gold);background:#ffb7031f;color:var(--gold);font:800 12px var(--cond);letter-spacing:1px;cursor:pointer;line-height:1.4}
+.betatag:hover{background:var(--gold);color:#1d1200}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">Süper Lig <b>7-0</b> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> online</span> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
+  <div class="logo">Süper Lig <b>7-0</b> <button id="betabtn" class="betatag" onclick="openBeta()" title="Deneme sürümü · geri bildirim">BETA</button> <span id="online" class="online hidden" title="Şu an sitede olanlar"><i></i><span id="onlineN">–</span> online</span> <button id="leader" class="leader hidden" onclick="show('rank')"></button></div>
   <nav>
     <button id="myteam" class="myteam hidden" onclick="show('play');renderNameScreen(true)" title="Takım adını değiştir"></button>
     <button id="n-play" class="on" onclick="show('play')">Oyna</button>
@@ -2135,7 +2139,7 @@ const DICT_ROWS = [
  ["Günün Meydan Okuması","Daily Challenge","Reto del día"],["Herkese bugün aynı takımlar ve 70 M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.","Everyone gets the same teams today and a 70 M budget. Every player has a price. Only your first game of the day counts.","Hoy todos tienen los mismos equipos y 70 M de presupuesto. Cada jugador tiene un precio. Solo cuenta tu primera partida del día."],
  ["Bugünkü sonucun:","Today's result:","Tu resultado de hoy:"],["Bugünkü skorun:","Today's score:","Tu puntuación de hoy:"],["Bu kadro hangi sezon?","Which season is this squad?","¿De qué temporada es esta plantilla?"],
  ["Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.","Daily quiz: see the XI and guess the team and season. 5 questions.","Quiz diario: mira el once y adivina equipo y temporada. 5 preguntas."],
- ["Diziliş","Formation","Formación"],["Oyun tarzı","Playing style","Estilo de juego"],["Tema","Theme","Tema"],["Ayarlar","Settings","Ajustes"],["Açık","On","Activado"],["Kapalı","Off","Desactivado"],["Almanak modu","Almanac mode","Modo almanaque"],["reytingler gizli, sadece isim ve mevki","ratings hidden, names and positions only","valoraciones ocultas, solo nombres y posiciones"],
+ ["Diziliş","Formation","Formación"],["Oyun tarzı","Playing style","Estilo de juego"],["Tema","Theme","Tema"],["Ayarlar","Settings","Ajustes"],["Beta sürüm","Beta version","Versión beta"],["Site deneme sürümünde. Kadroları, reytingleri ve oyunu her gün geliştiriyoruz, ufak tefek hatalar olabilir.","The site is in beta. We improve the squads, ratings and game every day, so you may spot small bugs.","La web está en beta. Mejoramos plantillas, valoraciones y el juego cada día, así que puede haber pequeños fallos."],["Bir hata mı gördün, bir fikrin mi var? Yaz, okuyup düzeltelim.","Spotted a bug or have an idea? Tell us and we'll fix it.","¿Viste un fallo o tienes una idea? Escríbenos y lo arreglamos."],["Hata ya da önerin…","Your bug report or idea…","Tu fallo o sugerencia…"],["Birkaç kelime yaz.","Write a few words.","Escribe unas palabras."],["Teşekkürler! Mesajın ulaştı ✓","Thanks! Your message was received ✓","¡Gracias! Recibimos tu mensaje ✓"],["Deneme sürümü · geri bildirim","Beta · send feedback","Beta · envía tu opinión"],["Açık","On","Activado"],["Kapalı","Off","Desactivado"],["Almanak modu","Almanac mode","Modo almanaque"],["reytingler gizli, sadece isim ve mevki","ratings hidden, names and positions only","valoraciones ocultas, solo nombres y posiciones"],
  ["Kuraya başla","Start the draw","Empezar el sorteo"],["Günün meydan okumasına başla","Start the daily challenge","Empezar el reto del día"],["Tekrar oyna (sayılmaz)","Play again (won't count)","Jugar otra vez (no cuenta)"],
  ["TV Yayını","TV Broadcast","Retransmisión TV"],["Klasik Yeşil","Classic Green","Verde clásico"],["Gece Mavisi","Midnight Blue","Azul noche"],
  ["Seri başlat: her gün meydan okumayı oyna","Start a streak: play the challenge every day","Empieza una racha: juega el reto cada día"],["bugün oynamazsan bozulur!","play today or you'll lose it!","¡juega hoy o la perderás!"],
@@ -2326,7 +2330,7 @@ const RX = [
  [/^11'im: (.+)$/, m => (LI===0?"My XI: ":"Mi once: ")+m[1]],
 ];
 // "kenar" sembollerini ayırıp çekirdeği çevir
-const EDGE = /^([⚙🔊🔇🌐⚗\s ·•✕↺▶✓⚠✅❌⚽🔁🟥🟨🚑📋🎲🧠⚔️🔥📒🗓️🎮👑🏅📸📤⬇️🧘🤝☝️🎯⚡🏹🪽🚀🚌⚖️🌙🟩📺🎱🥅🗣️🏁🟢⏸️⏱️💔🚩➕📲️‍]*)([\s\S]*?)([\s ▶✓⚠…️]*)$/u;
+const EDGE = /^([🧪⚙🔊🔇🌐⚗\s ·•✕↺▶✓⚠✅❌⚽🔁🟥🟨🚑📋🎲🧠⚔️🔥📒🗓️🎮👑🏅📸📤⬇️🧘🤝☝️🎯⚡🏹🪽🚀🚌⚖️🌙🟩📺🎱🥅🗣️🏁🟢⏸️⏱️💔🚩➕📲️‍]*)([\s\S]*?)([\s ▶✓⚠…️]*)$/u;
 function tcore(s){
   if (!s) return s;
   if (DICT[s]) return DICT[s][LI];
@@ -2380,6 +2384,29 @@ function openSettings(){
   document.body.appendChild(d);
 }
 function closeSettings(){ document.getElementById("setbox")?.remove(); }
+// ---------- BETA etiketi ve geri bildirim ----------
+function openBeta(){
+  if (typeof document==="undefined" || !document.createElement) return;
+  document.getElementById("betabox")?.remove();
+  const d = document.createElement("div"); d.id="betabox"; d.className="modal";
+  d.innerHTML = `<div class="mbox"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🧪 Beta sürüm</h3><button class="chip" onclick="closeBeta()">✕</button></div>
+    <p>Site deneme sürümünde. Kadroları, reytingleri ve oyunu her gün geliştiriyoruz, ufak tefek hatalar olabilir.</p>
+    <p class="mut">Bir hata mı gördün, bir fikrin mi var? Yaz, okuyup düzeltelim.</p>
+    <textarea id="fb_msg" class="inp" rows="4" maxlength="300" placeholder="Hata ya da önerin…"></textarea>
+    <div class="row" style="margin-top:10px"><button class="btn" id="fb_send" onclick="sendBeta()">Gönder</button></div>
+    <p class="mut" id="fb_info" style="font-size:13px;margin:8px 0 0"></p></div>`;
+  d.addEventListener("click", e=>{ if(e.target===d) closeBeta(); });
+  document.body.appendChild(d);
+}
+function closeBeta(){ document.getElementById("betabox")?.remove(); }
+async function sendBeta(){
+  const msg = ($("fb_msg").value||"").trim().slice(0,300), info=$("fb_info"), btn=$("fb_send");
+  if (msg.length<3){ info.textContent = L("Birkaç kelime yaz."); return; }
+  btn.disabled = true; info.textContent = L("Gönderiliyor…");
+  try { const db = await fb(); await db.ref("reports").push({season:"-", team:"-", player:"Geri bildirim", type:"Öneri / geri bildirim", msg, by: myName(), lang: LANG, t: TS()});
+    info.textContent = L("Teşekkürler! Mesajın ulaştı ✓"); setTimeout(closeBeta, 1400); }
+  catch(e){ info.textContent = L("Gönderilemedi, internet bağlantını kontrol edip tekrar dene."); btn.disabled=false; }
+}
 // ---------- açılış ----------
 applyTheme();
 applyI18nData();

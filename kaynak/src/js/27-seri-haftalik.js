@@ -17,7 +17,7 @@ function weekDays(){ const d=new Date(), wd=(d.getDay()+6)%7; return [...Array(w
 async function weekTable(){
   const db = await fb(), days = weekDays(), agg = {};
   const snaps = await Promise.all(days.map(d => db.ref("daily/"+d).once("value")));
-  snaps.forEach((s,i) => Object.values(s.val()||{}).forEach(r => { const k=nameKey(r.name||"?");
+  snaps.forEach((s,i) => Object.values(s.val()||{}).forEach(r => { if (badName(r.name||"")) return; const k=nameKey(r.name||"?");
     const a = agg[k] || (agg[k] = {name:r.name, w:0, gf:0, ga:0, n:0, days:{}});
     if (a.days[days[i]]) return; a.days[days[i]]=1; a.w+=r.w||0; a.gf+=r.gf||0; a.ga+=r.ga||0; a.n++; }));
   return Object.values(agg).sort((a,b)=>b.w-a.w || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf || b.n-a.n);

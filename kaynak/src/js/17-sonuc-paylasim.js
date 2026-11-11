@@ -23,7 +23,7 @@ function finish(){
         : `Bugünkü en iyin hâlâ <b>${r.old.w}-${7-r.old.w}</b>, tabloda <b style="color:var(--gold)">${pos}. sıradasın</b>.`) + ` <a href="#" onclick="S.rankMode='${S.mode==="real"?"real":"solo"}';show('rank');return false">Tabloyu gör</a>`; } catch(e){} });
   if (submitP) submitP.then(async id => { const el=$("dailyrank"); if(!el) return;
     if (!id){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
-    try { const db=await fb(), s=await db.ref("daily/"+todayKey()).once("value"); const rows=Object.entries(s.val()||{}).map(([k,v])=>({id:k,...v})).sort(rankSort);
+    try { const db=await fb(), s=await db.ref("daily/"+todayKey()).once("value"); const rows=rowsOf(s.val());
       const pos=rows.findIndex(r=>r.id===id)+1; el.innerHTML=`🏅 Meydan okuma sıralamasında <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım). <a href="#" onclick="show('rank');return false">Sıralamayı gör</a>`; } catch(e){} });
   const hist = store.get("hist", []); hist.unshift({d:Date.now(), title:recStr()+" · "+title, mode:S.mode}); store.set("hist", hist.slice(0,50));
   $("play").innerHTML = `${pathHTML()}

@@ -40,7 +40,7 @@ function renderPre(){
   <div class="grid">
     <div>
       <div class="card">
-        <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px">${STAGES[i].toUpperCase()} · MAÇ ÖNÜ</div>
+        <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${STAGES[i]} · Maç önü</div>
         <div class="score pre"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
           <div><div class="big vs">VS</div><div class="clock">⚖️ ${esc(T.ref)}</div></div>
           <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[os].e} ${esc(os)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>

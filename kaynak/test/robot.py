@@ -48,7 +48,9 @@ def run(name, vp, b):
     errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto("file://" + HTML); time.sleep(0.8)
-    pg.evaluate("()=>localStorage.clear()"); pg.reload(); time.sleep(1)
+    pg.evaluate("()=>localStorage.clear()")
+    if os.environ.get("DIL"): pg.evaluate("(d)=>localStorage.setItem('sl70:dil', JSON.stringify(d))", os.environ["DIL"])
+    pg.reload(); time.sleep(1)
 
     def chk(screen, *sels):
         for s in sels:
@@ -128,7 +130,7 @@ def run(name, vp, b):
         if pg.locator("#htbox").count() == 0: fails.append(f"[{name}] devre arası: değişiklikten sonra panel kapandı")
         chk("09b-devre-arasi-2-degisiklik", "#htbox .btn.gold")
         click("#htbox .btn.gold")
-        pg.wait_for_function("()=>/Sonraki maç|Sonucu gör/.test(document.getElementById('after')?.textContent||'')", timeout=40000)
+        pg.wait_for_function("()=>!!document.querySelector('#after .btn[onclick=\"finish()\"], #after .btn[onclick=\"nextStep()\"]')", timeout=40000)
         chk("10-mac-sonu", "#after .btn")
     step("07-mac", s7)
     # 8) penaltı seçimi (eleme maçını zorla berabere bitir)
@@ -140,7 +142,7 @@ def run(name, vp, b):
         chk("11-penalti", ".penpick .lrow", ".penpick .btn.ghost")
         click(".penpick .btn.ghost")
         chk("11b-penalti-sirali", ".penpick .btn.gold"); click(".penpick .btn.gold")
-        pg.wait_for_function("()=>/Sonraki maç|Sonucu gör/.test(document.getElementById('after')?.textContent||'')", timeout=40000)
+        pg.wait_for_function("()=>!!document.querySelector('#after .btn[onclick=\"finish()\"], #after .btn[onclick=\"nextStep()\"]')", timeout=40000)
     step("08-penalti", s8)
     # 9) sonuç + paylaş
     def s9():
@@ -154,7 +156,7 @@ def run(name, vp, b):
     def s10():
         click("#n-squads"); time.sleep(0.4)
         chk("14-kadrolar", "#squads .chip", "#squads .repbtn")
-        pg.evaluate("()=>{ const b=[...document.querySelectorAll('#squads .chip')].find(x=>x.textContent.includes('Bildir')); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
+        pg.evaluate("()=>{ const b=document.querySelector('#squads .chip[onclick^=openMultiReport]'); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
         chk("15-bildir", "#repbox .mr_cb", "#mr_send"); pg.evaluate("()=>closeReport()")
         click("#n-rank"); time.sleep(0.4); chk("16-siralama", "#rank")
         click("#n-ach"); time.sleep(0.3); chk("17-basarimlar", "#ach .card")
@@ -168,7 +170,7 @@ def run(name, vp, b):
         if pg.locator("#sndbtn").count()==0: fails.append(f"[{name}] ses butonu yok")
         else: chk("21-ses-butonu", "#sndbtn")
         click("#n-play"); pg.evaluate("()=>renderStart()"); time.sleep(0.3)
-        pg.evaluate("()=>{ const b=[...document.querySelectorAll('.mode')].find(x=>x.textContent.includes('hangi sezon')); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
+        pg.evaluate("()=>{ const b=document.querySelector('.mode[onclick^=startQuiz]'); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
         chk("22-quiz", ".qopt", ".qpitch", ".exitc")
         for i in range(5):
             click(".qopt"); chk(f"22b-quiz-{i}", ".quiz .btn.gold"); click(".quiz .btn.gold")

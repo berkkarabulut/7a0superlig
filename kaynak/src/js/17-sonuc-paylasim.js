@@ -52,7 +52,8 @@ function record(){ const w=S.T.res.filter(r=>r.res==="W").length; return [w,7-w]
 const recStr = () => record().join("-");
 function resultTitle(){ const T=S.T, champ=!T.out, [w]=record();
   return w===7&&T.ga===0 ? "Efsane! Kalesini gole kapatarak 7-0" : w===7 ? "Efsane! 7'de 7" : champ&&T.L===0 ? "Yenilmez şampiyon" : champ ? "Şampiyon" : T.out; }
-function shareText(){
+function shareText(){ return Lines(shareTextTr()); }
+function shareTextTr(){
   const T=S.T, line = T.res.map(r=>r.res==="W"?"🟩":r.res==="D"?"🟨":"🟥").join("") + "⬛".repeat(7-T.res.length);
   return `⚽ Süper Lig 7-0 · ${myName()}: ${recStr()}\n${resultTitle()}\n${line}\n${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}\n${S.form} · ${S.style}${S.almanac?" · Almanak":""}${S.mode==="daily"?` · Günün meydan okuması (${todayKey()})`:""}\n11'im: ${S.slots.map(s=>short(s.p.n)).join(", ")}\n${SITE}`;
 }

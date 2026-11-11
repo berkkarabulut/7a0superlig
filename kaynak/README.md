@@ -32,3 +32,8 @@ Kurallar:
 - `og.png` · WhatsApp/Instagram link önizleme görseli (1200x630)
 - `icon-180/192/512.png`, `manifest.json`, `sw.js` · ana ekrana ekleme (PWA); service worker önce internetten çeker, yoksa önbellekten açar
 - İstatistik sayfası: siteyi `?istatistik` ile aç (ör. `.../7a0superlig/?istatistik`). Veriler Firebase `stats` altında; kurallar `firebase-rules.json`'da.
+
+## Dil ve tema
+- Kod Türkçe yazılır. İngilizce/İspanyolca seçilince `src/js/34-dil.js` ekrandaki yazıları sözlükle (DICT_ROWS + RX kalıpları) çevirir; maç anlatımı `TXT_I18N` ile doğrudan seçilen dilde üretilir.
+- Yeni bir Türkçe yazı eklersen `DICT_ROWS`'a İngilizce ve İspanyolcasını da ekle. Kontrol: `DIL=en HARVEST=/tmp/h.txt python3 test/robot.py; python3 test/ceviri-kontrol.py /tmp/h.txt` çevrilmemiş satırları listeler.
+- Temalar `src/js/33-temalar.js`: TV yayını renkleri çalışma anında diğer paletlere eşlenir.

@@ -35,7 +35,7 @@ function quizEnd(){
   const Q=S.Q, marks = Q.qs.map((q,i)=>q.opts[Q.ans[i]]===q.t), score = marks.filter(Boolean).length;
   const prev = store.get("quiz:"+Q.day, null); if (!Q.practice && !prev) store.set("quiz:"+Q.day, {score, marks});
   const line = marks.map(m=>m?"🟩":"🟥").join("");
-  S.quizShare = `🧠 Süper Lig 7-0 · Bu kadro hangi sezon?\n${Q.practice?"Pratik":todayKey()}: ${score}/${QN} ${line}\n${SITE}`;
+  S.quizShare = Lines(`🧠 Süper Lig 7-0 · Bu kadro hangi sezon?\n${Q.practice?"Pratik":todayKey()}: ${score}/${QN} ${line}\n${SITE}`);
   $("play").innerHTML = `<div class="card result"><div class="rec ${score===QN?"gold":score>=3?"W":"L"}">${score}/${QN}</div><div style="font-size:28px">${line}</div>
     <p>${score===QN?"Ansiklopedi gibisin! 🧠":score>=3?"Fena değil, futbolu biliyorsun.":"Bir daha dene, kadroları Kadrolar sekmesinden çalışabilirsin 😄"}</p>
     ${!Q.practice&&prev?`<p class="mut">Bugünkü ilk sonucun ${prev.score}/${QN} olarak kaldı. Yarın yeni sorular gelecek.</p>`:!Q.practice?`<p class="mut">Yarın yeni sorular gelecek.</p>`:""}

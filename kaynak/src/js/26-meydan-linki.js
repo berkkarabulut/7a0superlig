@@ -29,7 +29,7 @@ function challengeLink(){
   return `${base}?m=${(S.seed>>>0).toString(36)}&d=${encodeURIComponent(S.form)}&s=${recStr()}&n=${encodeURIComponent(myName())}`;
 }
 async function shareChallenge(){
-  const url = challengeLink(), txt = `⚔️ ${myName()} sana Süper Lig 7-0'da meydan okuyor! Ben ${recStr()} yaptım, aynı kurayla sen kaç yaparsın?`;
+  const url = challengeLink(), txt = LANG==="tr" ? `⚔️ ${myName()} sana Süper Lig 7-0'da meydan okuyor! Ben ${recStr()} yaptım, aynı kurayla sen kaç yaparsın?` : LANG==="en" ? `⚔️ ${myName()} challenges you on Süper Lig 7-0! I went ${recStr()}, what can you do with the same draw?` : `⚔️ ¡${myName()} te reta en Süper Lig 7-0! Yo hice ${recStr()}, ¿cuánto haces tú con el mismo sorteo?`;
   try { if (navigator.share){ await navigator.share({title:"Süper Lig 7-0 meydan okuma", text:txt, url}); return; } } catch(e){ if (e && e.name==="AbortError") return; }
   const el = $("chalout"); if (!el) return;
   el.innerHTML = `<textarea class="inp" rows="3" readonly onclick="this.select()">${esc(txt+"\n"+url)}</textarea>`;

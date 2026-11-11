@@ -194,7 +194,9 @@ def run(name, vp, b):
         chk("26c-ana-sayfa", ".modes .mode")
     step("13-cikis", s13)
     def s14():
-        chk("27-ayarlar-butonu", "#n-settings"); click("#n-settings"); time.sleep(0.3)
+        pg.evaluate("()=>{ const o=$('online'); o.classList.remove('hidden'); $('onlineN').textContent='12'; const l=$('leader'); l.classList.remove('hidden'); l.innerHTML='👑 <span>Tek:</span> ROBOT FC <b>7-0</b>'; }"); time.sleep(0.2)
+        sb = ".setmob" if name=="telefon" else "#n-settings"
+        chk("27-ayarlar-butonu", sb, "#betabtn"); click(sb); time.sleep(0.3)
         chk("28-ayarlar", "#setbox .chip[onclick^=setLang]", "#setbox .chip[onclick^=setTheme]", "#setbox .chip[onclick*=sound]")
         click("#setbox .chip[onclick=\"setTheme('gece')\"]"); time.sleep(0.3)
         if pg.evaluate("()=>curTheme()") != "gece": fails.append(f"[{name}] ayarlar: tema değişmedi")

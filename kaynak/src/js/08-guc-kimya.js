@@ -46,6 +46,7 @@ function statsHTML(){
     ${(()=>{ const c=chemistry(pl); return c.parts.length?`<div class="chemlist">⚗️ Kimya${c.total>=5?" (en fazla +5)":""}: ${c.parts.map(esc).join(" · ")}</div>`:`<div class="chemlist mut">⚗️ Kimya için aynı kulüpten 3+ oyuncu ya da efsane ikililer topla.</div>`; })()}`;
 }
 function renderReady(){
+  S.phase = "ready"; S.sel = null;
   $("play").innerHTML = `
   <div class="grid">
     <div>${S.mode==="real"?realFormHTML():""}<h1>11'in hazır.</h1>
@@ -57,7 +58,7 @@ function renderReady(){
       <div class="row" style="margin-top:18px"><button class="btn" onclick="startTournament()">Turnuvaya başla</button>
       <button class="btn ghost" onclick="${S.mode==='real'?'renderRealPicker()':'renderStart()'}">${S.mode==='real'?'Başka takım seç':'Baştan kur'}</button></div>
     </div>
-    <div class="side">${pitchHTML()}${benchHTML()}${statsHTML()}</div>
+    <div class="side rd-side"><p class="mut rd-hint">✋ Değişiklik için bir oyuncuya, sonra yerine geçeceği oyuncuya dokun.</p>${pitchHTML()}${benchHTML()}${statsHTML()}</div>
   </div>`;
 }
 

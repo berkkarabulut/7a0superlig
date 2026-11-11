@@ -474,6 +474,17 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .rl-rk{font-weight:800;font-size:13px;padding:1px 7px;border-radius:3px;background:#ffffff18}
 .rl-rk.rk1{background:var(--gold);color:#1d1200}
 .rl-info{margin-bottom:14px;border-left:4px solid var(--gold)}
+
+/* hazır ekranında dokun-değiştir */
+.rd-hint{font-size:13px;margin:0 0 8px}
+.rd-edit .slot.full{cursor:pointer}
+.rd-side .slot.rsel .shirt svg{filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 3px #ffb703)}
+.rd-side .slot.rsel .nm{background:var(--gold);color:#1d1200}
+.rd-side .slot.rok .shirt{animation:rdpulse 1.1s infinite}
+.rd-side .bslot.rsel{outline:2px solid var(--gold)}
+.rd-side .bslot.rok{outline:2px dashed #7fe3a0}
+.rd-side .bslot.full{cursor:pointer}
+@keyframes rdpulse{50%{transform:scale(1.08)}}
 </style>
 </head>
 <body>
@@ -875,8 +886,11 @@ const showR = r => S.almanac ? "?" : r;
 const SHIRT = (c,r,drop) => `<div class="shirt"><svg viewBox="0 0 40 38"><path d="M13 3 Q20 8 27 3 L37 8 L40 17 L33 19 L32 37 L8 37 L7 19 L0 17 L3 8 Z" fill="${c[0]}" stroke="${c[1]}" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 9 L20 37" stroke="${c[1]}" stroke-width="3" opacity=".55"/></svg><span class="rv rb ${tier(r)} ${drop?"drop":""}">${showR(r)}</span></div>`;
 function pitchHTML(){
   const selP = (S.sel!=null && S.cur && S.phase!=="bench") ? S.cur.players[S.sel] : null;
-  return `<div class="pitch">${S.slots.map((s,si)=>{ const ok = selP && !s.p && fits(selP,s.pos); return `
-    <div class="slot ${s.p?"full":""} ${s.pos==="GK"?"gk":""} ${s.p&&s.p.r>=LEGEND?"leg":""} ${ok?(natural(selP,s.pos)?"ok":"ok near"):""} ${selP&&!ok&&!s.p?"no":""} ${s.p&&s.p.off?"offp":""}" style="--x:${s.x};--y:${s.y}" ${ok?`onclick="place(${si})"`:""}>
+  const rs = S.phase==="ready" ? S.rsel : null, rp = rs ? (rs.k==="x" ? S.slots[rs.i].p : S.bench[rs.i].p) : null;
+  return `<div class="pitch ${S.phase==="ready"?"rd-edit":""}">${S.slots.map((s,si)=>{ const ok = selP && !s.p && fits(selP,s.pos);
+    const rsel = rs && rs.k==="x" && rs.i===si, rok = rp && !rsel && readyCanSwap({k:"x",i:si});
+    const tap = S.phase==="ready" ? `onclick="readyTap('x',${si})"` : (ok?`onclick="place(${si})"`:""); return `
+    <div class="slot ${rsel?"rsel":""} ${rok?"rok":""} ${s.p?"full":""} ${s.pos==="GK"?"gk":""} ${s.p&&s.p.r>=LEGEND?"leg":""} ${ok?(natural(selP,s.pos)?"ok":"ok near"):""} ${selP&&!ok&&!s.p?"no":""} ${s.p&&s.p.off?"offp":""}" style="--x:${s.x};--y:${s.y}" ${tap}>
       ${s.p ? SHIRT(kitC(s.p.team), s.p.r) : `<div class="dot">${LABEL[s.pos]}</div>`}
       ${s.p?`<div class="nm">${esc(short(s.p.n))}</div><div class="tm">${esc(s.p.team)} ${s.p.season.slice(2)}</div>`:(ok?`<div class="nm">${NAME[s.pos]}${natural(selP,s.pos)?"":` −${penaltyFor(selP,s.pos)}`}</div>`:"")}
     </div>`;}).join("")}</div>`;
@@ -885,7 +899,8 @@ function benchHTML(){
   if (!S.bench || !S.bench.length) return "";
   const selP = (S.sel!=null && S.cur && S.phase==="bench") ? S.cur.players[S.sel] : null;
   return `<div class="bench"><div class="bh2">YEDEK KULÜBESİ</div><div class="brow">${S.bench.map((s,si)=>{ const ok = selP && !s.p && fits(selP,s.pos);
-    return `<div class="bslot ${s.p?"full":""} ${ok?"ok":""}" ${ok?`onclick="place(${si})"`:""}>${s.p?`<span class="rv ${tier(s.p.base)}">${showR(s.p.base)}</span><span class="bn">${esc(short(s.p.n))}</span>`:`<span class="bl">${LABEL[s.pos]}</span>`}</div>`; }).join("")}</div></div>`;
+    const rs = S.phase==="ready" ? S.rsel : null, rsel = rs && rs.k==="b" && rs.i===si, rok = rs && !rsel && s.p && readyCanSwap({k:"b",i:si});
+    return `<div class="bslot ${rsel?"rsel":""} ${rok?"rok":""} ${s.p?"full":""} ${ok?"ok":""}" ${S.phase==="ready"&&s.p?`onclick="readyTap('b',${si})"`:ok?`onclick="place(${si})"`:""}>${s.p?`<span class="rv ${tier(s.p.base)}">${showR(s.p.base)}</span><span class="bn">${esc(short(s.p.n))}</span>`:`<span class="bl">${LABEL[s.pos]}</span>`}</div>`; }).join("")}</div></div>`;
 }
 function renderDraft(){
   const bp = S.phase==="bench", filled = curSlots().filter(s=>s.p).length, t = S.cur, free = !anyPickable(), tc = kitC(t.team);
@@ -933,6 +948,27 @@ function renderDraft(){
   if (S.sel!=null) document.getElementById("selcard")?.scrollIntoView?.({block:"center",behavior:"smooth"});
 }
 
+
+// ---------- hazır ekranında kadro değişikliği (dokun-değiştir) ----------
+const strictFit = (p, pos) => natural(p,pos) || nearFit(p,pos);
+function readyPlayer(r){ return r.k==="x" ? (S.slots[r.i]||{}).p : ((S.bench||[])[r.i]||{}).p; }
+function readyCanSwap(t){
+  const a = S.rsel; if (!a) return false; const pa = readyPlayer(a), pb = readyPlayer(t); if (!pa || !pb) return false;
+  if (a.k==="b" && t.k==="b") return false;
+  const okA = t.k!=="x" || strictFit(pa, S.slots[t.i].pos), okB = a.k!=="x" || strictFit(pb, S.slots[a.i].pos);
+  return okA && okB;
+}
+function readySet(r, p){
+  if (r.k==="x"){ const pos=S.slots[r.i].pos, pen=penaltyFor(p,pos); S.slots[r.i].p = {...p, r:p.base-pen, off:pen>0, forced:false}; }
+  else S.bench[r.i].p = {...p, r:p.base, off:false, forced:false};
+}
+function readyTap(k, i){
+  const t = {k, i};
+  if (!S.rsel){ if (readyPlayer(t)) S.rsel = t; return renderReady(); }
+  if (S.rsel.k===k && S.rsel.i===i){ S.rsel = null; return renderReady(); }
+  if (!readyCanSwap(t)){ S.rsel = readyPlayer(t) ? t : null; return renderReady(); }
+  const pa = readyPlayer(S.rsel), pb = readyPlayer(t); readySet(S.rsel, pb); readySet(t, pa); S.rsel = null; renderReady();
+}
 // ---------- güç ----------
 const DUOS = [
   ["Gheorghe Hagi","Hakan Şükür"],["Gheorghe Hagi","Gheorghe Popescu"],["Hakan Şükür","Arif Erdem"],["Tugay Kerimoğlu","Hakan Şükür"],["Okan Buruk","Hakan Şükür"],["Ümit Davala","Hakan Şükür"],["Cláudio Taffarel","Bülent Korkmaz"],
@@ -981,6 +1017,7 @@ function statsHTML(){
     ${(()=>{ const c=chemistry(pl); return c.parts.length?`<div class="chemlist">⚗️ Kimya${c.total>=5?" (en fazla +5)":""}: ${c.parts.map(esc).join(" · ")}</div>`:`<div class="chemlist mut">⚗️ Kimya için aynı kulüpten 3+ oyuncu ya da efsane ikililer topla.</div>`; })()}`;
 }
 function renderReady(){
+  S.phase = "ready"; S.sel = null;
   $("play").innerHTML = `
   <div class="grid">
     <div>${S.mode==="real"?realFormHTML():""}<h1>11'in hazır.</h1>
@@ -992,7 +1029,7 @@ function renderReady(){
       <div class="row" style="margin-top:18px"><button class="btn" onclick="startTournament()">Turnuvaya başla</button>
       <button class="btn ghost" onclick="${S.mode==='real'?'renderRealPicker()':'renderStart()'}">${S.mode==='real'?'Başka takım seç':'Baştan kur'}</button></div>
     </div>
-    <div class="side">${pitchHTML()}${benchHTML()}${statsHTML()}</div>
+    <div class="side rd-side"><p class="mut rd-hint">✋ Değişiklik için bir oyuncuya, sonra yerine geçeceği oyuncuya dokun.</p>${pitchHTML()}${benchHTML()}${statsHTML()}</div>
   </div>`;
 }
 
@@ -2204,6 +2241,7 @@ function langChips(){ return Object.entries(LANGS).map(([k,v])=>`<button class="
 
 // [türkçe, english, español]
 const DICT_ROWS = [
+ ["✋ Değişiklik için bir oyuncuya, sonra yerine geçeceği oyuncuya dokun.","✋ To make a change, tap a player, then the player to swap with.","✋ Para cambiar, toca un jugador y luego el jugador por el que lo cambias."],
  ["🏟️ Gerçek takımla oyna","🏟️ Play with a real team","🏟️ Juega con un equipo real"],["Gerçek takımla oyna","Play with a real team","Juega con un equipo real"],["Bir sezonun gerçek kadrosunu seç, onunla turnuvaya çık. 1998-99 Galatasaray ile 7-0 yapabilir misin?","Pick a real squad from any season and take it to the tournament. Can you go 7-0 with 1998-99 Galatasaray?","Elige la plantilla real de una temporada y llévala al torneo. ¿Puedes hacer 7-0 con el Galatasaray 1998-99?"],["Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?","Pick a real squad from any season; the best formation and starting XI are set up automatically and you can change them. Your opponents are real squads from other seasons too. Let's see if you can go 7-0 with it.","Elige la plantilla real de una temporada; la mejor formación y el once se arman solos y puedes cambiarlos. Tus rivales también son plantillas reales de otras temporadas. ¿Podrás hacer 7-0?"],["← Geri","← Back","← Atrás"],["Tümü","All","Todos"],["Diğer","Others","Otros"],["🔒 Kadro eksik · yakında","🔒 Squad incomplete · coming soon","🔒 Plantilla incompleta · próximamente"],["Başka takım seç","Pick another team","Elegir otro equipo"],["Bu kadroyla kurulamıyor","Not possible with this squad","No es posible con esta plantilla"],["Gerçek takım","Real team","Equipo real"],["Günün sıralamasına bakılıyor…","Checking today's ranking…","Consultando la clasificación de hoy…"],["Gerçek takım modunda bir sezonun gerçek kadrosuyla oynarsın; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol.","In real team mode you play with a season's real squad; each team's best result of the day goes on the table. Ranking: wins, goal difference, goals scored.","En el modo equipo real juegas con la plantilla real de una temporada; en la tabla aparece el mejor resultado del día de cada equipo. Orden: victorias, diferencia de goles, goles a favor."],
  ["Bu ad kullanılamaz. Küfür, hakaret ya da ırk/din/etnik köken içeren adlara izin vermiyoruz.","This name can't be used. Names with swearing, insults or references to race, religion or ethnicity aren't allowed.","Este nombre no se puede usar. No se permiten insultos ni referencias a raza, religión u origen étnico."],["Takım adın kurallarımıza uymadığı için silindi, yeni bir ad seç.","Your team name broke our rules and was removed. Pick a new one.","Tu nombre de equipo no cumplía las normas y se eliminó. Elige uno nuevo."],["Adsız Takım","Unnamed Team","Equipo sin nombre"],
  ["Tüm kadrolar","All squads","Todas las plantillas"],

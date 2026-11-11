@@ -245,6 +245,15 @@ def run(name, vp, b):
         click("#play .rl-card:not(.rl-lock)"); time.sleep(0.4)
         chk("38-gercek-hazir", "#play .rl-info .chip[onclick^=realSetForm]")
         if pg.evaluate("()=>S.slots.filter(s=>s.p).length") != 11: fails.append(f"[{name}] gerçek takım 11'i dolmadı")
+        before = pg.evaluate("()=>[S.slots[9].p.n,S.slots[10].p.n]")
+        pg.evaluate("()=>{readyTap('x',9);readyTap('x',10)}"); time.sleep(0.2)
+        after = pg.evaluate("()=>[S.slots[9].p.n,S.slots[10].p.n]")
+        chk("38b-gercek-degisiklik", ".rd-hint")
+        if before == after: fails.append(f"[{name}] hazır ekranında 11 içi değişiklik olmadı")
+        pg.evaluate("()=>pickReal('1998-99|Galatasaray')"); time.sleep(0.3)
+        moved = pg.evaluate("()=>{ const n=S.bench[0].p.n, i=S.slots.findIndex(s=>strictFit(S.bench[0].p,s.pos)); if(i<0) return 'yer yok'; readyTap('b',0); readyTap('x',i); return S.slots[i].p.n===n; }")
+        if moved is not True: fails.append(f"[{name}] yedekten 11'e değişiklik olmadı: {moved}")
+
         pg.evaluate("()=>{S.mode='solo';renderStart()}")
     step("19-gercek-takim", s19)
 

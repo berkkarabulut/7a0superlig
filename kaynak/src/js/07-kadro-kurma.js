@@ -78,8 +78,11 @@ const showR = r => S.almanac ? "?" : r;
 const SHIRT = (c,r,drop) => `<div class="shirt"><svg viewBox="0 0 40 38"><path d="M13 3 Q20 8 27 3 L37 8 L40 17 L33 19 L32 37 L8 37 L7 19 L0 17 L3 8 Z" fill="${c[0]}" stroke="${c[1]}" stroke-width="2.2" stroke-linejoin="round"/><path d="M20 9 L20 37" stroke="${c[1]}" stroke-width="3" opacity=".55"/></svg><span class="rv rb ${tier(r)} ${drop?"drop":""}">${showR(r)}</span></div>`;
 function pitchHTML(){
   const selP = (S.sel!=null && S.cur && S.phase!=="bench") ? S.cur.players[S.sel] : null;
-  return `<div class="pitch">${S.slots.map((s,si)=>{ const ok = selP && !s.p && fits(selP,s.pos); return `
-    <div class="slot ${s.p?"full":""} ${s.pos==="GK"?"gk":""} ${s.p&&s.p.r>=LEGEND?"leg":""} ${ok?(natural(selP,s.pos)?"ok":"ok near"):""} ${selP&&!ok&&!s.p?"no":""} ${s.p&&s.p.off?"offp":""}" style="--x:${s.x};--y:${s.y}" ${ok?`onclick="place(${si})"`:""}>
+  const rs = S.phase==="ready" ? S.rsel : null, rp = rs ? (rs.k==="x" ? S.slots[rs.i].p : S.bench[rs.i].p) : null;
+  return `<div class="pitch ${S.phase==="ready"?"rd-edit":""}">${S.slots.map((s,si)=>{ const ok = selP && !s.p && fits(selP,s.pos);
+    const rsel = rs && rs.k==="x" && rs.i===si, rok = rp && !rsel && readyCanSwap({k:"x",i:si});
+    const tap = S.phase==="ready" ? `onclick="readyTap('x',${si})"` : (ok?`onclick="place(${si})"`:""); return `
+    <div class="slot ${rsel?"rsel":""} ${rok?"rok":""} ${s.p?"full":""} ${s.pos==="GK"?"gk":""} ${s.p&&s.p.r>=LEGEND?"leg":""} ${ok?(natural(selP,s.pos)?"ok":"ok near"):""} ${selP&&!ok&&!s.p?"no":""} ${s.p&&s.p.off?"offp":""}" style="--x:${s.x};--y:${s.y}" ${tap}>
       ${s.p ? SHIRT(kitC(s.p.team), s.p.r) : `<div class="dot">${LABEL[s.pos]}</div>`}
       ${s.p?`<div class="nm">${esc(short(s.p.n))}</div><div class="tm">${esc(s.p.team)} ${s.p.season.slice(2)}</div>`:(ok?`<div class="nm">${NAME[s.pos]}${natural(selP,s.pos)?"":` −${penaltyFor(selP,s.pos)}`}</div>`:"")}
     </div>`;}).join("")}</div>`;
@@ -88,7 +91,8 @@ function benchHTML(){
   if (!S.bench || !S.bench.length) return "";
   const selP = (S.sel!=null && S.cur && S.phase==="bench") ? S.cur.players[S.sel] : null;
   return `<div class="bench"><div class="bh2">YEDEK KULÜBESİ</div><div class="brow">${S.bench.map((s,si)=>{ const ok = selP && !s.p && fits(selP,s.pos);
-    return `<div class="bslot ${s.p?"full":""} ${ok?"ok":""}" ${ok?`onclick="place(${si})"`:""}>${s.p?`<span class="rv ${tier(s.p.base)}">${showR(s.p.base)}</span><span class="bn">${esc(short(s.p.n))}</span>`:`<span class="bl">${LABEL[s.pos]}</span>`}</div>`; }).join("")}</div></div>`;
+    const rs = S.phase==="ready" ? S.rsel : null, rsel = rs && rs.k==="b" && rs.i===si, rok = rs && !rsel && s.p && readyCanSwap({k:"b",i:si});
+    return `<div class="bslot ${rsel?"rsel":""} ${rok?"rok":""} ${s.p?"full":""} ${ok?"ok":""}" ${S.phase==="ready"&&s.p?`onclick="readyTap('b',${si})"`:ok?`onclick="place(${si})"`:""}>${s.p?`<span class="rv ${tier(s.p.base)}">${showR(s.p.base)}</span><span class="bn">${esc(short(s.p.n))}</span>`:`<span class="bl">${LABEL[s.pos]}</span>`}</div>`; }).join("")}</div></div>`;
 }
 function renderDraft(){
   const bp = S.phase==="bench", filled = curSlots().filter(s=>s.p).length, t = S.cur, free = !anyPickable(), tc = kitC(t.team);
@@ -136,3 +140,24 @@ function renderDraft(){
   if (S.sel!=null) document.getElementById("selcard")?.scrollIntoView?.({block:"center",behavior:"smooth"});
 }
 
+
+// ---------- hazır ekranında kadro değişikliği (dokun-değiştir) ----------
+const strictFit = (p, pos) => natural(p,pos) || nearFit(p,pos);
+function readyPlayer(r){ return r.k==="x" ? (S.slots[r.i]||{}).p : ((S.bench||[])[r.i]||{}).p; }
+function readyCanSwap(t){
+  const a = S.rsel; if (!a) return false; const pa = readyPlayer(a), pb = readyPlayer(t); if (!pa || !pb) return false;
+  if (a.k==="b" && t.k==="b") return false;
+  const okA = t.k!=="x" || strictFit(pa, S.slots[t.i].pos), okB = a.k!=="x" || strictFit(pb, S.slots[a.i].pos);
+  return okA && okB;
+}
+function readySet(r, p){
+  if (r.k==="x"){ const pos=S.slots[r.i].pos, pen=penaltyFor(p,pos); S.slots[r.i].p = {...p, r:p.base-pen, off:pen>0, forced:false}; }
+  else S.bench[r.i].p = {...p, r:p.base, off:false, forced:false};
+}
+function readyTap(k, i){
+  const t = {k, i};
+  if (!S.rsel){ if (readyPlayer(t)) S.rsel = t; return renderReady(); }
+  if (S.rsel.k===k && S.rsel.i===i){ S.rsel = null; return renderReady(); }
+  if (!readyCanSwap(t)){ S.rsel = readyPlayer(t) ? t : null; return renderReady(); }
+  const pa = readyPlayer(S.rsel), pb = readyPlayer(t); readySet(S.rsel, pb); readySet(t, pa); S.rsel = null; renderReady();
+}

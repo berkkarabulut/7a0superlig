@@ -9,6 +9,7 @@ const kitC = team => COLORS[team] || ["#6b4f86","#ffffff"];
 const kit = team => { const c=kitC(team); return `<span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span>`; };
 // sezon sonu teknik direktörü (bilinmeyenler boş)
 const COACH = {
+ "1980-81|Adanaspor":"Tamer Kaptan","1985-86|Samsunspor":"Fethi Demircan","1987-88|Malatyaspor":"Yılmaz Vural",
  "1986-87|Samsunspor":"Milorad Mitrović","1989-90|Trabzonspor":"Urbain Braems","2004-05|Trabzonspor":"Ziya Doğan / Şenol Güneş",
  "1980-81|Trabzonspor":"Özkan Sümer","1980-81|Galatasaray":"Brian Birch",
  "1981-82|Beşiktaş":"Đorđe Milić","1981-82|Trabzonspor":"Ahmet Suat Özyazıcı","1981-82|Fenerbahçe":"Friedel Rausch",

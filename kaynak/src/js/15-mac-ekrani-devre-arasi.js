@@ -14,10 +14,10 @@ function halfTime(M, a, b){
     const tap = id => { if (!sel){ sel=id; return draw(); } if (sel===id){ sel=null; return draw(); } const x=sel; move(x,id); };
     const draw = () => {
       const selP = sel ? (sel[0]==="b" ? T.bench[+sel.split(":")[1]] : cur(+sel.split(":")[1])) : null, os=T.o.pw.style;
-      const pitch = `<div class="pitch lp">${T.xi.map((s,k)=>{ const p=cur(k), me=sel==="x:"+k;
-        if (!p) return `<div class="slot" style="--x:${s.x};--y:${s.y}"><div class="dot">🟥</div></div>`;
-        const pen=penOf(p,s.pos); let prev=""; if (selP && sel[0]==="b"){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
-        return `<div class="slot full ${me?"selx":""}" style="--x:${s.x};--y:${s.y}" data-drag="x:${k}" data-drop="x:${k}">${SHIRT(kitC(p.team), p.r, pen>0)}<div class="nm">${esc(short(p.n))}</div><div class="tm">${LABEL[s.pos]}${pen?` <b class="neg">−${pen}</b>`:""}</div>${prev}</div>`; }).join("")}</div>`;
+      const inline = typeof window!=="undefined" && window.innerWidth<=900;
+      const big = matchPitchHTML(M,T,T.o,{sel,selP});
+      const pitch = inline ? big : "";
+      if ($("mpitch")){ if (inline) $("mpitch").style.display="none"; else $("mpitch").innerHTML = big; }
       const bl = benchAv();
       $("after").innerHTML = `<div class="card ht" id="htbox"><h3 style="margin-top:0">⏸️ Devre arası · ${a}-${b}</h3>
         <p class="mut" style="margin:0 0 8px;font-size:13px">${a<b?"Gerideysin. Hücuma geçmenin ya da tarzı değiştirmenin tam zamanı.":a>b?"Öndesin. Skoru korumak isteyebilirsin.":"Eşitlik var. İkinci yarı için planın ne?"} Rakip: ${STYLES[os].e} ${esc(os)}</p>
@@ -32,18 +32,38 @@ function halfTime(M, a, b){
         ${bl.length&&M.subsLeft()?`<div class="lineup">${bl.map(({p,i})=>`<div class="lrow bench2 ${sel==="b:"+i?"sel":""}" data-drag="b:${i}" data-drop="b:${i}"><span class="grip">⠿</span><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.base)}">${showR(p.base)}</span></div>`).join("")}</div>`:`<p class="mut">${M.subsLeft()?"Kulübede girebilecek oyuncu kalmadı.":"Değişiklik hakkın bitti."}</p>`}
         <div class="row" style="margin-top:12px"><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button></div></div>`;
       msg=null;
-      enableDrag($("htbox"), move, tap); };
+      enableDrag($("mgrid")||$("htbox"), move, tap); };
     window.__hs = k => { style=k; draw(); };
     window.__hm = k => { ment=k; draw(); };
     window.__ho = n => { const k=T.xi.findIndex((s,kk)=>cur(kk)?.n===n); if(k>=0){ sel="x:"+k; draw(); } };
     window.__hi = bi => { if (sel && sel[0]==="x") move(sel,"b:"+bi); };
-    window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; res({style,ment}); };
+    window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; if ($("mpitch")){ $("mpitch").style.display=""; $("mpitch").innerHTML = matchPitchHTML(M,T,T.o); } res({style,ment}); };
     draw();
     try{ $("after").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){}
   });
 }
 // maç sırasında bir mevkide şu an kim oynuyor (değişiklik zincirini takip eder)
 function slotPlayer(M,T,k){ let n=T.matchXi[k]; if(!n) return null; let ch=true; while(ch){ ch=false; for (const s of M.subs) if (s.out.n===n){ n=s.in.n; ch=true; } } return M.onPitch().find(q=>q.n===n) || null; }
+// rakibin 11'i: en iyi kaleci + 4 defans + 4 orta saha + 2 forvet (eksikse en yüksek reytinglilerle tamamlanır)
+function oppXI(o){
+  const pl=[...o.pl].sort((a,b)=>b.r-a.r), take=(g,n)=>pl.filter(p=>p.pos===g).slice(0,n);
+  let xi=[...take("GK",1),...take("DF",4),...take("MF",4),...take("FW",2)];
+  for (const p of pl){ if (xi.length>=11) break; if (!xi.includes(p) && p.pos!=="GK") xi.push(p); }
+  const Y={GK:6,DF:17,MF:29,FW:40}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
+  return Object.entries(lines).flatMap(([g,ps])=>ps.map((p,i)=>({p, x: ps.length===1?50:12+i*76/(ps.length-1), y:Y[g]})));
+}
+// iki takım tek sahada: rakip üst yarı, sen alt yarı. edit=true iken (devre arası) senin oyuncuların sürüklenebilir.
+function matchPitchHTML(M,T,o,ht){
+  const sel = ht && ht.sel, selP = ht && ht.selP;
+  const mine = new Set(T.xi.map(s=>kitC(s.p.team)[0])), oc0 = kitC(o.t.team), oc = mine.has(oc0[0]) ? [oc0[1], oc0[0]] : oc0; // aynı renkse rakip deplasman formasıyla
+  const opp = oppXI(o).map(({p,x,y})=>`<div class="slot full mp-o" style="--x:${x};--y:${y}">${SHIRT(oc, p.r)}<div class="nm">${esc(p.n)}</div></div>`).join("");
+  const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = s.pos==="GK" ? 94 : 54+Math.max(0,Math.min(64,s.y-13))*30/64;
+    if (!p) return `<div class="slot mp-m" style="--x:${s.x};--y:${y}"><div class="dot">🟥</div></div>`;
+    const pen=penOf(p,s.pos), subIn=M.subs.some(x=>x.in.n===p.n), act = ht ? `data-drag="x:${k}" data-drop="x:${k}"` : "";
+    let prev=""; if (selP && sel && sel[0]==="b"){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
+    return `<div class="slot full mp-m ${sel==="x:"+k?"selx":""} ${pen?"offp":""}" style="--x:${s.x};--y:${y}" ${act}>${SHIRT(kitC(p.team), p.r, pen>0)}<div class="nm">${subIn?"🔁 ":""}${esc(p.n)}</div>${prev}</div>`; }).join("");
+  return `<div class="pitch mp ${ht?"mp-edit":""}"><div class="mp-lbl mp-lt">${kit(o.t.team)}${esc(o.name)}</div><div class="mp-lbl mp-lb">${esc(myName())}</div>${opp}${me}</div>`;
+}
 function onPitchHTML(M,T){
   return T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k); if(!p) return `<div class="row" style="gap:6px;padding:2px 0;opacity:.6"><span class="pos ${LINE(s.pos)}">${LABEL[s.pos]}</span>— boş (oyundan çıktı)</div>`;
     const pen=penOf(p,s.pos), subIn=M.subs.some(x=>x.in.n===p.n);
@@ -65,7 +85,7 @@ async function runMatchInner(rid){
   const M = makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
   $("play").innerHTML = `
     ${pathHTML()}
-    <div class="grid">
+    <div class="grid" id="mgrid">
       <div>
         <div class="card">
           <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]} · Hakem: ${esc(T.ref)}</div>
@@ -78,11 +98,9 @@ async function runMatchInner(rid){
         </div>
         ${isKo?`<div class="card" style="margin-top:14px"><h3>Eleme ağacı</h3><div id="brk">${bracketHTML()}</div></div>`:""}
       </div>
-      <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}
-        <p class="mut" style="font-size:12px;margin-top:10px">Sahadaki 11'in</p>
-        <div style="font-size:13px" id="onpitch">${onPitchHTML(M,T)}</div>
-        <p class="mut" style="font-size:12px;margin-top:10px">Rakibin 11'i</p>
-        <div style="font-size:13px">${o.pl.slice(0,16).map(p=>`<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${p.pos}">${roles(p).map(r=>LABEL[r]).join("/")}</span>${esc(p.n)}<span class="rt"><span class="rv ${tier(p.r)}">${showR(p.r)}</span></span></div>`).join("")}</div>
+      <div class="mside">
+        <div id="mpitch">${matchPitchHTML(M,T,o)}</div>
+        <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>
       </div>
     </div>`;
   const ms = SPEEDS[S.speed]; let a=0,b=0, ei=0, len=90;
@@ -93,7 +111,7 @@ async function runMatchInner(rid){
     while (ei<M.ev.length && M.ev[ei].m<=m){
       const e=M.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); sfx("goal", e.side===0); goalFx(e.side===0); }
       add(`<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
-      if (e.type==="red"||e.type==="inj"||e.type==="sub"){ const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
+      if (e.type==="red"||e.type==="inj"||e.type==="sub"){ const op=$("mpitch"); if(op) op.innerHTML=matchPitchHTML(M,T,o); }
       if (e.type==="red"||e.type==="inj"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }
       if (ms){ if (e.type==="goal") await nap(ms*12); else if (e.type!=="flow") await nap(ms*3); }
     }
@@ -105,7 +123,7 @@ async function runMatchInner(rid){
   M.run(1,45); await anim(1,45);
   $("clk").textContent="Devre arası"; sfx("half"); add(`<li class="penh"><span>⏸️ ${esc(T.ref)} ilk yarıyı bitirdi: ${a}-${b}</span></li>`);
   if (ms){ const h = await halfTime(M,a,b); if (S.runId!==rid) throw "iptal"; if (h.style!==T.style || h.ment!=="Aynen devam") add(`<li class="penh"><span>📋 İkinci yarı planı: ${STYLES[h.style].e} ${esc(h.style)} · ${esc(h.ment)}</span></li>`); $("mystyle").textContent=`${S.form} · ${STYLES[h.style].e} ${h.style}`; }
-  { const op=$("onpitch"); if(op) op.innerHTML=onPitchHTML(M,T); }
+  { const op=$("mpitch"); if(op) op.innerHTML=matchPitchHTML(M,T,o); }
   M.run(46,90); await anim(46,90);
   let et=false;
   if (isKo && M.g[0]===M.g[1]){ et=true; len=120; add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await nap(ms*18); M.run(91,120,0.85); await anim(91,120); }

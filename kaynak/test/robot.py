@@ -128,9 +128,9 @@ def run(name, vp, b):
         pg.evaluate("()=>{ runMatch(); }"); time.sleep(1)
         chk("08-mac", "#sc", "#clk", "#ev")
         pg.wait_for_selector("#htbox", timeout=40000); time.sleep(0.5)
-        chk("09-devre-arasi", "#htbox .chip", "#htbox [data-drag^='x:']", "#htbox [data-drag^='b:']", "#htbox .btn.gold")
+        chk("09-devre-arasi", "#htbox .chip", "#mgrid [data-drag^='x:']", "#htbox [data-drag^='b:']", "#htbox .btn.gold")
         for k in (8, 3):
-            click("#htbox [data-drag^='b:']"); click(f"#htbox [data-drop='x:{k}']")
+            click("#htbox [data-drag^='b:']"); click(f"#mgrid [data-drop='x:{k}']")
         if pg.locator("#htbox").count() == 0: fails.append(f"[{name}] devre arası: değişiklikten sonra panel kapandı")
         chk("09b-devre-arasi-2-degisiklik", "#htbox .btn.gold")
         click("#htbox .btn.gold")

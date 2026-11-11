@@ -4,9 +4,15 @@
   repeating-linear-gradient(0deg,#1f7a44 0 8.33%,#1a6d3c 8.33% 16.66%);box-shadow:inset 0 0 40px #0007,0 6px 20px #0006}
 .pitch:before,.pitch:after{display:none}
 .slot{left:calc(var(--x) * 1%);top:calc(var(--y) * 1%)}
-.shirt{position:relative;width:46px;height:44px;margin:0 auto 1px}
+.shirt{position:relative;width:48px;height:46px;margin:0 auto 10px}
 .shirt svg{width:100%;height:100%;filter:drop-shadow(0 3px 3px #000a);overflow:visible}
-.shirt .rb{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);min-width:26px;padding:1px 3px;font-size:15px;line-height:1.1;box-shadow:0 1px 3px #0009}
+.shirt .rb{position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);min-width:27px;height:21px;padding:0 4px;font:800 15px/21px var(--cond);border-radius:6px 6px 10px 10px;border:1.5px solid #ffffffd9;box-shadow:0 2px 5px #000b,inset 0 1px 0 #ffffff80;letter-spacing:.3px}
+.shirt .rb.r90{background:linear-gradient(160deg,#fff1b8 0%,#ffcf3f 40%,#c88a00 100%);color:#2a1800;border-color:#fff6d6;animation:shine 2.6s linear infinite;background-size:200% 200%}
+.shirt .rb.r87{background:linear-gradient(160deg,#ffd0e6,#e0457b 55%,#8e1240);color:#fff}
+.shirt .rb.r84{background:linear-gradient(160deg,#c7fff2,#19c3a3 55%,#037a66);color:#00241f}
+.shirt .rb.r80{background:linear-gradient(160deg,#d6e7ff,#4f8dff 55%,#1d4fb8);color:#fff}
+.shirt .rb.r70,.shirt .rb.rq{background:linear-gradient(160deg,#e6dcef,#8a77a0 55%,#4c3c5e);color:#fff}
+@keyframes shine{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
 .slot.leg .shirt svg{filter:drop-shadow(0 0 5px #ffb703) drop-shadow(0 2px 2px #000a)}
 .slot.leg .dot{box-shadow:none}
 .slot.offp .shirt:after{content:"!";position:absolute;top:-4px;right:-2px;background:#f08a24;color:#fff;border-radius:50%;width:16px;height:16px;font-size:11px;line-height:16px;font-weight:800}

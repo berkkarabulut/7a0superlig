@@ -1,0 +1,4 @@
+# yazım birleştirme 2
+@Ibrahim Üzülmez=>İbrahim Üzülmez
+@Ramón Motta=>Ramon Motta
+@Junior Caiçara=>Júnior Caiçara

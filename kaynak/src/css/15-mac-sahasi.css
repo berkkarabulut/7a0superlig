@@ -19,3 +19,21 @@
   .pitch.mp .shirt{width:34px;height:32px;margin-bottom:11px}
   .pitch.mp .nm{font-size:9.5px;max-width:76px}
 }
+
+/* top animasyonu */
+.pitch.mp .slot{transition:left var(--nudge,300ms) ease-out,top var(--nudge,300ms) ease-out}
+.mp-ball{position:absolute;width:16px;height:16px;border-radius:50%;transform:translate(-50%,-50%);z-index:6;pointer-events:none;
+  background:radial-gradient(circle at 35% 30%,#fff 0 35%,#d9d9d9 60%,#8a8a8a 100%);box-shadow:0 0 0 1.5px #111,0 3px 5px #000a;
+  transition-property:left,top;transition-timing-function:cubic-bezier(.3,.7,.4,1)}
+.mp-ball:after{content:"";position:absolute;inset:4.5px;border-radius:50%;background:#222;clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%)}
+.fx-shot .shirt{animation:fxshot .6s}
+.fx-save .shirt{animation:fxsave .9s}
+.fx-yel .shirt:before,.fx-red .shirt:before,.fx-inj .shirt:before{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:15px;z-index:7;animation:fxpop 1.5s}
+.fx-yel .shirt:before{content:"🟨"}.fx-red .shirt:before{content:"🟥"}.fx-inj .shirt:before{content:"🚑"}
+.pitch.mp.net-top:before,.pitch.mp.net-bot:before{content:"";position:absolute;left:36%;right:36%;height:7%;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at center,#ffffffcc,#ffb70333 60%,transparent 75%);animation:netflash 1.2s ease-out forwards;display:block}
+.pitch.mp.net-top:before{top:0}.pitch.mp.net-bot:before{bottom:0}
+@keyframes fxshot{40%{transform:scale(1.25)}}
+@keyframes fxsave{0%,100%{transform:none}30%{transform:translateX(-6px) rotate(-12deg)}60%{transform:translateX(6px) rotate(10deg)}}
+@keyframes fxpop{0%{opacity:0;transform:translate(-50%,6px) scale(.6)}15%{opacity:1;transform:translate(-50%,0) scale(1.2)}80%{opacity:1}100%{opacity:0}}
+@keyframes netflash{0%{opacity:0;transform:scaleY(.4)}20%{opacity:1;transform:scaleY(1.3)}100%{opacity:0;transform:scaleY(1)}}

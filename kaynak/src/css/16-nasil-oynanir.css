@@ -1,0 +1,10 @@
+
+/* ===== nasıl oynanır ===== */
+.howtoc{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
+.howtoc a{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:6px 12px;color:var(--txt);text-decoration:none;font-size:14px;font-weight:600}
+.howtoc a:hover{border-color:var(--gold);color:var(--gold)}
+.howsec{margin-bottom:14px;line-height:1.65;scroll-margin-top:12px}
+.howsec h3{margin:0 0 8px;font-size:20px}
+.howsec ul,.howsec ol{padding-left:22px;margin:6px 0}
+.howsec li{margin:5px 0}
+.howsec p{margin:8px 0}

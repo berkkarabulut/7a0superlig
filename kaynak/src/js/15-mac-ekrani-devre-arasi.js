@@ -19,6 +19,8 @@ function halfTime(M, a, b){
       const pitch = inline ? big : "";
       if ($("mpitch")){ if (inline) $("mpitch").style.display="none"; else $("mpitch").innerHTML = big; }
       const bl = benchAv();
+      const benchHTML2 = `<div class="ph" style="margin-top:10px">Kulübe</div>${bl.length&&M.subsLeft()?`<div class="lineup">${bl.map(({p,i})=>`<div class="lrow bench2 ${sel==="b:"+i?"sel":""}" data-drag="b:${i}" data-drop="b:${i}"><span class="grip">⠿</span><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.base)}">${showR(p.base)}</span></div>`).join("")}</div>`:`<p class="mut">${M.subsLeft()?"Kulübede girebilecek oyuncu kalmadı.":"Değişiklik hakkın bitti."}</p>`}`;
+      const goHTML = `<div class="row" style="margin-top:12px"><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button></div>`;
       $("after").innerHTML = `<div class="card ht" id="htbox"><h3 style="margin-top:0">⏸️ Devre arası · ${a}-${b}</h3>
         <p class="mut" style="margin:0 0 8px;font-size:13px">${a<b?"Gerideysin. Hücuma geçmenin ya da tarzı değiştirmenin tam zamanı.":a>b?"Öndesin. Skoru korumak isteyebilirsin.":"Eşitlik var. İkinci yarı için planın ne?"} Rakip: ${STYLES[os].e} ${esc(os)}</p>
         <div class="ph">Oyun tarzı</div><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>
@@ -28,18 +30,18 @@ function halfTime(M, a, b){
         ${pitch}
         ${msg?`<div class="tacnote ${msg[0]}" style="margin-top:6px">${msg[1]}</div>`:""}
         ${M.subs.length?`<div class="mut" style="font-size:13px;margin-top:6px">${M.subs.map(s=>`🔁 ${esc(short(s.out.n))} → ${esc(short(s.in.n))}`).join(" · ")}</div>`:""}
-        <div class="ph" style="margin-top:10px">Kulübe</div>
-        ${bl.length&&M.subsLeft()?`<div class="lineup">${bl.map(({p,i})=>`<div class="lrow bench2 ${sel==="b:"+i?"sel":""}" data-drag="b:${i}" data-drop="b:${i}"><span class="grip">⠿</span><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.base)}">${showR(p.base)}</span></div>`).join("")}</div>`:`<p class="mut">${M.subsLeft()?"Kulübede girebilecek oyuncu kalmadı.":"Değişiklik hakkın bitti."}</p>`}
-        <div class="row" style="margin-top:12px"><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button></div></div>`;
+        ${inline ? benchHTML2 : ""}
+        ${inline ? goHTML : ""}</div>`;
+      if (!inline){ if ($("mbench")) $("mbench").innerHTML = `<div class="card mbench">${benchHTML2}</div>`; if ($("mgo")) $("mgo").innerHTML = `<div class="mgo">${goHTML.replace('style="margin-top:12px"','')}</div>`; }
       msg=null;
       enableDrag($("mgrid")||$("htbox"), move, tap); };
     window.__hs = k => { style=k; draw(); };
     window.__hm = k => { ment=k; draw(); };
     window.__ho = n => { const k=T.xi.findIndex((s,kk)=>cur(kk)?.n===n); if(k>=0){ sel="x:"+k; draw(); } };
     window.__hi = bi => { if (sel && sel[0]==="x") move(sel,"b:"+bi); };
-    window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; if ($("mpitch")){ $("mpitch").style.display=""; $("mpitch").innerHTML = matchPitchHTML(M,T,T.o); } res({style,ment}); };
+    window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; if ($("mbench")) $("mbench").innerHTML=""; if ($("mgo")) $("mgo").innerHTML=""; if ($("mpitch")){ $("mpitch").style.display=""; $("mpitch").innerHTML = matchPitchHTML(M,T,T.o); } res({style,ment}); };
     draw();
-    try{ $("after").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){}
+    try{ const tgt = (typeof window!=="undefined" && window.innerWidth>900 && $("mgo")) ? $("mgrid") : $("after"); tgt.scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){}
   });
 }
 // maç sırasında bir mevkide şu an kim oynuyor (değişiklik zincirini takip eder)
@@ -87,6 +89,7 @@ async function runMatchInner(rid){
     ${pathHTML()}
     <div class="grid mgrid" id="mgrid">
       <div>
+        <div id="mgo"></div>
         <div class="card">
           <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]} · Hakem: ${esc(T.ref)}</div>
           <div class="score"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400" id="mystyle">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
@@ -100,6 +103,7 @@ async function runMatchInner(rid){
       </div>
       <div class="mside">
         <div id="mpitch">${matchPitchHTML(M,T,o)}</div>
+        <div id="mbench"></div>
         <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>
       </div>
     </div>`;

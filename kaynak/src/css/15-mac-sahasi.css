@@ -31,3 +31,8 @@
   .mgrid .pitch.mp .nm{font-size:12px;max-width:110px}
   .mgrid .mp-lbl{font-size:14px}
 }
+/* devre arası: başlat butonu skorbordun üstünde, kulübe sahanın altında */
+.mgo{margin-bottom:12px}
+.mgo .btn{width:100%;font-size:19px;padding:14px;animation:mgopulse 1.6s ease-in-out infinite}
+@keyframes mgopulse{50%{box-shadow:0 0 0 6px #ffb70340}}
+.mbench .ph:first-child{margin-top:0!important}

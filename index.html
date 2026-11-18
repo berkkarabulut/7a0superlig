@@ -530,8 +530,13 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .mbench .ph:first-child{margin-top:0!important}
 
 /* asıl skor tabelası ekrandan çıkınca üstte küçük sabit skor şeridi (anlatım akarken ve devre arasında skor hep görünsün) */
-.mgrid .minisc{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:#0d0216f2;border-bottom:3px solid var(--acc);box-shadow:0 8px 16px -6px #000d;font-weight:800;transform:translateY(-110%);transition:transform .2s}
+.mgrid .minisc{position:fixed;top:0;left:0;right:0;z-index:60;padding:8px 12px 4px;padding-top:max(8px,env(safe-area-inset-top));background:#0d0216;border-bottom:3px solid var(--acc);box-shadow:0 8px 16px -6px #000d;font-weight:800;transform:translateY(-110%);transition:transform .2s}
 .mgrid .minisc.on{transform:none}
+.mgrid .minisc .ms-row{display:flex;align-items:center;justify-content:center;gap:10px;max-width:760px;margin:0 auto}
+.mgrid .minisc .ms-ev{max-height:none;overflow:hidden;max-width:760px;margin:6px auto 0;font-weight:400}
+.mgrid .minisc .ms-ev:empty{display:none}
+.mgrid .minisc .ms-ev li{padding:4px 2px;font-size:13px}
+.mgrid .minisc .ms-ev li:last-child{border-bottom:0}
 .mgrid .minisc .ms-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
 .mgrid .minisc .ms-t:first-child{text-align:right}
 .mgrid .minisc .ms-s{font-family:var(--cond);font-size:26px;color:var(--gold);background:var(--acc);color:#fff;border-radius:4px;padding:0 10px;line-height:1.25}
@@ -1672,7 +1677,7 @@ async function runMatchInner(rid){
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid mgrid" id="mgrid">
-      <div class="minisc" id="minisc" aria-hidden="true"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div>
+      <div class="minisc" id="minisc" aria-hidden="true"><div class="ms-row"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div><ul class="events ms-ev" id="ms-ev"></ul></div>
       <div>
         <div id="mgo"></div>
         <div class="card">
@@ -1771,6 +1776,8 @@ function miniScore(){
     if (!sc || !mini || typeof IntersectionObserver==="undefined" || typeof MutationObserver==="undefined") return;
     const sync = () => { const a=$("ms-s"), b=$("ms-c"); if (a) a.textContent = sc.textContent; if (b) b.textContent = ck ? ck.textContent : ""; };
     new MutationObserver(sync).observe(sc, {childList:true, characterData:true, subtree:true});
+    const ev=$("ev"), mev=$("ms-ev");
+    if (ev && mev) new MutationObserver(() => { mev.innerHTML = [...ev.children].slice(-4).map(li=>li.outerHTML).join(""); }).observe(ev, {childList:true}); // son 4 olay
     if (ck) new MutationObserver(sync).observe(ck, {childList:true, characterData:true, subtree:true});
     new IntersectionObserver(es => { for (const e of es) mini.classList.toggle("on", !e.isIntersecting); }).observe(box);
     sync();

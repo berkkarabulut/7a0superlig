@@ -88,7 +88,7 @@ async function runMatchInner(rid){
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid mgrid" id="mgrid">
-      <div class="minisc" id="minisc" aria-hidden="true"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div>
+      <div class="minisc" id="minisc" aria-hidden="true"><div class="ms-row"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div><ul class="events ms-ev" id="ms-ev"></ul></div>
       <div>
         <div id="mgo"></div>
         <div class="card">
@@ -187,6 +187,8 @@ function miniScore(){
     if (!sc || !mini || typeof IntersectionObserver==="undefined" || typeof MutationObserver==="undefined") return;
     const sync = () => { const a=$("ms-s"), b=$("ms-c"); if (a) a.textContent = sc.textContent; if (b) b.textContent = ck ? ck.textContent : ""; };
     new MutationObserver(sync).observe(sc, {childList:true, characterData:true, subtree:true});
+    const ev=$("ev"), mev=$("ms-ev");
+    if (ev && mev) new MutationObserver(() => { mev.innerHTML = [...ev.children].slice(-4).map(li=>li.outerHTML).join(""); }).observe(ev, {childList:true}); // son 4 olay
     if (ck) new MutationObserver(sync).observe(ck, {childList:true, characterData:true, subtree:true});
     new IntersectionObserver(es => { for (const e of es) mini.classList.toggle("on", !e.isIntersecting); }).observe(box);
     sync();

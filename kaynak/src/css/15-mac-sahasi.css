@@ -38,8 +38,13 @@
 .mbench .ph:first-child{margin-top:0!important}
 
 /* asıl skor tabelası ekrandan çıkınca üstte küçük sabit skor şeridi (anlatım akarken ve devre arasında skor hep görünsün) */
-.mgrid .minisc{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:#0d0216f2;border-bottom:3px solid var(--acc);box-shadow:0 8px 16px -6px #000d;font-weight:800;transform:translateY(-110%);transition:transform .2s}
+.mgrid .minisc{position:fixed;top:0;left:0;right:0;z-index:60;padding:8px 12px 4px;padding-top:max(8px,env(safe-area-inset-top));background:#0d0216;border-bottom:3px solid var(--acc);box-shadow:0 8px 16px -6px #000d;font-weight:800;transform:translateY(-110%);transition:transform .2s}
 .mgrid .minisc.on{transform:none}
+.mgrid .minisc .ms-row{display:flex;align-items:center;justify-content:center;gap:10px;max-width:760px;margin:0 auto}
+.mgrid .minisc .ms-ev{max-height:none;overflow:hidden;max-width:760px;margin:6px auto 0;font-weight:400}
+.mgrid .minisc .ms-ev:empty{display:none}
+.mgrid .minisc .ms-ev li{padding:4px 2px;font-size:13px}
+.mgrid .minisc .ms-ev li:last-child{border-bottom:0}
 .mgrid .minisc .ms-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
 .mgrid .minisc .ms-t:first-child{text-align:right}
 .mgrid .minisc .ms-s{font-family:var(--cond);font-size:26px;color:var(--gold);background:var(--acc);color:#fff;border-radius:4px;padding:0 10px;line-height:1.25}

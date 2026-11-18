@@ -94,7 +94,8 @@ def main():
     css = "".join(read(f) for f in css_files)
     js = "".join(read(f) for f in js_files)
     data = json.load(open(os.path.join(HERE, "data4.json"), encoding="utf-8"))
-    html = shell.replace("/*CSS*/", css, 1).replace("/*JS*/", js, 1).replace("/*DATA*/", json.dumps(data, ensure_ascii=False), 1)
+    guncel = json.load(open(os.path.join(HERE, "guncel.json"), encoding="utf-8"))
+    html = shell.replace("/*CSS*/", css, 1).replace("/*JS*/", js, 1).replace("/*DATA*/", json.dumps(data, ensure_ascii=False), 1).replace("/*GUNCEL*/", json.dumps(guncel, ensure_ascii=False), 1)
     out = os.path.join(HERE, "..", "index.html")
     if "--cikti" in args:
         out = args[args.index("--cikti") + 1]

@@ -32,25 +32,27 @@ function realBest(t){
   return best;
 }
 const realOk = t => !!realBest(t);
-const realLabel = () => { const t = POOL.find(x=>x.id===S.realId); return t ? `${t.season} ${t.team}` : ""; };
+const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
 function renderRealPicker(club){
   S.realClub = club || S.realClub || "Tümü";
-  const clubs = ["Tümü","Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(1,5);
-  const list = POOL.filter(t => S.realClub==="Tümü" || (S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub)).slice().reverse();
+  const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
+  const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);
+  const list = [...CUR.filter(hit), ...POOL.filter(t=>!t.cur && hit(t)).slice().reverse()];
   $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
     <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
+    <div class="row" style="margin:10px 0 6px"><button class="btn ghost" onclick="renderDerby()">⚔️ Güncel kadrolarla derbi simülasyonu</button></div>
     <div class="row" style="margin:10px 0 14px">${clubs.map(c=>`<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${c}</button>`).join("")}</div>
     <div class="rl-grid">${list.map(t => { const b = realBest(t), c = kitC(t.team), coach = coachOf(t);
       const avg = b ? Math.round(b.total/11) : null;
       return `<button class="card rl-card ${b?"":"rl-lock"}" ${b?`onclick="pickReal('${esc(t.id)}')"`:"disabled"}>
-        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${t.season} ${esc(t.team)}</b><span class="rl-rk rk${t.rank}">${t.rank}.</span></span>
+        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${t.season} ${esc(t.team)}</b>${t.cur?`<span class="rl-rk rl-cur">GÜNCEL</span>`:`<span class="rl-rk rk${t.rank}">${t.rank}.</span>`}</span>
         <span class="mut rl-s">${b ? `${b.form} · ilk 11 ortalaması <b>${avg}</b> · ${t.players.length} oyuncu` : "🔒 Kadro eksik · yakında"}</span>
         ${coach?`<span class="mut rl-s">Teknik direktör: ${esc(coach)}</span>`:""}</button>`; }).join("")}</div>`;
   toTop();
 }
 function realFill(form){
-  const t = POOL.find(x=>x.id===S.realId), a = realAssign(t, form); if (!a) return false;
+  const t = findTeam(S.realId), a = realAssign(t, form); if (!a) return false;
   const meta = {team:t.team, season:t.season, key:t.id};
   S.form = form;
   S.slots = FORMATIONS[form].map(([pos,x,y],i)=>{ const p = t.players[a.pick[i]], pen = penaltyFor(p,pos);
@@ -61,14 +63,14 @@ function realFill(form){
   return true;
 }
 function pickReal(id){
-  const t = POOL.find(x=>x.id===id); if (!t || !realOk(t)) return;
+  const t = findTeam(id); if (!t || !realOk(t)) return;
   S.mode = "real"; S.realId = id; S.challenge = null; S.almanac = false;
   S.seed = Math.floor(Math.random()*2e9); S.phase = "ready"; S.used = new Set(); S.drawn = new Set(); S.spent = 0; S.counted = false;
   realFill(realBest(t).form); bump("g"); renderReady();
 }
 function realSetForm(f){ if (realFill(f)) renderReady(); }
 function realFormHTML(){
-  const t = POOL.find(x=>x.id===S.realId); if (!t) return "";
+  const t = findTeam(S.realId); if (!t) return "";
   return `<div class="card rl-info"><b>🏟️ ${esc(realLabel())}</b>${coachOf(t)?` <span class="mut">· ${esc(coachOf(t))}</span>`:""}
     <h3 style="margin:10px 0 6px">Diziliş</h3>
     <div class="row">${Object.keys(FORMATIONS).map(f=>{ const a = realAssign(t,f); return a ? `<button class="chip ${f===S.form?"on":""}" onclick="realSetForm('${f}')">${f}</button>` : `<button class="chip" disabled title="Bu kadroyla kurulamıyor">${f}</button>`; }).join("")}</div>

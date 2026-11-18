@@ -5,6 +5,10 @@ const POOL = [];
 function rankNote(season, rank){ return rank===1 ? `${season} sezonunu şampiyon bitirdi` : `${season} sezonunu ${rank}. bitirdi`; }
 for (const [season, teams] of Object.entries(DATA))
   for (const t of teams) POOL.push({ season, team: t.team, rank: t.rank, note: rankNote(season, t.rank), players: t.players, id: season+"|"+t.team });
+// güncel sezon kadroları (guncel.json): kura havuzunda yok, sadece gerçek takım modu ve derbi simülasyonu kullanır
+const GUNCEL = /*GUNCEL*/;
+const CUR = GUNCEL.teams.map(t => ({ season: GUNCEL.sezon, team: t.team, rank: 0, cur: true, coach: t.coach, note: `${GUNCEL.sezon} güncel kadro`, players: t.players, id: GUNCEL.sezon+"|"+t.team }));
+const findTeam = id => POOL.find(x=>x.id===id) || CUR.find(x=>x.id===id);
 
 const FORMATIONS = {
   "4-3-3": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["CM",27,48],["DM",50,56],["CM",73,48],["LW",16,22],["ST",50,15],["RW",84,22]],

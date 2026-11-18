@@ -147,6 +147,7 @@ const DICT_ROWS = [
  ["Kimya","Chemistry","Química"],
 ];
 DICT_ROWS.push([". Buna karşı etkili:",". Works well against it:",". Funciona contra él:"],["Ne şiş yansın ne kebap.","Safe and steady.","Ni fu ni fa."],["— boş (oyundan çıktı)","— empty (left the pitch)","— vacío (fuera del campo)"],["Yedek seçerken oyuncuya dokunman yeter, kulübede uygun yere kendisi geçer. Sarı: asıl mevkisi. Turuncu: mevki dışı (oyuncu −4, takım gücü −2.5). Kadro başına 2 yeniden çekme hakkın var.","When picking subs, just tap a player and he takes the right bench spot. Yellow: natural position. Orange: out of position (player −4, team strength −2.5). You have 2 redraws per squad.","Al elegir suplentes, toca un jugador y se coloca solo en el banquillo. Amarillo: su posición. Naranja: fuera de posición (jugador −4, fuerza −2.5). Tienes 2 cambios de sorteo por plantilla."],["G1","G1","G1"],["G2","G2","G2"],["G3","G3","G3"],["S16","R16","OCT"],["ÇF","QF","CU"],["YF","SF","SF"],["F","F","F"],["Sen de 11'ini kur","Build your own XI","Crea tu propio once"],["SÜPER LİG","SÜPER LİG","SÜPER LİG"],["Maç önü","Pre-match","Previa"],["Günün meydan okuması","Daily challenge","Reto del día"]);
+DICT_ROWS.push(["⚔️ Güncel derbi simülasyonu","⚔️ Current derby simulator","⚔️ Simulador de derbi actual"],["Güncel derbi simülasyonu","Current derby simulator","Simulador de derbi actual"],["⚔️ Güncel kadrolarla derbi simülasyonu","⚔️ Derby simulator with current squads","⚔️ Simulador de derbi con plantillas actuales"],["Ev sahibi","Home","Local"],["Deplasman","Away","Visitante"],["⇅ Yer değiştir","⇅ Swap","⇅ Cambiar"],["VS","VS","VS"],["▶️ Maçı oynat","▶️ Play the match","▶️ Jugar el partido"],["📤 Paylaş","📤 Share","📤 Compartir"],["Kopyalandı ✓","Copied ✓","Copiado ✓"],["Kopyalanamadı","Couldn't copy","No se pudo copiar"],["Berabere","Draw","Empate"],["Gol yok, 0-0.","No goals, 0-0.","Sin goles, 0-0."],["beraberlik","draw","empate"],["GÜNCEL","CURRENT","ACTUAL"],["Güncel kadro yok.","No current squads.","No hay plantillas actuales."]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];
@@ -156,6 +157,15 @@ const STAGE_I18N = [["Grup 1. maç","Group match 1","Grupo · partido 1"],["Grup
 for (const r of STAGE_I18N) DICT[r[0]] = [r[1], r[2]];
 const posName = s => DICT[s] ? DICT[s][LI] : s;
 const RX = [
+ [/^🎲 ([\d.]+) kez simüle et$/, m => "🎲 "+(LI===0?`Simulate ${m[1].replace(".",",")} times`:`Simular ${m[1]} veces`)],
+ [/^🎲 ([\d.]+) maçlık simülasyon$/, m => "🎲 "+(LI===0?`${m[1].replace(".",",")}-match simulation`:`Simulación de ${m[1]} partidos`)],
+ [/^(.+) kazandı$/, m => m[1]+(LI===0?" won":" ganó")],
+ [/^Güncel (\d{4}-\d{2})$/, m => (LI===0?"Current ":"Actual ")+m[1]],
+ [/^🏟️ (.+) ile turnuvaya çık$/, m => "🏟️ "+(LI===0?`Enter the tournament with ${m[1]}`:`Juega el torneo con ${m[1]}`)],
+ [/^Maç başı gol: (.+) · En olası skorlar: (.+)$/, m => LI===0?`Goals per match: ${m[1]} · Most likely scores: ${m[2]}`:`Goles por partido: ${m[1]} · Marcadores más probables: ${m[2]}`],
+ [/^(\S+) · (\S+) (.+) · güç (\d+)(?: · TD (.+))?$/, m => `${m[1]} · ${m[2]} ${L(m[3])} · ${LI===0?"power":"poder"} ${m[4]}${m[5]?` · ${LI===0?"Coach":"DT"} ${m[5]}`:""}`],
+ [/^(\d{4}-\d{2}) güncel kadrolarıyla iki takımı seç\. İlk 11 ve diziliş otomatik kurulur, ev sahibi küçük bir avantajla başlar\. Kadrolar (.+) itibarıyla\.$/, m => LI===0?`Pick two teams with ${m[1]} current squads. The XI and formation are set automatically; the home side gets a small edge. Squads as of ${m[2]}.`:`Elige dos equipos con las plantillas actuales ${m[1]}. El once y la formación se eligen solos; el local tiene una pequeña ventaja. Plantillas a ${m[2]}.`],
+ [/^(\d{4}-\d{2}) kadrolarıyla (.+)\. İki takımı seç, maçı oynat, 1\.000 kere simüle et\.$/, m => LI===0?`${m[1]} squads: ${m[2]}. Pick two teams, play the match, simulate it 1,000 times.`:`Plantillas ${m[1]}: ${m[2]}. Elige dos equipos, juega el partido, simúlalo 1.000 veces.`],
  [/^(\S+) · ilk 11 ortalaması$/, m => m[1]+(LI===0?" · XI average":" · media del once")],
  [/^· (\d+) oyuncu$/, m => "· "+m[1]+(LI===0?" players":" jugadores")],
  [/^Teknik direktör: (.+)$/, m => (LI===0?"Coach: ":"DT: ")+m[1]],

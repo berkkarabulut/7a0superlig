@@ -569,6 +569,36 @@ body.yayin main{padding-top:6px}
 .st-last{font-size:11px;color:var(--mut,#c2b3d6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .st-msg{font:800 22px/1.3 var(--cond);text-align:center;padding:16px 6px;text-transform:uppercase}
 .st-intro ol{padding-left:20px;line-height:1.6}
+
+/* ===== güncel derbi simülasyonu ===== */
+.rl-rk.rl-cur{background:var(--win);color:#04170c;font-size:11px;letter-spacing:.5px}
+.db-cfg{display:flex;flex-direction:column;gap:6px}
+.db-lab{font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.db-pick .chip{display:inline-flex;align-items:center;gap:6px}
+.db-swap{padding:4px 12px;font-size:13px}
+.db-sides{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin:14px 0}
+.db-side{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.db-name{display:flex;align-items:center;gap:8px;font-size:17px}
+.db-meta{font-size:13px;margin-top:4px}
+.db-xi{font-size:13px;margin-top:8px;line-height:1.5}
+.db-vs{align-self:center;font-weight:900;font-size:20px;color:var(--gold)}
+.db-act{gap:8px;align-items:center}
+.db-res{margin-top:14px}
+.db-score{display:flex;align-items:center;justify-content:center;gap:16px;font-size:18px;font-weight:700}
+.db-score b{font-size:38px;color:var(--gold);font-family:var(--cond,inherit)}
+.db-win{text-align:center;margin:2px 0 10px}
+.db-ev{display:flex;flex-direction:column;gap:4px}
+.db-e{font-size:14px}
+.db-e.db-r{text-align:right}
+.db-m{color:var(--mut);display:inline-block;min-width:30px}
+.db-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px}
+.db-pcs{display:flex;justify-content:space-between;gap:8px;margin:8px 0 4px;font-size:14px;flex-wrap:wrap}
+@media (max-width:640px){
+  .db-sides{grid-template-columns:1fr}
+  .db-vs{justify-self:center}
+  .db-score{font-size:15px;gap:10px}
+  .db-score b{font-size:30px}
+}
 </style>
 </head>
 <body>
@@ -603,6 +633,10 @@ const POOL = [];
 function rankNote(season, rank){ return rank===1 ? `${season} sezonunu şampiyon bitirdi` : `${season} sezonunu ${rank}. bitirdi`; }
 for (const [season, teams] of Object.entries(DATA))
   for (const t of teams) POOL.push({ season, team: t.team, rank: t.rank, note: rankNote(season, t.rank), players: t.players, id: season+"|"+t.team });
+// güncel sezon kadroları (guncel.json): kura havuzunda yok, sadece gerçek takım modu ve derbi simülasyonu kullanır
+const GUNCEL = {"sezon": "2026-27", "guncelleme": "2026-11-18", "kaynak": "Kulüp kadroları: Wikipedia 2026-27 sezon sayfaları (GS, FB), starting11.com (BJK, TS, Başakşehir), 18 Kasım 2026. Güçler oyunun kendi ölçeği.", "teams": [{"team": "Galatasaray", "coach": "Okan Buruk", "players": [{"n": "Uğurcan Çakır", "p": ["GK"], "r": 85, "d": ["GK"]}, {"n": "Günay Güvenç", "p": ["GK"], "r": 76, "d": ["GK"]}, {"n": "Davinson Sánchez", "p": ["DF"], "r": 85, "d": ["CB"]}, {"n": "Kaan Ayhan", "p": ["DF"], "r": 85, "d": ["CB", "DM"]}, {"n": "Abdülkerim Bardakcı", "p": ["DF"], "r": 84, "d": ["CB"]}, {"n": "Wilfried Singo", "p": ["DF"], "r": 82, "d": ["RB", "CB"]}, {"n": "Ismail Jakobs", "p": ["DF"], "r": 82, "d": ["LB"]}, {"n": "Eren Elmalı", "p": ["DF"], "r": 79, "d": ["LB"]}, {"n": "El Chadaille Bitshiabu", "p": ["DF"], "r": 78, "d": ["CB"]}, {"n": "Lucas Torreira", "p": ["MF"], "r": 87, "d": ["DM"]}, {"n": "Gabriel Sara", "p": ["MF"], "r": 87, "d": ["CM", "AM"]}, {"n": "İlkay Gündoğan", "p": ["MF"], "r": 84, "d": ["CM", "AM"]}, {"n": "Aleksey Batrakov", "p": ["MF"], "r": 84, "d": ["AM", "CM"]}, {"n": "Mario Lemina", "p": ["MF"], "r": 82, "d": ["DM", "CM"]}, {"n": "Lesley Ugochukwu", "p": ["MF"], "r": 80, "d": ["DM", "CM"]}, {"n": "Leroy Sané", "p": ["MF"], "r": 86, "d": ["RW", "LW"]}, {"n": "Rafael Leão", "p": ["MF"], "r": 88, "d": ["LW", "ST"]}, {"n": "Yunus Akgün", "p": ["MF"], "r": 84, "d": ["RW"]}, {"n": "Roland Sallai", "p": ["MF"], "r": 80, "d": ["RW", "RB"]}, {"n": "Barış Alper Yılmaz", "p": ["FW"], "r": 87, "d": ["RW", "ST"]}, {"n": "Victor Osimhen", "p": ["FW"], "r": 92, "d": ["ST"]}, {"n": "Deniz Gül", "p": ["FW"], "r": 80, "d": ["ST"]}]}, {"team": "Fenerbahçe", "coach": "İsmail Kartal", "players": [{"n": "Ederson", "p": ["GK"], "r": 86, "d": ["GK"]}, {"n": "Mert Günok", "p": ["GK"], "r": 79, "d": ["GK"]}, {"n": "Milan Škriniar", "p": ["DF"], "r": 84, "d": ["CB"]}, {"n": "Nathan Aké", "p": ["DF"], "r": 84, "d": ["CB", "LB"]}, {"n": "Mert Müldür", "p": ["DF"], "r": 84, "d": ["RB", "LB"]}, {"n": "Jayden Oosterwolde", "p": ["DF"], "r": 83, "d": ["LB", "CB"]}, {"n": "Nélson Semedo", "p": ["DF"], "r": 81, "d": ["RB"]}, {"n": "Kojo Peprah Oppong", "p": ["DF"], "r": 80, "d": ["CB"]}, {"n": "Archie Brown", "p": ["DF"], "r": 80, "d": ["LB"]}, {"n": "Yiğit Efe Demir", "p": ["DF"], "r": 78, "d": ["CB"]}, {"n": "N'Golo Kanté", "p": ["MF"], "r": 85, "d": ["DM", "CM"]}, {"n": "Mattéo Guendouzi", "p": ["MF"], "r": 84, "d": ["CM", "DM"]}, {"n": "İsmail Yüksek", "p": ["MF"], "r": 81, "d": ["DM"]}, {"n": "Mert Hakan Yandaş", "p": ["MF"], "r": 78, "d": ["CM"]}, {"n": "İrfan Can Kahveci", "p": ["MF"], "r": 86, "d": ["RM", "AM"]}, {"n": "Marco Asensio", "p": ["MF"], "r": 85, "d": ["AM", "RW"]}, {"n": "Oğuz Aydın", "p": ["MF"], "r": 80, "d": ["LW", "RW"]}, {"n": "Kerem Aktürkoğlu", "p": ["FW"], "r": 85, "d": ["LW"]}, {"n": "Mason Greenwood", "p": ["FW"], "r": 87, "d": ["RW", "ST"]}, {"n": "Dorgeles Nene", "p": ["FW"], "r": 81, "d": ["RW", "LW"]}, {"n": "Romelu Lukaku", "p": ["FW"], "r": 84, "d": ["ST"]}, {"n": "Vedat Muriqi", "p": ["FW"], "r": 84, "d": ["ST"]}]}, {"team": "Beşiktaş", "coach": "Vincenzo Italiano", "players": [{"n": "Alexander Nübel", "p": ["GK"], "r": 83, "d": ["GK"]}, {"n": "Doğan Alemdar", "p": ["GK"], "r": 77, "d": ["GK"]}, {"n": "Emmanuel Agbadou", "p": ["DF"], "r": 82, "d": ["CB"]}, {"n": "Tiago Djaló", "p": ["DF"], "r": 81, "d": ["CB"]}, {"n": "Emirhan Topçu", "p": ["DF"], "r": 80, "d": ["CB"]}, {"n": "Ümit Akdağ", "p": ["DF"], "r": 78, "d": ["CB"]}, {"n": "Amir Murillo", "p": ["DF"], "r": 81, "d": ["RB"]}, {"n": "Taylan Bulut", "p": ["DF"], "r": 76, "d": ["RB"]}, {"n": "Rıdvan Yılmaz", "p": ["DF"], "r": 80, "d": ["LB"]}, {"n": "Kassoum Ouattara", "p": ["DF"], "r": 79, "d": ["LB"]}, {"n": "Wilfred Ndidi", "p": ["MF"], "r": 83, "d": ["DM"]}, {"n": "Salih Özcan", "p": ["MF"], "r": 82, "d": ["DM", "CM"]}, {"n": "Orkun Kökçü", "p": ["MF"], "r": 87, "d": ["CM", "AM"]}, {"n": "Junior Olaitan", "p": ["MF"], "r": 81, "d": ["CM", "AM"]}, {"n": "Fabio Miretti", "p": ["MF"], "r": 80, "d": ["CM", "AM"]}, {"n": "Kartal Kayra Yılmaz", "p": ["MF"], "r": 77, "d": ["CM"]}, {"n": "Leandro Trossard", "p": ["FW"], "r": 86, "d": ["LW", "AM"]}, {"n": "Václav Černý", "p": ["FW"], "r": 82, "d": ["RW"]}, {"n": "Milot Rashica", "p": ["FW"], "r": 79, "d": ["LW", "RW"]}, {"n": "Ernest Poku", "p": ["FW"], "r": 79, "d": ["RW", "LW"]}, {"n": "İlhan Fakılı", "p": ["FW"], "r": 77, "d": ["RW", "LW"]}, {"n": "Dušan Vlahović", "p": ["FW"], "r": 87, "d": ["ST"]}, {"n": "Oh Hyeon-gyu", "p": ["FW"], "r": 80, "d": ["ST"]}, {"n": "Semih Kılıçsoy", "p": ["FW"], "r": 78, "d": ["ST"]}]}, {"team": "Trabzonspor", "coach": "Thomas Reis", "players": [{"n": "André Onana", "p": ["GK"], "r": 84, "d": ["GK"]}, {"n": "Stefan Savić", "p": ["DF"], "r": 80, "d": ["CB"]}, {"n": "Chibuike Nwaiwu", "p": ["DF"], "r": 79, "d": ["CB"]}, {"n": "Cenk Özkacar", "p": ["DF"], "r": 79, "d": ["CB"]}, {"n": "Samet Akaydın", "p": ["DF"], "r": 76, "d": ["CB"]}, {"n": "Wagner Pina", "p": ["DF"], "r": 79, "d": ["RB"]}, {"n": "Sidny Lopes Cabral", "p": ["DF"], "r": 79, "d": ["LB", "RB"]}, {"n": "Mustafa Eskihellaç", "p": ["DF"], "r": 78, "d": ["LB", "RB"]}, {"n": "Fabinho", "p": ["MF"], "r": 82, "d": ["DM"]}, {"n": "Ruslan Malinovskyi", "p": ["MF"], "r": 81, "d": ["CM", "AM"]}, {"n": "Okay Yokuşlu", "p": ["MF"], "r": 78, "d": ["DM"]}, {"n": "Ozan Tufan", "p": ["MF"], "r": 78, "d": ["DM", "CM"]}, {"n": "Batista Mendy", "p": ["MF"], "r": 78, "d": ["DM", "CM"]}, {"n": "Melih Kabasakal", "p": ["MF"], "r": 77, "d": ["DM"]}, {"n": "Benjamin Bouchouari", "p": ["MF"], "r": 77, "d": ["CM"]}, {"n": "Ernest Muçi", "p": ["MF"], "r": 83, "d": ["AM", "ST"]}, {"n": "Mohamed Salah", "p": ["FW"], "r": 88, "d": ["RW"]}, {"n": "Noah Saviolo", "p": ["FW"], "r": 80, "d": ["LW"]}, {"n": "Aral Şimşir", "p": ["FW"], "r": 79, "d": ["LW", "RW"]}, {"n": "Paul Onuachu", "p": ["FW"], "r": 84, "d": ["ST"]}, {"n": "Franculino Djú", "p": ["FW"], "r": 78, "d": ["ST"]}, {"n": "Umut Nayir", "p": ["FW"], "r": 76, "d": ["ST"]}]}, {"team": "Başakşehir", "coach": "Nuri Şahin", "players": [{"n": "Muhammed Şengezer", "p": ["GK"], "r": 79, "d": ["GK"]}, {"n": "Volkan Babacan", "p": ["GK"], "r": 74, "d": ["GK"]}, {"n": "Jerome Opoku", "p": ["DF"], "r": 79, "d": ["CB"]}, {"n": "Emin Bayram", "p": ["DF"], "r": 78, "d": ["CB"]}, {"n": "Ousseynou Ba", "p": ["DF"], "r": 78, "d": ["CB"]}, {"n": "Michał Karbownik", "p": ["DF"], "r": 78, "d": ["RB", "LB"]}, {"n": "Christopher Operi", "p": ["DF"], "r": 77, "d": ["LB"]}, {"n": "Ömer Ali Şahiner", "p": ["DF"], "r": 76, "d": ["RB"]}, {"n": "Onur Bulut", "p": ["DF"], "r": 75, "d": ["RB"]}, {"n": "Olivier Kemen", "p": ["MF"], "r": 79, "d": ["DM", "CM"]}, {"n": "Jakub Kałuziński", "p": ["MF"], "r": 78, "d": ["DM"]}, {"n": "Berkay Özcan", "p": ["MF"], "r": 77, "d": ["CM", "AM"]}, {"n": "Onur Ergün", "p": ["MF"], "r": 74, "d": ["CM"]}, {"n": "Abbosbek Fayzullayev", "p": ["MF"], "r": 79, "d": ["AM", "LW"]}, {"n": "Ivan Brnić", "p": ["MF"], "r": 78, "d": ["AM", "LW"]}, {"n": "Edin Višća", "p": ["MF"], "r": 77, "d": ["RW"]}, {"n": "Andreas Skov Olsen", "p": ["FW"], "r": 81, "d": ["RW"]}, {"n": "Yusuf Sarı", "p": ["FW"], "r": 77, "d": ["RW", "LW"]}, {"n": "Eldor Shomurodov", "p": ["FW"], "r": 83, "d": ["ST", "AM"]}, {"n": "Davie Selke", "p": ["FW"], "r": 78, "d": ["ST"]}, {"n": "Umut Bozok", "p": ["FW"], "r": 78, "d": ["ST"]}, {"n": "Bertuğ Yıldırım", "p": ["FW"], "r": 78, "d": ["ST"]}]}]};
+const CUR = GUNCEL.teams.map(t => ({ season: GUNCEL.sezon, team: t.team, rank: 0, cur: true, coach: t.coach, note: `${GUNCEL.sezon} güncel kadro`, players: t.players, id: GUNCEL.sezon+"|"+t.team }));
+const findTeam = id => POOL.find(x=>x.id===id) || CUR.find(x=>x.id===id);
 
 const FORMATIONS = {
   "4-3-3": [["GK",50,90],["LB",14,70],["CB",38,75],["CB",62,75],["RB",86,70],["CM",27,48],["DM",50,56],["CM",73,48],["LW",16,22],["ST",50,15],["RW",84,22]],
@@ -731,7 +765,7 @@ const COACH = {
  "2024-25|Galatasaray":"Okan Buruk","2024-25|Fenerbahçe":"José Mourinho","2024-25|Samsunspor":"Thomas Reis",
  "2025-26|Galatasaray":"Okan Buruk","2025-26|Fenerbahçe":"Zeki Murat Göle","2025-26|Trabzonspor":"Fatih Tekke"
 };
-const coachOf = t => COACH[t.season+"|"+t.team] || "";
+const coachOf = t => COACH[t.season+"|"+t.team] || t.coach || "";
 // hakemler: [ad, ilk sezon yılı, son sezon yılı] (yaklaşık aktif dönem)
 const REFS = [["Yusuf Namoğlu",1978,1990],["Erman Toroğlu",1980,1992],["Necmi Temizel",1980,1990],["Sadık Deda",1980,1993],["İhsan Türe",1982,1993],["Talat Tokat",1980,1991],["Burhan Koç",1980,1990],
  ["Hilmi Ok",1985,1996],["Ahmet Çakar",1988,1998],["Metin Tokat",1990,2003],["Oğuz Sarvan",1990,2002],["Mustafa Çulcu",1991,2003],["Muhittin Boşat",1992,2002],["İbrahim Aksoy",1993,2003],["Serdar Tatlı",1996,2005],
@@ -872,6 +906,7 @@ function renderStart(){
       <button class="card mode ${S.homePick&&S.mode==="solo"?"on":""}" onclick="pickMode('solo')"><b><span class="mi">🎮</span> Tek oyunculu</b><span class="mut">Sınırsız oyun. İstediğin kadar kur, istediğin kadar dene.</span></button>
       <button class="card mode ${S.homePick&&S.mode==="daily"?"on":""}" onclick="pickMode('daily')"><b><span class="mi">🗓️</span> Günün Meydan Okuması</b><span class="mut">Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.${daily?` <br>Bugünkü sonucun: <b style="color:var(--gold)">${esc(daily.title)}</b>`:""}<br>${streakHTML()}</span></button>
       <button class="card mode realcard" onclick="renderRealPicker()"><b>🏟️ Gerçek takımla oyna</b><span class="mut">Bir sezonun gerçek kadrosunu seç, onunla turnuvaya çık. 1998-99 Galatasaray ile 7-0 yapabilir misin?</span></button>
+      <button class="card mode dbcard" onclick="renderDerby()"><b><span class="mi">⚔️</span> Güncel derbi simülasyonu</b><span class="mut">${GUNCEL.sezon} kadrolarıyla Galatasaray, Fenerbahçe, Beşiktaş, Trabzonspor, Başakşehir. İki takımı seç, maçı oynat, 1.000 kere simüle et.</span></button>
       <button class="card mode" onclick="startQuiz(false)"><b>🧠 Bu kadro hangi sezon?</b><span class="mut">Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.${store.get("quiz:"+todayKey(),null)?` <br>Bugünkü skorun: <b style="color:var(--gold)">${store.get("quiz:"+todayKey()).score}/5</b>`:""}</span></button>
       <button class="card mode invcard" onclick="openInvite()"><b>📨 Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
@@ -2649,6 +2684,7 @@ const DICT_ROWS = [
  ["Kimya","Chemistry","Química"],
 ];
 DICT_ROWS.push([". Buna karşı etkili:",". Works well against it:",". Funciona contra él:"],["Ne şiş yansın ne kebap.","Safe and steady.","Ni fu ni fa."],["— boş (oyundan çıktı)","— empty (left the pitch)","— vacío (fuera del campo)"],["Yedek seçerken oyuncuya dokunman yeter, kulübede uygun yere kendisi geçer. Sarı: asıl mevkisi. Turuncu: mevki dışı (oyuncu −4, takım gücü −2.5). Kadro başına 2 yeniden çekme hakkın var.","When picking subs, just tap a player and he takes the right bench spot. Yellow: natural position. Orange: out of position (player −4, team strength −2.5). You have 2 redraws per squad.","Al elegir suplentes, toca un jugador y se coloca solo en el banquillo. Amarillo: su posición. Naranja: fuera de posición (jugador −4, fuerza −2.5). Tienes 2 cambios de sorteo por plantilla."],["G1","G1","G1"],["G2","G2","G2"],["G3","G3","G3"],["S16","R16","OCT"],["ÇF","QF","CU"],["YF","SF","SF"],["F","F","F"],["Sen de 11'ini kur","Build your own XI","Crea tu propio once"],["SÜPER LİG","SÜPER LİG","SÜPER LİG"],["Maç önü","Pre-match","Previa"],["Günün meydan okuması","Daily challenge","Reto del día"]);
+DICT_ROWS.push(["⚔️ Güncel derbi simülasyonu","⚔️ Current derby simulator","⚔️ Simulador de derbi actual"],["Güncel derbi simülasyonu","Current derby simulator","Simulador de derbi actual"],["⚔️ Güncel kadrolarla derbi simülasyonu","⚔️ Derby simulator with current squads","⚔️ Simulador de derbi con plantillas actuales"],["Ev sahibi","Home","Local"],["Deplasman","Away","Visitante"],["⇅ Yer değiştir","⇅ Swap","⇅ Cambiar"],["VS","VS","VS"],["▶️ Maçı oynat","▶️ Play the match","▶️ Jugar el partido"],["📤 Paylaş","📤 Share","📤 Compartir"],["Kopyalandı ✓","Copied ✓","Copiado ✓"],["Kopyalanamadı","Couldn't copy","No se pudo copiar"],["Berabere","Draw","Empate"],["Gol yok, 0-0.","No goals, 0-0.","Sin goles, 0-0."],["beraberlik","draw","empate"],["GÜNCEL","CURRENT","ACTUAL"],["Güncel kadro yok.","No current squads.","No hay plantillas actuales."]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];
@@ -2658,6 +2694,15 @@ const STAGE_I18N = [["Grup 1. maç","Group match 1","Grupo · partido 1"],["Grup
 for (const r of STAGE_I18N) DICT[r[0]] = [r[1], r[2]];
 const posName = s => DICT[s] ? DICT[s][LI] : s;
 const RX = [
+ [/^🎲 ([\d.]+) kez simüle et$/, m => "🎲 "+(LI===0?`Simulate ${m[1].replace(".",",")} times`:`Simular ${m[1]} veces`)],
+ [/^🎲 ([\d.]+) maçlık simülasyon$/, m => "🎲 "+(LI===0?`${m[1].replace(".",",")}-match simulation`:`Simulación de ${m[1]} partidos`)],
+ [/^(.+) kazandı$/, m => m[1]+(LI===0?" won":" ganó")],
+ [/^Güncel (\d{4}-\d{2})$/, m => (LI===0?"Current ":"Actual ")+m[1]],
+ [/^🏟️ (.+) ile turnuvaya çık$/, m => "🏟️ "+(LI===0?`Enter the tournament with ${m[1]}`:`Juega el torneo con ${m[1]}`)],
+ [/^Maç başı gol: (.+) · En olası skorlar: (.+)$/, m => LI===0?`Goals per match: ${m[1]} · Most likely scores: ${m[2]}`:`Goles por partido: ${m[1]} · Marcadores más probables: ${m[2]}`],
+ [/^(\S+) · (\S+) (.+) · güç (\d+)(?: · TD (.+))?$/, m => `${m[1]} · ${m[2]} ${L(m[3])} · ${LI===0?"power":"poder"} ${m[4]}${m[5]?` · ${LI===0?"Coach":"DT"} ${m[5]}`:""}`],
+ [/^(\d{4}-\d{2}) güncel kadrolarıyla iki takımı seç\. İlk 11 ve diziliş otomatik kurulur, ev sahibi küçük bir avantajla başlar\. Kadrolar (.+) itibarıyla\.$/, m => LI===0?`Pick two teams with ${m[1]} current squads. The XI and formation are set automatically; the home side gets a small edge. Squads as of ${m[2]}.`:`Elige dos equipos con las plantillas actuales ${m[1]}. El once y la formación se eligen solos; el local tiene una pequeña ventaja. Plantillas a ${m[2]}.`],
+ [/^(\d{4}-\d{2}) kadrolarıyla (.+)\. İki takımı seç, maçı oynat, 1\.000 kere simüle et\.$/, m => LI===0?`${m[1]} squads: ${m[2]}. Pick two teams, play the match, simulate it 1,000 times.`:`Plantillas ${m[1]}: ${m[2]}. Elige dos equipos, juega el partido, simúlalo 1.000 veces.`],
  [/^(\S+) · ilk 11 ortalaması$/, m => m[1]+(LI===0?" · XI average":" · media del once")],
  [/^· (\d+) oyuncu$/, m => "· "+m[1]+(LI===0?" players":" jugadores")],
  [/^Teknik direktör: (.+)$/, m => (LI===0?"Coach: ":"DT: ")+m[1]],
@@ -2907,25 +2952,27 @@ function realBest(t){
   return best;
 }
 const realOk = t => !!realBest(t);
-const realLabel = () => { const t = POOL.find(x=>x.id===S.realId); return t ? `${t.season} ${t.team}` : ""; };
+const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
 function renderRealPicker(club){
   S.realClub = club || S.realClub || "Tümü";
-  const clubs = ["Tümü","Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(1,5);
-  const list = POOL.filter(t => S.realClub==="Tümü" || (S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub)).slice().reverse();
+  const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
+  const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);
+  const list = [...CUR.filter(hit), ...POOL.filter(t=>!t.cur && hit(t)).slice().reverse()];
   $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
     <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
+    <div class="row" style="margin:10px 0 6px"><button class="btn ghost" onclick="renderDerby()">⚔️ Güncel kadrolarla derbi simülasyonu</button></div>
     <div class="row" style="margin:10px 0 14px">${clubs.map(c=>`<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${c}</button>`).join("")}</div>
     <div class="rl-grid">${list.map(t => { const b = realBest(t), c = kitC(t.team), coach = coachOf(t);
       const avg = b ? Math.round(b.total/11) : null;
       return `<button class="card rl-card ${b?"":"rl-lock"}" ${b?`onclick="pickReal('${esc(t.id)}')"`:"disabled"}>
-        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${t.season} ${esc(t.team)}</b><span class="rl-rk rk${t.rank}">${t.rank}.</span></span>
+        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${t.season} ${esc(t.team)}</b>${t.cur?`<span class="rl-rk rl-cur">GÜNCEL</span>`:`<span class="rl-rk rk${t.rank}">${t.rank}.</span>`}</span>
         <span class="mut rl-s">${b ? `${b.form} · ilk 11 ortalaması <b>${avg}</b> · ${t.players.length} oyuncu` : "🔒 Kadro eksik · yakında"}</span>
         ${coach?`<span class="mut rl-s">Teknik direktör: ${esc(coach)}</span>`:""}</button>`; }).join("")}</div>`;
   toTop();
 }
 function realFill(form){
-  const t = POOL.find(x=>x.id===S.realId), a = realAssign(t, form); if (!a) return false;
+  const t = findTeam(S.realId), a = realAssign(t, form); if (!a) return false;
   const meta = {team:t.team, season:t.season, key:t.id};
   S.form = form;
   S.slots = FORMATIONS[form].map(([pos,x,y],i)=>{ const p = t.players[a.pick[i]], pen = penaltyFor(p,pos);
@@ -2936,14 +2983,14 @@ function realFill(form){
   return true;
 }
 function pickReal(id){
-  const t = POOL.find(x=>x.id===id); if (!t || !realOk(t)) return;
+  const t = findTeam(id); if (!t || !realOk(t)) return;
   S.mode = "real"; S.realId = id; S.challenge = null; S.almanac = false;
   S.seed = Math.floor(Math.random()*2e9); S.phase = "ready"; S.used = new Set(); S.drawn = new Set(); S.spent = 0; S.counted = false;
   realFill(realBest(t).form); bump("g"); renderReady();
 }
 function realSetForm(f){ if (realFill(f)) renderReady(); }
 function realFormHTML(){
-  const t = POOL.find(x=>x.id===S.realId); if (!t) return "";
+  const t = findTeam(S.realId); if (!t) return "";
   return `<div class="card rl-info"><b>🏟️ ${esc(realLabel())}</b>${coachOf(t)?` <span class="mut">· ${esc(coachOf(t))}</span>`:""}
     <h3 style="margin:10px 0 6px">Diziliş</h3>
     <div class="row">${Object.keys(FORMATIONS).map(f=>{ const a = realAssign(t,f); return a ? `<button class="chip ${f===S.form?"on":""}" onclick="realSetForm('${f}')">${f}</button>` : `<button class="chip" disabled title="Bu kadroyla kurulamıyor">${f}</button>`; }).join("")}</div>
@@ -3141,6 +3188,107 @@ function stIntro(){
     <a class="btn ghost" href="?yayin=test">🧪 Deneme modu (sahte izleyiciler)</a></div></div>`;
 }
 if (stIsOn()) setTimeout(() => { if (/[?&]yayin=test/.test(location.search)) stStart(); else stIntro(); }, 700);
+// ---------- güncel derbi simülasyonu ----------
+// GUNCEL kadrolardan iki takım: en iyi diziliş otomatik kurulur, maç motoru oynatır. Tek maç ya da 1.000 maç.
+const DB_N = 1000, DB_HOME = { att: 2, def: 1 };
+// turnuva motoru büyük güç farklarına göre ayarlı; gerçek derbiler daha dengeli olduğu için farkları yarıya indiriyoruz
+const DB_SHRINK = 0.5, dbShr = x => 85 + (x-85)*DB_SHRINK;
+function dbSide(t, home){
+  const b = realBest(t); if (!b) return null;
+  const slots = FORMATIONS[b.form].map(x=>x[0]);
+  const pl = b.pick.map((j,i) => { const p = t.players[j], pen = penaltyFor(p, slots[i]); return {...p, r: p.r-pen, pos: LINE(slots[i]), role: slots[i]}; });
+  const style = oppStyle(t), pw = teamPower(pl, style);
+  if (home){ pw.att += DB_HOME.att; pw.def += DB_HOME.def; }
+  pw.att = dbShr(pw.att); pw.def = dbShr(pw.def);
+  return { t, form: b.form, pl, pw, style };
+}
+const dbTeam = id => CUR.find(t=>t.id===id);
+function dbPair(){
+  const D = S.db || (S.db = { a: CUR[0]?.id, b: CUR[1]?.id });
+  if (D.a===D.b) D.b = CUR.find(t=>t.id!==D.a)?.id;
+  return D;
+}
+function dbSet(k, id){ const D = dbPair(); D[k] = id; if (D.a===D.b) D[k==="a"?"b":"a"] = CUR.find(t=>t.id!==id)?.id; D.res = null; D.many = null; renderDerby(); }
+function dbSwap(){ const D = dbPair(); [D.a, D.b] = [D.b, D.a]; D.res = null; D.many = null; renderDerby(); }
+function dbPlay(){
+  const D = dbPair(), A = dbSide(dbTeam(D.a), true), B = dbSide(dbTeam(D.b), false);
+  const r = matchEngine(A.pw, B.pw, A.pl, B.pl, false, { ref: pickRef(GUNCEL.sezon), myName: A.t.team, oppName: B.t.team });
+  D.res = { g1: r.g1, g2: r.g2, ev: r.ev.filter(e => e.type==="goal" || e.type==="red").map(e => ({m: e.m, side: e.side, type: e.type, n: e.p?.n || ""})) };
+  bump("db"); renderDerby();
+}
+function dbMany(){
+  const D = dbPair(), A = dbSide(dbTeam(D.a), true), B = dbSide(dbTeam(D.b), false);
+  let w = 0, d = 0, l = 0, gf = 0, ga = 0; const sc = {};
+  for (let i=0; i<DB_N; i++){
+    const g1 = poisson(lam(A.pw.att, B.pw.def)), g2 = poisson(lam(B.pw.att, A.pw.def));
+    gf += g1; ga += g2; g1>g2 ? w++ : g1===g2 ? d++ : l++;
+    const k = g1+"-"+g2; sc[k] = (sc[k]||0)+1;
+  }
+  const top = Object.entries(sc).sort((x,y)=>y[1]-x[1]).slice(0,3);
+  D.many = { w, d, l, gf: gf/DB_N, ga: ga/DB_N, top };
+  bump("db"); renderDerby();
+}
+function dbXI(s){
+  const order = ["GK","DF","MF","FW"];
+  return order.map(k => s.pl.filter(p=>p.pos===k).map(p=>short(p.n)).join(", ")).filter(Boolean).join(" · ");
+}
+function dbShareText(){
+  const D = dbPair(), A = dbTeam(D.a), B = dbTeam(D.b), L = [];
+  if (D.res){
+    L.push(`⚔️ ${A.team} ${D.res.g1}-${D.res.g2} ${B.team} (simülasyon)`);
+    for (const e of D.res.ev) L.push(`${e.m}' ${e.type==="goal"?"⚽":"🟥"} ${short(e.n)} (${e.side?B.team:A.team})`);
+  }
+  if (D.many){
+    const m = D.many;
+    L.push(`🎲 ${DB_N} maçta: ${A.team} %${Math.round(m.w/DB_N*100)} · beraberlik %${Math.round(m.d/DB_N*100)} · ${B.team} %${Math.round(m.l/DB_N*100)}`);
+    L.push(`En olası skor: ${m.top[0][0]}`);
+  }
+  L.push(`Sen de dene: https://7a0superlig.com/?derbi`);
+  return L.join("\n");
+}
+async function dbShare(){
+  const txt = dbShareText(), out = $("dbshare");
+  try { if (navigator.share){ await navigator.share({text: txt}); return; } } catch(e){ if (e && e.name==="AbortError") return; }
+  try { await navigator.clipboard.writeText(txt); if (out) out.textContent = "Kopyalandı ✓"; } catch(e){ if (out) out.textContent = "Kopyalanamadı"; }
+}
+function dbPick(k){
+  const D = dbPair();
+  return `<div class="db-pick"><div class="mut db-lab">${k==="a"?"Ev sahibi":"Deplasman"}</div><div class="row">${CUR.map(t => { const c = kitC(t.team);
+    return `<button class="chip ${D[k]===t.id?"on":""}" onclick="dbSet('${k}','${esc(t.id)}')"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span> ${esc(t.team)}</button>`; }).join("")}</div></div>`;
+}
+function renderDerby(){
+  const D = dbPair(), TA = dbTeam(D.a), TB = dbTeam(D.b);
+  if (!TA || !TB){ $("play").innerHTML = `${topBar("")}<p class="mut">Güncel kadro yok.</p>`; return; }
+  const A = dbSide(TA, true), B = dbSide(TB, false), ca = kitC(TA.team), cb = kitC(TB.team);
+  const side = (s, c) => `<div class="db-side"><div class="db-name"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${esc(s.t.team)}</b></div>
+    <div class="mut db-meta">${s.form} · ${STYLES[s.style]?.e||""} ${esc(s.style)} · güç ${s.pw.ovr}${coachOf(s.t)?` · TD ${esc(coachOf(s.t))}`:""}</div>
+    <div class="db-xi">${esc(dbXI(s))}</div></div>`;
+  let res = "";
+  if (D.res){
+    const r = D.res, win = r.g1>r.g2 ? TA.team : r.g2>r.g1 ? TB.team : "";
+    res += `<div class="card db-res"><div class="db-score"><span>${esc(TA.team)}</span><b>${r.g1} - ${r.g2}</b><span>${esc(TB.team)}</span></div>
+      <div class="mut db-win">${win ? `${esc(win)} kazandı` : "Berabere"}</div>
+      <div class="db-ev">${r.ev.length ? r.ev.map(e=>`<div class="db-e ${e.side?"db-r":""}"><span class="db-m">${e.m}'</span> ${e.type==="goal"?"⚽":"🟥"} ${esc(e.n)}</div>`).join("") : `<div class="mut">Gol yok, 0-0.</div>`}</div></div>`;
+  }
+  if (D.many){
+    const m = D.many, pc = x => Math.round(x/DB_N*100);
+    res += `<div class="card db-res"><h3 style="margin:0 0 8px">🎲 ${DB_N.toLocaleString("tr-TR")} maçlık simülasyon</h3>
+      <div class="db-bar"><span style="flex:${m.w};background:${ca[0]}"></span><span style="flex:${m.d};background:#8a8f98"></span><span style="flex:${m.l};background:${cb[0]}"></span></div>
+      <div class="db-pcs"><span><b>%${pc(m.w)}</b> ${esc(TA.team)}</span><span><b>%${pc(m.d)}</b> beraberlik</span><span><b>%${pc(m.l)}</b> ${esc(TB.team)}</span></div>
+      <div class="mut db-meta">Maç başı gol: ${m.gf.toFixed(1)} - ${m.ga.toFixed(1)} · En olası skorlar: ${m.top.map(([k,v])=>`${k} (%${(v/DB_N*100).toFixed(0)})`).join(", ")}</div></div>`;
+  }
+  $("play").innerHTML = `${topBar("")}
+    <h1>⚔️ Güncel derbi simülasyonu</h1>
+    <p class="mut">${GUNCEL.sezon} güncel kadrolarıyla iki takımı seç. İlk 11 ve diziliş otomatik kurulur, ev sahibi küçük bir avantajla başlar. Kadrolar ${GUNCEL.guncelleme.split("-").reverse().join(".")} itibarıyla.</p>
+    <div class="card db-cfg">${dbPick("a")}<div class="row" style="justify-content:center;margin:4px 0"><button class="btn ghost db-swap" onclick="dbSwap()">⇅ Yer değiştir</button></div>${dbPick("b")}</div>
+    <div class="db-sides">${side(A, ca)}<div class="db-vs">VS</div>${side(B, cb)}</div>
+    <div class="row db-act"><button class="btn" onclick="dbPlay()">▶️ Maçı oynat</button><button class="btn ghost" onclick="dbMany()">🎲 ${DB_N.toLocaleString("tr-TR")} kez simüle et</button>
+      ${D.res||D.many?`<button class="btn ghost" onclick="dbShare()">📤 Paylaş</button><span id="dbshare" class="mut"></span>`:""}</div>
+    ${res}
+    <div class="row" style="margin-top:14px"><button class="btn ghost" onclick="pickReal('${esc(TA.id)}')">🏟️ ${esc(TA.team)} ile turnuvaya çık</button></div>`;
+  toTop();
+}
+if (typeof location!=="undefined" && /[?&]derbi/.test(location.search)) setTimeout(()=>renderDerby(), 400);
 // ---------- açılış ----------
 applyTheme();
 applyI18nData();

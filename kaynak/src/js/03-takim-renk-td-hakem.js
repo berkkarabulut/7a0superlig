@@ -58,7 +58,7 @@ const COACH = {
  "2024-25|Galatasaray":"Okan Buruk","2024-25|Fenerbahçe":"José Mourinho","2024-25|Samsunspor":"Thomas Reis",
  "2025-26|Galatasaray":"Okan Buruk","2025-26|Fenerbahçe":"Zeki Murat Göle","2025-26|Trabzonspor":"Fatih Tekke"
 };
-const coachOf = t => COACH[t.season+"|"+t.team] || "";
+const coachOf = t => COACH[t.season+"|"+t.team] || t.coach || "";
 // hakemler: [ad, ilk sezon yılı, son sezon yılı] (yaklaşık aktif dönem)
 const REFS = [["Yusuf Namoğlu",1978,1990],["Erman Toroğlu",1980,1992],["Necmi Temizel",1980,1990],["Sadık Deda",1980,1993],["İhsan Türe",1982,1993],["Talat Tokat",1980,1991],["Burhan Koç",1980,1990],
  ["Hilmi Ok",1985,1996],["Ahmet Çakar",1988,1998],["Metin Tokat",1990,2003],["Oğuz Sarvan",1990,2002],["Mustafa Çulcu",1991,2003],["Muhittin Boşat",1992,2002],["İbrahim Aksoy",1993,2003],["Serdar Tatlı",1996,2005],

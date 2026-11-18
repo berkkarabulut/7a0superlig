@@ -83,6 +83,10 @@
         "dv": {
           ".write": true,
           ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
+        },
+        "db": {
+          ".write": true,
+          ".validate": "newData.isNumber() && newData.val() == (data.exists() ? data.val() : 0) + 1"
         }
       }
     },

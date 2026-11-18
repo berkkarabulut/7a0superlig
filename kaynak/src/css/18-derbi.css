@@ -41,3 +41,11 @@
 .sl-i{min-width:22px}
 .sl-c{font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sl-p{font-weight:800;color:var(--gold)}
+
+/* ===== ana sayfa mod grupları ===== */
+.mgroup{margin:18px 0 6px}
+.mgroup .mg-h{margin:0;font-size:20px;text-transform:uppercase;letter-spacing:.5px}
+.mgroup .mg-h .mut{font-size:15px;font-weight:600;letter-spacing:0}
+.mgroup .mg-d{margin:4px 0 0;font-size:14px}
+.mgroup .modes{margin-top:10px}
+.modes.mg-inv{margin-top:8px}

@@ -1,7 +1,7 @@
 // ---------- günlük sıralama ----------
 const rankSort = (a,b) => b.w-a.w || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf || a.spent-b.spent || a.t-b.t;
 let LB = {};
-const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Tek oyunculu", short:"Tek", icon:"🎮"}, real:{path:"real", title:"Gerçek takım", short:"Gerçek", icon:"🏟️"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
+const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Efsaneler Draft'ı", short:"Draft", icon:"🎮"}, real:{path:"real", title:"Gerçek takım", short:"Gerçek", icon:"🏟️"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
 const rowsOf = v => Object.entries(v||{}).map(([id,x])=>({id,...x})).filter(x=>!badName(x.name||"")).sort(rankSort);
 function watchLeader(){
   fb().then(db => { for (const m of ["daily","solo"]) db.ref(MODES[m].path+"/"+todayKey()).on("value", s => {
@@ -43,7 +43,7 @@ async function renderRank(day, mode){
     <p class="mut" style="font-size:13px">${mode==="daily"
       ? "Meydan okumada herkes aynı takımlarla ve aynı bütçeyle oynar. Günde sadece ilk oyun sayılır. Sıralama: galibiyet sayısı, averaj, atılan gol, sonra harcanan bütçe (az olan önde)."
       : mode==="real" ? "Gerçek takım modunda bir sezonun gerçek kadrosuyla oynarsın; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."
-      : "Tek oyunculuda istediğin kadar oynarsın, tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."}</p>`;
+      : "Efsaneler Draft'ında istediğin kadar oynarsın, tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."}</p>`;
   try {
     const db = await fb(); let rows = LB[mode+":"+day];
     if (!rows || day!==today){ rows = rowsOf((await db.ref(M.path+"/"+day).once("value")).val()); LB[mode+":"+day]=rows; }

@@ -109,7 +109,7 @@ function renderDraft(){
       ${bp&&filled===0?`<div class="card hint benchintro"><b>11'in tamam! 🎉 Şimdi yedek kulübesini kur.</b> 7 yedek seçeceksin: 1 kaleci, 2 defans, 2 orta saha, 2 forvet. Kırmızı kart cezası ya da sakatlıkta bunlar oyuna girer, maç öncesi istediğinle değiştirebilirsin. Yedeklerde mevki dışı yok, sadece kendi mevkisindeki oyuncuyu koyabilirsin.
         <div class="row" style="margin-top:8px"><button class="btn ghost" onclick="skipBench()">Yedeksiz devam et</button></div></div>`:""}
       <div class="draw" style="border-left:6px solid ${tc[0]};box-shadow:inset 6px 0 0 ${tc[1]}33;padding-left:12px">
-        <div><span class="badge">${bp?`Yedek ${filled+1}/7`:`${filled+1}. oyuncu`} · ${S.mode==="daily"?"Günün meydan okuması":"Tek oyunculu"}${S.almanac?" · Almanak":""}</span>
+        <div><span class="badge">${bp?`Yedek ${filled+1}/7`:`${filled+1}. oyuncu`} · ${S.mode==="daily"?"Günün meydan okuması":S.sl?GUNCEL.sezon+" Süper Lig":"Efsaneler Draft'ı"}${S.almanac?" · Almanak":""}</span>
           <h2 style="margin:8px 0 0">${kit(t.team)}${esc(t.season)} ${esc(t.team)}</h2>
           <div class="mut" style="font-size:13px">${esc(t.note||"")}${coachOf(t)?` · TD: ${esc(coachOf(t))}`:""}</div></div>
         <div class="row drawbtns">

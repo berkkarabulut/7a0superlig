@@ -19,7 +19,7 @@ function finish(){
   if (soloP) soloP.then(async r => { const el=$("solorank"); if(!el) return;
     if (!r){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
     try { const db=await fb(), rows=rowsOf((await db.ref((S.mode==="real"?"real/":"solo/")+todayKey()).once("value")).val()), pos=rows.findIndex(x=>x.id===r.key)+1;
-      el.innerHTML = (r.better ? `🔥 Günün en iyi sonucun güncellendi! ${S.mode==="real"?"Gerçek takım":"Tek oyunculu"} tabloda <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım).`
+      el.innerHTML = (r.better ? `🔥 Günün en iyi sonucun güncellendi! ${S.mode==="real"?"Gerçek takım":"Efsaneler Draft'ı"} tabloda <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım).`
         : `Bugünkü en iyin hâlâ <b>${r.old.w}-${7-r.old.w}</b>, tabloda <b style="color:var(--gold)">${pos}. sıradasın</b>.`) + ` <a href="#" onclick="S.rankMode='${S.mode==="real"?"real":"solo"}';show('rank');return false">Tabloyu gör</a>`; } catch(e){} });
   if (submitP) submitP.then(async id => { const el=$("dailyrank"); if(!el) return;
     if (!id){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }

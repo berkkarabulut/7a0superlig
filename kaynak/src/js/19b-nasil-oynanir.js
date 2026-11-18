@@ -5,11 +5,11 @@ function howData(){
   const tr = [
     ["amac","🎯 Amaç",`<p>Süper Lig 7-0'da 1980'den bugüne her sezon ligi ilk 3'te bitiren takımların oyuncularıyla kendi kadronu kurar, 7 maçlık bir turnuvaya çıkarsın. Hedef: <b>7 maç, 7 galibiyet</b>, mümkünse kalende tek gol görmeden. Sonucun bir skor gibi yazılır: kazandığın maç sayısı - kazanamadığın maç sayısı. 7'nin 7'sini kazanırsan 7-0 yapmış olursun.</p>
       <ol><li>Ana sayfadan bir mod seç.</li><li>Diziliş ve oyun tarzını belirle, 11'ini ve yedeklerini kur.</li><li>Kurayı çek, grubu geç, eleme turlarını kazan, kupayı kaldır.</li></ol>`],
-    ["modlar","🎮 Oyun modları",`<p><b>🎮 Tek oyunculu:</b> Sınırsız oyun. İstediğin kadar kur, istediğin kadar dene. Günün en iyi sonucun "Tek oyunculu" sıralamasına yazılır.</p>
+    ["modlar","🎮 Oyun modları",`<p><b>🎮 Efsaneler Draft'ı:</b> 1980-2026 arası her sezonun ilk 3'ünden takım çekip efsane 11'ini kurduğun klasik mod. Sınırsız oyun, istediğin kadar kur, istediğin kadar dene. Günün en iyi sonucun "Efsaneler Draft'ı" sıralamasına yazılır.</p>
       <p><b>🗓️ Günün meydan okuması:</b> O gün herkese aynı takım sırası gelir ve herkesin ${DAILY_BUDGET} M bütçesi vardır. Her oyuncunun reytingine göre bir fiyatı var: 95'lik bir oyuncu ${P(95)} M, 90'lık ${P(90)} M, 85'lik ${P(85)} M, 80 ve altı 1 M. Yıldızlarla dolu bir kadro kuramazsın, bütçeyi akıllı dağıtman gerekir. Günde sadece ilk oyunun sayılır, sonrakiler sıralamaya girmez. Her gün oynarsan 🔥 seri tutarsın, bir gün atlarsan seri bozulur.</p>
       <p><b>🏟️ Gerçek takımla oyna:</b> Bir sezonun gerçek kadrosunu seçersin (örneğin 1998-99 Galatasaray). En uygun diziliş ve ilk 11 otomatik kurulur, kalanlar yedeğe geçer. İstersen dizilişi, tarzı ve 11'i değiştirirsin. Rakiplerin diğer sezonların gerçek kadrolarıdır. Kadrosu eksik birkaç takım şimdilik kilitli. Sonuçların ayrı "Gerçek takım" sıralamasında, hangi takımla oynadığınla birlikte görünür.</p>
       <p><b>🧠 Bu kadro hangi sezon?:</b> Günlük bilgi yarışması. Bir takımın 11'ini görürsün, hangi sezonun hangi takımı olduğunu bulursun. 5 soru var, ipucu olarak sırası ve teknik direktörünün baş harfleri verilir. Günde bir kez sayılır, sonra istediğin kadar pratik yapabilirsin.</p>
-      <p><b>📖 Almanak modu:</b> Tek oyunculu ve meydan okumada açabileceğin zor mod. Reytingler gizlenir, oyuncuları sadece adı ve mevkisiyle seçersin. Futbol hafızana güveniyorsan tam sana göre.</p>`],
+      <p><b>📖 Almanak modu:</b> Efsaneler Draft'ı ve meydan okumada açabileceğin zor mod. Reytingler gizlenir, oyuncuları sadece adı ve mevkisiyle seçersin. Futbol hafızana güveniyorsan tam sana göre.</p>`],
     ["kadro","🧩 Kadro kurma",`<p>Önce dizilişini (9 seçenek: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1 vb.) ve oyun tarzını seçersin. Sonra kura başlar: her çekilişte bir <b>sezon-takım</b> gelir, o takımdan <b>bir oyuncu</b> alırsın.</p>
       <ul><li>Oyuncuya dokununca sahada oynayabileceği yerler yanar, hangisine koyacağını sen seçersin.</li>
       <li><b>Kendi mevkisinde</b> oynayan oyuncu tam reytingle oynar. <b>Yakın bir mevkiye</b> de koyabilirsin (stoperi sağ beke, kanadı forvete gibi) ama oyuncu ${OFFPOS} reyting kaybeder ve takımın hücum ile savunması ${TEAM_OFF} puan düşer. Sahada bu oyuncuların formasında turuncu <b>!</b> işareti çıkar.</li>
@@ -40,7 +40,7 @@ function howData(){
       <p>Hazır olunca büyük sarı <b>"İkinci yarıyı başlat"</b> butonuna basarsın. Maç içinde yapılan değişiklikler kalıcı değildir; bir sonraki maça senin kurduğun 11 ile çıkılır.</p>`],
     ["sonuc","🏁 Sonuç ve paylaşım",`<p>Turnuva bitince sonucun skor gibi yazılır (örneğin 5-2). Penaltıyla kazanılan eleme maçları galibiyet sayılır, elenirsen kalan maçlar kayıp sayılır. Sonuç ekranından görsel olarak paylaşabilir, <b>⚔️ Arkadaşına meydan oku</b> linkiyle arkadaşına aynı kurayı ve aynı dizilişi gönderip "aynı takımlarla sen kaç yaparsın?" diyebilirsin.</p>`],
     ["siralama","📊 Sıralamalar",`<ul><li><b>🗓️ Günün meydan okuması:</b> Herkesin günün ilk oyunu sıralanır. Sıralama: galibiyet, averaj, atılan gol, sonra harcanan bütçe (az olan önde).</li>
-      <li><b>🎮 Tek oyunculu:</b> Her takımın günün en iyi sonucu yazılır.</li>
+      <li><b>🎮 Efsaneler Draft'ı:</b> Her takımın günün en iyi sonucu yazılır.</li>
       <li><b>🏟️ Gerçek takım:</b> Gerçek kadrolarla oynananların günlük tablosu, kim hangi takımla oynamış görünür.</li>
       <li><b>👑 Haftalık lig:</b> Pazartesiden bugüne meydan okuma galibiyetlerin toplanır. Pazar gecesi liderde kalan haftanın şampiyonu olur.</li></ul>
       <p>Bugünün ve dünün tablosuna bakabilirsin. Takım adın sıralamada görünür; küfür, hakaret ya da ırk, din veya etnik köken içeren adlar kabul edilmez.</p>`],
@@ -58,11 +58,11 @@ function howData(){
   const en = [
     ["amac","🎯 The goal",`<p>In Süper Lig 7-0 you build your own squad from players of every team that finished in the top 3 of the Turkish Süper Lig from 1980 to today, then take it into a 7-match tournament. The goal: <b>7 matches, 7 wins</b>, ideally without conceding a single goal. Your result reads like a score: matches won - matches not won. Win all 7 and you've gone 7-0.</p>
       <ol><li>Pick a mode on the home page.</li><li>Choose a formation and playing style, build your XI and subs.</li><li>Do the draw, get out of the group, win the knockouts, lift the cup.</li></ol>`],
-    ["modlar","🎮 Game modes",`<p><b>🎮 Solo:</b> Unlimited play. Build and retry as often as you like. Your best result of the day goes on the Solo table.</p>
+    ["modlar","🎮 Game modes",`<p><b>🎮 Legends Draft:</b> The classic mode: draw teams from every season's top 3 between 1980 and 2026 and build your legendary XI. Unlimited play. Your best result of the day goes on the Legends Draft table.</p>
       <p><b>🗓️ Daily Challenge:</b> Everyone gets the same team order that day and a ${DAILY_BUDGET} M budget. Every player has a price based on rating: a 95 costs ${P(95)} M, a 90 costs ${P(90)} M, an 85 costs ${P(85)} M, 80 and below cost 1 M. You can't stack stars, so spend wisely. Only your first game of the day counts. Play every day to keep your 🔥 streak alive.</p>
       <p><b>🏟️ Play with a real team:</b> Pick a real squad from a season (e.g. 1998-99 Galatasaray). The best formation and XI are set up automatically and the rest go to the bench; you can change formation, style and lineup. Your opponents are real squads from other seasons. A few incomplete squads are locked for now. Results go on a separate "Real team" table showing which team you used.</p>
       <p><b>🧠 Which season is this squad?:</b> A daily quiz. You see a team's XI and guess the team and season. 5 questions; the hint shows its league position and the coach's initials. Counts once a day, then you can practise as much as you like.</p>
-      <p><b>📖 Almanac mode:</b> A hard mode for Solo and the Daily Challenge. Ratings are hidden and you pick players by name and position only.</p>`],
+      <p><b>📖 Almanac mode:</b> A hard mode for Legends Draft and the Daily Challenge. Ratings are hidden and you pick players by name and position only.</p>`],
     ["kadro","🧩 Building your squad",`<p>First choose a formation (9 options: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, etc.) and a playing style. Then the draw starts: each draw brings a <b>season-team</b> and you take <b>one player</b> from it.</p>
       <ul><li>Tap a player to light up the spots he can play; you choose where he goes.</li>
       <li>A player in his <b>own position</b> plays at full rating. You can also use a <b>nearby position</b> (a centre-back at right-back, a winger up front) but he loses ${OFFPOS} rating and your team loses ${TEAM_OFF} attack and defence. These players get an orange <b>!</b> on their shirt.</li>
@@ -93,7 +93,7 @@ function howData(){
       <p>When ready, hit the big yellow <b>"Start the second half"</b> button. In-match changes aren't permanent; the next match starts with the XI you set.</p>`],
     ["sonuc","🏁 Result and sharing",`<p>When the tournament ends your result reads like a score (e.g. 5-2). Knockout wins on penalties count as wins; if you're knocked out, the remaining matches count as losses. Share your result as an image, or send a <b>⚔️ challenge link</b> with the same draw and formation: "same teams, what can you do?"</p>`],
     ["siralama","📊 Rankings",`<ul><li><b>🗓️ Daily Challenge:</b> everyone's first game of the day. Order: wins, goal difference, goals scored, then budget spent (less is better).</li>
-      <li><b>🎮 Solo:</b> each team's best result of the day.</li>
+      <li><b>🎮 Legends Draft:</b> each team's best result of the day.</li>
       <li><b>🏟️ Real team:</b> daily table for real squads, showing which team each player used.</li>
       <li><b>👑 Weekly league:</b> Daily Challenge wins from Monday to today. Whoever leads on Sunday night is champion of the week.</li></ul>
       <p>You can see today's and yesterday's tables. Your team name is shown publicly; names with swearing, insults or references to race, religion or ethnicity aren't allowed.</p>`],
@@ -111,11 +111,11 @@ function howData(){
   return [
     ["amac","🎯 El objetivo",`<p>En Süper Lig 7-0 armas tu plantilla con jugadores de todos los equipos que terminaron entre los 3 primeros de la Süper Lig turca desde 1980 hasta hoy, y la llevas a un torneo de 7 partidos. El objetivo: <b>7 partidos, 7 victorias</b>, a ser posible sin encajar ni un gol. Tu resultado se lee como un marcador: partidos ganados - partidos no ganados. Si ganas los 7, has hecho 7-0.</p>
       <ol><li>Elige un modo en la portada.</li><li>Elige formación y estilo, arma tu once y tus suplentes.</li><li>Haz el sorteo, supera el grupo, gana las eliminatorias y levanta la copa.</li></ol>`],
-    ["modlar","🎮 Modos de juego",`<p><b>🎮 Solo:</b> juego ilimitado. Arma y vuelve a intentarlo cuantas veces quieras. Tu mejor resultado del día va a la tabla Solo.</p>
+    ["modlar","🎮 Modos de juego",`<p><b>🎮 Draft de leyendas:</b> el modo clásico: saca equipos del top 3 de cada temporada entre 1980 y 2026 y arma tu once legendario. Juego ilimitado. Tu mejor resultado del día va a la tabla del Draft de leyendas.</p>
       <p><b>🗓️ Reto del día:</b> ese día todos reciben el mismo orden de equipos y ${DAILY_BUDGET} M de presupuesto. Cada jugador tiene un precio según su valoración: uno de 95 cuesta ${P(95)} M, uno de 90 ${P(90)} M, uno de 85 ${P(85)} M, y los de 80 o menos 1 M. Solo cuenta tu primera partida del día. Juega cada día para mantener tu 🔥 racha.</p>
       <p><b>🏟️ Juega con un equipo real:</b> elige la plantilla real de una temporada (p. ej. Galatasaray 1998-99). La mejor formación y el once se arman solos y el resto va al banquillo; puedes cambiarlo todo. Tus rivales también son plantillas reales. Algunas plantillas incompletas están bloqueadas por ahora. Los resultados van a una tabla aparte, "Equipo real".</p>
       <p><b>🧠 ¿De qué temporada es esta plantilla?:</b> quiz diario. Ves el once de un equipo y adivinas equipo y temporada. 5 preguntas; la pista muestra su posición y las iniciales del entrenador. Cuenta una vez al día y luego puedes practicar.</p>
-      <p><b>📖 Modo almanaque:</b> modo difícil para Solo y el Reto del día. Las valoraciones se ocultan y eliges solo por nombre y posición.</p>`],
+      <p><b>📖 Modo almanaque:</b> modo difícil para el Draft de leyendas y el Reto del día. Las valoraciones se ocultan y eliges solo por nombre y posición.</p>`],
     ["kadro","🧩 Armar la plantilla",`<p>Primero elige formación (9 opciones) y estilo de juego. Luego empieza el sorteo: cada vez sale una <b>temporada-equipo</b> y tomas <b>un jugador</b> de ella.</p>
       <ul><li>Toca a un jugador y se iluminan los puestos donde puede jugar; tú eliges dónde va.</li>
       <li>En su <b>propia posición</b> juega con toda su valoración. En una <b>posición cercana</b> pierde ${OFFPOS} puntos y tu equipo pierde ${TEAM_OFF} de ataque y defensa; su camiseta lleva un <b>!</b> naranja.</li>
@@ -140,7 +140,7 @@ function howData(){
     ["mac","⚽ El partido y el descanso",`<p>Los partidos se juegan minuto a minuto, con los dos equipos en el mismo campo: el rival arriba, tú abajo. En el <b>descanso</b> puedes cambiar el estilo, elegir mentalidad (Seguir igual, Ir al ataque +2/-2, Proteger el resultado -2/+2) y hacer cambios arrastrando suplentes al campo, hasta <b>${MAXSUBS}</b> por partido. Luego pulsa el gran botón amarillo <b>"Empezar la segunda parte"</b>. Los cambios durante el partido no son permanentes.</p>`],
     ["sonuc","🏁 Resultado y compartir",`<p>Tu resultado se lee como un marcador (p. ej. 5-2). Las victorias en penaltis cuentan como victorias; si te eliminan, los partidos restantes cuentan como derrotas. Compártelo como imagen o envía un <b>⚔️ enlace de reto</b> con el mismo sorteo y formación.</p>`],
     ["siralama","📊 Clasificaciones",`<ul><li><b>🗓️ Reto del día:</b> primera partida del día de cada uno. Orden: victorias, diferencia de goles, goles a favor y presupuesto gastado.</li>
-      <li><b>🎮 Solo:</b> el mejor resultado del día de cada equipo.</li>
+      <li><b>🎮 Legends Draft:</b> el mejor resultado del día de cada equipo.</li>
       <li><b>🏟️ Equipo real:</b> tabla diaria con plantillas reales.</li>
       <li><b>👑 Liga semanal:</b> victorias del Reto del día de lunes a hoy; el líder del domingo por la noche es el campeón de la semana.</li></ul>
       <p>Los nombres con insultos o referencias a raza, religión u origen étnico no están permitidos.</p>`],

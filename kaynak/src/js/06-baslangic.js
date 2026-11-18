@@ -11,14 +11,20 @@ function renderStart(){
     Takım çek, her takımdan bir oyuncu seç, 11'i tamamla, turnuvaya çık. Hedef: 7 maç, 7 galibiyet, kalende tek gol yok.</p>
     ${challengeBanner()}
     <div id="installbox" class="row" style="margin:6px 0">${installHTML()}</div>
+    <div class="mgroup"><h2 class="mg-h">⭐ Efsaneler <span class="mut">· 1980–2026</span></h2><p class="mut mg-d">Süper Lig tarihinin her sezonundan ilk 3 takım ve oyuncuları.</p>
     <div class="modes">
-      <button class="card mode ${S.homePick&&S.mode==="solo"?"on":""}" onclick="pickMode('solo')"><b><span class="mi">🎮</span> Tek oyunculu</b><span class="mut">Sınırsız oyun. İstediğin kadar kur, istediğin kadar dene.</span></button>
+      <button class="card mode ${S.homePick&&S.mode==="solo"?"on":""}" onclick="pickMode('solo')"><b><span class="mi">🎮</span> Efsaneler Draft'ı</b><span class="mut">1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur. Sınırsız oyna.</span></button>
       <button class="card mode ${S.homePick&&S.mode==="daily"?"on":""}" onclick="pickMode('daily')"><b><span class="mi">🗓️</span> Günün Meydan Okuması</b><span class="mut">Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.${daily?` <br>Bugünkü sonucun: <b style="color:var(--gold)">${esc(daily.title)}</b>`:""}<br>${streakHTML()}</span></button>
-      <button class="card mode realcard" onclick="renderRealPicker()"><b>🏟️ Gerçek takımla oyna</b><span class="mut">Bir sezonun gerçek kadrosunu seç, onunla turnuvaya çık. 1998-99 Galatasaray ile 7-0 yapabilir misin?</span></button>
+      <button class="card mode realcard" onclick="renderRealPicker()"><b><span class="mi">🏟️</span> Gerçek takımla oyna</b><span class="mut">Bir sezonun gerçek kadrosunu seç, onunla turnuvaya çık. 1998-99 Galatasaray ile 7-0 yapabilir misin?</span></button>
+      <button class="card mode" onclick="startQuiz(false)"><b><span class="mi">🧠</span> Bu kadro hangi sezon?</b><span class="mut">Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.${store.get("quiz:"+todayKey(),null)?` <br>Bugünkü skorun: <b style="color:var(--gold)">${store.get("quiz:"+todayKey()).score}/5</b>`:""}</span></button>
+    </div></div>
+    <div class="mgroup"><h2 class="mg-h">🔥 Bu sezon <span class="mut">· ${GUNCEL.sezon}</span></h2><p class="mut mg-d">Bugünkü Süper Lig: ${CUR.length} takımın güncel kadroları.</p>
+    <div class="modes">
       <button class="card mode slcard ${S.sl?"on":""}" onclick="renderSL()"><b><span class="mi">🏆</span> ${GUNCEL.sezon} Süper Lig turnuvası</b><span class="mut">Rakiplerin bu sezonun ${CUR.length} Süper Lig takımı. Kendi 11'ini kur ya da güncel bir takımla gir.</span></button>
       <button class="card mode dbcard" onclick="renderDerby()"><b><span class="mi">⚔️</span> Güncel derbi simülasyonu</b><span class="mut">${GUNCEL.sezon} kadrolarıyla iki Süper Lig takımını seç, maçı oynat, 1.000 kere simüle et.</span></button>
-      <button class="card mode" onclick="startQuiz(false)"><b>🧠 Bu kadro hangi sezon?</b><span class="mut">Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.${store.get("quiz:"+todayKey(),null)?` <br>Bugünkü skorun: <b style="color:var(--gold)">${store.get("quiz:"+todayKey()).score}/5</b>`:""}</span></button>
-      <button class="card mode invcard" onclick="openInvite()"><b>📨 Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
+    </div></div>
+    <div class="modes mg-inv">
+      <button class="card mode invcard" onclick="openInvite()"><b><span class="mi">📨</span> Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
     ${S.homePick||S.challenge?`<div class="card" id="setupcard">
       ${S.sl?`<div class="sl-ban">🏆 <b>${GUNCEL.sezon} Süper Lig modu</b> · Kurada bu sezonun Süper Lig takımları çıkar, rakiplerin de onlar. Bu modun sonuçları sıralamaya yazılmaz. <button class="btn ghost sl-off" onclick="S.sl=false;renderStart()">Kapat</button></div>`:""}

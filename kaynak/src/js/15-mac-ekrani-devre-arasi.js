@@ -57,26 +57,27 @@ function oppXI(o){
   const pl=[...o.pl].sort((a,b)=>b.r-a.r), take=(g,n)=>pl.filter(p=>p.pos===g).slice(0,n);
   let xi=[...take("GK",1),...take("DF",4),...take("MF",4),...take("FW",2)];
   for (const p of pl){ if (xi.length>=11) break; if (!xi.includes(p) && p.pos!=="GK") xi.push(p); }
-  const Y={GK:5,DF:15.5,MF:26.5,FW:37.5}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
-  return Object.entries(lines).flatMap(([g,ps])=>ps.map((p,i)=>({p, x: ps.length===1?50:12+i*76/(ps.length-1), y:Y[g]})));
+  const Y={GK:5,DF:15,MF:29,FW:42}, X={GK:[50],DF:[14,38,62,86],MF:[13,38,62,87],FW:[37,63]}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
+  return Object.entries(lines).flatMap(([g,ps])=>ps.map((p,i)=>({p, x: ps.length===X[g].length ? X[g][i] : ps.length===1?50:12+i*76/(ps.length-1), y:Y[g]})));
 }
 // iki takım tek sahada: rakip üst yarı, sen alt yarı. edit=true iken (devre arası) senin oyuncuların sürüklenebilir.
-// bizim yarı sahadaki dikey konumlar: aşağıdan (kaleci) yukarı yerleştirilir; aynı kolondaki (yatayda yakın) her oyuncu
-// altındakinden en az MP_GAP yukarıda durur. Yer yetmezse hepsi orantılı sıkıştırılır (MP_TOP ile kaleci arası).
-const MP_GAP = 10, MP_TOP = 47, MP_GK = 95;
+// maç sahasında bizim oyuncuların dikey konumları: her diziliş için elle dizildi (FORMATIONS'taki sırayla, sahanın yüzdesi).
+// Aynı hattakiler aynı yükseklikte, hatlar arası eşit; 9 dizilişte telefon ve bilgisayarda isim/not çakışması yok (test/saha-cakisma.py).
+const MP_TABLE = {
+  "4-3-3":   [96, 85,85,85,85, 66,75,66, 54,52,54],
+  "4-4-2":   [96, 85,85,85,85, 69,69,69,69, 54,54],
+  "3-5-2":   [96, 85,85,85, 65,65,75,65,65, 53,53],
+  "4-2-3-1": [96, 85,85,85,85, 75,75, 64,64,64, 53],
+  "4-1-4-1": [96, 85,85,85,85, 75, 64,64,64,64, 53],
+  "4-4-1-1": [96, 85,85,85,85, 72,72,72,72, 62, 52],
+  "4-3-1-2": [96, 85,85,85,85, 68,75,68, 61.5, 51.5,51.5],
+  "3-4-3":   [96, 85,85,85, 69,69,69,69, 54,52,54],
+  "5-3-2":   [96, 80,85,85,85,80, 67,75,67, 54,54],
+};
 function mpYs(xi){
-  const base = s => s.pos==="GK" ? MP_GK : 52 + Math.max(0, Math.min(64, s.y-13)) * 35/64;
-  const Y = new Array(xi.length), order = xi.map((s,i)=>i).sort((i,j)=>xi[j].y - xi[i].y || (xi[j].pos==="GK") - (xi[i].pos==="GK"));
-  const done = [];
-  for (const i of order){
-    let y = base(xi[i]);
-    for (const j of done) if (Math.abs(xi[i].x - xi[j].x) < 21 && xi[j].y >= xi[i].y) y = Math.min(y, Y[j] - MP_GAP);
-    Y[i] = y; done.push(i);
-  }
-  // yer yetmezse sahadaki oyuncular (kaleci hariç) en alttaki oyuncuya sabitlenerek yukarıdan sıkıştırılır
-  const out = Y.filter((y,i)=>xi[i].pos!=="GK"), lo = Math.min(...out), hi = Math.max(...out);
-  if (lo < MP_TOP && hi > lo) for (let i = 0; i < Y.length; i++) if (xi[i].pos!=="GK") Y[i] = MP_TOP + (Y[i] - lo) * (hi - MP_TOP) / (hi - lo);
-  return Y;
+  const f = Object.keys(FORMATIONS).find(k => FORMATIONS[k].length===xi.length && FORMATIONS[k].every((s,i)=>s[0]===xi[i].pos && s[2]===xi[i].y));
+  const t = f && MP_TABLE[f];
+  return xi.map((s,i)=> t ? t[i] : (s.pos==="GK" ? 96 : 52 + Math.max(0, Math.min(64, s.y-13)) * 33/64));
 }
 function matchPitchHTML(M,T,o,ht){
   const sel = ht && ht.sel, selP = ht && ht.selP;

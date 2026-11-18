@@ -34,6 +34,7 @@ function realBest(t){
 const realOk = t => !!realBest(t);
 const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
 function renderRealPicker(club){
+  S.sl = false;
   S.realClub = club || S.realClub || "Tümü";
   const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
   const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);

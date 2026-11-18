@@ -10,7 +10,23 @@ function curXI(t){
   return (t._xi = b.pick.map((j,i) => { const p = t.players[j]; return {...p, r: p.r-penaltyFor(p, slots[i]), pos: LINE(slots[i])}; }));
 }
 const curPow = t => t.cur ? (t._pw ?? (t._pw = teamPower(curXI(t), oppStyle(t)).ovr)) : 0;
-function slDraft(){ pickMode("solo"); S.sl = true; renderStart(); try { $("setupcard")?.scrollIntoView({behavior:"smooth", block:"start"}); } catch(e){} }
+function slDraft(){ S.mode = "solo"; S.homePick = true; S.challenge = null; S.sl = true; renderSLSetup(); }
+function renderSLSetup(){
+  RNG = Math.random;
+  $("play").innerHTML = `${topBar("")}
+    <h1>🎮 ${GUNCEL.sezon} · Kendi 11'ini kur</h1>
+    <div class="sl-ban">🏆 <b>${GUNCEL.sezon} Süper Lig modu</b> · Kurada bu sezonun Süper Lig takımları çıkar, rakiplerin de onlar. Bu modun sonuçları sıralamaya yazılmaz.</div>
+    <div class="card" id="slsetup">
+      <h3>Diziliş</h3>
+      <div class="row">${Object.keys(FORMATIONS).map(f=>`<button class="chip ${f===S.form?"on":""}" onclick="S.form='${f}';renderSLSetup()">${f}</button>`).join("")}</div>
+      <h3 style="margin-top:16px">Oyun tarzı</h3>
+      <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderSLSetup()">${v.e} ${k} <span class="mut" style="font-weight:400">· ${v.d}</span></button>`).join("")}</div>
+      <h3 style="margin-top:16px">Ayarlar</h3>
+      <div class="row"><label class="toggle"><input type="checkbox" ${S.almanac?"checked":""} onchange="S.almanac=this.checked"> <b>Almanak modu</b> <span class="mut">· reytingler gizli, sadece isim ve mevki</span></label></div>
+      <div style="margin-top:20px" class="row"><button class="btn" onclick="startDraft()">Kuraya başla</button><button class="btn ghost" onclick="S.sl=false;renderSL()">← Süper Lig turnuvası</button></div>
+    </div>`;
+  toTop();
+}
 function renderSL(){
   const list = [...CUR].sort((a,b)=>curPow(b)-curPow(a));
   $("play").innerHTML = `${topBar("")}

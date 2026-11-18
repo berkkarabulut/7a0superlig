@@ -1,6 +1,7 @@
 // ---------- başlangıç ----------
 let S = { mode:"solo", form:"4-3-3", style:"Dengeli", almanac:false, speed:"Normal" };
 function renderStart(){
+  if (S.sl) return renderSLSetup(); // SL modunda "baştan kur / yeni kadro" SL kurulum ekranına döner
   RNG = Math.random;
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);

@@ -947,7 +947,7 @@ const $ = id => document.getElementById(id);
 function show(id){
   for (const s of ["play","rank","squads","profile","ach","how"]) { $(s).classList.toggle("hidden", s!==id); $("n-"+s).classList.toggle("on", s===id); }
   if (id==="squads") renderSquads();
-  if (id==="rank") renderRank(todayKey(), S.mode==="solo"||S.mode==="real"?S.mode:"daily");
+  if (id==="rank") renderRank(todayKey(), (S.mode==="solo"||S.mode==="real") && typeof slOn==="function" && slOn() ? "sl" : S.mode==="solo"||S.mode==="real"?S.mode:"daily");
   if (id==="ach") renderAch();
   if (id==="profile") renderProfile();
   if (id==="how") renderHow();
@@ -1965,15 +1965,17 @@ function finish(){
   const stk = (S.mode==="daily" && S.counted) ? bumpStreak() : null;
   let submitP = null, soloP = null;
   const resTxt = champ ? "Şampiyon" : T.out.replace(" elendin","").replace(/^Grupta \d\. oldun,?/,"Grup");
-  if (S.mode==="real") soloP = submitReal({ name: myName(), team: realLabel(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
-  if (S.mode==="solo" && !S.sl) soloP = submitSolo({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
+  const LM = (S.mode==="solo"||S.mode==="real") && slOn() ? "sl" : S.mode==="real" ? "real" : S.mode==="solo" ? "solo" : null;
+  if (LM==="sl") soloP = submitReal({ name: myName(), team: S.mode==="real" ? realLabel() : "Kendi 11'i", w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt }, "sl");
+  if (LM==="real") soloP = submitReal({ name: myName(), team: realLabel(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
+  if (LM==="solo") soloP = submitSolo({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: 0, ovr: teamPower(T.me,S.style).ovr, res: resTxt });
   if (S.mode==="daily" && S.counted){ store.set("daily:"+todayKey(), {title:recStr()+" · "+title, spent:S.spent, ovr:teamPower(T.me,S.style).ovr, perfect}); S.counted=false;
     submitP = submitDaily({ name: myName(), w: record()[0], gf: T.gf, ga: T.ga, spent: S.spent, ovr: teamPower(T.me,S.style).ovr, res: resTxt }); }
   if (soloP) soloP.then(async r => { const el=$("solorank"); if(!el) return;
     if (!r){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
-    try { const db=await fb(), rows=rowsOf((await db.ref((S.mode==="real"?"real/":"solo/")+todayKey()).once("value")).val()), pos=rows.findIndex(x=>x.id===r.key)+1;
-      el.innerHTML = (r.better ? `🔥 Günün en iyi sonucun güncellendi! ${S.mode==="real"?"Gerçek takım":"Efsaneler Draft'ı"} tabloda <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım).`
-        : `Bugünkü en iyin hâlâ <b>${r.old.w}-${7-r.old.w}</b>, tabloda <b style="color:var(--gold)">${pos}. sıradasın</b>.`) + ` <a href="#" onclick="S.rankMode='${S.mode==="real"?"real":"solo"}';show('rank');return false">Tabloyu gör</a>`; } catch(e){} });
+    try { const db=await fb(), rows=rowsOf((await db.ref(LM+"/"+todayKey()).once("value")).val()), pos=rows.findIndex(x=>x.id===r.key)+1;
+      el.innerHTML = (r.better ? `🔥 Günün en iyi sonucun güncellendi! ${MODES[LM].title} tabloda <b style="color:var(--gold)">${pos}. sıradasın</b> (${rows.length} takım).`
+        : `Bugünkü en iyin hâlâ <b>${r.old.w}-${7-r.old.w}</b>, tabloda <b style="color:var(--gold)">${pos}. sıradasın</b>.`) + ` <a href="#" onclick="S.rankMode='${LM}';show('rank');return false">Tabloyu gör</a>`; } catch(e){} });
   if (submitP) submitP.then(async id => { const el=$("dailyrank"); if(!el) return;
     if (!id){ el.textContent="Sıralamaya gönderilemedi (bağlantı yok)."; return; }
     try { const db=await fb(), s=await db.ref("daily/"+todayKey()).once("value"); const rows=rowsOf(s.val());
@@ -1986,7 +1988,7 @@ function finish(){
       <div class="site">⚽ SÜPER LİG 7-0 · <a href="https://${SITE}/" target="_blank">${SITE}</a></div>
       <p class="mut">${T.W}G ${T.D}B ${T.L}M · Atılan ${T.gf} · Yenen ${T.ga}${S.mode==="daily"?` · Bütçe ${S.spent}/${DAILY_BUDGET} M`:""}${S.almanac?" · Almanak":""}</p>
       <p>${sub}</p>
-      ${(S.mode==="solo"&&!S.sl)||S.mode==="real"?`<p id="solorank" class="mut">Günün sıralamasına bakılıyor…</p>`:""}
+      ${LM?`<p id="solorank" class="mut">Günün sıralamasına bakılıyor…</p>`:""}
       ${S.mode==="daily"?`<p id="dailyrank" class="mut">${submitP?"Sıralamaya ekleniyor…":"Bugünkü hakkını kullanmıştın, bu oyun sıralamaya sayılmadı."}</p>`:""}
       ${challengeResultHTML()}
       ${stk?`<p>🔥 <b style="color:var(--gold)">${stk.n} gün</b> seri! Yarın da oyna, seriyi bozma.</p>`:""}
@@ -2366,7 +2368,7 @@ async function startPresence(){
 // ---------- günlük sıralama ----------
 const rankSort = (a,b) => b.w-a.w || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf || a.spent-b.spent || a.t-b.t;
 let LB = {};
-const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Efsaneler Draft'ı", short:"Draft", icon:"🎮"}, real:{path:"real", title:"Gerçek takım", short:"Gerçek", icon:"🏟️"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
+const MODES = { daily:{path:"daily", title:"Günün Meydan Okuması", short:"Meydan", icon:"🗓️"}, solo:{path:"solo", title:"Efsaneler Draft'ı", short:"Draft", icon:"🎮"}, real:{path:"real", title:"Gerçek takım", short:"Gerçek", icon:"🏟️"}, sl:{path:"sl", title:"2026-27 Süper Lig", short:"SL 26-27", icon:"🆕"}, week:{path:null, title:"Haftalık lig", short:"Hafta", icon:"👑"} };
 const rowsOf = v => Object.entries(v||{}).map(([id,x])=>({id,...x})).filter(x=>!badName(x.name||"")).sort(rankSort);
 function watchLeader(){
   fb().then(db => { for (const m of ["daily","solo"]) db.ref(MODES[m].path+"/"+todayKey()).on("value", s => {
@@ -2407,12 +2409,13 @@ async function renderRank(day, mode){
     <div class="card" id="rankbox"><p class="mut">Yükleniyor…</p></div>
     <p class="mut" style="font-size:13px">${mode==="daily"
       ? "Meydan okumada herkes aynı takımlarla ve aynı bütçeyle oynar. Günde sadece ilk oyun sayılır. Sıralama: galibiyet sayısı, averaj, atılan gol, sonra harcanan bütçe (az olan önde)."
+      : mode==="sl" ? "2026-27 Süper Lig turnuvasında rakiplerin bu sezonun gerçek kadroları. İster kendi 11'ini bu sezonun oyuncularından kur, ister güncel bir takımla gir; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."
       : mode==="real" ? "Gerçek takım modunda bir sezonun gerçek kadrosuyla oynarsın; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."
       : "Efsaneler Draft'ında istediğin kadar oynarsın, tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol."}</p>`;
   try {
     const db = await fb(); let rows = LB[mode+":"+day];
     if (!rows || day!==today){ rows = rowsOf((await db.ref(M.path+"/"+day).once("value")).val()); LB[mode+":"+day]=rows; }
-    const mine = store.get((mode==="daily"?"dailyId:":mode==="real"?"realId:":"soloId:")+day, null);
+    const mine = store.get((mode==="daily"?"dailyId:":mode==="real"?"realId:":mode==="sl"?"slId:":"soloId:")+day, null);
     $("rankbox").innerHTML = rows.length ? `<div style="overflow-x:auto"><table><tr><th>#</th><th>Takım</th><th>Sonuç</th><th>A-Y</th>${mode==="daily"?"<th>Bütçe</th>":"<th>Oyun</th>"}<th>Genel</th></tr>${rows.map((r,i)=>`<tr class="${r.id===mine?"me":""}"><td>${i===0?"👑":i+1}</td><td>${esc(r.name)}${r.team?`<br><small class="mut">🏟️ ${esc(r.team)}</small>`:""}</td><td><b>${r.w}-${7-r.w}</b> <small class="mut">${esc(r.res||"")}</small></td><td>${r.gf}-${r.ga}</td><td>${mode==="daily"?r.spent+" M":(r.games||1)}</td><td>${r.ovr}</td></tr>`).join("")}</table></div>`
       : `<p class="mut">${day===today?"Bugün henüz kimse oynamadı. İlk sen ol!":"O gün kimse oynamamış."}</p>`;
   } catch(e){ $("rankbox").innerHTML = `<p class="mut">Sıralamaya şu an ulaşılamıyor. İnternet bağlantını kontrol et.</p>`; }
@@ -2941,6 +2944,7 @@ DICT_ROWS.push(["Göster ▾","Show ▾","Mostrar ▾"],["Gizle ▴","Hide ▴",
 DICT_ROWS.push(["Genel","Overview","General"],["Oyuncular","Players","Jugadores"],["Maçlar","Matches","Partidos"],["Biz","Us","Nosotros"],["Rakipler","Opponents","Rivales"],["Gol","Goals","Goles"],["İsabetli şut","Shots on target","Tiros a puerta"],["Sarı kart","Yellow cards","Amarillas"],["Kırmızı kart","Red cards","Rojas"],["⚽ Gol","⚽ Goals","⚽ Goles"],["📈 Ortalama not","📈 Average rating","📈 Nota media"],["🏅 Maçın oyuncusu","🏅 Player of the match","🏅 Jugador del partido"],["🎯 Şut","🎯 Shots","🎯 Tiros"],["Mvk","Pos","Pos"],["Dk","Min","Min"],["İsb","OT","AP"],["MO","PoM","JdP"],["Not","Rating","Nota"],["Sana gol atanlar:","Scored against you:","Te marcaron:"],["🧤 Kalende gol yok.","🧤 No goals conceded.","🧤 Portería a cero."],["Başlığa dokun, o sütuna göre sırala. Not 10 üzerinden: gol, asist, isabetli şut, kartlar, sonuç ve (defans/kaleci için) yenilen gole göre hesaplanır.","Tap a header to sort. Ratings are out of 10, based on goals, assists, shots on target, cards, the result and (for defenders/keepers) goals conceded.","Toca una cabecera para ordenar. Nota sobre 10 según goles, asistencias, tiros a puerta, tarjetas, resultado y (defensas/porteros) goles encajados."],["🏅 Maçın oyuncusu:","🏅 Player of the match:","🏅 Jugador del partido:"],["İsabet","On target","A puerta"],["Kart","Cards","Tarjetas"],["⭐ Maçın yıldızı","⭐ Star of the match","⭐ Estrella del partido"],["⭐ Turnuvanın yıldızı","⭐ Star of the tournament","⭐ Estrella del torneo"]);
 DICT_ROWS.push(["🎮 Efsaneler Draft'ı","🎮 Legends Draft","🎮 Draft de leyendas"],["🗓️ Günün Meydan Okuması","🗓️ Daily Challenge","🗓️ Reto del día"],["⚔️ Meydan okuma","⚔️ Challenge","⚔️ Desafío"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario."]);
 DICT_ROWS.push(["← Geri","← Back","← Atrás"],["⌂ Ana sayfa","⌂ Home","⌂ Inicio"],["Bir önceki ekrana dönülsün mü?","Go back to the previous screen?","¿Volver a la pantalla anterior?"],["Maç yarıda kalacak.","The match will be abandoned.","El partido quedará a medias."]);
+DICT_ROWS.push(["Kendi 11'i","Own XI","Once propio"],["2026-27 Süper Lig","2026-27 Süper Lig","Süper Lig 2026-27"],["2026-27 Süper Lig turnuvasında rakiplerin bu sezonun gerçek kadroları. İster kendi 11'ini bu sezonun oyuncularından kur, ister güncel bir takımla gir; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol.","In the 2026-27 Süper Lig tournament your opponents are this season's real squads. Build your own XI from this season's players or enter with a current team; each team's best result of the day goes on the table. Ranking: wins, goal difference, goals scored.","En el torneo de la Süper Lig 2026-27 tus rivales son las plantillas reales de esta temporada. Arma tu once con jugadores de esta temporada o entra con un equipo actual; en la tabla queda el mejor resultado del día de cada equipo. Orden: victorias, diferencia de goles, goles a favor."]);
 DICT_ROWS.push(["📋 Taktik","📋 Tactics","📋 Táctica"],["👥 Kadro","👥 Squad","👥 Plantilla"],["🗣️ Konuşma","🗣️ Team talk","🗣️ Charla"],["⚽ Maç","⚽ Match","⚽ Partido"],["🎯 Anlayış","🎯 Approach","🎯 Planteamiento"],["🔁 Değişiklik","🔁 Subs","🔁 Cambios"],["⚽ 2. yarı","⚽ 2nd half","⚽ 2ª parte"],["İleri: Kadro ▶","Next: Squad ▶","Siguiente: Plantilla ▶"],["İleri: Konuşma ▶","Next: Team talk ▶","Siguiente: Charla ▶"],["İleri: Anlayış ▶","Next: Approach ▶","Siguiente: Planteamiento ▶"],["İleri: Değişiklik ▶","Next: Subs ▶","Siguiente: Cambios ▶"],["◀ Taktik","◀ Tactics","◀ Táctica"],["◀ Kadro","◀ Squad","◀ Plantilla"],["◀ Anlayış","◀ Approach","◀ Planteamiento"],["⏩ Direkt maça çık","⏩ Skip to the match","⏩ Ir al partido"],["⏩ Direkt başlat","⏩ Start now","⏩ Empezar ya"]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
@@ -2978,7 +2982,7 @@ const RX = [
  [/^(\S+) · ilk 11 ortalaması$/, m => m[1]+(LI===0?" · XI average":" · media del once")],
  [/^· (\d+) oyuncu$/, m => "· "+m[1]+(LI===0?" players":" jugadores")],
  [/^Teknik direktör: (.+)$/, m => (LI===0?"Coach: ":"DT: ")+m[1]],
- [/^(.+) tabloda$/, m => m[1]==="Gerçek takım" ? (LI===0?"Real team table:":"Tabla equipo real:") : m[0]],
+ [/^(.+) tabloda$/, m => m[1]==="Gerçek takım" ? (LI===0?"Real team table:":"Tabla equipo real:") : m[1]==="2026-27 Süper Lig" ? (LI===0?"2026-27 Süper Lig table:":"Tabla Süper Lig 2026-27:") : m[1]==="Efsaneler Draft'ı" ? (LI===0?"Legends Draft table:":"Tabla Draft de leyendas:") : m[0]],
  [/^(\d{4}-\d{2}) sezonunu şampiyon bitirdi$/, m => LI===0?`Champions in ${m[1]}`:`Campeón en ${m[1]}`],
  [/^(\d{4}-\d{2}) sezonunu (\d)\. bitirdi$/, m => LI===0?`Finished ${ORD(+m[2])} in ${m[1]}`:`${ORD(+m[2])} en ${m[1]}`],
  [/^TD: (.+)$/, m => (LI===0?"Coach: ":"DT: ")+m[1]],
@@ -3272,15 +3276,16 @@ function realFormHTML(){
     <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderReady()">${v.e} ${k}</button>`).join("")}</div>
     <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="${S.santraOn?"renderSantra()":"renderRealPicker()"}">${S.santraOn?"Takımları değiştir":"Başka takım seç"}</button></div></div>`;
 }
-async function submitReal(entry){
+async function submitReal(entry, path){
+  path = path || "real";
   if (myTeamBad() || badName(entry.name)) return null;
   try {
-    const db = await fb(), key = nameKey(entry.name), ref = db.ref("real/"+todayKey()+"/"+key);
+    const db = await fb(), key = nameKey(entry.name), ref = db.ref(path+"/"+todayKey()+"/"+key);
     const old = (await ref.once("value")).val();
     const better = !old || rankSort({...entry,t:0},{...old,t:0}) < 0;
     if (better) await ref.set({...entry, games:(old?.games||0)+1, t: TS()});
     else await ref.child("games").set((old.games||0)+1).catch(()=>{});
-    store.set("realId:"+todayKey(), key); return {key, better, old};
+    store.set(path+"Id:"+todayKey(), key); return {key, better, old};
   } catch(e){ return null; }
 }
 // ---------- TikTok canlı yayın modu: sohbet oyla oynatır ----------

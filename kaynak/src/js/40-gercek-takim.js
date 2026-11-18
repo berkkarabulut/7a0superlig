@@ -80,14 +80,15 @@ function realFormHTML(){
     <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderReady()">${v.e} ${k}</button>`).join("")}</div>
     <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="${S.santraOn?"renderSantra()":"renderRealPicker()"}">${S.santraOn?"Takımları değiştir":"Başka takım seç"}</button></div></div>`;
 }
-async function submitReal(entry){
+async function submitReal(entry, path){
+  path = path || "real";
   if (myTeamBad() || badName(entry.name)) return null;
   try {
-    const db = await fb(), key = nameKey(entry.name), ref = db.ref("real/"+todayKey()+"/"+key);
+    const db = await fb(), key = nameKey(entry.name), ref = db.ref(path+"/"+todayKey()+"/"+key);
     const old = (await ref.once("value")).val();
     const better = !old || rankSort({...entry,t:0},{...old,t:0}) < 0;
     if (better) await ref.set({...entry, games:(old?.games||0)+1, t: TS()});
     else await ref.child("games").set((old.games||0)+1).catch(()=>{});
-    store.set("realId:"+todayKey(), key); return {key, better, old};
+    store.set(path+"Id:"+todayKey(), key); return {key, better, old};
   } catch(e){ return null; }
 }

@@ -16,7 +16,7 @@
 .ts-tb.on{color:var(--txt);border-bottom-color:var(--teal)}
 /* not rozeti */
 .ts-rt{display:inline-block;min-width:36px;text-align:center;font-weight:800;font-size:13px;border-radius:4px;padding:2px 5px;color:#0b1a10}
-.ts-rt.r8{background:#2fd47a}.ts-rt.r7{background:#9be36a}.ts-rt.r6{background:#f2c14e}.ts-rt.r5{background:#ff6b6b;color:#fff}
+.ts-rt.q1{background:#ff4d4d;color:#fff}.ts-rt.q2{background:#ffa94d}.ts-rt.q3{background:#e9e4f0}.ts-rt.q4{background:#9dffa8}.ts-rt.q5{background:#2bff6a}.ts-rt.q6{background:#ffd23f}
 /* form şeridi */
 .ts-form{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .ts-fm{display:inline-flex;align-items:center;gap:5px;font-weight:800;font-size:13px;padding:4px 9px;border-radius:4px;background:#ffffff14}

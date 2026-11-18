@@ -249,8 +249,11 @@ def run(name, vp, b):
     def s19():
         pg.evaluate("()=>{show('play');S.homePick=false;S.challenge=null;renderStart()}"); time.sleep(0.3)
         chk("36-gercek-kart", "#play .realcard"); click("#play .realcard"); time.sleep(0.4)
-        chk("37-gercek-secim", "#play .rl-card:not(.rl-lock)", "#play .rl-lock")
-        click("#play .rl-card:not(.rl-lock)"); time.sleep(0.4)
+        chk("37-gercek-secim", "#rl-sz", "#rl-tm", "#play .rl-go")
+        pg.select_option("#rl-sz", index=5); time.sleep(0.3)
+        if pg.evaluate("()=>document.querySelectorAll('#rl-tm option').length") < 2: fails.append(f"[{name}] gerçek takım: sezon seçince takım listesi dolmadı")
+        chk("37b-gercek-sezon", "#rl-tm", "#play .rl-go")
+        click("#play .rl-go"); time.sleep(0.4)
         chk("38-gercek-hazir", "#play .rl-info .chip[onclick^=realSetForm]")
         if pg.evaluate("()=>S.slots.filter(s=>s.p).length") != 11: fails.append(f"[{name}] gerçek takım 11'i dolmadı")
         before = pg.evaluate("()=>[S.slots[9].p.n,S.slots[10].p.n]")

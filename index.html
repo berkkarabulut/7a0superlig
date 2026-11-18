@@ -457,6 +457,11 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 /* ===== beta etiketi ===== */
 .betatag{display:inline-block;vertical-align:middle;margin-left:8px;padding:2px 7px;border-radius:3px;border:1px solid var(--gold);background:#ffb7031f;color:var(--gold);font:800 12px var(--cond);letter-spacing:1px;cursor:pointer;line-height:1.4}
 .betatag:hover{background:var(--gold);color:#1d1200}
+.betanote{display:flex;align-items:center;gap:10px;max-width:1100px;margin:10px auto 0;padding:8px 12px;border:1px solid #f5b80055;background:#f5b80014;border-radius:6px;font-size:13px;line-height:1.35;color:var(--txt)}
+.betanote span{flex:1}
+.betanote a{color:var(--gold);font-weight:800}
+.betanote .bn-x{background:none;border:0;color:var(--mut);font-size:15px;cursor:pointer;padding:2px 6px}
+@media (max-width:700px){.betanote{margin:8px 10px 0;font-size:12px}}
 
 /* ===== davet et ===== */
 .invbtn{white-space:nowrap}
@@ -515,6 +520,15 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .rl-s .rl-rk{font-size:10px;padding:0 5px;vertical-align:1px}
 @media (max-width:560px){.rl-grid{grid-template-columns:1fr 1fr;gap:8px}.rl-n b{font-size:14px}.rl-pw{font-size:22px}.rl-s{font-size:11.5px}.rl-card .rl-s+.rl-s{display:none}}
 .rl-n b{flex:none}
+.rl-pick{display:flex;flex-direction:column;gap:12px;max-width:520px;padding:16px}
+.rl-lab{display:flex;flex-direction:column;gap:6px;font-weight:800;font-size:13px;letter-spacing:.4px;text-transform:uppercase;color:var(--mut)}
+.rl-lab select{font:inherit;font-size:16px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--txt);background:#ffffff10;border:1px solid #ffffff2a;border-radius:6px;padding:11px 12px;appearance:auto;width:100%}
+.rl-lab select:focus{outline:2px solid var(--gold);outline-offset:1px}
+.rl-lab option{background:#1a0a26;color:#fff}
+.rl-prev{display:flex;align-items:center;gap:10px;padding:12px;border-radius:8px;background:#ffffff0a;border-left:4px solid var(--gold)}
+.rl-prev .rl-n b{font-size:18px}
+.rl-prev .rl-pw{font-size:34px}
+.rl-go{width:100%;font-size:17px;padding:13px}
 
 /* ===== maç ekranı: iki takım tek sahada ===== */
 .mside{display:flex;flex-direction:column;gap:14px}
@@ -755,6 +769,7 @@ body.yayin main{padding-top:6px}
     <button id="n-settings" class="setbtn" onclick="openSettings()">⚙️ Ayarlar</button>
   </nav>
 </header>
+<div id="betanote" class="betanote" role="note"><span>🧪 <b>Beta sürüm:</b> Kadrolar tam güncel olmayabilir. Şikayet ve önerilerini <a href="#" onclick="show('squads');return false">Kadrolar</a> sekmesinden bekliyoruz.</span><button class="bn-x" onclick="this.parentNode.remove();try{sessionStorage.setItem('sl70:bn','1')}catch(e){}" aria-label="Kapat">✕</button></div>
 <main>
   <section id="play"></section>
   <section id="rank" class="hidden"></section>
@@ -2955,6 +2970,7 @@ DICT_ROWS.push(["Göster ▾","Show ▾","Mostrar ▾"],["Gizle ▴","Hide ▴",
 DICT_ROWS.push(["Genel","Overview","General"],["Oyuncular","Players","Jugadores"],["Maçlar","Matches","Partidos"],["Biz","Us","Nosotros"],["Rakipler","Opponents","Rivales"],["Gol","Goals","Goles"],["İsabetli şut","Shots on target","Tiros a puerta"],["Sarı kart","Yellow cards","Amarillas"],["Kırmızı kart","Red cards","Rojas"],["⚽ Gol","⚽ Goals","⚽ Goles"],["📈 Ortalama not","📈 Average rating","📈 Nota media"],["🏅 Maçın oyuncusu","🏅 Player of the match","🏅 Jugador del partido"],["🎯 Şut","🎯 Shots","🎯 Tiros"],["Mvk","Pos","Pos"],["Dk","Min","Min"],["İsb","OT","AP"],["MO","PoM","JdP"],["Not","Rating","Nota"],["Sana gol atanlar:","Scored against you:","Te marcaron:"],["🧤 Kalende gol yok.","🧤 No goals conceded.","🧤 Portería a cero."],["Başlığa dokun, o sütuna göre sırala. Not 10 üzerinden: gol, asist, isabetli şut, kartlar, sonuç ve (defans/kaleci için) yenilen gole göre hesaplanır.","Tap a header to sort. Ratings are out of 10, based on goals, assists, shots on target, cards, the result and (for defenders/keepers) goals conceded.","Toca una cabecera para ordenar. Nota sobre 10 según goles, asistencias, tiros a puerta, tarjetas, resultado y (defensas/porteros) goles encajados."],["🏅 Maçın oyuncusu:","🏅 Player of the match:","🏅 Jugador del partido:"],["İsabet","On target","A puerta"],["Kart","Cards","Tarjetas"],["⭐ Maçın yıldızı","⭐ Star of the match","⭐ Estrella del partido"],["⭐ Turnuvanın yıldızı","⭐ Star of the tournament","⭐ Estrella del torneo"]);
 DICT_ROWS.push(["🎮 Efsaneler Draft'ı","🎮 Legends Draft","🎮 Draft de leyendas"],["🗓️ Günün Meydan Okuması","🗓️ Daily Challenge","🗓️ Reto del día"],["⚔️ Meydan okuma","⚔️ Challenge","⚔️ Desafío"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario."]);
 DICT_ROWS.push(["← Geri","← Back","← Atrás"],["⌂ Ana sayfa","⌂ Home","⌂ Inicio"],["Bir önceki ekrana dönülsün mü?","Go back to the previous screen?","¿Volver a la pantalla anterior?"],["Maç yarıda kalacak.","The match will be abandoned.","El partido quedará a medias."]);
+DICT_ROWS.push(["Şampiyon","Champions","Campeón"],["1 · Sezon","1 · Season","1 · Temporada"],["2 · Takım","2 · Team","2 · Equipo"],["Bu takımla oyna ▶","Play with this team ▶","Jugar con este equipo ▶"],["Bir sezonun gerçek kadrosunu seç, 7-0 yapabilecek misin?","Pick a real squad from any season. Can you go 7-0?","Elige una plantilla real de cualquier temporada. ¿Puedes hacer 7-0?"],["Bu sezonda oynanabilir kadro yok.","No playable squad in this season.","No hay plantillas jugables en esta temporada."],["Güncel","Current","Actual"],["Beta sürüm:","Beta version:","Versión beta:"],["Kadrolar tam güncel olmayabilir. Şikayet ve önerilerini","Squads may not be fully up to date. Send complaints and suggestions via the","Las plantillas pueden no estar del todo actualizadas. Envía quejas y sugerencias desde la pestaña"],["sekmesinden bekliyoruz.","tab.","."]);
 DICT_ROWS.push(["Kendi 11'i","Own XI","Once propio"],["2026-27 Süper Lig","2026-27 Süper Lig","Süper Lig 2026-27"],["2026-27 Süper Lig turnuvasında rakiplerin bu sezonun gerçek kadroları. İster kendi 11'ini bu sezonun oyuncularından kur, ister güncel bir takımla gir; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol.","In the 2026-27 Süper Lig tournament your opponents are this season's real squads. Build your own XI from this season's players or enter with a current team; each team's best result of the day goes on the table. Ranking: wins, goal difference, goals scored.","En el torneo de la Süper Lig 2026-27 tus rivales son las plantillas reales de esta temporada. Arma tu once con jugadores de esta temporada o entra con un equipo actual; en la tabla queda el mejor resultado del día de cada equipo. Orden: victorias, diferencia de goles, goles a favor."]);
 DICT_ROWS.push(["📋 Taktik","📋 Tactics","📋 Táctica"],["👥 Kadro","👥 Squad","👥 Plantilla"],["🗣️ Konuşma","🗣️ Team talk","🗣️ Charla"],["⚽ Maç","⚽ Match","⚽ Partido"],["🎯 Anlayış","🎯 Approach","🎯 Planteamiento"],["🔁 Değişiklik","🔁 Subs","🔁 Cambios"],["⚽ 2. yarı","⚽ 2nd half","⚽ 2ª parte"],["İleri: Kadro ▶","Next: Squad ▶","Siguiente: Plantilla ▶"],["İleri: Konuşma ▶","Next: Team talk ▶","Siguiente: Charla ▶"],["İleri: Anlayış ▶","Next: Approach ▶","Siguiente: Planteamiento ▶"],["İleri: Değişiklik ▶","Next: Subs ▶","Siguiente: Cambios ▶"],["◀ Taktik","◀ Tactics","◀ Táctica"],["◀ Kadro","◀ Squad","◀ Plantilla"],["◀ Anlayış","◀ Approach","◀ Planteamiento"],["⏩ Direkt maça çık","⏩ Skip to the match","⏩ Ir al partido"],["⏩ Direkt başlat","⏩ Start now","⏩ Empezar ya"]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
@@ -3240,24 +3256,33 @@ function realBest(t){
 }
 const realOk = t => !!realBest(t);
 const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
-function renderRealPicker(club){
-  navPush("real", () => renderRealPicker(S.realClub));
+// Gerçek takım seçici: önce sezon, sonra o sezonun takımları (açılır listeler)
+const RANKTXT = r => r===1 ? "Şampiyon" : r+".";
+function realSeasons(){ return [GUNCEL.sezon+"*", ...[...new Set(POOL.filter(t=>!t.cur).map(t=>t.season))].sort().reverse()]; }
+function realTeamsOf(sz){
+  const pw = t => { const b = realBest(t); return b ? b.total : -1; };
+  return sz.endsWith("*") ? CUR.slice().sort((a,b)=>pw(b)-pw(a)) : POOL.filter(t=>!t.cur && t.season===sz).sort((a,b)=>a.rank-b.rank);
+}
+function renderRealPicker(arg){
+  navPush("real", () => renderRealPicker());
   S.sl = false; S.santraOn = false;
-  S.realClub = club || S.realClub || "Tümü";
-  const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
-  const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);
-  const pw = t => { const b = realBest(t); return b ? Math.round(b.total/11)*1000 + b.total : -1; };
-  const list = [...CUR.filter(hit).sort((a,b)=>pw(b)-pw(a)), ...POOL.filter(t=>!t.cur && hit(t)).slice().reverse()];
+  if (arg && /^Güncel/.test(arg)) S.realSeason = GUNCEL.sezon+"*";
+  const seasons = realSeasons();
+  if (!seasons.includes(S.realSeason)) S.realSeason = seasons[0];
+  const teams = realTeamsOf(S.realSeason);
+  if (!teams.some(t=>t.id===S.realPick && realBest(t))) S.realPick = (teams.find(t=>realBest(t))||{}).id;
+  const t = findTeam(S.realPick), bst = t && realBest(t), c = t ? kitC(t.team) : ["#888","#444"], coach = t && coachOf(t);
   $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
-    <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
-    <div class="rl-tabs">${clubs.map(c=>{ const k = big.includes(c) ? kitC(c) : null; return `<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${k?`<span class="kit" style="--c1:${k[0]};--c2:${k[1]}"></span>`:""}${c}</button>`; }).join("")}</div>
-    <div class="rl-grid">${list.map(t => { const b = realBest(t), c = kitC(t.team), coach = coachOf(t);
-      const avg = b ? Math.round(b.total/11) : null;
-      return `<button class="card rl-card ${b?"":"rl-lock"}" ${b?`onclick="pickReal('${esc(t.id)}')"`:"disabled"}>
-        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><span class="rl-n"><small class="rl-sz">${t.season}</small><b>${esc(t.team)}</b></span>${b?`<span class="rl-pw">${avg}</span>`:""}</span>
-        <span class="mut rl-s">${t.cur?`<span class="rl-rk rl-cur">GÜNCEL</span> `:`<span class="rl-rk rk${t.rank}">${t.rank}.</span> `}${b ? b.form : "🔒 Kadro eksik · yakında"}</span>
-        ${coach?`<span class="mut rl-s">Teknik direktör: ${esc(coach)}</span>`:""}</button>`; }).join("")}</div>`;
+    <p class="mut">Bir sezonun gerçek kadrosunu seç, 7-0 yapabilecek misin?</p>
+    <div class="card rl-pick">
+      <label class="rl-lab">1 · Sezon
+        <select id="rl-sz" onchange="S.realSeason=this.value;S.realPick=null;renderRealPicker()">${seasons.map(z=>`<option value="${z}" ${z===S.realSeason?"selected":""}>${z.endsWith("*")?z.slice(0,-1)+" · Güncel":z}</option>`).join("")}</select></label>
+      <label class="rl-lab">2 · Takım
+        <select id="rl-tm" onchange="S.realPick=this.value;renderRealPicker()">${teams.map(x=>{ const b = realBest(x); return `<option value="${esc(x.id)}" ${x.id===S.realPick?"selected":""} ${b?"":"disabled"}>${esc(x.team)} · ${x.cur?"":RANKTXT(x.rank)+" · "}${b?Math.round(b.total/11):"🔒"}</option>`; }).join("")}</select></label>
+      ${t && bst ? `<div class="rl-prev"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><span class="rl-n"><small class="rl-sz">${t.season}${t.cur?" · Güncel":" · "+RANKTXT(t.rank)}</small><b>${esc(t.team)}</b><small class="mut">${bst.form}${coach?" · TD: "+esc(coach):""}</small></span><span class="rl-pw">${Math.round(bst.total/11)}</span></div>
+      <button class="btn gold rl-go" onclick="pickReal('${esc(t.id)}')">Bu takımla oyna ▶</button>` : `<p class="mut">Bu sezonda oynanabilir kadro yok.</p>`}
+    </div>`;
   toTop();
 }
 function realFill(form){
@@ -3724,6 +3749,7 @@ startI18n();
 setTimeout(()=>showConsent(false), 1200);
 if (typeof location!=="undefined" && location.protocol.startsWith("http")) { setTimeout(startPresence, 300); if (IS_WEB){ setTimeout(trackVisit, 900); registerPWA(); } }
 if (typeof location!=="undefined" && /[?&]istatistik/.test(location.search)) setTimeout(()=>renderStats(), 400);
+try { if (typeof sessionStorage!=="undefined" && sessionStorage.getItem("sl70:bn")) document.getElementById("betanote")?.remove(); } catch(e){}
 </script>
 </body>
 </html>

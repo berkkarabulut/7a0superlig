@@ -33,24 +33,33 @@ function realBest(t){
 }
 const realOk = t => !!realBest(t);
 const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
-function renderRealPicker(club){
-  navPush("real", () => renderRealPicker(S.realClub));
+// Gerçek takım seçici: önce sezon, sonra o sezonun takımları (açılır listeler)
+const RANKTXT = r => r===1 ? "Şampiyon" : r+".";
+function realSeasons(){ return [GUNCEL.sezon+"*", ...[...new Set(POOL.filter(t=>!t.cur).map(t=>t.season))].sort().reverse()]; }
+function realTeamsOf(sz){
+  const pw = t => { const b = realBest(t); return b ? b.total : -1; };
+  return sz.endsWith("*") ? CUR.slice().sort((a,b)=>pw(b)-pw(a)) : POOL.filter(t=>!t.cur && t.season===sz).sort((a,b)=>a.rank-b.rank);
+}
+function renderRealPicker(arg){
+  navPush("real", () => renderRealPicker());
   S.sl = false; S.santraOn = false;
-  S.realClub = club || S.realClub || "Tümü";
-  const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
-  const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);
-  const pw = t => { const b = realBest(t); return b ? Math.round(b.total/11)*1000 + b.total : -1; };
-  const list = [...CUR.filter(hit).sort((a,b)=>pw(b)-pw(a)), ...POOL.filter(t=>!t.cur && hit(t)).slice().reverse()];
+  if (arg && /^Güncel/.test(arg)) S.realSeason = GUNCEL.sezon+"*";
+  const seasons = realSeasons();
+  if (!seasons.includes(S.realSeason)) S.realSeason = seasons[0];
+  const teams = realTeamsOf(S.realSeason);
+  if (!teams.some(t=>t.id===S.realPick && realBest(t))) S.realPick = (teams.find(t=>realBest(t))||{}).id;
+  const t = findTeam(S.realPick), bst = t && realBest(t), c = t ? kitC(t.team) : ["#888","#444"], coach = t && coachOf(t);
   $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
-    <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
-    <div class="rl-tabs">${clubs.map(c=>{ const k = big.includes(c) ? kitC(c) : null; return `<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${k?`<span class="kit" style="--c1:${k[0]};--c2:${k[1]}"></span>`:""}${c}</button>`; }).join("")}</div>
-    <div class="rl-grid">${list.map(t => { const b = realBest(t), c = kitC(t.team), coach = coachOf(t);
-      const avg = b ? Math.round(b.total/11) : null;
-      return `<button class="card rl-card ${b?"":"rl-lock"}" ${b?`onclick="pickReal('${esc(t.id)}')"`:"disabled"}>
-        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><span class="rl-n"><small class="rl-sz">${t.season}</small><b>${esc(t.team)}</b></span>${b?`<span class="rl-pw">${avg}</span>`:""}</span>
-        <span class="mut rl-s">${t.cur?`<span class="rl-rk rl-cur">GÜNCEL</span> `:`<span class="rl-rk rk${t.rank}">${t.rank}.</span> `}${b ? b.form : "🔒 Kadro eksik · yakında"}</span>
-        ${coach?`<span class="mut rl-s">Teknik direktör: ${esc(coach)}</span>`:""}</button>`; }).join("")}</div>`;
+    <p class="mut">Bir sezonun gerçek kadrosunu seç, 7-0 yapabilecek misin?</p>
+    <div class="card rl-pick">
+      <label class="rl-lab">1 · Sezon
+        <select id="rl-sz" onchange="S.realSeason=this.value;S.realPick=null;renderRealPicker()">${seasons.map(z=>`<option value="${z}" ${z===S.realSeason?"selected":""}>${z.endsWith("*")?z.slice(0,-1)+" · Güncel":z}</option>`).join("")}</select></label>
+      <label class="rl-lab">2 · Takım
+        <select id="rl-tm" onchange="S.realPick=this.value;renderRealPicker()">${teams.map(x=>{ const b = realBest(x); return `<option value="${esc(x.id)}" ${x.id===S.realPick?"selected":""} ${b?"":"disabled"}>${esc(x.team)} · ${x.cur?"":RANKTXT(x.rank)+" · "}${b?Math.round(b.total/11):"🔒"}</option>`; }).join("")}</select></label>
+      ${t && bst ? `<div class="rl-prev"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><span class="rl-n"><small class="rl-sz">${t.season}${t.cur?" · Güncel":" · "+RANKTXT(t.rank)}</small><b>${esc(t.team)}</b><small class="mut">${bst.form}${coach?" · TD: "+esc(coach):""}</small></span><span class="rl-pw">${Math.round(bst.total/11)}</span></div>
+      <button class="btn gold rl-go" onclick="pickReal('${esc(t.id)}')">Bu takımla oyna ▶</button>` : `<p class="mut">Bu sezonda oynanabilir kadro yok.</p>`}
+    </div>`;
   toTop();
 }
 function realFill(form){

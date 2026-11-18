@@ -5,7 +5,7 @@ eval(s+`;choosePens=async a=>kickOrder(a).slice(0,5).map(p=>p.n);
 (async()=>{let errs=0;const t0=Date.now();const ok=POOL.filter(realOk);const ms=Date.now()-t0;
  console.log("oynanabilir:",ok.length,"/",POOL.length,"· hesap süresi:",ms+"ms");
  if(ms>1500) {console.log("HATA yavaş");errs++}
- renderRealPicker("Tümü"); if(!els.play.innerHTML.includes("rl-card")) {console.log("HATA seçim ekranı boş");errs++}
+ renderRealPicker("Tümü"); if(!els.play.innerHTML.includes("rl-go")) {console.log("HATA seçim ekranı boş");errs++}
  const stats={};let plays=0;
  for(const t of ok){ try{ pickReal(t.id);
    if(S.slots.length!==11||!S.slots.every(z=>z.p)) throw "11 dolmadı "+t.id;

@@ -2,3 +2,8 @@
 /* ===== beta etiketi ===== */
 .betatag{display:inline-block;vertical-align:middle;margin-left:8px;padding:2px 7px;border-radius:3px;border:1px solid var(--gold);background:#ffb7031f;color:var(--gold);font:800 12px var(--cond);letter-spacing:1px;cursor:pointer;line-height:1.4}
 .betatag:hover{background:var(--gold);color:#1d1200}
+.betanote{display:flex;align-items:center;gap:10px;max-width:1100px;margin:10px auto 0;padding:8px 12px;border:1px solid #f5b80055;background:#f5b80014;border-radius:6px;font-size:13px;line-height:1.35;color:var(--txt)}
+.betanote span{flex:1}
+.betanote a{color:var(--gold);font-weight:800}
+.betanote .bn-x{background:none;border:0;color:var(--mut);font-size:15px;cursor:pointer;padding:2px 6px}
+@media (max-width:700px){.betanote{margin:8px 10px 0;font-size:12px}}

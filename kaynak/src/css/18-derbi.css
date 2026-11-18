@@ -1,37 +1,6 @@
 
-/* ===== güncel derbi simülasyonu ===== */
+/* ===== güncel kadro rozeti ===== */
 .rl-rk.rl-cur{background:var(--win);color:#04170c;font-size:11px;letter-spacing:.5px}
-.db-cfg{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end}
-.db-cfg > .row{margin:0!important}
-.db-selw{display:flex;align-items:center;gap:8px}
-.db-sel{flex:1;background:var(--card);color:var(--txt,#fff);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:16px;font-weight:700}
-.db-lab{font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.db-pick .chip{display:inline-flex;align-items:center;gap:6px}
-.db-swap{padding:4px 12px;font-size:13px}
-.db-sides{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin:14px 0}
-.db-side{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
-.db-name{display:flex;align-items:center;gap:8px;font-size:17px}
-.db-meta{font-size:13px;margin-top:4px}
-.db-xi{font-size:13px;margin-top:8px;line-height:1.5}
-.db-vs{align-self:center;font-weight:900;font-size:20px;color:var(--gold)}
-.db-act{gap:8px;align-items:center}
-.db-res{margin-top:14px}
-.db-score{display:flex;align-items:center;justify-content:center;gap:16px;font-size:18px;font-weight:700}
-.db-score b{font-size:38px;color:var(--gold);font-family:var(--cond,inherit)}
-.db-win{text-align:center;margin:2px 0 10px}
-.db-ev{display:flex;flex-direction:column;gap:4px}
-.db-e{font-size:14px}
-.db-e.db-r{text-align:right}
-.db-m{color:var(--mut);display:inline-block;min-width:30px}
-.db-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px}
-.db-pcs{display:flex;justify-content:space-between;gap:8px;margin:8px 0 4px;font-size:14px;flex-wrap:wrap}
-@media (max-width:640px){
-  .db-cfg{grid-template-columns:1fr}
-  .db-sides{grid-template-columns:1fr}
-  .db-vs{justify-self:center}
-  .db-score{font-size:15px;gap:10px}
-  .db-score b{font-size:30px}
-}
 
 /* ===== 2026-27 Süper Lig turnuvası ===== */
 .sl-ban{background:rgba(255,200,0,.08);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -49,3 +18,15 @@
 .mgroup .mg-d{margin:4px 0 0;font-size:14px}
 .mgroup .modes{margin-top:10px}
 .modes.mg-inv{margin-top:8px}
+
+/* ===== Santra (tek maç) ===== */
+.sa-cfg{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center}
+.sa-lab{font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sa-selw{display:flex;align-items:center;gap:8px}
+.sa-sel{flex:1;min-width:0;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:15px;font-weight:700}
+.sa-rnd{padding:8px 12px!important;width:auto!important;flex:0 0 auto!important}
+.sa-meta{font-size:13px;margin-top:6px}
+.sa-swap{padding:6px 12px;font-size:13px}
+.sa-pk{display:block;margin-top:12px}
+.sa-end{font-size:17px}
+@media (max-width:640px){ .sa-cfg{grid-template-columns:1fr} .sa-mid{text-align:center} }

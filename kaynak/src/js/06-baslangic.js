@@ -21,9 +21,10 @@ function renderStart(){
     <div class="mgroup"><h2 class="mg-h">🔥 Bu sezon <span class="mut">· ${GUNCEL.sezon}</span></h2><p class="mut mg-d">Bugünkü Süper Lig: ${CUR.length} takımın güncel kadroları.</p>
     <div class="modes">
       <button class="card mode slcard ${S.sl?"on":""}" onclick="renderSL()"><b><span class="mi">🏆</span> ${GUNCEL.sezon} Süper Lig turnuvası</b><span class="mut">Rakiplerin bu sezonun ${CUR.length} Süper Lig takımı. Kendi 11'ini kur ya da güncel bir takımla gir.</span></button>
-      <button class="card mode dbcard" onclick="renderDerby()"><b><span class="mi">⚔️</span> Güncel derbi simülasyonu</b><span class="mut">${GUNCEL.sezon} kadrolarıyla iki Süper Lig takımını seç, maçı oynat, 1.000 kere simüle et.</span></button>
     </div></div>
+    <div class="mgroup"><h2 class="mg-h">⚡ Tek maç</h2><p class="mut mg-d">Tarihin ya da bu sezonun herhangi iki takımı, tek maç.</p></div>
     <div class="modes mg-inv">
+      <button class="card mode sacard" onclick="renderSantra()"><b><span class="mi">⚽</span> Santra</b><span class="mut">İstediğin takımla istediğin takıma karşı tek maç oyna. 2000 Galatasaray mı, 2026-27 Fenerbahçe mi? Sen seç, maçı sen yönet.</span></button>
       <button class="card mode invcard" onclick="openInvite()"><b><span class="mi">📨</span> Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
     ${S.homePick||S.challenge?`<div class="card" id="setupcard">
@@ -42,7 +43,7 @@ function renderStart(){
     </div>`:""}`;
 }
 function pickMode(m){
-  S.mode = m; S.homePick = true; S.sl = false; renderStart();
+  S.mode = m; S.homePick = true; S.sl = false; S.santraOn = false; renderStart();
   try { const c = $("setupcard"); if (c && c.scrollIntoView) c.scrollIntoView({behavior:"smooth", block:"start"}); } catch(e){}
 }
 

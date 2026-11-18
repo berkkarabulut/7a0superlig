@@ -50,13 +50,14 @@ function renderReady(){
   $("play").innerHTML = `${topBar("Kurduğun kadro silinecek.")}
   <div class="grid">
     <div>${S.mode==="real"?realFormHTML():""}<h1>11'in hazır.</h1>
-      <p class="mut">Turnuva 7 maç: önce grup kurası çekilir, 4 takımlı grupta 3 maç oynarsın, ilk 2'ye girersen Son 16 kurası, çeyrek final, yarı final ve final gelir. Her maç öncesi takımına konuşma yapar, kadronu ayarlarsın. Elemelerde beraberlikte uzatma, sonra penaltı: penaltıcılarını sen seçersin.</p>
+      ${S.santraOn?`<p class="mut">⚽ Santra · tek maç: rakibin <b>${esc(santraOppLabel())}</b>. Maç öncesi takımına konuşma yaparsın, devre arasında taktik ve değişiklik yaparsın.</p>`:`<p class="mut">Turnuva 7 maç: önce grup kurası çekilir, 4 takımlı grupta 3 maç oynarsın, ilk 2'ye girersen Son 16 kurası, çeyrek final, yarı final ve final gelir. Her maç öncesi takımına konuşma yapar, kadronu ayarlarsın. Elemelerde beraberlikte uzatma, sonra penaltı: penaltıcılarını sen seçersin.</p>`}
       ${(S.bench||[]).length?"":`<p class="hint card">Yedeğin yok: kırmızı kart ya da sakatlıkta 10 kişi kalırsın.</p>`}
       ${S.mode==="daily"?`<p>Harcanan bütçe: <b>${S.spent} / ${DAILY_BUDGET} M</b>${S.counted?"":" · <span class='mut'>bugünkü hakkını kullandın, bu oyun sayılmaz</span>"}</p>`:""}
       <h3>Maç hızı</h3>
       <div class="row">${Object.keys(SPEEDS).map(k=>`<button class="chip ${k===S.speed?"on":""}" onclick="S.speed='${k}';renderReady()">${k}</button>`).join("")}</div>
-      <div class="row" style="margin-top:18px"><button class="btn" onclick="startTournament()">Turnuvaya başla</button>
-      <button class="btn ghost" onclick="${S.mode==='real'?'renderRealPicker()':'renderStart()'}">${S.mode==='real'?'Başka takım seç':'Baştan kur'}</button></div>
+      ${S.santraOn?`<div class="row" style="margin-top:18px"><button class="btn" onclick="startSantra()">⚽ Santra: maçı başlat</button>
+      <button class="btn ghost" onclick="renderSantra()">Takımları değiştir</button></div>`:`<div class="row" style="margin-top:18px"><button class="btn" onclick="startTournament()">Turnuvaya başla</button>
+      <button class="btn ghost" onclick="${S.mode==='real'?'renderRealPicker()':'renderStart()'}">${S.mode==='real'?'Başka takım seç':'Baştan kur'}</button></div>`}
     </div>
     <div class="side rd-side"><p class="mut rd-hint">✋ Değişiklik için bir oyuncuya, sonra yerine geçeceği oyuncuya dokun.</p>${pitchHTML()}${benchHTML()}${statsHTML()}</div>
   </div>`;

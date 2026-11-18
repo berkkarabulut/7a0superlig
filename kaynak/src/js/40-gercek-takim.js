@@ -34,7 +34,7 @@ function realBest(t){
 const realOk = t => !!realBest(t);
 const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
 function renderRealPicker(club){
-  S.sl = false;
+  S.sl = false; S.santraOn = false;
   S.realClub = club || S.realClub || "Tümü";
   const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
   const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);
@@ -42,7 +42,6 @@ function renderRealPicker(club){
   $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
     <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
-    <div class="row" style="margin:10px 0 6px"><button class="btn ghost" onclick="renderDerby()">⚔️ Güncel kadrolarla derbi simülasyonu</button></div>
     <div class="row" style="margin:10px 0 14px">${clubs.map(c=>`<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${c}</button>`).join("")}</div>
     <div class="rl-grid">${list.map(t => { const b = realBest(t), c = kitC(t.team), coach = coachOf(t);
       const avg = b ? Math.round(b.total/11) : null;
@@ -77,7 +76,7 @@ function realFormHTML(){
     <div class="row">${Object.keys(FORMATIONS).map(f=>{ const a = realAssign(t,f); return a ? `<button class="chip ${f===S.form?"on":""}" onclick="realSetForm('${f}')">${f}</button>` : `<button class="chip" disabled title="Bu kadroyla kurulamıyor">${f}</button>`; }).join("")}</div>
     <h3 style="margin:12px 0 6px">Oyun tarzı</h3>
     <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderReady()">${v.e} ${k}</button>`).join("")}</div>
-    <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="renderRealPicker()">Başka takım seç</button></div></div>`;
+    <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="${S.santraOn?"renderSantra()":"renderRealPicker()"}">${S.santraOn?"Takımları değiştir":"Başka takım seç"}</button></div></div>`;
 }
 async function submitReal(entry){
   if (myTeamBad() || badName(entry.name)) return null;

@@ -584,39 +584,8 @@ body.yayin main{padding-top:6px}
 .st-msg{font:800 22px/1.3 var(--cond);text-align:center;padding:16px 6px;text-transform:uppercase}
 .st-intro ol{padding-left:20px;line-height:1.6}
 
-/* ===== güncel derbi simülasyonu ===== */
+/* ===== güncel kadro rozeti ===== */
 .rl-rk.rl-cur{background:var(--win);color:#04170c;font-size:11px;letter-spacing:.5px}
-.db-cfg{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:end}
-.db-cfg > .row{margin:0!important}
-.db-selw{display:flex;align-items:center;gap:8px}
-.db-sel{flex:1;background:var(--card);color:var(--txt,#fff);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:16px;font-weight:700}
-.db-lab{font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.db-pick .chip{display:inline-flex;align-items:center;gap:6px}
-.db-swap{padding:4px 12px;font-size:13px}
-.db-sides{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin:14px 0}
-.db-side{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
-.db-name{display:flex;align-items:center;gap:8px;font-size:17px}
-.db-meta{font-size:13px;margin-top:4px}
-.db-xi{font-size:13px;margin-top:8px;line-height:1.5}
-.db-vs{align-self:center;font-weight:900;font-size:20px;color:var(--gold)}
-.db-act{gap:8px;align-items:center}
-.db-res{margin-top:14px}
-.db-score{display:flex;align-items:center;justify-content:center;gap:16px;font-size:18px;font-weight:700}
-.db-score b{font-size:38px;color:var(--gold);font-family:var(--cond,inherit)}
-.db-win{text-align:center;margin:2px 0 10px}
-.db-ev{display:flex;flex-direction:column;gap:4px}
-.db-e{font-size:14px}
-.db-e.db-r{text-align:right}
-.db-m{color:var(--mut);display:inline-block;min-width:30px}
-.db-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px}
-.db-pcs{display:flex;justify-content:space-between;gap:8px;margin:8px 0 4px;font-size:14px;flex-wrap:wrap}
-@media (max-width:640px){
-  .db-cfg{grid-template-columns:1fr}
-  .db-sides{grid-template-columns:1fr}
-  .db-vs{justify-self:center}
-  .db-score{font-size:15px;gap:10px}
-  .db-score b{font-size:30px}
-}
 
 /* ===== 2026-27 Süper Lig turnuvası ===== */
 .sl-ban{background:rgba(255,200,0,.08);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -634,6 +603,18 @@ body.yayin main{padding-top:6px}
 .mgroup .mg-d{margin:4px 0 0;font-size:14px}
 .mgroup .modes{margin-top:10px}
 .modes.mg-inv{margin-top:8px}
+
+/* ===== Santra (tek maç) ===== */
+.sa-cfg{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center}
+.sa-lab{font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sa-selw{display:flex;align-items:center;gap:8px}
+.sa-sel{flex:1;min-width:0;background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:15px;font-weight:700}
+.sa-rnd{padding:8px 12px!important;width:auto!important;flex:0 0 auto!important}
+.sa-meta{font-size:13px;margin-top:6px}
+.sa-swap{padding:6px 12px;font-size:13px}
+.sa-pk{display:block;margin-top:12px}
+.sa-end{font-size:17px}
+@media (max-width:640px){ .sa-cfg{grid-template-columns:1fr} .sa-mid{text-align:center} }
 
 /* ===== turnuva sonu istatistikleri ===== */
 .ts-card{margin-top:16px}
@@ -973,9 +954,10 @@ function renderStart(){
     <div class="mgroup"><h2 class="mg-h">🔥 Bu sezon <span class="mut">· ${GUNCEL.sezon}</span></h2><p class="mut mg-d">Bugünkü Süper Lig: ${CUR.length} takımın güncel kadroları.</p>
     <div class="modes">
       <button class="card mode slcard ${S.sl?"on":""}" onclick="renderSL()"><b><span class="mi">🏆</span> ${GUNCEL.sezon} Süper Lig turnuvası</b><span class="mut">Rakiplerin bu sezonun ${CUR.length} Süper Lig takımı. Kendi 11'ini kur ya da güncel bir takımla gir.</span></button>
-      <button class="card mode dbcard" onclick="renderDerby()"><b><span class="mi">⚔️</span> Güncel derbi simülasyonu</b><span class="mut">${GUNCEL.sezon} kadrolarıyla iki Süper Lig takımını seç, maçı oynat, 1.000 kere simüle et.</span></button>
     </div></div>
+    <div class="mgroup"><h2 class="mg-h">⚡ Tek maç</h2><p class="mut mg-d">Tarihin ya da bu sezonun herhangi iki takımı, tek maç.</p></div>
     <div class="modes mg-inv">
+      <button class="card mode sacard" onclick="renderSantra()"><b><span class="mi">⚽</span> Santra</b><span class="mut">İstediğin takımla istediğin takıma karşı tek maç oyna. 2000 Galatasaray mı, 2026-27 Fenerbahçe mi? Sen seç, maçı sen yönet.</span></button>
       <button class="card mode invcard" onclick="openInvite()"><b><span class="mi">📨</span> Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
     ${S.homePick||S.challenge?`<div class="card" id="setupcard">
@@ -994,7 +976,7 @@ function renderStart(){
     </div>`:""}`;
 }
 function pickMode(m){
-  S.mode = m; S.homePick = true; S.sl = false; renderStart();
+  S.mode = m; S.homePick = true; S.sl = false; S.santraOn = false; renderStart();
   try { const c = $("setupcard"); if (c && c.scrollIntoView) c.scrollIntoView({behavior:"smooth", block:"start"}); } catch(e){}
 }
 
@@ -1217,13 +1199,14 @@ function renderReady(){
   $("play").innerHTML = `${topBar("Kurduğun kadro silinecek.")}
   <div class="grid">
     <div>${S.mode==="real"?realFormHTML():""}<h1>11'in hazır.</h1>
-      <p class="mut">Turnuva 7 maç: önce grup kurası çekilir, 4 takımlı grupta 3 maç oynarsın, ilk 2'ye girersen Son 16 kurası, çeyrek final, yarı final ve final gelir. Her maç öncesi takımına konuşma yapar, kadronu ayarlarsın. Elemelerde beraberlikte uzatma, sonra penaltı: penaltıcılarını sen seçersin.</p>
+      ${S.santraOn?`<p class="mut">⚽ Santra · tek maç: rakibin <b>${esc(santraOppLabel())}</b>. Maç öncesi takımına konuşma yaparsın, devre arasında taktik ve değişiklik yaparsın.</p>`:`<p class="mut">Turnuva 7 maç: önce grup kurası çekilir, 4 takımlı grupta 3 maç oynarsın, ilk 2'ye girersen Son 16 kurası, çeyrek final, yarı final ve final gelir. Her maç öncesi takımına konuşma yapar, kadronu ayarlarsın. Elemelerde beraberlikte uzatma, sonra penaltı: penaltıcılarını sen seçersin.</p>`}
       ${(S.bench||[]).length?"":`<p class="hint card">Yedeğin yok: kırmızı kart ya da sakatlıkta 10 kişi kalırsın.</p>`}
       ${S.mode==="daily"?`<p>Harcanan bütçe: <b>${S.spent} / ${DAILY_BUDGET} M</b>${S.counted?"":" · <span class='mut'>bugünkü hakkını kullandın, bu oyun sayılmaz</span>"}</p>`:""}
       <h3>Maç hızı</h3>
       <div class="row">${Object.keys(SPEEDS).map(k=>`<button class="chip ${k===S.speed?"on":""}" onclick="S.speed='${k}';renderReady()">${k}</button>`).join("")}</div>
-      <div class="row" style="margin-top:18px"><button class="btn" onclick="startTournament()">Turnuvaya başla</button>
-      <button class="btn ghost" onclick="${S.mode==='real'?'renderRealPicker()':'renderStart()'}">${S.mode==='real'?'Başka takım seç':'Baştan kur'}</button></div>
+      ${S.santraOn?`<div class="row" style="margin-top:18px"><button class="btn" onclick="startSantra()">⚽ Santra: maçı başlat</button>
+      <button class="btn ghost" onclick="renderSantra()">Takımları değiştir</button></div>`:`<div class="row" style="margin-top:18px"><button class="btn" onclick="startTournament()">Turnuvaya başla</button>
+      <button class="btn ghost" onclick="${S.mode==='real'?'renderRealPicker()':'renderStart()'}">${S.mode==='real'?'Başka takım seç':'Baştan kur'}</button></div>`}
     </div>
     <div class="side rd-side"><p class="mut rd-hint">✋ Değişiklik için bir oyuncuya, sonra yerine geçeceği oyuncuya dokun.</p>${pitchHTML()}${benchHTML()}${statsHTML()}</div>
   </div>`;
@@ -1362,7 +1345,7 @@ function addTbl(n,gf,ga){ const r=S.T.table[n]; r.O++; r.A+=gf; r.Y+=ga; if(gf>g
 function sortedTable(){ return Object.values(S.T.table).sort((a,b)=>b.P-a.P||(b.A-b.Y)-(a.A-a.Y)||b.A-a.A); }
 
 function pathHTML(){
-  const T=S.T; return `<div class="pathbar">${exitBtn(T.done?"":"Turnuvan yarıda kalacak, bu kadroyla oynadıkların kaybolur.")}</div><div class="path">${STAGES.map((s,i)=>`<span class="${i<T.res.length?T.res[i].res:(i===T.i&&!T.done?"cur":"")}">${s}${i<T.res.length?` ${T.res[i].g1}-${T.res[i].g2}`:""}</span>`).join("")}</div>`;
+  const T=S.T; if (T.single) return `<div class="pathbar">${exitBtn("")}</div><div class="path"><span class="cur">⚽ Santra · tek maç</span></div>`; return `<div class="pathbar">${exitBtn(T.done?"":"Turnuvan yarıda kalacak, bu kadroyla oynadıkların kaybolur.")}</div><div class="path">${STAGES.map((s,i)=>`<span class="${i<T.res.length?T.res[i].res:(i===T.i&&!T.done?"cur":"")}">${s}${i<T.res.length?` ${T.res[i].g1}-${T.res[i].g2}`:""}</span>`).join("")}</div>`;
 }
 function tableHTML(){
   return `<table><tr><th>Grup</th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>P</th></tr>${sortedTable().map(r=>`<tr class="${r.n===myName()?"me":""}"><td>${esc(r.n)}</td><td>${r.O}</td><td>${r.G}</td><td>${r.B}</td><td>${r.M}</td><td>${r.A}</td><td>${r.Y}</td><td>${r.P}</td></tr>`).join("")}</table>`;
@@ -1444,7 +1427,7 @@ function drawCeremony(title, note, items, doneTxt, onDone){
 // ---------- maç önü: kadro + takım konuşması ----------
 function talkCtx(T,o){ const me=teamPower(lineup(T),T.style), d=(me.att+me.def)-(o.pw.att+o.pw.def); return d>3?"fav":d<-3?"dog":"even"; }
 function preMatch(){
-  const T=S.T, i=T.i, isKo=i>=3, o = isKo ? T.R[i-3][1] : T.group[i];
+  const T=S.T, i=T.i, isKo=i>=3, o = T.single ? T.group[0] : isKo ? T.R[i-3][1] : T.group[i];
   T.o = o; T.ref = pickRef(o.t.season);
   if (T.prepFor!==i){ T.prepFor=i; T.notes = []; T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; }
   renderPre();
@@ -1483,7 +1466,7 @@ function renderPre(){
   <div class="grid">
     <div>
       <div class="card">
-        <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${STAGES[i]} · Maç önü</div>
+        <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${T.single?"Santra":STAGES[i]} · Maç önü</div>
         <div class="score pre"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
           <div><div class="big vs">VS</div><div class="clock">⚖️ ${esc(T.ref)}</div></div>
           <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[os].e} ${esc(os)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
@@ -1680,7 +1663,7 @@ async function runMatch(){
 }
 async function runMatchInner(rid){
   const nap = async ms => { await sleep(ms); if (S.runId!==rid) throw "iptal"; };
-  const T=S.T, i=T.i, isKo = i>=3, o=T.o;
+  const T=S.T, i=T.i, isKo = T.single ? !!T.pk : i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
   T.matchXi = T.xi.map(s=>isOut(T,s.p.n)?null:s.p.n);
   const pw = {...teamPower(L, T.style)};
@@ -1695,7 +1678,7 @@ async function runMatchInner(rid){
       <div>
         <div id="mgo"></div>
         <div class="card">
-          <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]} · Hakem: ${esc(T.ref)}</div>
+          <div class="mut" style="text-align:center;font-weight:700">${T.single?"Santra":STAGES[i]} · Hakem: ${esc(T.ref)}</div>
           <div class="score"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400" id="mystyle">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
             <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
             <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[o.pw.style].e} ${esc(o.pw.style)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
@@ -1703,12 +1686,12 @@ async function runMatchInner(rid){
           <div id="after" class="m-after"></div>
           <ul class="events" id="ev"></ul>
         </div>
-        ${isKo?`<div class="card" style="margin-top:14px"><h3>Eleme ağacı</h3><div id="brk">${bracketHTML()}</div></div>`:""}
+        ${isKo&&!T.single?`<div class="card" style="margin-top:14px"><h3>Eleme ağacı</h3><div id="brk">${bracketHTML()}</div></div>`:""}
       </div>
       <div class="mside">
         <div id="mpitch">${matchPitchHTML(M,T,o)}</div>
         <div id="mbench"></div>
-        <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>
+        ${T.single ? "" : `<div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>`}
       </div>
     </div>`;
   miniScore();
@@ -1765,6 +1748,7 @@ async function runMatchInner(rid){
   tsRecord(T, r, L, pw, opw, o);
   let msg="";
   const sideNotes = [...r.reds.map(n=>`🟥 ${esc(n)} bir sonraki maçta cezalı.`), ...r.injs.map(n=>`🚑 ${esc(n)} ${T.outs[n].n} maç yok.`)];
+  if (T.single){ santraAfter(T, res, r, pen, sideNotes); return; }
   if (!isKo){
     addTbl(myName(), r.g1, r.g2); addTbl(o.name, r.g2, r.g1);
     const om = T.others[i]; addTbl(om.a,om.g1,om.g2); addTbl(om.b,om.g2,om.g1);
@@ -2611,7 +2595,7 @@ function askExit(what){
   d.addEventListener("click", e=>{ if(e.target===d) d.remove(); });
   document.body.appendChild(d);
 }
-function goHome(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.T=null; S.Q=null; S.sl=false; show("play"); renderStart(); try{ window.scrollTo(0,0); }catch(e){} }
+function goHome(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.T=null; S.Q=null; S.sl=false; S.santraOn=false; show("play"); renderStart(); try{ window.scrollTo(0,0); }catch(e){} }
 // ---------- temalar: aynı tasarım, farklı renk paleti (TV yayını renkleri çalışma anında eşlenir) ----------
 const THEMES = {
   tv:     { ad:"📺 TV Yayını", meta:"#14061f", map:{} },
@@ -2785,6 +2769,8 @@ DICT_ROWS.push(["🎮 Kendi 11'ini kur","🎮 Build your own XI","🎮 Crea tu p
 DICT_ROWS.push(["← Süper Lig turnuvası","← Süper Lig tournament","← Torneo Süper Lig"]);
 DICT_ROWS.push(["📊 Turnuva istatistikleri","📊 Tournament stats","📊 Estadísticas del torneo"],["Maç","Matches","Partidos"],["G-B-M","W-D-L","G-E-P"],["Atılan-Yenilen","For-Against","A favor-En contra"],["Şut / isabet","Shots / on target","Tiros / a puerta"],["Topa sahip olma","Possession","Posesión"],["Gol yemeden","Clean sheets","Porterías a cero"],["Sarı / kırmızı","Yellow / red","Amarillas / rojas"],["Maç başı gol","Goals per match","Goles por partido"],["Turnuvanın yıldızı:","Player of the tournament:","Jugador del torneo:"],["⚽ Gol krallığı","⚽ Top scorers","⚽ Goleadores"],["🅰️ Asist","🅰️ Assists","🅰️ Asistencias"],["🎯 Rakiplerin golcüleri","🎯 Opponents' scorers","🎯 Goleadores rivales"],["Kalende gol yok 🧤","No goals conceded 🧤","Portería a cero 🧤"],["Oyuncular","Players","Jugadores"],["Maç maç","Match by match","Partido a partido"],["Oyuncu","Player","Jugador"],["Rakip","Opponent","Rival"],["Skor","Score","Marcador"],["Şut","Shots","Tiros"],["İsabet","On target","A puerta"],["Topa sahip","Possession","Posesión"],["Yok","None","Ninguno"]);
 DICT_ROWS.push(["Efsaneler Draft'ı","Legends Draft","Draft de leyendas"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur. Sınırsız oyna.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI. Play as much as you like.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario. Juega sin límite."],["⭐ Efsaneler ","⭐ Legends ","⭐ Leyendas "],["· 1980–2026","· 1980–2026","· 1980–2026"],["Süper Lig tarihinin her sezonundan ilk 3 takım ve oyuncuları.","The top 3 teams and their players from every season in Süper Lig history.","Los 3 primeros equipos y sus jugadores de cada temporada de la historia de la Süper Lig."],["🔥 Bu sezon ","🔥 This season ","🔥 Esta temporada "],["Draft","Draft","Draft"],["Efsaneler Draft'ı tabloda","Legends Draft table:","Tabla Draft de leyendas:"]);
+DICT_ROWS.push(["⚡ Tek maç","⚡ Single match","⚡ Partido único"],["Tarihin ya da bu sezonun herhangi iki takımı, tek maç.","Any two teams from history or this season, one match.","Dos equipos cualesquiera de la historia o de esta temporada, un partido."],["Santra","Kick-off","Saque inicial"],["⚽ Santra","⚽ Kick-off","⚽ Saque inicial"],["İstediğin takımla istediğin takıma karşı tek maç oyna. 2000 Galatasaray mı, 2026-27 Fenerbahçe mi? Sen seç, maçı sen yönet.","Play a single match with any team against any team. 2000 Galatasaray or 2026-27 Fenerbahçe? You pick, you manage.","Juega un partido con cualquier equipo contra cualquier equipo. ¿Galatasaray 2000 o Fenerbahçe 2026-27? Tú eliges, tú diriges."],["İstediğin takımla istediğin takıma karşı tek maç. Kendi takımının dizilişini ve ilk 11'ini ayarlarsın, maç öncesi konuşmanı yaparsın, devre arasında taktik ve değişiklik yaparsın.","A single match, any team against any team. Set your formation and XI, give your team talk, change tactics and make subs at half-time.","Un partido, cualquier equipo contra cualquiera. Elige formación y once, da la charla previa y cambia táctica y jugadores en el descanso."],["Senin takımın","Your team","Tu equipo"],["Rakip","Opponent","Rival"],["Berabere biterse uzatma ve penaltı","Extra time and penalties if level","Prórroga y penaltis si hay empate"],["· kapalıysa beraberlik geçerli","· if off, a draw stands","· si está apagado, vale el empate"],["Kadroyu ayarla ▶","Set up your squad ▶","Prepara la plantilla ▶"],["⚽ Santra: maçı başlat","⚽ Kick off","⚽ Empezar el partido"],["Takımları değiştir","Change teams","Cambiar equipos"],["⚽ Santra · tek maç","⚽ Kick-off · single match","⚽ Saque inicial · partido único"],["🏆 Kazandın!","🏆 You won!","🏆 ¡Ganaste!"],["😔 Kaybettin.","😔 You lost.","😔 Perdiste."],["🤝 Berabere.","🤝 Draw.","🤝 Empate."],["🔁 Rövanş","🔁 Rematch","🔁 Revancha"],["Kadroyu değiştir","Change squad","Cambiar plantilla"],["⚽ Yeni maç","⚽ New match","⚽ Nuevo partido"]);
+DICT_ROWS.push(["📊 Maç istatistikleri","📊 Match stats","📊 Estadísticas del partido"],["Maçın yıldızı:","Player of the match:","Jugador del partido:"]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];
@@ -2794,6 +2780,9 @@ const STAGE_I18N = [["Grup 1. maç","Group match 1","Grupo · partido 1"],["Grup
 for (const r of STAGE_I18N) DICT[r[0]] = [r[1], r[2]];
 const posName = s => DICT[s] ? DICT[s][LI] : s;
 const RX = [
+ [/^(.+) \((\d{4}-\d{2}) güncel\)$/, m => `${m[1]} (${m[2]} ${LI===0?"current":"actual"})`],
+ [/^⚽ Santra · tek maç: rakibin$/, m => LI===0?"⚽ Kick-off · single match: your opponent is":"⚽ Saque inicial · partido único: tu rival es"],
+ [/^\. Maç öncesi takımına konuşma yaparsın, devre arasında taktik ve değişiklik yaparsın\.$/, m => LI===0?". Give your team talk before the match and change tactics and players at half-time.":". Da la charla previa y cambia táctica y jugadores en el descanso."],
  [/^· (\d{4}-\d{2})$/, m => m[0]],
  [/^Bugünkü Süper Lig: (\d+) takımın güncel kadroları\.$/, m => LI===0?`Today's Süper Lig: current squads of all ${m[1]} teams.`:`La Süper Lig de hoy: plantillas actuales de los ${m[1]} equipos.`],
  [/^(\d{4}-\d{2}) Süper Lig$/, m => LI===0?`${m[1]} Süper Lig`:`Süper Lig ${m[1]}`],
@@ -3066,7 +3055,7 @@ function realBest(t){
 const realOk = t => !!realBest(t);
 const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
 function renderRealPicker(club){
-  S.sl = false;
+  S.sl = false; S.santraOn = false;
   S.realClub = club || S.realClub || "Tümü";
   const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
   const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);
@@ -3074,7 +3063,6 @@ function renderRealPicker(club){
   $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
     <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
-    <div class="row" style="margin:10px 0 6px"><button class="btn ghost" onclick="renderDerby()">⚔️ Güncel kadrolarla derbi simülasyonu</button></div>
     <div class="row" style="margin:10px 0 14px">${clubs.map(c=>`<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${c}</button>`).join("")}</div>
     <div class="rl-grid">${list.map(t => { const b = realBest(t), c = kitC(t.team), coach = coachOf(t);
       const avg = b ? Math.round(b.total/11) : null;
@@ -3109,7 +3097,7 @@ function realFormHTML(){
     <div class="row">${Object.keys(FORMATIONS).map(f=>{ const a = realAssign(t,f); return a ? `<button class="chip ${f===S.form?"on":""}" onclick="realSetForm('${f}')">${f}</button>` : `<button class="chip" disabled title="Bu kadroyla kurulamıyor">${f}</button>`; }).join("")}</div>
     <h3 style="margin:12px 0 6px">Oyun tarzı</h3>
     <div class="row">${Object.entries(STYLES).map(([k,v])=>`<button class="chip ${k===S.style?"on":""}" onclick="S.style='${k}';renderReady()">${v.e} ${k}</button>`).join("")}</div>
-    <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="renderRealPicker()">Başka takım seç</button></div></div>`;
+    <div class="row" style="margin-top:12px"><button class="btn ghost" onclick="${S.santraOn?"renderSantra()":"renderRealPicker()"}">${S.santraOn?"Takımları değiştir":"Başka takım seç"}</button></div></div>`;
 }
 async function submitReal(entry){
   if (myTeamBad() || badName(entry.name)) return null;
@@ -3301,107 +3289,6 @@ function stIntro(){
     <a class="btn ghost" href="?yayin=test">🧪 Deneme modu (sahte izleyiciler)</a></div></div>`;
 }
 if (stIsOn()) setTimeout(() => { if (/[?&]yayin=test/.test(location.search)) stStart(); else stIntro(); }, 700);
-// ---------- güncel derbi simülasyonu ----------
-// GUNCEL kadrolardan iki takım: en iyi diziliş otomatik kurulur, maç motoru oynatır. Tek maç ya da 1.000 maç.
-const DB_N = 1000, DB_HOME = { att: 2, def: 1 };
-// turnuva motoru büyük güç farklarına göre ayarlı; gerçek derbiler daha dengeli olduğu için farkları yarıya indiriyoruz
-const DB_SHRINK = 0.5, dbShr = x => 85 + (x-85)*DB_SHRINK;
-function dbSide(t, home){
-  const b = realBest(t); if (!b) return null;
-  const slots = FORMATIONS[b.form].map(x=>x[0]);
-  const pl = b.pick.map((j,i) => { const p = t.players[j], pen = penaltyFor(p, slots[i]); return {...p, r: p.r-pen, pos: LINE(slots[i]), role: slots[i]}; });
-  const style = oppStyle(t), pw = teamPower(pl, style);
-  if (home){ pw.att += DB_HOME.att; pw.def += DB_HOME.def; }
-  pw.att = dbShr(pw.att); pw.def = dbShr(pw.def);
-  return { t, form: b.form, pl, pw, style };
-}
-const dbTeam = id => CUR.find(t=>t.id===id);
-function dbPair(){
-  const D = S.db || (S.db = { a: CUR[0]?.id, b: CUR[1]?.id });
-  if (D.a===D.b) D.b = CUR.find(t=>t.id!==D.a)?.id;
-  return D;
-}
-function dbSet(k, id){ const D = dbPair(); D[k] = id; if (D.a===D.b) D[k==="a"?"b":"a"] = CUR.find(t=>t.id!==id)?.id; D.res = null; D.many = null; renderDerby(); }
-function dbSwap(){ const D = dbPair(); [D.a, D.b] = [D.b, D.a]; D.res = null; D.many = null; renderDerby(); }
-function dbPlay(){
-  const D = dbPair(), A = dbSide(dbTeam(D.a), true), B = dbSide(dbTeam(D.b), false);
-  const r = matchEngine(A.pw, B.pw, A.pl, B.pl, false, { ref: pickRef(GUNCEL.sezon), myName: A.t.team, oppName: B.t.team });
-  D.res = { g1: r.g1, g2: r.g2, ev: r.ev.filter(e => e.type==="goal" || e.type==="red").map(e => ({m: e.m, side: e.side, type: e.type, n: e.p?.n || ""})) };
-  bump("db"); renderDerby();
-}
-function dbMany(){
-  const D = dbPair(), A = dbSide(dbTeam(D.a), true), B = dbSide(dbTeam(D.b), false);
-  let w = 0, d = 0, l = 0, gf = 0, ga = 0; const sc = {};
-  for (let i=0; i<DB_N; i++){
-    const g1 = poisson(lam(A.pw.att, B.pw.def)), g2 = poisson(lam(B.pw.att, A.pw.def));
-    gf += g1; ga += g2; g1>g2 ? w++ : g1===g2 ? d++ : l++;
-    const k = g1+"-"+g2; sc[k] = (sc[k]||0)+1;
-  }
-  const top = Object.entries(sc).sort((x,y)=>y[1]-x[1]).slice(0,3);
-  D.many = { w, d, l, gf: gf/DB_N, ga: ga/DB_N, top };
-  bump("db"); renderDerby();
-}
-function dbXI(s){
-  const order = ["GK","DF","MF","FW"];
-  return order.map(k => s.pl.filter(p=>p.pos===k).map(p=>short(p.n)).join(", ")).filter(Boolean).join(" · ");
-}
-function dbShareText(){
-  const D = dbPair(), A = dbTeam(D.a), B = dbTeam(D.b), L = [];
-  if (D.res){
-    L.push(`⚔️ ${A.team} ${D.res.g1}-${D.res.g2} ${B.team} (simülasyon)`);
-    for (const e of D.res.ev) L.push(`${e.m}' ${e.type==="goal"?"⚽":"🟥"} ${short(e.n)} (${e.side?B.team:A.team})`);
-  }
-  if (D.many){
-    const m = D.many;
-    L.push(`🎲 ${DB_N} maçta: ${A.team} %${Math.round(m.w/DB_N*100)} · beraberlik %${Math.round(m.d/DB_N*100)} · ${B.team} %${Math.round(m.l/DB_N*100)}`);
-    L.push(`En olası skor: ${m.top[0][0]}`);
-  }
-  L.push(`Sen de dene: https://7a0superlig.com/?derbi`);
-  return L.join("\n");
-}
-async function dbShare(){
-  const txt = dbShareText(), out = $("dbshare");
-  try { if (navigator.share){ await navigator.share({text: txt}); return; } } catch(e){ if (e && e.name==="AbortError") return; }
-  try { await navigator.clipboard.writeText(txt); if (out) out.textContent = "Kopyalandı ✓"; } catch(e){ if (out) out.textContent = "Kopyalanamadı"; }
-}
-function dbPick(k){
-  const D = dbPair();
-  const c = kitC(dbTeam(D[k]).team);
-  return `<div class="db-pick"><div class="mut db-lab">${k==="a"?"Ev sahibi":"Deplasman"}</div><div class="db-selw"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><select class="db-sel" onchange="dbSet('${k}',this.value)">${CUR.map(t => `<option value="${esc(t.id)}" ${D[k]===t.id?"selected":""}>${esc(t.team)}</option>`).join("")}</select></div></div>`;
-}
-function renderDerby(){
-  const D = dbPair(), TA = dbTeam(D.a), TB = dbTeam(D.b);
-  if (!TA || !TB){ $("play").innerHTML = `${topBar("")}<p class="mut">Güncel kadro yok.</p>`; return; }
-  const A = dbSide(TA, true), B = dbSide(TB, false), ca = kitC(TA.team), cb = kitC(TB.team);
-  const side = (s, c) => `<div class="db-side"><div class="db-name"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${esc(s.t.team)}</b></div>
-    <div class="mut db-meta">${s.form} · ${STYLES[s.style]?.e||""} ${esc(s.style)} · güç ${s.pw.ovr}${coachOf(s.t)?` · TD ${esc(coachOf(s.t))}`:""}</div>
-    <div class="db-xi">${esc(dbXI(s))}</div></div>`;
-  let res = "";
-  if (D.res){
-    const r = D.res, win = r.g1>r.g2 ? TA.team : r.g2>r.g1 ? TB.team : "";
-    res += `<div class="card db-res"><div class="db-score"><span>${esc(TA.team)}</span><b>${r.g1} - ${r.g2}</b><span>${esc(TB.team)}</span></div>
-      <div class="mut db-win">${win ? `${esc(win)} kazandı` : "Berabere"}</div>
-      <div class="db-ev">${r.ev.length ? r.ev.map(e=>`<div class="db-e ${e.side?"db-r":""}"><span class="db-m">${e.m}'</span> ${e.type==="goal"?"⚽":"🟥"} ${esc(e.n)}</div>`).join("") : `<div class="mut">Gol yok, 0-0.</div>`}</div></div>`;
-  }
-  if (D.many){
-    const m = D.many, pc = x => Math.round(x/DB_N*100);
-    res += `<div class="card db-res"><h3 style="margin:0 0 8px">🎲 ${DB_N.toLocaleString("tr-TR")} maçlık simülasyon</h3>
-      <div class="db-bar"><span style="flex:${m.w};background:${ca[0]}"></span><span style="flex:${m.d};background:#8a8f98"></span><span style="flex:${m.l};background:${cb[0]}"></span></div>
-      <div class="db-pcs"><span><b>%${pc(m.w)}</b> ${esc(TA.team)}</span><span><b>%${pc(m.d)}</b> beraberlik</span><span><b>%${pc(m.l)}</b> ${esc(TB.team)}</span></div>
-      <div class="mut db-meta">Maç başı gol: ${m.gf.toFixed(1)} - ${m.ga.toFixed(1)} · En olası skorlar: ${m.top.map(([k,v])=>`${k} (%${(v/DB_N*100).toFixed(0)})`).join(", ")}</div></div>`;
-  }
-  $("play").innerHTML = `${topBar("")}
-    <h1>⚔️ Güncel derbi simülasyonu</h1>
-    <p class="mut">${GUNCEL.sezon} güncel kadrolarıyla iki takımı seç. İlk 11 ve diziliş otomatik kurulur, ev sahibi küçük bir avantajla başlar. Kadrolar ${GUNCEL.guncelleme.split("-").reverse().join(".")} itibarıyla.</p>
-    <div class="card db-cfg">${dbPick("a")}<div class="row" style="justify-content:center;margin:4px 0"><button class="btn ghost db-swap" onclick="dbSwap()">⇅ Yer değiştir</button></div>${dbPick("b")}</div>
-    <div class="db-sides">${side(A, ca)}<div class="db-vs">VS</div>${side(B, cb)}</div>
-    <div class="row db-act"><button class="btn" onclick="dbPlay()">▶️ Maçı oynat</button><button class="btn ghost" onclick="dbMany()">🎲 ${DB_N.toLocaleString("tr-TR")} kez simüle et</button>
-      ${D.res||D.many?`<button class="btn ghost" onclick="dbShare()">📤 Paylaş</button><span id="dbshare" class="mut"></span>`:""}</div>
-    ${res}
-    <div class="row" style="margin-top:14px"><button class="btn ghost" onclick="pickReal('${esc(TA.id)}')">🏟️ ${esc(TA.team)} ile turnuvaya çık</button></div>`;
-  toTop();
-}
-if (typeof location!=="undefined" && /[?&]derbi/.test(location.search)) setTimeout(()=>renderDerby(), 400);
 // ---------- 2026-27 Süper Lig turnuvası ----------
 // Rakipler GUNCEL kadrolardan gelir. İki giriş: kendi draft kadronla (S.sl) ya da güncel bir takımla (gerçek takım modu).
 const slOn = () => !!S.sl || (S.mode==="real" && CUR.some(t=>t.id===S.realId));
@@ -3483,13 +3370,13 @@ function tsHTML(T){
   const tile = (v,l) => `<div class="ts-tile"><b>${v}</b><span>${l}</span></div>`;
   const opTop = Object.entries(st.opg).sort((a,b)=>b[1]-a[1]).slice(0,3);
   const lst = (arr,k,ic) => arr.length ? arr.map(x=>`<div class="ts-li"><span>${esc(short(x.n))}</span><b>${x[k]} ${ic}</b></div>`).join("") : `<div class="mut">Yok</div>`;
-  return `<details class="card ts-card" open><summary><h3>📊 Turnuva istatistikleri</h3></summary>
+  return `<details class="card ts-card" open><summary><h3>📊 ${T.single?"Maç istatistikleri":"Turnuva istatistikleri"}</h3></summary>
     <div class="ts-tiles">
       ${tile(n,"Maç")}${tile(`${T.W}-${T.D}-${T.L}`,"G-B-M")}${tile(`${T.gf}-${T.ga}`,"Atılan-Yenilen")}
       ${tile(`${sum(m=>m.sh[0])} / ${sum(m=>m.ot[0])}`,"Şut / isabet")}${tile("%"+Math.round(sum(m=>m.poss)/n),"Topa sahip olma")}
       ${tile(cs,"Gol yemeden")}${tile(`${sum(m=>m.y[0])} / ${sum(m=>m.rd[0])}`,"Sarı / kırmızı")}${tile((T.gf/n).toFixed(1),"Maç başı gol")}
     </div>
-    ${star?`<div class="ts-star">⭐ <b>Turnuvanın yıldızı:</b> ${esc(star.n)} <span class="mut">· ${star.g} gol · ${star.a} asist · ${star.ap} maç</span></div>`:""}
+    ${star?`<div class="ts-star">⭐ <b>${T.single?"Maçın yıldızı:":"Turnuvanın yıldızı:"}</b> ${esc(star.n)} <span class="mut">· ${star.g} gol · ${star.a} asist · ${star.ap} maç</span></div>`:""}
     <div class="ts-cols">
       <div><h4>⚽ Gol krallığı</h4>${lst(tops("g"),"g","gol")}</div>
       <div><h4>🅰️ Asist</h4>${lst(tops("a"),"a","asist")}</div>
@@ -3500,9 +3387,76 @@ function tsHTML(T){
       ${[...pls].sort((a,b)=>b.g-a.g||b.a-a.a||b.ap-a.ap).map(x=>`<tr><td style="text-align:left">${esc(short(x.n))}</td><td>${x.ap}</td><td>${x.g||""}</td><td>${x.a||""}</td><td>${x.sh||""}</td><td>${x.y||""}</td><td>${x.r||""}</td></tr>`).join("")}</table></div>
     <h4>Maç maç</h4>
     <div style="overflow-x:auto"><table class="ts-tbl"><tr><th></th><th style="text-align:left">Rakip</th><th>Skor</th><th>Şut</th><th>İsabet</th><th>Topa sahip</th></tr>
-      ${M.map((m,i)=>`<tr><td class="mut">${SHORTST[i]}</td><td style="text-align:left">${esc(m.opp)}</td><td><b>${m.g1}-${m.g2}</b></td><td>${m.sh[0]}-${m.sh[1]}</td><td>${m.ot[0]}-${m.ot[1]}</td><td>%${m.poss}</td></tr>`).join("")}</table></div>
+      ${M.map((m,i)=>`<tr><td class="mut">${T.single?"":SHORTST[i]}</td><td style="text-align:left">${esc(m.opp)}</td><td><b>${m.g1}-${m.g2}</b></td><td>${m.sh[0]}-${m.sh[1]}</td><td>${m.ot[0]}-${m.ot[1]}</td><td>%${m.poss}</td></tr>`).join("")}</table></div>
   </details>`;
 }
+// ---------- Santra: istediğin iki takımla tek maç ----------
+// Takımlar: 2026-27 güncel kadrolar + 1980-2026 efsane sezonlar. Senin takımın gerçek takım akışıyla (diziliş, ilk 11) kurulur,
+// sonra turnuva motoru tek maçlık (T.single) çalışır.
+const saTeams = () => [...CUR, ...POOL.filter(realOk).slice().reverse()];
+const saLabel = t => t.cur ? `${t.team} (${t.season} güncel)` : `${t.season} ${t.team} (${t.rank}.)`;
+function saState(){
+  const A = S.santra || (S.santra = { me: CUR[0]?.id, op: CUR[1]?.id, pk: false });
+  if (!findTeam(A.me)) A.me = CUR[0]?.id;
+  if (!findTeam(A.op) || A.op===A.me) A.op = saTeams().find(t=>t.id!==A.me)?.id;
+  return A;
+}
+const santraOppLabel = () => { const t = findTeam(saState().op); return t ? saLabel(t) : ""; };
+function saSet(k, id){ const A = saState(); A[k] = id; if (A.me===A.op) A[k==="me"?"op":"me"] = saTeams().find(t=>t.id!==id)?.id; renderSantra(); }
+function saRand(k){ const L = saTeams().filter(t=>t.id!==saState()[k==="me"?"op":"me"]); saSet(k, rnd(L).id); }
+function saSwap(){ const A = saState(); [A.me, A.op] = [A.op, A.me]; renderSantra(); }
+function saSelect(k){
+  const A = saState(), opts = t => `<option value="${esc(t.id)}" ${A[k]===t.id?"selected":""}>${esc(saLabel(t))}</option>`;
+  const old = POOL.filter(realOk).slice().reverse();
+  const t = findTeam(A[k]), c = kitC(t.team);
+  return `<div class="sa-pick"><div class="mut sa-lab">${k==="me"?"Senin takımın":"Rakip"}</div>
+    <div class="sa-selw"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><select class="sa-sel" onchange="saSet('${k}',this.value)">
+      <optgroup label="${GUNCEL.sezon} · güncel kadrolar">${CUR.map(opts).join("")}</optgroup>
+      <optgroup label="Efsane sezonlar · 1980-2026">${old.map(opts).join("")}</optgroup></select>
+      <button class="btn ghost sa-rnd" onclick="saRand('${k}')" title="Rastgele">🎲</button></div>
+    <div class="mut sa-meta">${t.cur?"":`${esc(t.note||"")} · `}güç ${t.cur?curPow(t):teamPower(oppPlayers(t), oppStyle(t)).ovr}${coachOf(t)?` · TD ${esc(coachOf(t))}`:""}</div></div>`;
+}
+function renderSantra(){
+  S.santraOn = false; S.sl = false;
+  const A = saState();
+  $("play").innerHTML = `${topBar("")}
+    <h1>⚽ Santra</h1>
+    <p class="mut">İstediğin takımla istediğin takıma karşı tek maç. Kendi takımının dizilişini ve ilk 11'ini ayarlarsın, maç öncesi konuşmanı yaparsın, devre arasında taktik ve değişiklik yaparsın.</p>
+    <div class="card sa-cfg">${saSelect("me")}<div class="sa-mid"><button class="btn ghost sa-swap" onclick="saSwap()">⇅ Yer değiştir</button></div>${saSelect("op")}</div>
+    <label class="toggle sa-pk"><input type="checkbox" ${A.pk?"checked":""} onchange="saState().pk=this.checked"> <b>Berabere biterse uzatma ve penaltı</b> <span class="mut">· kapalıysa beraberlik geçerli</span></label>
+    <div class="row" style="margin-top:16px"><button class="btn" onclick="santraGo()">Kadroyu ayarla ▶</button></div>`;
+  toTop();
+}
+function santraGo(){ const A = saState(); pickReal(A.me); S.santraOn = true; renderReady(); }
+// rakip de gerçek takım: senin takımın gibi tam kimya bonusu alsın (yoksa seçen taraf hep avantajlı olur)
+function saOpp(t){ const o = opp(t); o.pw = teamPower(o.pl.map(p=>({...p, key:t.id, team:t.team})), o.pw.style); return o; }
+function startSantra(){
+  const A = saState(), ot = findTeam(A.op); if (!ot) return renderSantra();
+  RNG = Math.random;
+  const xi = S.slots.map(s=>({pos:s.pos, x:s.x, y:s.y, p:{...s.p, r:s.p.base}}));
+  const bench = (S.bench||[]).filter(s=>s.p).map(s=>({...s.p}));
+  const T = { single:true, pk:!!A.pk, xi, bench, orig: xi.map(s=>s.p.n), mor:{}, outs:{}, penOrder:null, style:S.style, group:[saOpp(ot)], pots:[], R:null, rest15:[], M:[], i:0, res:[], table:{}, W:0,D:0,L:0,gf:0,ga:0, out:null, done:false, others:[] };
+  S.T = T; T.me = lineup(T); T.mePw = teamPower(T.me, T.style);
+  bump("db");
+  preMatch();
+}
+function santraAfter(T, res, r, pen, notes){
+  T.done = true; T.i = 1;
+  const me = findTeam(S.realId), ot = T.o.t;
+  const verdict = res==="W" ? "🏆 Kazandın!" : res==="L" ? "😔 Kaybettin." : "🤝 Berabere.";
+  $("after").innerHTML = `<div class="sa-end"><b>${verdict}</b> <span class="mut">${esc(me?saLabel(me):myName())} ${r.g1}-${r.g2} ${esc(saLabel(ot))}${pen?` · pen. ${pen[0]}-${pen[1]}`:""}</span></div>
+    <div class="row" style="margin-top:10px"><button class="btn gold" onclick="startSantra()">🔁 Rövanş</button><button class="btn" onclick="santraGo()">Kadroyu değiştir</button><button class="btn ghost" onclick="renderSantra()">⚽ Yeni maç</button><button class="btn ghost" onclick="saShare()">📤 Paylaş</button><span id="sashare" class="mut"></span></div>`;
+  try { $("mgrid").insertAdjacentHTML("afterend", tsHTML(T)); } catch(e){}
+}
+async function saShare(){
+  const T = S.T, r = T.res[0], me = findTeam(S.realId); if (!r) return;
+  const goals = (T.st?.pl ? Object.values(T.st.pl).filter(x=>x.g).map(x=>`${short(x.n)}${x.g>1?" x"+x.g:""}`) : []).join(", ");
+  const txt = `⚽ Santra: ${me?saLabel(me):myName()} ${r.g1}-${r.g2} ${saLabel(T.o.t)}${goals?`\n⚽ ${goals}`:""}\nSen de dene: https://${SITE}/?santra`;
+  const out = $("sashare");
+  try { if (navigator.share){ await navigator.share({text: txt}); return; } } catch(e){ if (e && e.name==="AbortError") return; }
+  try { await navigator.clipboard.writeText(txt); if (out) out.textContent = "Kopyalandı ✓"; } catch(e){ if (out) out.textContent = "Kopyalanamadı"; }
+}
+if (typeof location!=="undefined" && /[?&](santra|derbi)/.test(location.search)) setTimeout(()=>renderSantra(), 400);
 // ---------- açılış ----------
 applyTheme();
 applyI18nData();

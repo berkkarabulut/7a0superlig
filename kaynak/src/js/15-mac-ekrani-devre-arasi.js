@@ -77,7 +77,7 @@ async function runMatch(){
 }
 async function runMatchInner(rid){
   const nap = async ms => { await sleep(ms); if (S.runId!==rid) throw "iptal"; };
-  const T=S.T, i=T.i, isKo = i>=3, o=T.o;
+  const T=S.T, i=T.i, isKo = T.single ? !!T.pk : i>=3, o=T.o;
   const L = lineup(T); const missing = 11 - L.length;
   T.matchXi = T.xi.map(s=>isOut(T,s.p.n)?null:s.p.n);
   const pw = {...teamPower(L, T.style)};
@@ -92,7 +92,7 @@ async function runMatchInner(rid){
       <div>
         <div id="mgo"></div>
         <div class="card">
-          <div class="mut" style="text-align:center;font-weight:700">${STAGES[i]} · Hakem: ${esc(T.ref)}</div>
+          <div class="mut" style="text-align:center;font-weight:700">${T.single?"Santra":STAGES[i]} · Hakem: ${esc(T.ref)}</div>
           <div class="score"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400" id="mystyle">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
             <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
             <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[o.pw.style].e} ${esc(o.pw.style)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
@@ -100,12 +100,12 @@ async function runMatchInner(rid){
           <div id="after" class="m-after"></div>
           <ul class="events" id="ev"></ul>
         </div>
-        ${isKo?`<div class="card" style="margin-top:14px"><h3>Eleme ağacı</h3><div id="brk">${bracketHTML()}</div></div>`:""}
+        ${isKo&&!T.single?`<div class="card" style="margin-top:14px"><h3>Eleme ağacı</h3><div id="brk">${bracketHTML()}</div></div>`:""}
       </div>
       <div class="mside">
         <div id="mpitch">${matchPitchHTML(M,T,o)}</div>
         <div id="mbench"></div>
-        <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>
+        ${T.single ? "" : `<div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>`}
       </div>
     </div>`;
   miniScore();
@@ -162,6 +162,7 @@ async function runMatchInner(rid){
   tsRecord(T, r, L, pw, opw, o);
   let msg="";
   const sideNotes = [...r.reds.map(n=>`🟥 ${esc(n)} bir sonraki maçta cezalı.`), ...r.injs.map(n=>`🚑 ${esc(n)} ${T.outs[n].n} maç yok.`)];
+  if (T.single){ santraAfter(T, res, r, pen, sideNotes); return; }
   if (!isKo){
     addTbl(myName(), r.g1, r.g2); addTbl(o.name, r.g2, r.g1);
     const om = T.others[i]; addTbl(om.a,om.g1,om.g2); addTbl(om.b,om.g2,om.g1);

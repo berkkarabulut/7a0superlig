@@ -1,7 +1,7 @@
 // ---------- maç önü: kadro + takım konuşması ----------
 function talkCtx(T,o){ const me=teamPower(lineup(T),T.style), d=(me.att+me.def)-(o.pw.att+o.pw.def); return d>3?"fav":d<-3?"dog":"even"; }
 function preMatch(){
-  const T=S.T, i=T.i, isKo=i>=3, o = isKo ? T.R[i-3][1] : T.group[i];
+  const T=S.T, i=T.i, isKo=i>=3, o = T.single ? T.group[0] : isKo ? T.R[i-3][1] : T.group[i];
   T.o = o; T.ref = pickRef(o.t.season);
   if (T.prepFor!==i){ T.prepFor=i; T.notes = []; T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; }
   renderPre();
@@ -40,7 +40,7 @@ function renderPre(){
   <div class="grid">
     <div>
       <div class="card">
-        <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${STAGES[i]} · Maç önü</div>
+        <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${T.single?"Santra":STAGES[i]} · Maç önü</div>
         <div class="score pre"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
           <div><div class="big vs">VS</div><div class="clock">⚖️ ${esc(T.ref)}</div></div>
           <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[os].e} ${esc(os)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>

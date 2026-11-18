@@ -36,13 +36,13 @@ function tsHTML(T){
   const tile = (v,l) => `<div class="ts-tile"><b>${v}</b><span>${l}</span></div>`;
   const opTop = Object.entries(st.opg).sort((a,b)=>b[1]-a[1]).slice(0,3);
   const lst = (arr,k,ic) => arr.length ? arr.map(x=>`<div class="ts-li"><span>${esc(short(x.n))}</span><b>${x[k]} ${ic}</b></div>`).join("") : `<div class="mut">Yok</div>`;
-  return `<details class="card ts-card" open><summary><h3>📊 Turnuva istatistikleri</h3></summary>
+  return `<details class="card ts-card" open><summary><h3>📊 ${T.single?"Maç istatistikleri":"Turnuva istatistikleri"}</h3></summary>
     <div class="ts-tiles">
       ${tile(n,"Maç")}${tile(`${T.W}-${T.D}-${T.L}`,"G-B-M")}${tile(`${T.gf}-${T.ga}`,"Atılan-Yenilen")}
       ${tile(`${sum(m=>m.sh[0])} / ${sum(m=>m.ot[0])}`,"Şut / isabet")}${tile("%"+Math.round(sum(m=>m.poss)/n),"Topa sahip olma")}
       ${tile(cs,"Gol yemeden")}${tile(`${sum(m=>m.y[0])} / ${sum(m=>m.rd[0])}`,"Sarı / kırmızı")}${tile((T.gf/n).toFixed(1),"Maç başı gol")}
     </div>
-    ${star?`<div class="ts-star">⭐ <b>Turnuvanın yıldızı:</b> ${esc(star.n)} <span class="mut">· ${star.g} gol · ${star.a} asist · ${star.ap} maç</span></div>`:""}
+    ${star?`<div class="ts-star">⭐ <b>${T.single?"Maçın yıldızı:":"Turnuvanın yıldızı:"}</b> ${esc(star.n)} <span class="mut">· ${star.g} gol · ${star.a} asist · ${star.ap} maç</span></div>`:""}
     <div class="ts-cols">
       <div><h4>⚽ Gol krallığı</h4>${lst(tops("g"),"g","gol")}</div>
       <div><h4>🅰️ Asist</h4>${lst(tops("a"),"a","asist")}</div>
@@ -53,6 +53,6 @@ function tsHTML(T){
       ${[...pls].sort((a,b)=>b.g-a.g||b.a-a.a||b.ap-a.ap).map(x=>`<tr><td style="text-align:left">${esc(short(x.n))}</td><td>${x.ap}</td><td>${x.g||""}</td><td>${x.a||""}</td><td>${x.sh||""}</td><td>${x.y||""}</td><td>${x.r||""}</td></tr>`).join("")}</table></div>
     <h4>Maç maç</h4>
     <div style="overflow-x:auto"><table class="ts-tbl"><tr><th></th><th style="text-align:left">Rakip</th><th>Skor</th><th>Şut</th><th>İsabet</th><th>Topa sahip</th></tr>
-      ${M.map((m,i)=>`<tr><td class="mut">${SHORTST[i]}</td><td style="text-align:left">${esc(m.opp)}</td><td><b>${m.g1}-${m.g2}</b></td><td>${m.sh[0]}-${m.sh[1]}</td><td>${m.ot[0]}-${m.ot[1]}</td><td>%${m.poss}</td></tr>`).join("")}</table></div>
+      ${M.map((m,i)=>`<tr><td class="mut">${T.single?"":SHORTST[i]}</td><td style="text-align:left">${esc(m.opp)}</td><td><b>${m.g1}-${m.g2}</b></td><td>${m.sh[0]}-${m.sh[1]}</td><td>${m.ot[0]}-${m.ot[1]}</td><td>%${m.poss}</td></tr>`).join("")}</table></div>
   </details>`;
 }

@@ -1,7 +1,7 @@
 
 /* ===== maç ekranı: iki takım tek sahada ===== */
 .mside{display:flex;flex-direction:column;gap:14px}
-.pitch.mp{aspect-ratio:5/11;position:relative}
+.pitch.mp{aspect-ratio:5/9.5;position:relative}
 .pitch.mp .slot{position:absolute;transform:translate(-50%,-50%);text-align:center;width:84px}
 .pitch.mp .shirt{width:42px;height:40px;margin-bottom:12px}
 .pitch.mp .shirt .rb{min-width:22px;height:17px;font-size:12px;line-height:17px;top:auto;bottom:-10px;transform:translateX(-50%)}
@@ -14,7 +14,7 @@
 .mp-edit .slot.full{cursor:grab}
 
 @media(max-width:900px){
-  .pitch.mp{aspect-ratio:5/11;background:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" preserveAspectRatio="none"%3E%3Cg stroke="white" stroke-opacity=".38" stroke-width="1.6" fill="none"%3E%3Crect x="10" y="10" width="280" height="380" rx="2"/%3E%3Cline x1="10" y1="200" x2="290" y2="200"/%3E%3Ccircle cx="150" cy="200" r="38"/%3E%3Crect x="80" y="10" width="140" height="58"/%3E%3Crect x="117" y="10" width="66" height="20"/%3E%3Cpath d="M126.5 68 A30 30 0 0 0 173.5 68"/%3E%3Crect x="80" y="332" width="140" height="58"/%3E%3Crect x="117" y="370" width="66" height="20"/%3E%3Cpath d="M126.5 332 A30 30 0 0 1 173.5 332"/%3E%3Cpath d="M10 18 A8 8 0 0 0 18 10"/%3E%3Cpath d="M282 10 A8 8 0 0 0 290 18"/%3E%3Cpath d="M10 382 A8 8 0 0 1 18 390"/%3E%3Cpath d="M290 382 A8 8 0 0 0 282 390"/%3E%3Crect x="132" y="3" width="36" height="7" stroke-opacity=".6"/%3E%3Crect x="132" y="390" width="36" height="7" stroke-opacity=".6"/%3E%3C/g%3E%3Cg fill="white" fill-opacity=".45"%3E%3Ccircle cx="150" cy="200" r="2.4"/%3E%3Ccircle cx="150" cy="50" r="2"/%3E%3Ccircle cx="150" cy="350" r="2"/%3E%3C/g%3E%3C/svg%3E') center/100% 100% no-repeat, radial-gradient(ellipse at 50% 50%,#ffffff12,transparent 60%), radial-gradient(ellipse at 50% 120%,#0006,transparent 55%),
+  .pitch.mp{aspect-ratio:5/9.5;background:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" preserveAspectRatio="none"%3E%3Cg stroke="white" stroke-opacity=".38" stroke-width="1.6" fill="none"%3E%3Crect x="10" y="10" width="280" height="380" rx="2"/%3E%3Cline x1="10" y1="200" x2="290" y2="200"/%3E%3Ccircle cx="150" cy="200" r="38"/%3E%3Crect x="80" y="10" width="140" height="58"/%3E%3Crect x="117" y="10" width="66" height="20"/%3E%3Cpath d="M126.5 68 A30 30 0 0 0 173.5 68"/%3E%3Crect x="80" y="332" width="140" height="58"/%3E%3Crect x="117" y="370" width="66" height="20"/%3E%3Cpath d="M126.5 332 A30 30 0 0 1 173.5 332"/%3E%3Cpath d="M10 18 A8 8 0 0 0 18 10"/%3E%3Cpath d="M282 10 A8 8 0 0 0 290 18"/%3E%3Cpath d="M10 382 A8 8 0 0 1 18 390"/%3E%3Cpath d="M290 382 A8 8 0 0 0 282 390"/%3E%3Crect x="132" y="3" width="36" height="7" stroke-opacity=".6"/%3E%3Crect x="132" y="390" width="36" height="7" stroke-opacity=".6"/%3E%3C/g%3E%3Cg fill="white" fill-opacity=".45"%3E%3Ccircle cx="150" cy="200" r="2.4"/%3E%3Ccircle cx="150" cy="50" r="2"/%3E%3Ccircle cx="150" cy="350" r="2"/%3E%3C/g%3E%3C/svg%3E') center/100% 100% no-repeat, radial-gradient(ellipse at 50% 50%,#ffffff12,transparent 60%), radial-gradient(ellipse at 50% 120%,#0006,transparent 55%),
   repeating-linear-gradient(0deg,#1f7a44 0 8.33%,#1a6d3c 8.33% 16.66%)}
   .pitch.mp .slot{left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:84px}
   .pitch.mp .shirt{width:34px;height:32px;margin-bottom:11px}
@@ -25,7 +25,7 @@
 @media(min-width:901px){
   .mgrid{grid-template-columns:minmax(0,1fr) 420px}
   .mgrid>.mside{order:-1}
-  .mgrid .pitch.mp{aspect-ratio:3/5;width:100%}
+  .mgrid .pitch.mp{aspect-ratio:5/7;width:100%}
   .mgrid .pitch.mp .slot{width:110px}
   .mgrid .pitch.mp .shirt{width:50px;height:48px;margin-bottom:13px}
   .mgrid .pitch.mp .shirt .rb{min-width:26px;height:20px;font-size:14px;line-height:20px;bottom:-11px}

@@ -57,13 +57,13 @@ function oppXI(o){
   const pl=[...o.pl].sort((a,b)=>b.r-a.r), take=(g,n)=>pl.filter(p=>p.pos===g).slice(0,n);
   let xi=[...take("GK",1),...take("DF",4),...take("MF",4),...take("FW",2)];
   for (const p of pl){ if (xi.length>=11) break; if (!xi.includes(p) && p.pos!=="GK") xi.push(p); }
-  const Y={GK:4,DF:14.5,MF:26,FW:37.5}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
+  const Y={GK:5,DF:15.5,MF:26.5,FW:37.5}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
   return Object.entries(lines).flatMap(([g,ps])=>ps.map((p,i)=>({p, x: ps.length===1?50:12+i*76/(ps.length-1), y:Y[g]})));
 }
 // iki takım tek sahada: rakip üst yarı, sen alt yarı. edit=true iken (devre arası) senin oyuncuların sürüklenebilir.
 // bizim yarı sahadaki dikey konumlar: aşağıdan (kaleci) yukarı yerleştirilir; aynı kolondaki (yatayda yakın) her oyuncu
 // altındakinden en az MP_GAP yukarıda durur. Yer yetmezse hepsi orantılı sıkıştırılır (MP_TOP ile kaleci arası).
-const MP_GAP = 11.5, MP_TOP = 46, MP_GK = 96;
+const MP_GAP = 10, MP_TOP = 47, MP_GK = 95;
 function mpYs(xi){
   const base = s => s.pos==="GK" ? MP_GK : 52 + Math.max(0, Math.min(64, s.y-13)) * 35/64;
   const Y = new Array(xi.length), order = xi.map((s,i)=>i).sort((i,j)=>xi[j].y - xi[i].y || (xi[j].pos==="GK") - (xi[i].pos==="GK"));

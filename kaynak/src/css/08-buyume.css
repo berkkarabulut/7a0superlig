@@ -20,3 +20,9 @@
 .golfx.golfx-me{color:var(--gold)}.golfx.golfx-op{color:#ffffffb0;font-size:48px}
 @keyframes golfx{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}15%{transform:translate(-50%,-50%) scale(1.25);opacity:1}70%{opacity:1}100%{transform:translate(-50%,-60%) scale(1);opacity:0}}
 #sndbtn{font-size:18px}
+/* quiz: seçenekler üstte, saha altta ve biraz daha büyük */
+.quiz .qopts{margin:6px 0 0}
+.qpitch.qbig{margin-top:14px;padding:18px 10px;gap:16px;min-height:340px;justify-content:space-around}
+.qpitch.qbig .qp{font-size:15px}
+@media (min-width:700px){ .qpitch.qbig{min-height:420px;padding:24px 16px} .qpitch.qbig .qp{font-size:16px} }
+@media (max-width:640px){ .quiz .qopts{grid-template-columns:1fr 1fr;gap:6px} .quiz .qopt{padding:9px 8px;font-size:14px} }

@@ -621,6 +621,28 @@ body.yayin main{padding-top:6px}
 .sl-i{min-width:22px}
 .sl-c{font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sl-p{font-weight:800;color:var(--gold)}
+
+/* ===== turnuva sonu istatistikleri ===== */
+.ts-card{margin-top:16px}
+.ts-card>summary{cursor:pointer;list-style:none}
+.ts-card>summary::-webkit-details-marker{display:none}
+.ts-card>summary h3{display:inline-block;margin:0 0 10px}
+.ts-card h4{margin:16px 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+.ts-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ts-tile{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.ts-tile b{font-size:22px;font-family:var(--cond);color:var(--gold)}
+.ts-tile span{font-size:12px;color:var(--mut)}
+.ts-star{margin-top:12px;padding:10px 12px;border:1px solid var(--gold);border-radius:8px;background:rgba(255,183,3,.08)}
+.ts-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ts-li{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ts-tbl{width:100%;border-collapse:collapse;font-size:14px}
+.ts-tbl th,.ts-tbl td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.ts-tbl th{color:var(--mut);font-weight:600}
+.m-after:not(:empty){margin:10px 0 12px}
+@media (max-width:640px){
+  .ts-tiles{grid-template-columns:repeat(2,1fr)}
+  .ts-cols{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -1251,7 +1273,9 @@ function makeMatch(A,B,pa,pb,o={}){
       const f = Math.pow(0.65,red[s]) * Math.pow(1.3,red[o2]) * mult, lead = g[s]-g[o2];
       const pg = lam(attOf(s,m), defOf(o2,m))*f/90*0.92 * (lead>=4?0.35:lead>=3?0.55:1);
       const x = Math.random();
-      if (x < pg){ const p=shooter(s), k=TXT["g_"+sty[s]]&&Math.random()<.5?"g_"+sty[s]:"goal"; g[s]++; ev.push({m,side:s,type:"goal",p,text:T(k,{p})}); }
+      if (x < pg){ const p=shooter(s), k=TXT["g_"+sty[s]]&&Math.random()<.5?"g_"+sty[s]:"goal"; g[s]++;
+        const as = Math.random()<0.75 ? wpick(av(s).filter(q=>q.n!==p.n && q.pos!=="GK"), q=>({MF:3,FW:2.2,DF:1}[q.pos]||1)*Math.max(1,q.r-60)) : null; // asist (istatistik için)
+        ev.push({m,side:s,type:"goal",p,a:as||null,text:T(k,{p})}); }
       else if (x < pg*2.3){ const p=shooter(s), k=rnd(["save","save","post","wide","wide"]); ev.push({m,side:s,type:k,p,text:T(k,{p,gk:gk(o2)})}); }
       else if (Math.random() < 0.05){ const p=shooter(s), k=TXT["f_"+sty[s]]&&Math.random()<.4?"f_"+sty[s]:"flow"; ev.push({m,side:s,type:"flow",p,text:T(k,{p,t:tn[s]})}); }
       if (Math.random() < 0.11/90*f){ const p=taker(s), k=gk(o2), y=Math.random();
@@ -1657,8 +1681,8 @@ async function runMatchInner(rid){
             <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
             <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[o.pw.style].e} ${esc(o.pw.style)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
           ${ctrOf(T.style,o.pw.style)>0?`<div class="tacnote good">✓ Tarzın rakibe karşı avantajlı (${esc(T.style)} > ${esc(o.pw.style)})</div>`:ctrOf(o.pw.style,T.style)>0?`<div class="tacnote bad">⚠ Rakibin tarzı sana karşı avantajlı (${esc(o.pw.style)} > ${esc(T.style)})</div>`:""}
+          <div id="after" class="m-after"></div>
           <ul class="events" id="ev"></ul>
-          <div id="after" style="margin-top:14px"></div>
         </div>
         ${isKo?`<div class="card" style="margin-top:14px"><h3>Eleme ağacı</h3><div id="brk">${bracketHTML()}</div></div>`:""}
       </div>
@@ -1719,6 +1743,7 @@ async function runMatchInner(rid){
   afterMorale(T,res,r);
   T.gf+=r.g1; T.ga+=r.g2; if(r.g1>r.g2)T.W++; else if(r.g1<r.g2)T.L++; else T.D++;
   T.res.push({res, g1:r.g1, g2:r.g2, pen, et:r.et, opp:o.name, team:o.t.team});
+  tsRecord(T, r, L, pw, opw, o);
   let msg="";
   const sideNotes = [...r.reds.map(n=>`🟥 ${esc(n)} bir sonraki maçta cezalı.`), ...r.injs.map(n=>`🚑 ${esc(n)} ${T.outs[n].n} maç yok.`)];
   if (!isKo){
@@ -1835,7 +1860,8 @@ function finish(){
       </div><div id="chalout" style="max-width:520px;margin:8px auto 0"></div><p class="mut" id="cp" style="font-size:12px"></p>
     </div>
     ${T.res.length>3?`<div class="card" style="margin-top:16px"><h3>Eleme ağacı</h3>${bracketHTML()}</div>`:""}
-    <div class="grid" style="margin-top:16px"><div class="card"><h3>Maçlarımız</h3><table>${T.res.map((r,i)=>`<tr><td>${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}"><b>${r.g1}-${r.g2}</b>${r.pen?` (pen. ${r.pen[0]}-${r.pen[1]})`:""}</td></tr>`).join("")}</table></div><div>${pitchHTML()}${benchHTML()}</div></div>`;
+    <div class="grid" style="margin-top:16px"><div class="card"><h3>Maçlarımız</h3><table>${T.res.map((r,i)=>`<tr><td>${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}"><b>${r.g1}-${r.g2}</b>${r.pen?` (pen. ${r.pen[0]}-${r.pen[1]})`:""}</td></tr>`).join("")}</table></div><div>${pitchHTML()}${benchHTML()}</div></div>
+    ${tsHTML(T)}`;
 }
 const SHORTST = ["G1","G2","G3","S16","ÇF","YF","F"];
 function record(){ const w=S.T.res.filter(r=>r.res==="W").length; return [w,7-w]; }
@@ -2736,6 +2762,7 @@ DICT_ROWS.push([". Buna karşı etkili:",". Works well against it:",". Funciona 
 DICT_ROWS.push(["⚔️ Güncel derbi simülasyonu","⚔️ Current derby simulator","⚔️ Simulador de derbi actual"],["Güncel derbi simülasyonu","Current derby simulator","Simulador de derbi actual"],["⚔️ Güncel kadrolarla derbi simülasyonu","⚔️ Derby simulator with current squads","⚔️ Simulador de derbi con plantillas actuales"],["Ev sahibi","Home","Local"],["Deplasman","Away","Visitante"],["⇅ Yer değiştir","⇅ Swap","⇅ Cambiar"],["VS","VS","VS"],["▶️ Maçı oynat","▶️ Play the match","▶️ Jugar el partido"],["📤 Paylaş","📤 Share","📤 Compartir"],["Kopyalandı ✓","Copied ✓","Copiado ✓"],["Kopyalanamadı","Couldn't copy","No se pudo copiar"],["Berabere","Draw","Empate"],["Gol yok, 0-0.","No goals, 0-0.","Sin goles, 0-0."],["beraberlik","draw","empate"],["GÜNCEL","CURRENT","ACTUAL"],["Güncel kadro yok.","No current squads.","No hay plantillas actuales."]);
 DICT_ROWS.push(["🎮 Kendi 11'ini kur","🎮 Build your own XI","🎮 Crea tu propio once"],["Kendi 11'ini kur","Build your own XI","Crea tu propio once"],["Bu sezonun Süper Lig takımlarından takım çek, oyuncularını seç, 11'ini kur ve yine güncel takımlara karşı oyna. Sonuç sıralamaya yazılmaz.","Draw this season's Süper Lig teams, pick their players, build your XI and play the current teams. The result isn't ranked.","Saca equipos de la Süper Lig de esta temporada, elige sus jugadores, arma tu once y juega contra los equipos actuales. El resultado no entra en la clasificación."],["🏟️ Güncel bir takımla gir","🏟️ Enter with a current team","🏟️ Entra con un equipo actual"],["Güncel bir takımla gir","Enter with a current team","Entra con un equipo actual"],["Takımlar ve güçleri","Teams and their strength","Equipos y su fuerza"],[" · Kurada bu sezonun Süper Lig takımları çıkar, rakiplerin de onlar. Bu modun sonuçları sıralamaya yazılmaz."," · You draw this season's Süper Lig teams and play against them too. Results in this mode aren't ranked."," · En el sorteo salen equipos de la Süper Lig de esta temporada y también son tus rivales. Los resultados de este modo no se clasifican."],["Kapat","Close","Cerrar"],["Güçlüler","Strongest","Los fuertes"],["Orta sıra","Mid-table","Zona media"],["Diğerleri","The rest","El resto"]);
 DICT_ROWS.push(["← Süper Lig turnuvası","← Süper Lig tournament","← Torneo Süper Lig"]);
+DICT_ROWS.push(["📊 Turnuva istatistikleri","📊 Tournament stats","📊 Estadísticas del torneo"],["Maç","Matches","Partidos"],["G-B-M","W-D-L","G-E-P"],["Atılan-Yenilen","For-Against","A favor-En contra"],["Şut / isabet","Shots / on target","Tiros / a puerta"],["Topa sahip olma","Possession","Posesión"],["Gol yemeden","Clean sheets","Porterías a cero"],["Sarı / kırmızı","Yellow / red","Amarillas / rojas"],["Maç başı gol","Goals per match","Goles por partido"],["Turnuvanın yıldızı:","Player of the tournament:","Jugador del torneo:"],["⚽ Gol krallığı","⚽ Top scorers","⚽ Goleadores"],["🅰️ Asist","🅰️ Assists","🅰️ Asistencias"],["🎯 Rakiplerin golcüleri","🎯 Opponents' scorers","🎯 Goleadores rivales"],["Kalende gol yok 🧤","No goals conceded 🧤","Portería a cero 🧤"],["Oyuncular","Players","Jugadores"],["Maç maç","Match by match","Partido a partido"],["Oyuncu","Player","Jugador"],["Rakip","Opponent","Rival"],["Skor","Score","Marcador"],["Şut","Shots","Tiros"],["İsabet","On target","A puerta"],["Topa sahip","Possession","Posesión"],["Yok","None","Ninguno"]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];
@@ -2745,6 +2772,8 @@ const STAGE_I18N = [["Grup 1. maç","Group match 1","Grupo · partido 1"],["Grup
 for (const r of STAGE_I18N) DICT[r[0]] = [r[1], r[2]];
 const posName = s => DICT[s] ? DICT[s][LI] : s;
 const RX = [
+ [/^(\d+) (gol|asist)$/, m => m[1]+" "+(m[2]==="gol"?(LI===0?(m[1]==="1"?"goal":"goals"):(m[1]==="1"?"gol":"goles")):(LI===0?(m[1]==="1"?"assist":"assists"):(m[1]==="1"?"asistencia":"asistencias")))],
+ [/^· (\d+) gol · (\d+) asist · (\d+) maç$/, m => LI===0?`· ${m[1]} goals · ${m[2]} assists · ${m[3]} matches`:`· ${m[1]} goles · ${m[2]} asistencias · ${m[3]} partidos`],
  [/^🎲 ([\d.]+) kez simüle et$/, m => "🎲 "+(LI===0?`Simulate ${m[1].replace(".",",")} times`:`Simular ${m[1]} veces`)],
  [/^🎲 ([\d.]+) maçlık simülasyon$/, m => "🎲 "+(LI===0?`${m[1].replace(".",",")}-match simulation`:`Simulación de ${m[1]} partidos`)],
  [/^(.+) kazandı$/, m => m[1]+(LI===0?" won":" ganó")],
@@ -3390,6 +3419,64 @@ function renderSL(){
     <div class="sl-list">${list.map((t,i)=>{ const c = kitC(t.team);
       return `<div class="sl-row"><span class="mut sl-i">${i+1}.</span><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${esc(t.team)}</b><span class="mut sl-c">${coachOf(t)?esc(coachOf(t)):""}</span><span class="sl-p">${curPow(t)}</span></div>`; }).join("")}</div>`;
   toTop();
+}
+// ---------- turnuva sonu istatistikleri ----------
+// Her maçtan sonra tsRecord ile T.st'ye yazılır; sonuç ekranında tsHTML gösterir.
+const TS_POSS = {"Topa sahip ol":7, "Önde baskı":2, "Uzun top":-3, "Kontra atak":-5, "Otobüsü çek":-8};
+function tsRecord(T, r, L, pw, opw, o){
+  const st = T.st || (T.st = {pl:{}, m:[], opg:{}});
+  const P = (p) => st.pl[p.n] || (st.pl[p.n] = {n:p.n, pos:p.pos||"", ap:0, g:0, a:0, sh:0, y:0, r:0});
+  for (const p of L) P(p).ap++;
+  for (const s of (r.subs||[])) P(s.in).ap++;
+  const m = {opp:o.t.team, season:o.t.season, g1:r.g1, g2:r.g2, sh:[0,0], ot:[0,0], y:[0,0], rd:[0,0], poss:0};
+  for (const e of r.ev){
+    const sd = e.side;
+    if (["goal","save","post","wide","penS","penM"].includes(e.type)) m.sh[sd]++;
+    if (["goal","save","penS"].includes(e.type)) m.ot[sd]++;
+    if (e.type==="yellow") m.y[sd]++;
+    if (e.type==="red") m.rd[sd]++;
+    if (sd===0 && e.p){
+      const x = P(e.p);
+      if (["goal","save","post","wide","penS","penM"].includes(e.type)) x.sh++;
+      if (e.type==="goal"){ x.g++; if (e.a) P(e.a).a++; }
+      if (e.type==="yellow") x.y++;
+      if (e.type==="red") x.r++;
+    }
+    if (sd===1 && e.type==="goal" && e.p){ const k = e.p.n+"|"+o.t.team; st.opg[k] = (st.opg[k]||0)+1; }
+  }
+  m.poss = Math.round(Math.max(28, Math.min(72, 50 + ((pw.ovr||0)-(opw.ovr||0))*1.2 + (TS_POSS[T.style]||0) - (TS_POSS[o.pw.style]||0))));
+  st.m.push(m);
+}
+const tsScore = x => x.g*3 + x.a*2 + x.sh*0.3 + x.ap*0.5 - x.y*0.5 - x.r*2;
+function tsHTML(T){
+  const st = T.st; if (!st || !st.m.length) return "";
+  const M = st.m, n = M.length, sum = (f) => M.reduce((a,m)=>a+f(m),0);
+  const pls = Object.values(st.pl).filter(x=>x.ap>0);
+  const star = [...pls].sort((a,b)=>tsScore(b)-tsScore(a))[0];
+  const tops = (k) => [...pls].filter(x=>x[k]>0).sort((a,b)=>b[k]-a[k]||b.g-a.g).slice(0,5);
+  const cs = M.filter(m=>m.g2===0).length;
+  const tile = (v,l) => `<div class="ts-tile"><b>${v}</b><span>${l}</span></div>`;
+  const opTop = Object.entries(st.opg).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const lst = (arr,k,ic) => arr.length ? arr.map(x=>`<div class="ts-li"><span>${esc(short(x.n))}</span><b>${x[k]} ${ic}</b></div>`).join("") : `<div class="mut">Yok</div>`;
+  return `<details class="card ts-card" open><summary><h3>📊 Turnuva istatistikleri</h3></summary>
+    <div class="ts-tiles">
+      ${tile(n,"Maç")}${tile(`${T.W}-${T.D}-${T.L}`,"G-B-M")}${tile(`${T.gf}-${T.ga}`,"Atılan-Yenilen")}
+      ${tile(`${sum(m=>m.sh[0])} / ${sum(m=>m.ot[0])}`,"Şut / isabet")}${tile("%"+Math.round(sum(m=>m.poss)/n),"Topa sahip olma")}
+      ${tile(cs,"Gol yemeden")}${tile(`${sum(m=>m.y[0])} / ${sum(m=>m.rd[0])}`,"Sarı / kırmızı")}${tile((T.gf/n).toFixed(1),"Maç başı gol")}
+    </div>
+    ${star?`<div class="ts-star">⭐ <b>Turnuvanın yıldızı:</b> ${esc(star.n)} <span class="mut">· ${star.g} gol · ${star.a} asist · ${star.ap} maç</span></div>`:""}
+    <div class="ts-cols">
+      <div><h4>⚽ Gol krallığı</h4>${lst(tops("g"),"g","gol")}</div>
+      <div><h4>🅰️ Asist</h4>${lst(tops("a"),"a","asist")}</div>
+      <div><h4>🎯 Rakiplerin golcüleri</h4>${opTop.length?opTop.map(([k,v])=>{ const [nm,tm]=k.split("|"); return `<div class="ts-li"><span>${esc(short(nm))} <span class="mut">${esc(tm)}</span></span><b>${v} gol</b></div>`; }).join(""):`<div class="mut">Kalende gol yok 🧤</div>`}</div>
+    </div>
+    <h4>Oyuncular</h4>
+    <div style="overflow-x:auto"><table class="ts-tbl"><tr><th style="text-align:left">Oyuncu</th><th>M</th><th>G</th><th>A</th><th>Şut</th><th>🟨</th><th>🟥</th></tr>
+      ${[...pls].sort((a,b)=>b.g-a.g||b.a-a.a||b.ap-a.ap).map(x=>`<tr><td style="text-align:left">${esc(short(x.n))}</td><td>${x.ap}</td><td>${x.g||""}</td><td>${x.a||""}</td><td>${x.sh||""}</td><td>${x.y||""}</td><td>${x.r||""}</td></tr>`).join("")}</table></div>
+    <h4>Maç maç</h4>
+    <div style="overflow-x:auto"><table class="ts-tbl"><tr><th></th><th style="text-align:left">Rakip</th><th>Skor</th><th>Şut</th><th>İsabet</th><th>Topa sahip</th></tr>
+      ${M.map((m,i)=>`<tr><td class="mut">${SHORTST[i]}</td><td style="text-align:left">${esc(m.opp)}</td><td><b>${m.g1}-${m.g2}</b></td><td>${m.sh[0]}-${m.sh[1]}</td><td>${m.ot[0]}-${m.ot[1]}</td><td>%${m.poss}</td></tr>`).join("")}</table></div>
+  </details>`;
 }
 // ---------- açılış ----------
 applyTheme();

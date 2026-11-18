@@ -1,0 +1,22 @@
+
+/* ===== turnuva sonu istatistikleri ===== */
+.ts-card{margin-top:16px}
+.ts-card>summary{cursor:pointer;list-style:none}
+.ts-card>summary::-webkit-details-marker{display:none}
+.ts-card>summary h3{display:inline-block;margin:0 0 10px}
+.ts-card h4{margin:16px 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+.ts-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ts-tile{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.ts-tile b{font-size:22px;font-family:var(--cond);color:var(--gold)}
+.ts-tile span{font-size:12px;color:var(--mut)}
+.ts-star{margin-top:12px;padding:10px 12px;border:1px solid var(--gold);border-radius:8px;background:rgba(255,183,3,.08)}
+.ts-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ts-li{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ts-tbl{width:100%;border-collapse:collapse;font-size:14px}
+.ts-tbl th,.ts-tbl td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.ts-tbl th{color:var(--mut);font-weight:600}
+.m-after:not(:empty){margin:10px 0 12px}
+@media (max-width:640px){
+  .ts-tiles{grid-template-columns:repeat(2,1fr)}
+  .ts-cols{grid-template-columns:1fr}
+}

@@ -97,8 +97,8 @@ async function runMatchInner(rid){
             <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
             <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[o.pw.style].e} ${esc(o.pw.style)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
           ${ctrOf(T.style,o.pw.style)>0?`<div class="tacnote good">✓ Tarzın rakibe karşı avantajlı (${esc(T.style)} > ${esc(o.pw.style)})</div>`:ctrOf(o.pw.style,T.style)>0?`<div class="tacnote bad">⚠ Rakibin tarzı sana karşı avantajlı (${esc(o.pw.style)} > ${esc(T.style)})</div>`:""}
+          <div id="after" class="m-after"></div>
           <ul class="events" id="ev"></ul>
-          <div id="after" style="margin-top:14px"></div>
         </div>
         ${isKo?`<div class="card" style="margin-top:14px"><h3>Eleme ağacı</h3><div id="brk">${bracketHTML()}</div></div>`:""}
       </div>
@@ -159,6 +159,7 @@ async function runMatchInner(rid){
   afterMorale(T,res,r);
   T.gf+=r.g1; T.ga+=r.g2; if(r.g1>r.g2)T.W++; else if(r.g1<r.g2)T.L++; else T.D++;
   T.res.push({res, g1:r.g1, g2:r.g2, pen, et:r.et, opp:o.name, team:o.t.team});
+  tsRecord(T, r, L, pw, opw, o);
   let msg="";
   const sideNotes = [...r.reds.map(n=>`🟥 ${esc(n)} bir sonraki maçta cezalı.`), ...r.injs.map(n=>`🚑 ${esc(n)} ${T.outs[n].n} maç yok.`)];
   if (!isKo){

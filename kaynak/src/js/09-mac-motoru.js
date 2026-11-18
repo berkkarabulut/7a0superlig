@@ -60,7 +60,9 @@ function makeMatch(A,B,pa,pb,o={}){
       const f = Math.pow(0.65,red[s]) * Math.pow(1.3,red[o2]) * mult, lead = g[s]-g[o2];
       const pg = lam(attOf(s,m), defOf(o2,m))*f/90*0.92 * (lead>=4?0.35:lead>=3?0.55:1);
       const x = Math.random();
-      if (x < pg){ const p=shooter(s), k=TXT["g_"+sty[s]]&&Math.random()<.5?"g_"+sty[s]:"goal"; g[s]++; ev.push({m,side:s,type:"goal",p,text:T(k,{p})}); }
+      if (x < pg){ const p=shooter(s), k=TXT["g_"+sty[s]]&&Math.random()<.5?"g_"+sty[s]:"goal"; g[s]++;
+        const as = Math.random()<0.75 ? wpick(av(s).filter(q=>q.n!==p.n && q.pos!=="GK"), q=>({MF:3,FW:2.2,DF:1}[q.pos]||1)*Math.max(1,q.r-60)) : null; // asist (istatistik için)
+        ev.push({m,side:s,type:"goal",p,a:as||null,text:T(k,{p})}); }
       else if (x < pg*2.3){ const p=shooter(s), k=rnd(["save","save","post","wide","wide"]); ev.push({m,side:s,type:k,p,text:T(k,{p,gk:gk(o2)})}); }
       else if (Math.random() < 0.05){ const p=shooter(s), k=TXT["f_"+sty[s]]&&Math.random()<.4?"f_"+sty[s]:"flow"; ev.push({m,side:s,type:"flow",p,text:T(k,{p,t:tn[s]})}); }
       if (Math.random() < 0.11/90*f){ const p=taker(s), k=gk(o2), y=Math.random();

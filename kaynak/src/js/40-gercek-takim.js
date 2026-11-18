@@ -39,16 +39,17 @@ function renderRealPicker(club){
   S.realClub = club || S.realClub || "Tümü";
   const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
   const hit = t => S.realClub==="Tümü" || (S.realClub===GN ? t.cur : S.realClub==="Diğer" ? !big.includes(t.team) : t.team===S.realClub);
-  const list = [...CUR.filter(hit), ...POOL.filter(t=>!t.cur && hit(t)).slice().reverse()];
+  const pw = t => { const b = realBest(t); return b ? Math.round(b.total/11)*1000 + b.total : -1; };
+  const list = [...CUR.filter(hit).sort((a,b)=>pw(b)-pw(a)), ...POOL.filter(t=>!t.cur && hit(t)).slice().reverse()];
   $("play").innerHTML = `${topBar("")}
     <h1>🏟️ Gerçek takımla oyna</h1>
     <p class="mut">Bir sezonun gerçek kadrosunu seç; en uygun diziliş ve ilk 11 otomatik kurulur, sonra istediğin gibi değiştirirsin. Rakiplerin de diğer sezonların gerçek kadroları. Bakalım o takımla 7-0 yapabilecek misin?</p>
-    <div class="row" style="margin:10px 0 14px">${clubs.map(c=>`<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${c}</button>`).join("")}</div>
+    <div class="rl-tabs">${clubs.map(c=>{ const k = big.includes(c) ? kitC(c) : null; return `<button class="chip ${c===S.realClub?"on":""}" onclick="renderRealPicker('${c}')">${k?`<span class="kit" style="--c1:${k[0]};--c2:${k[1]}"></span>`:""}${c}</button>`; }).join("")}</div>
     <div class="rl-grid">${list.map(t => { const b = realBest(t), c = kitC(t.team), coach = coachOf(t);
       const avg = b ? Math.round(b.total/11) : null;
       return `<button class="card rl-card ${b?"":"rl-lock"}" ${b?`onclick="pickReal('${esc(t.id)}')"`:"disabled"}>
-        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${t.season} ${esc(t.team)}</b>${t.cur?`<span class="rl-rk rl-cur">GÜNCEL</span>`:`<span class="rl-rk rk${t.rank}">${t.rank}.</span>`}</span>
-        <span class="mut rl-s">${b ? `${b.form} · ilk 11 ortalaması <b>${avg}</b> · ${t.players.length} oyuncu` : "🔒 Kadro eksik · yakında"}</span>
+        <span class="rl-h"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><span class="rl-n"><small class="rl-sz">${t.season}</small><b>${esc(t.team)}</b></span>${b?`<span class="rl-pw">${avg}</span>`:""}</span>
+        <span class="mut rl-s">${t.cur?`<span class="rl-rk rl-cur">GÜNCEL</span> `:`<span class="rl-rk rk${t.rank}">${t.rank}.</span> `}${b ? b.form : "🔒 Kadro eksik · yakında"}</span>
         ${coach?`<span class="mut rl-s">Teknik direktör: ${esc(coach)}</span>`:""}</button>`; }).join("")}</div>`;
   toTop();
 }

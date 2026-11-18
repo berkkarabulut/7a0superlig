@@ -529,6 +529,15 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 @keyframes mgopulse{50%{box-shadow:0 0 0 6px #ffb70340}}
 .mbench .ph:first-child{margin-top:0!important}
 
+/* asıl skor tabelası ekrandan çıkınca üstte küçük sabit skor şeridi (anlatım akarken ve devre arasında skor hep görünsün) */
+.mgrid .minisc{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:#0d0216f2;border-bottom:3px solid var(--acc);box-shadow:0 8px 16px -6px #000d;font-weight:800;transform:translateY(-110%);transition:transform .2s}
+.mgrid .minisc.on{transform:none}
+.mgrid .minisc .ms-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.mgrid .minisc .ms-t:first-child{text-align:right}
+.mgrid .minisc .ms-s{font-family:var(--cond);font-size:26px;color:var(--gold);background:var(--acc);color:#fff;border-radius:4px;padding:0 10px;line-height:1.25}
+.mgrid .minisc .ms-c{font-size:13px;color:var(--mut);min-width:34px;text-align:center}
+.mgrid #after{scroll-margin-top:60px}
+
 /* ===== nasıl oynanır ===== */
 .howtoc{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
 .howtoc a{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:6px 12px;color:var(--txt);text-decoration:none;font-size:14px;font-weight:600}
@@ -1639,6 +1648,7 @@ async function runMatchInner(rid){
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid mgrid" id="mgrid">
+      <div class="minisc" id="minisc" aria-hidden="true"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div>
       <div>
         <div id="mgo"></div>
         <div class="card">
@@ -1658,6 +1668,7 @@ async function runMatchInner(rid){
         <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>
       </div>
     </div>`;
+  miniScore();
   const ms = SPEEDS[S.speed]; let a=0,b=0, ei=0, len=90;
   const ICON={goal:"⚽",save:"🧤",post:"🥅",wide:"↗️",penS:"🧤",penM:"❌",yellow:"🟨",red:"🟥",inj:"🚑",flow:"·",sub:""};
   const add = h => { const el=$("ev"); el.insertAdjacentHTML("beforeend", h); if(el.scrollTop!==undefined) el.scrollTop=el.scrollHeight; };
@@ -1726,6 +1737,19 @@ async function runMatchInner(rid){
   T.i++;
   const last = T.out || T.i===7;
   $("after").innerHTML = `${msg}${sideNotes.length&&!last?`<div class="mut" style="margin-top:6px">${sideNotes.join("<br>")}</div>`:""}<div class="row" style="margin-top:10px"><button class="btn ${last?"gold":""}" onclick="${last?"finish()":"nextStep()"}">${last?"Sonucu gör":"Sonraki maç: "+STAGES[T.i]}</button></div>`;
+}
+
+// asıl skor tabelası görünmüyorsa üstte küçük skor şeridini göster; skor ve dakika #sc / #clk'tan kopyalanır
+function miniScore(){
+  try {
+    const sc=$("sc"), ck=$("clk"), box=document.querySelector?.("#mgrid .score"), mini=$("minisc");
+    if (!sc || !mini || typeof IntersectionObserver==="undefined" || typeof MutationObserver==="undefined") return;
+    const sync = () => { const a=$("ms-s"), b=$("ms-c"); if (a) a.textContent = sc.textContent; if (b) b.textContent = ck ? ck.textContent : ""; };
+    new MutationObserver(sync).observe(sc, {childList:true, characterData:true, subtree:true});
+    if (ck) new MutationObserver(sync).observe(ck, {childList:true, characterData:true, subtree:true});
+    new IntersectionObserver(es => { for (const e of es) mini.classList.toggle("on", !e.isIntersecting); }).observe(box);
+    sync();
+  } catch(e){}
 }
 function simMatch(a,b){
   const r=simGoals(a.pw,b.pw,a.pl,b.pl); let pen=null, et=false;

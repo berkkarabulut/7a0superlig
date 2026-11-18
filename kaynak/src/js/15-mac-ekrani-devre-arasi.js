@@ -88,6 +88,7 @@ async function runMatchInner(rid){
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid mgrid" id="mgrid">
+      <div class="minisc" id="minisc" aria-hidden="true"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div>
       <div>
         <div id="mgo"></div>
         <div class="card">
@@ -107,6 +108,7 @@ async function runMatchInner(rid){
         <div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>
       </div>
     </div>`;
+  miniScore();
   const ms = SPEEDS[S.speed]; let a=0,b=0, ei=0, len=90;
   const ICON={goal:"⚽",save:"🧤",post:"🥅",wide:"↗️",penS:"🧤",penM:"❌",yellow:"🟨",red:"🟥",inj:"🚑",flow:"·",sub:""};
   const add = h => { const el=$("ev"); el.insertAdjacentHTML("beforeend", h); if(el.scrollTop!==undefined) el.scrollTop=el.scrollHeight; };
@@ -175,4 +177,17 @@ async function runMatchInner(rid){
   T.i++;
   const last = T.out || T.i===7;
   $("after").innerHTML = `${msg}${sideNotes.length&&!last?`<div class="mut" style="margin-top:6px">${sideNotes.join("<br>")}</div>`:""}<div class="row" style="margin-top:10px"><button class="btn ${last?"gold":""}" onclick="${last?"finish()":"nextStep()"}">${last?"Sonucu gör":"Sonraki maç: "+STAGES[T.i]}</button></div>`;
+}
+
+// asıl skor tabelası görünmüyorsa üstte küçük skor şeridini göster; skor ve dakika #sc / #clk'tan kopyalanır
+function miniScore(){
+  try {
+    const sc=$("sc"), ck=$("clk"), box=document.querySelector?.("#mgrid .score"), mini=$("minisc");
+    if (!sc || !mini || typeof IntersectionObserver==="undefined" || typeof MutationObserver==="undefined") return;
+    const sync = () => { const a=$("ms-s"), b=$("ms-c"); if (a) a.textContent = sc.textContent; if (b) b.textContent = ck ? ck.textContent : ""; };
+    new MutationObserver(sync).observe(sc, {childList:true, characterData:true, subtree:true});
+    if (ck) new MutationObserver(sync).observe(ck, {childList:true, characterData:true, subtree:true});
+    new IntersectionObserver(es => { for (const e of es) mini.classList.toggle("on", !e.isIntersecting); }).observe(box);
+    sync();
+  } catch(e){}
 }

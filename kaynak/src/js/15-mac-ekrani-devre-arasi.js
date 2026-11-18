@@ -63,13 +63,14 @@ function oppXI(o){
 // iki takım tek sahada: rakip üst yarı, sen alt yarı. edit=true iken (devre arası) senin oyuncuların sürüklenebilir.
 function matchPitchHTML(M,T,o,ht){
   const sel = ht && ht.sel, selP = ht && ht.selP;
+  const sc = M._sc || M.g || [0,0], rate = liveRatings(M, M._shown ?? M.ev.length, sc[0], sc[1]);
   const mine = new Set(T.xi.map(s=>kitC(s.p.team)[0])), oc0 = kitC(o.t.team), oc = mine.has(oc0[0]) ? [oc0[1], oc0[0]] : oc0; // aynı renkse rakip deplasman formasıyla
-  const opp = oppXI(o).map(({p,x,y})=>`<div class="slot full mp-o" style="--x:${x};--y:${y}">${SHIRT(oc, p.r)}<div class="nm">${esc(p.n)}</div></div>`).join("");
+  const opp = oppXI(o).map(({p,x,y})=>`<div class="slot full mp-o" style="--x:${x};--y:${y}">${SHIRT(oc, p.r)}${lrTag(rate(p,1))}<div class="nm">${esc(p.n)}</div></div>`).join("");
   const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = s.pos==="GK" ? 92 : 54+Math.max(0,Math.min(64,s.y-13))*28/64;
     if (!p) return `<div class="slot mp-m" style="--x:${s.x};--y:${y}"><div class="dot">🟥</div></div>`;
     const pen=penOf(p,s.pos), subIn=M.subs.some(x=>x.in.n===p.n), act = ht ? `data-drag="x:${k}" data-drop="x:${k}"` : "";
     let prev=""; if (selP && sel && sel[0]==="b"){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
-    return `<div class="slot full mp-m ${sel==="x:"+k?"selx":""} ${pen?"offp":""}" style="--x:${s.x};--y:${y}" ${act}>${SHIRT(kitC(p.team), p.r, pen>0)}<div class="nm">${subIn?"🔁 ":""}${esc(p.n)}</div>${prev}</div>`; }).join("");
+    return `<div class="slot full mp-m ${sel==="x:"+k?"selx":""} ${pen?"offp":""}" style="--x:${s.x};--y:${y}" ${act}>${SHIRT(kitC(p.team), p.r, pen>0)}${lrTag(rate(p,0))}<div class="nm">${subIn?"🔁 ":""}${esc(p.n)}</div>${prev}</div>`; }).join("");
   return `<div class="pitch mp ${ht?"mp-edit":""}"><div class="mp-lbl mp-lt">${kit(o.t.team)}${esc(o.name)}</div><div class="mp-lbl mp-lb">${esc(myName())}</div>${opp}${me}</div>`;
 }
 function onPitchHTML(M,T){
@@ -91,10 +92,11 @@ async function runMatchInner(rid){
   const opw = {...o.pw}; if (boost<0){ opw.att-=boost; opw.def-=boost; }
   const pickSub = (role, used) => { const b=bestSub(T, role, used); if(!b) return null; return {...b, r:Math.round(effR(T,b,role)), pos:LINE(role), role}; };
   const M = makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
+  M._shown = 0; M._sc = [0,0];
   $("play").innerHTML = `
     ${pathHTML()}
     <div class="grid mgrid" id="mgrid">
-      <div class="minisc" id="minisc" aria-hidden="true"><div class="ms-row"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div><ul class="events ms-ev" id="ms-ev"></ul></div>
+      <div class="minisc" id="minisc" aria-hidden="true"><div class="ms-row"><span class="ms-t">${esc(myName())}</span><span class="ms-s" id="ms-s">0-0</span><span class="ms-c" id="ms-c">0'</span><span class="ms-t">${esc(o.t.team)}</span></div>${atkHTML(o,"ms-atk-a")}<ul class="events ms-ev" id="ms-ev"></ul></div>
       <div>
         <div id="mgo"></div>
         <div class="card">
@@ -102,6 +104,7 @@ async function runMatchInner(rid){
           <div class="score"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400" id="mystyle">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
             <div><div class="big" id="sc">0-0</div><div class="clock" id="clk">0'</div><div class="bar"><i id="bar"></i></div><div id="rc" style="font-size:12px;color:#ff7a7a;margin-top:4px"></div></div>
             <div class="tn">${kit(o.t.team)}${esc(o.name)}<div class="mut" style="font-size:12px;font-weight:400">${STYLES[o.pw.style].e} ${esc(o.pw.style)}${coachOf(o.t)?` · TD: ${esc(coachOf(o.t))}`:""}</div></div></div>
+          <div class="atk-w"><span class="atk-lb">Atak</span>${atkHTML(o,"atk-a")}</div>
           ${ctrOf(T.style,o.pw.style)>0?`<div class="tacnote good">✓ Tarzın rakibe karşı avantajlı (${esc(T.style)} > ${esc(o.pw.style)})</div>`:ctrOf(o.pw.style,T.style)>0?`<div class="tacnote bad">⚠ Rakibin tarzı sana karşı avantajlı (${esc(o.pw.style)} > ${esc(T.style)})</div>`:""}
           <div id="after" class="m-after"></div>
           <ul class="events" id="ev"></ul>
@@ -114,19 +117,20 @@ async function runMatchInner(rid){
         ${T.single ? "" : `<div class="card">${isKo ? `<h3>Maçlarımız</h3>${ourMatchesHTML()}` : `<h3>Grup tablosu</h3><div id="tbl" style="overflow-x:auto">${tableHTML()}</div>`}</div>`}
       </div>
     </div>`;
-  miniScore();
+  miniScore(); atkInit(M, pw, opw);
   const ms = SPEEDS[S.speed]; let a=0,b=0, ei=0, len=90;
   const ICON={goal:"⚽",save:"🧤",post:"🥅",wide:"↗️",penS:"🧤",penM:"❌",yellow:"🟨",red:"🟥",inj:"🚑",flow:"·",sub:""};
   const add = h => { const el=$("ev"); el.insertAdjacentHTML("beforeend", h); if(el.scrollTop!==undefined) el.scrollTop=el.scrollHeight; };
   const redsTxt = ()=>{ const rr=[missing,0]; M.ev.slice(0,ei).forEach(e=>{ if(e.type==="red"||(e.type==="inj"&&e.side===0&&/10 kişi/.test(e.text))) rr[e.side]++; }); return rr; };
   const anim = async (m0,m1) => { for (let m=m0;m<=m1;m++){
     while (ei<M.ev.length && M.ev[ei].m<=m){
-      const e=M.ev[ei++]; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); sfx("goal", e.side===0); goalFx(e.side===0); }
+      const e=M.ev[ei++]; M._shown=ei; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; M._sc=[a,b]; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); sfx("goal", e.side===0); goalFx(e.side===0); }
       add(`<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
-      if (e.type==="red"||e.type==="inj"||e.type==="sub"){ const op=$("mpitch"); if(op) op.innerHTML=matchPitchHTML(M,T,o); }
+      if (e.type!=="flow"){ const op=$("mpitch"); if(op && ms) op.innerHTML=matchPitchHTML(M,T,o); }
       if (e.type==="red"||e.type==="inj"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }
       if (ms){ if (e.type==="goal") await nap(ms*12); else if (e.type!=="flow") await nap(ms*3); }
     }
+    if (ms) atkStep(M, ei, m);
     if (ms){ $("clk").textContent=(m>90?"Uzatma ":"")+m+"'"; $("bar").style.width=(m/len*100)+"%";
       if (m===105){ $("clk").textContent="Uzatma devresi"; await nap(ms*14); }
       await nap(ms); } } };
@@ -140,6 +144,7 @@ async function runMatchInner(rid){
   let et=false;
   if (isKo && M.g[0]===M.g[1]){ et=true; len=120; add(`<li class="penh"><span>⏱️ 90 dakika ${a}-${b} bitti, uzatmalara gidiliyor</span></li>`); if(ms) await nap(ms*18); M.run(91,120,0.85); await anim(91,120); }
   const r = M.result(et);
+  M._shown = M.ev.length; M._sc = [r.g1, r.g2]; { const op=$("mpitch"); if(op) op.innerHTML=matchPitchHTML(M,T,o); }
   $("clk").textContent= r.et ? "Uzatmalar bitti" : "Maç sonu"; $("bar").style.width="100%";
   add(`<li class="penh"><span>🏁 ${esc(T.ref)} son düdüğü çaldı</span></li>`); sfx("end");
   T.scorers = T.scorers || {}; r.ev.filter(e=>e.side===0&&e.type==="goal"&&e.p).forEach(e=>{ T.scorers[e.p.n]=(T.scorers[e.p.n]||0)+1; });

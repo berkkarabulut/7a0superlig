@@ -77,7 +77,7 @@ function makeMatch(A,B,pa,pb,o={}){
         if (s===1){ ev.push({m,side:s,type:"inj",p,text:T("injO",{p})}); }
         else { out[0].add(p.n); injs.push(p.n);
           const sub = nsub<MAXSUBS && o.pickSub ? o.pickSub(p.role, new Set(pl[0].map(q=>q.n))) : null;
-          if (sub){ nsub++; pl[0].push(sub); adj[0]+=(sub.r-p.r)/11; subs.push({out:p,in:sub}); ev.push({m,side:0,type:"inj",p,text:T("injS",{p,q:sub})}); }
+          if (sub){ nsub++; pl[0].push(sub); adj[0]+=(sub.r-p.r)/11; subs.push({out:p,in:sub}); ev.push({m,side:0,type:"inj",p,q:sub,text:T("injS",{p,q:sub})}); }
           else { red[0]++; ev.push({m,side:0,type:"inj",p,text:T("injN",{p})}); } } }
   } };
   return {
@@ -86,7 +86,7 @@ function makeMatch(A,B,pa,pb,o={}){
     onPitch: () => av(0),
     subsLeft: () => MAXSUBS-nsub,
     sub(outP, inP, m){ if (nsub>=MAXSUBS || out[0].has(outP.n)) return false; nsub++; out[0].add(outP.n); pl[0].push(inP); adj[0]+=(inP.r-outP.r)/11; subs.push({out:outP,in:inP});
-      ev.push({m,side:0,type:"sub",p:inP,text:`🔁 Değişiklik: ${short(outP.n)} çıktı, ${short(inP.n)} girdi`}); return true; },
+      ev.push({m,side:0,type:"sub",p:inP,o:outP,text:`🔁 Değişiklik: ${short(outP.n)} çıktı, ${short(inP.n)} girdi`}); return true; },
     setTactic(style, mentality){ if (style && style!==sty[0]){ sty[0]=style; A={...teamPower(av(0),style)}; adj[0]=0; } if (mentality) ment[0]=mentality; },
     result(et){ return { g1:g[0], g2:g[1], ev, et, len: et?120:90, red, reds, injs, subs, onPitch: av(0) }; }
   };

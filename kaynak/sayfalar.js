@@ -139,6 +139,31 @@ ${list.map(t => { const s = [...t.players].sort((a,b)=>b.r-a.r)[0]; return `<tr>
     { "@type":"ListItem", position:3, name:`${club} kadroları`, item:url } ] } });
 }
 
+// 2026-27 güncel kadrolar (guncel.json)
+const GUN = JSON.parse(fs.readFileSync(path.join(HERE, "guncel.json"), "utf8"));
+const CURT = GUN.teams.map(t => ({ season: GUN.sezon, cur: true, ...t }));
+function curPage(t){
+  const url = `${SITE}/kadro/${pageName(t.season, t.team)}`, coach = t.coach || "";
+  const ps = [...t.players].sort((a,b) => b.r - a.r), top = ps.slice(0, 3), avg = Math.round(ps.reduce((s,p)=>s+p.r,0) / ps.length);
+  const [c1, c2] = kitC(t.team), d = GUN.guncelleme.split("-").reverse().join(".");
+  const title = `${t.team} ${t.season} Güncel Kadrosu, Oyuncuları ve Reytingleri | Süper Lig 7-0`;
+  const desc = `${gen(t.team)} ${t.season} sezonu güncel kadrosu${coach ? `, teknik direktör ${coach}` : ""}. ${top.map(p=>p.n).join(", ")} ve diğer oyuncular, mevkileri ve reytingleri.`;
+  const rowsFor = g => ps.filter(p => p.p[0] === g).map(p => `<tr><td>${esc(p.n)}</td><td class="p" title="${esc(p.d.map(x=>LONG[x]||x).join(", "))}">${p.d.map(x=>LABEL[x]||x).join(" / ")}</td><td class="r ${p.r>=90?"r90":p.r>=85?"r85":""}">${p.r}</td></tr>`).join("");
+  const tables = GROUPS.map(([g, label]) => { const r = rowsFor(g); return r ? `<h2>${label}</h2><table><tr><th>Oyuncu</th><th>Mevki</th><th>Reyting</th></tr>${r}</table>` : ""; }).join("");
+  const others = CURT.filter(x => x.team !== t.team), hist = all.filter(x => x.team === t.team);
+  const body = `<div class="bc"><a href="/">Süper Lig 7-0</a> › <a href="/kadro/">Kadrolar</a> › ${t.season} › ${esc(t.team)}</div>
+<h1><span class="kit" style="--c1:${c1};--c2:${c2}"></span>${esc(t.team)} ${t.season} Kadrosu</h1>
+<p class="sub"><span class="tag t1">GÜNCEL</span>${coach ? `Teknik direktör: <b>${esc(coach)}</b> · ` : ""}${ps.length} oyuncu · Ortalama reyting <b>${avg}</b> · ${d} itibarıyla</p>
+<div class="box">${esc(t.team)} ${t.season} Süper Lig sezonu güncel kadrosu. Kadronun en yüksek reytingli oyuncuları ${top.map(p => `<b>${esc(p.n)}</b> (${p.r})`).join(", ").replace(/, ([^,]*)$/, " ve $1")}. Süper Lig 7-0'da bu kadroyla 2026-27 Süper Lig turnuvasına çıkabilir ya da Santra'da istediğin takıma karşı tek maç oynayabilirsin.</div>
+<a class="cta" href="/">▶ Bu kadroyla oyna</a>
+${tables}
+<h2>${t.season} Süper Lig'in diğer takımları</h2>
+<div class="grid">${others.map(o => `<a href="${pageName(o.season, o.team)}">${esc(o.team)}</a>`).join("")}</div>
+${hist.length ? `<h2>${esc(gen(t.team))} efsane kadroları</h2><div class="grid">${hist.map(o => `<a href="${pageName(o.season, o.team)}">${o.season} · ${o.rank}.</a>`).join("")}</div>` : ""}`;
+  return shell({ title, desc, url, body, ld: { "@context":"https://schema.org", "@type":"SportsTeam", name:`${t.team} (${t.season})`, sport:"Futbol",
+    ...(coach ? { coach:{ "@type":"Person", name:coach } } : {}), athlete: ps.map(p => ({ "@type":"Person", name:p.n })) } });
+}
+
 function indexPage(){
   const url = `${SITE}/kadro/`;
   const title = "Süper Lig Kadroları 1980'den Bugüne: Her Sezonun İlk 3 Takımı | Süper Lig 7-0";
@@ -147,6 +172,8 @@ function indexPage(){
 <h1>Süper Lig Kadroları (1980'den bugüne)</h1>
 <p class="sub">${seasons.length} sezon · ${all.length} takım · ${all.reduce((s,t)=>s+t.players.length,0)} oyuncu. Her sezon ilk 3'e giren takımların kadroları.</p>
 <a class="cta" href="/">▶ Efsane 11'ini kur, 7-0 yap</a>
+<h2>${GUN.sezon} Süper Lig güncel kadrolar</h2>
+<div class="grid">${CURT.map(t => `<a href="${pageName(t.season, t.team)}"><span class="kit" style="--c1:${kitC(t.team)[0]};--c2:${kitC(t.team)[1]}"></span>${esc(t.team)}</a>`).join("")}</div>
 <h2>Kulüpler</h2>
 <div class="grid">${clubs.map(c => `<a href="${slug(c)}.html"><span class="kit" style="--c1:${kitC(c)[0]};--c2:${kitC(c)[1]}"></span>${esc(c)} (${all.filter(x=>x.team===c).length})</a>`).join("")}</div>
 <h2>Sezonlar</h2>
@@ -159,8 +186,9 @@ const urls = [SITE + "/", SITE + "/kadro/"];
 fs.writeFileSync(path.join(OUT, "index.html"), indexPage());
 for (const c of clubs){ fs.writeFileSync(path.join(OUT, slug(c) + ".html"), clubPage(c)); urls.push(`${SITE}/kadro/${slug(c)}.html`); }
 for (const t of all){ fs.writeFileSync(path.join(OUT, pageName(t.season, t.team)), teamPage(t)); urls.push(`${SITE}/kadro/${pageName(t.season, t.team)}`); }
+for (const t of CURT){ fs.writeFileSync(path.join(OUT, pageName(t.season, t.team)), curPage(t)); urls.push(`${SITE}/kadro/${pageName(t.season, t.team)}`); }
 urls.push(SITE + "/gizlilik.html");
 const today = new Date().toISOString().slice(0, 10);
 fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\n")}\n</urlset>\n`);
 fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
-console.log(`✅ sayfalar: ${all.length} takım + ${clubs.length} kulüp + dizin, sitemap ${urls.length} adres`);
+console.log(`✅ sayfalar: ${all.length} takım + ${CURT.length} güncel + ${clubs.length} kulüp + dizin, sitemap ${urls.length} adres`);

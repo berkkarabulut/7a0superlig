@@ -54,7 +54,7 @@ function santraAfter(T, res, r, pen, notes){
   const verdict = res==="W" ? "🏆 Kazandın!" : res==="L" ? "😔 Kaybettin." : "🤝 Berabere.";
   $("after").innerHTML = `<div class="sa-end"><b>${verdict}</b> <span class="mut">${esc(me?saLabel(me):myName())} ${r.g1}-${r.g2} ${esc(saLabel(ot))}${pen?` · pen. ${pen[0]}-${pen[1]}`:""}</span></div>
     <div class="row" style="margin-top:10px"><button class="btn gold" onclick="startSantra()">🔁 Rövanş</button><button class="btn" onclick="santraGo()">Kadroyu değiştir</button><button class="btn ghost" onclick="renderSantra()">⚽ Yeni maç</button><button class="btn ghost" onclick="saShare()">📤 Paylaş</button><span id="sashare" class="mut"></span></div>`;
-  try { $("mgrid").insertAdjacentHTML("afterend", tsHTML(T)); } catch(e){}
+  try { $("after").insertAdjacentHTML("beforeend", tsHTML(T)); } catch(e){}
 }
 async function saShare(){
   const T = S.T, r = T.res[0], me = findTeam(S.realId); if (!r) return;

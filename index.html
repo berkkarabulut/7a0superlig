@@ -616,26 +616,82 @@ body.yayin main{padding-top:6px}
 .sa-end{font-size:17px}
 @media (max-width:640px){ .sa-cfg{grid-template-columns:1fr} .sa-mid{text-align:center} }
 
-/* ===== turnuva sonu istatistikleri ===== */
+/* ===== turnuva / maç istatistikleri (FM tarzı) ===== */
 .ts-card{margin-top:16px}
-.ts-card>summary{cursor:pointer;list-style:none}
+.ts-card>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ts-card>summary::-webkit-details-marker{display:none}
-.ts-card>summary h3{display:inline-block;margin:0 0 10px}
-.ts-card h4{margin:16px 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
-.ts-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.ts-tile{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center;display:flex;flex-direction:column;gap:2px}
-.ts-tile b{font-size:22px;font-family:var(--cond);color:var(--gold)}
-.ts-tile span{font-size:12px;color:var(--mut)}
-.ts-star{margin-top:12px;padding:10px 12px;border:1px solid var(--gold);border-radius:8px;background:rgba(255,183,3,.08)}
-.ts-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.ts-li{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ts-card>summary h3{margin:0}
+.ts-card[open]>summary{margin-bottom:12px}
+.ts-tog{font-size:13px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.ts-card .ts-hd,.ts-card[open] .ts-sh{display:none}
+.ts-card[open] .ts-hd{display:inline}
+.m-after .ts-card{margin-top:12px;background:var(--card2)}
+.ts-card h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--mut)}
+/* sekmeler */
+.ts-tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:14px}
+.ts-tb{background:none;border:0;color:var(--mut);font:inherit;font-weight:800;text-transform:uppercase;letter-spacing:.6px;font-size:13px;padding:9px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.ts-tb.on{color:var(--txt);border-bottom-color:var(--teal)}
+/* not rozeti */
+.ts-rt{display:inline-block;min-width:36px;text-align:center;font-weight:800;font-size:13px;border-radius:4px;padding:2px 5px;color:#0b1a10}
+.ts-rt.r8{background:#2fd47a}.ts-rt.r7{background:#9be36a}.ts-rt.r6{background:#f2c14e}.ts-rt.r5{background:#ff6b6b;color:#fff}
+/* form şeridi */
+.ts-form{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.ts-fm{display:inline-flex;align-items:center;gap:5px;font-weight:800;font-size:13px;padding:4px 9px;border-radius:4px;background:#ffffff14}
+.ts-fm i{font-style:normal;font-weight:600;opacity:.75;font-size:11px}
+.ts-fm.W{background:#00a88f;color:#fff}.ts-fm.L{background:#c0233b;color:#fff}.ts-fm.D{background:#6b6f7a;color:#fff}
+/* yıldız */
+.ts-star{display:flex;gap:14px;align-items:center;padding:12px 14px;border-radius:8px;background:linear-gradient(90deg,rgba(255,183,3,.14),rgba(255,183,3,.03));border:1px solid rgba(255,183,3,.45);margin-bottom:14px}
+.ts-star-rt .ts-rt{font-size:22px;min-width:64px;padding:8px 6px}
+.ts-star-l{font-size:12px;text-transform:uppercase;letter-spacing:.8px}
+.ts-star-n{font-size:20px;font-weight:800;font-family:var(--cond);text-transform:uppercase}
+/* karşılaştırma çubukları */
+.ts-cmpbox{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:14px}
+.ts-cmph{display:flex;justify-content:space-between;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);margin-bottom:4px}
+.ts-cmp{display:grid;grid-template-columns:48px 1fr 48px;grid-template-areas:"a l b" "a bar b";align-items:center;column-gap:10px;padding:5px 0}
+.ts-cmp>b:first-child{grid-area:a;text-align:left;font-size:16px}
+.ts-cmp>b:nth-of-type(2){grid-area:b;text-align:right;font-size:16px}
+.ts-cmp>span{grid-area:l;text-align:center;font-size:12px;color:var(--mut)}
+.ts-cmp>.ts-bar{grid-area:bar}
+.ts-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:#ffffff10;gap:2px}
+.ts-bar i{background:var(--teal);display:block}.ts-bar u{background:#c0233b;display:block}
+/* liderler */
+.ts-leads{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ts-lead{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.ts-li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ts-li:last-child{border-bottom:0}
+.ts-li i{font-style:normal;color:var(--mut);display:inline-block;width:16px}
+.ts-opp{margin-top:12px;font-size:13px}
+/* oyuncu tablosu */
+.ts-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
 .ts-tbl{width:100%;border-collapse:collapse;font-size:14px}
-.ts-tbl th,.ts-tbl td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
-.ts-tbl th{color:var(--mut);font-weight:600}
+.ts-tbl th,.ts-tbl td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.ts-tbl tr:nth-child(even) td{background:#ffffff05}
+.ts-tbl th{color:var(--mut);font-weight:700;font-size:12px;text-transform:uppercase;cursor:pointer;user-select:none;background:var(--card2);position:sticky;top:0}
+.ts-tbl th.on{color:var(--teal)}
+.ts-tbl th.on::after{content:" ▾"}
+.ts-tbl td.ts-nm{text-align:left;font-weight:700}
+.ts-tbl td .pos{font-size:11px}
+.ts-note{font-size:12px;margin-top:8px}
+/* maç kartları */
+.ts-mlist{display:flex;flex-direction:column;gap:10px}
+.ts-m{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.ts-mh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ts-mo{font-weight:800;display:inline-flex;align-items:center;gap:6px}
+.ts-mrow{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin:8px 0 6px;align-items:center}
+.ts-mrow b{color:var(--txt)}
+.ts-pos{display:inline-flex;align-items:center;gap:8px;min-width:200px;flex:1}
+.ts-pos .ts-bar{flex:1;max-width:160px}
+.ts-mom{font-size:14px;margin-bottom:6px}
+.ts-rts{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:12px;color:var(--mut)}
+.ts-rts span{display:inline-flex;align-items:center;gap:4px}
+.ts-rts .ts-rt{min-width:30px;font-size:11px;padding:1px 4px}
 .m-after:not(:empty){margin:10px 0 12px}
-@media (max-width:640px){
-  .ts-tiles{grid-template-columns:repeat(2,1fr)}
-  .ts-cols{grid-template-columns:1fr}
+@media (max-width:760px){
+  .ts-leads{grid-template-columns:1fr 1fr}
+}
+@media (max-width:480px){
+  .ts-leads{grid-template-columns:1fr}
+  .ts-tb{padding:9px 10px;font-size:12px}
 }
 </style>
 </head>
@@ -935,6 +991,7 @@ function updateHeaderName(){ const el=$("myteam"); if(!el) return; const t=getTe
 let S = { mode:"solo", form:"4-3-3", style:"Dengeli", almanac:false, speed:"Normal" };
 function renderStart(){
   if (S.sl) return renderSLSetup(); // SL modunda "baştan kur / yeni kadro" SL kurulum ekranına döner
+  if (S.homePick || S.challenge) return renderSetupPage(); // mod seçildiyse kurulum ayrı sayfa
   RNG = Math.random;
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);
@@ -960,8 +1017,21 @@ function renderStart(){
       <button class="card mode sacard" onclick="renderSantra()"><b><span class="mi">⚽</span> Santra</b><span class="mut">İstediğin takımla istediğin takıma karşı tek maç oyna. 2000 Galatasaray mı, 2026-27 Fenerbahçe mi? Sen seç, maçı sen yönet.</span></button>
       <button class="card mode invcard" onclick="openInvite()"><b><span class="mi">📨</span> Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
-    ${S.homePick||S.challenge?`<div class="card" id="setupcard">
-      ${S.sl?`<div class="sl-ban">🏆 <b>${GUNCEL.sezon} Süper Lig modu</b> · Kurada bu sezonun Süper Lig takımları çıkar, rakiplerin de onlar. Bu modun sonuçları sıralamaya yazılmaz. <button class="btn ghost sl-off" onclick="S.sl=false;renderStart()">Kapat</button></div>`:""}
+    `;
+}
+function pickMode(m){
+  S.mode = m; S.homePick = true; S.sl = false; S.santraOn = false; renderStart();
+}
+// Efsaneler Draft'ı / Günün Meydan Okuması kurulumu: ayrı sayfa, üstte geri tuşu
+function renderSetupPage(){
+  RNG = Math.random;
+  const daily = store.get("daily:"+todayKey(), null);
+  const title = S.challenge ? "⚔️ Meydan okuma" : S.mode==="daily" ? "🗓️ Günün Meydan Okuması" : "🎮 Efsaneler Draft'ı";
+  const desc = S.challenge ? "" : S.mode==="daily" ? `Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.` : "1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.";
+  $("play").innerHTML = `${topBar("")}
+    <h1>${title}</h1>${desc?`<p class="mut">${desc}</p>`:""}
+    ${challengeBanner()}
+    ${`<div class="card" id="setupcard">
       <h3>Diziliş</h3>
       <div class="row">${Object.keys(FORMATIONS).map(f=>`<button class="chip ${f===S.form?"on":""}" onclick="S.form='${f}';renderStart()">${f}</button>`).join("")}</div>
       <h3 style="margin-top:16px">Oyun tarzı</h3>
@@ -973,11 +1043,8 @@ function renderStart(){
       <div style="margin-top:20px" class="row">
         <button class="btn" onclick="startDraft()">${S.mode==="daily"?(daily?"Tekrar oyna (sayılmaz)":"Günün meydan okumasına başla"):"Kuraya başla"}</button>
       </div>
-    </div>`:""}`;
-}
-function pickMode(m){
-  S.mode = m; S.homePick = true; S.sl = false; S.santraOn = false; renderStart();
-  try { const c = $("setupcard"); if (c && c.scrollIntoView) c.scrollIntoView({behavior:"smooth", block:"start"}); } catch(e){}
+    </div>`}`;
+  toTop();
 }
 
 // ---------- kura ----------
@@ -1292,7 +1359,7 @@ function makeMatch(A,B,pa,pb,o={}){
         if (s===1){ ev.push({m,side:s,type:"inj",p,text:T("injO",{p})}); }
         else { out[0].add(p.n); injs.push(p.n);
           const sub = nsub<MAXSUBS && o.pickSub ? o.pickSub(p.role, new Set(pl[0].map(q=>q.n))) : null;
-          if (sub){ nsub++; pl[0].push(sub); adj[0]+=(sub.r-p.r)/11; subs.push({out:p,in:sub}); ev.push({m,side:0,type:"inj",p,text:T("injS",{p,q:sub})}); }
+          if (sub){ nsub++; pl[0].push(sub); adj[0]+=(sub.r-p.r)/11; subs.push({out:p,in:sub}); ev.push({m,side:0,type:"inj",p,q:sub,text:T("injS",{p,q:sub})}); }
           else { red[0]++; ev.push({m,side:0,type:"inj",p,text:T("injN",{p})}); } } }
   } };
   return {
@@ -1301,7 +1368,7 @@ function makeMatch(A,B,pa,pb,o={}){
     onPitch: () => av(0),
     subsLeft: () => MAXSUBS-nsub,
     sub(outP, inP, m){ if (nsub>=MAXSUBS || out[0].has(outP.n)) return false; nsub++; out[0].add(outP.n); pl[0].push(inP); adj[0]+=(inP.r-outP.r)/11; subs.push({out:outP,in:inP});
-      ev.push({m,side:0,type:"sub",p:inP,text:`🔁 Değişiklik: ${short(outP.n)} çıktı, ${short(inP.n)} girdi`}); return true; },
+      ev.push({m,side:0,type:"sub",p:inP,o:outP,text:`🔁 Değişiklik: ${short(outP.n)} çıktı, ${short(inP.n)} girdi`}); return true; },
     setTactic(style, mentality){ if (style && style!==sty[0]){ sty[0]=style; A={...teamPower(av(0),style)}; adj[0]=0; } if (mentality) ment[0]=mentality; },
     result(et){ return { g1:g[0], g2:g[1], ev, et, len: et?120:90, red, reds, injs, subs, onPitch: av(0) }; }
   };
@@ -1864,9 +1931,9 @@ function finish(){
         ${S.mode!=="daily"&&S.mode!=="real"&&S.seed!=null?`<button class="btn gold" onclick="shareChallenge()">⚔️ Arkadaşına meydan oku</button>`:""}
       </div><div id="chalout" style="max-width:520px;margin:8px auto 0"></div><p class="mut" id="cp" style="font-size:12px"></p>
     </div>
+    ${tsHTML(T)}
     ${T.res.length>3?`<div class="card" style="margin-top:16px"><h3>Eleme ağacı</h3>${bracketHTML()}</div>`:""}
-    <div class="grid" style="margin-top:16px"><div class="card"><h3>Maçlarımız</h3><table>${T.res.map((r,i)=>`<tr><td>${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}"><b>${r.g1}-${r.g2}</b>${r.pen?` (pen. ${r.pen[0]}-${r.pen[1]})`:""}</td></tr>`).join("")}</table></div><div>${pitchHTML()}${benchHTML()}</div></div>
-    ${tsHTML(T)}`;
+    <div class="grid" style="margin-top:16px"><div class="card"><h3>Maçlarımız</h3><table>${T.res.map((r,i)=>`<tr><td>${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}"><b>${r.g1}-${r.g2}</b>${r.pen?` (pen. ${r.pen[0]}-${r.pen[1]})`:""}</td></tr>`).join("")}</table></div><div>${pitchHTML()}${benchHTML()}</div></div>`;
 }
 const SHORTST = ["G1","G2","G3","S16","ÇF","YF","F"];
 function record(){ const w=S.T.res.filter(r=>r.res==="W").length; return [w,7-w]; }
@@ -2017,13 +2084,15 @@ function renderAch(){
 
 // ---------- kadrolar ----------
 function renderSquads(sel){
-  const seasons = Object.keys(DATA); sel = sel || seasons.at(-1);
+  const seasons = Object.keys(DATA); sel = sel || "cur";
+  const isCur = sel==="cur", list = isCur ? [...CUR].sort((a,b)=>curPow(b)-curPow(a)) : DATA[sel];
   $("squads").innerHTML = `<h1>Kadrolar</h1><p class="mut" style="font-size:13px">Yanlış bir şey mi gördün? Oyuncunun yanındaki ⚠️ ile ya da kadronun altındaki 🚩 Bildir ile birden fazla oyuncuyu seçip bildir, düzeltelim.</p>
-    <div class="scrollx" style="margin:12px 0 18px">${seasons.map(s=>`<button class="chip ${s===sel?"on":""}" onclick="renderSquads('${s}')">${s}</button>`).join("")}</div>
-    <div class="plist" style="grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr))">${DATA[sel].map(t=>`
-      <div class="card" style="border-top:4px solid ${kitC(t.team)[0]}"><h2>${t.rank}. ${kit(t.team)}${esc(t.team)}</h2><div class="mut" style="font-size:12px;margin:-6px 0 8px">${esc(rankNote(sel,t.rank))}${COACH[sel+"|"+t.team]?` · TD: ${esc(COACH[sel+"|"+t.team])}`:""}</div>
+    <div class="scrollx" style="margin:12px 0 18px"><button class="chip ${isCur?"on":""}" onclick="renderSquads('cur')">🔥 ${GUNCEL.sezon} güncel</button>${[...seasons].reverse().map(s=>`<button class="chip ${s===sel?"on":""}" onclick="renderSquads('${s}')">${s}</button>`).join("")}</div>
+    ${isCur?`<p class="mut" style="margin:-8px 0 14px">${GUNCEL.sezon} Süper Lig'in ${CUR.length} takımı, ${GUNCEL.guncelleme.split("-").reverse().join(".")} itibarıyla güncel kadrolar. Güce göre sıralı.</p>`:""}
+    <div class="plist" style="grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr))">${list.map(t=>{ sel = isCur ? t.season : sel; return `
+      <div class="card" style="border-top:4px solid ${kitC(t.team)[0]}"><h2>${isCur?"":t.rank+". "}${kit(t.team)}${esc(t.team)}${isCur?` <span class="rl-rk rl-cur">GÜNCEL</span>`:""}</h2><div class="mut" style="font-size:12px;margin:-6px 0 8px">${isCur?`güç ${curPow(t)}`:esc(rankNote(sel,t.rank))}${coachOf(t)?` · TD: ${esc(coachOf(t))}`:""}</div>
       <table>${t.players.map(p=>`<tr><td><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r]).join("/")}</span></td><td>${esc(p.n)}${p.r>=LEGEND?'<span class="seal">★</span>':""}</td><td class="rt" style="text-align:right"><span class="rv ${tierAlways(p.r)}">${p.r}</span></td><td style="width:28px"><button class="repbtn" title="Hata bildir" onclick="openReport('${sel}','${esc(t.team)}','${esc(p.n).replace(/'/g,"\\'")}')">⚠️</button></td></tr>`).join("")}</table>
-      <div class="row" style="margin-top:8px"><button class="chip" style="font-size:12px" onclick="openMultiReport('${sel}','${esc(t.team)}')">🚩 Bildir</button><button class="chip" style="font-size:12px" onclick="openReport('${sel}','${esc(t.team)}','')">➕ Eksik oyuncu bildir</button></div></div>`).join("")}
+      <div class="row" style="margin-top:8px"><button class="chip" style="font-size:12px" onclick="openMultiReport('${sel}','${esc(t.team)}')">🚩 Bildir</button><button class="chip" style="font-size:12px" onclick="openReport('${sel}','${esc(t.team)}','')">➕ Eksik oyuncu bildir</button></div></div>`; }).join("")}
     </div>`;
 }
 
@@ -2298,7 +2367,7 @@ function openReport(season, team, player){
 }
 function closeReport(){ document.getElementById("repbox")?.remove(); }
 function openMultiReport(season, team){
-  const tm = (DATA[season]||[]).find(x=>x.team===team); if(!tm) return;
+  const tm = (DATA[season]||[]).find(x=>x.team===team) || (season===GUNCEL.sezon ? CUR.find(x=>x.team===team) : null); if(!tm) return;
   const m = document.createElement("div"); m.id="repbox"; m.className="modal";
   const types = ["İsmi yanlış yazılmış","O sezon bu takımda oynamadı","Mevkisi yanlış","Reytingi yanlış","Diğer"];
   m.innerHTML = `<div class="mbox"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🚩 Kadroda hata bildir</h3><button class="chip" onclick="closeReport()">✕</button></div>
@@ -2595,7 +2664,7 @@ function askExit(what){
   d.addEventListener("click", e=>{ if(e.target===d) d.remove(); });
   document.body.appendChild(d);
 }
-function goHome(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.T=null; S.Q=null; S.sl=false; S.santraOn=false; show("play"); renderStart(); try{ window.scrollTo(0,0); }catch(e){} }
+function goHome(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.T=null; S.Q=null; S.sl=false; S.santraOn=false; S.homePick=false; S.challenge=null; show("play"); renderStart(); try{ window.scrollTo(0,0); }catch(e){} }
 // ---------- temalar: aynı tasarım, farklı renk paleti (TV yayını renkleri çalışma anında eşlenir) ----------
 const THEMES = {
   tv:     { ad:"📺 TV Yayını", meta:"#14061f", map:{} },
@@ -2771,6 +2840,9 @@ DICT_ROWS.push(["📊 Turnuva istatistikleri","📊 Tournament stats","📊 Esta
 DICT_ROWS.push(["Efsaneler Draft'ı","Legends Draft","Draft de leyendas"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur. Sınırsız oyna.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI. Play as much as you like.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario. Juega sin límite."],["⭐ Efsaneler ","⭐ Legends ","⭐ Leyendas "],["· 1980–2026","· 1980–2026","· 1980–2026"],["Süper Lig tarihinin her sezonundan ilk 3 takım ve oyuncuları.","The top 3 teams and their players from every season in Süper Lig history.","Los 3 primeros equipos y sus jugadores de cada temporada de la historia de la Süper Lig."],["🔥 Bu sezon ","🔥 This season ","🔥 Esta temporada "],["Draft","Draft","Draft"],["Efsaneler Draft'ı tabloda","Legends Draft table:","Tabla Draft de leyendas:"]);
 DICT_ROWS.push(["⚡ Tek maç","⚡ Single match","⚡ Partido único"],["Tarihin ya da bu sezonun herhangi iki takımı, tek maç.","Any two teams from history or this season, one match.","Dos equipos cualesquiera de la historia o de esta temporada, un partido."],["Santra","Kick-off","Saque inicial"],["⚽ Santra","⚽ Kick-off","⚽ Saque inicial"],["İstediğin takımla istediğin takıma karşı tek maç oyna. 2000 Galatasaray mı, 2026-27 Fenerbahçe mi? Sen seç, maçı sen yönet.","Play a single match with any team against any team. 2000 Galatasaray or 2026-27 Fenerbahçe? You pick, you manage.","Juega un partido con cualquier equipo contra cualquier equipo. ¿Galatasaray 2000 o Fenerbahçe 2026-27? Tú eliges, tú diriges."],["İstediğin takımla istediğin takıma karşı tek maç. Kendi takımının dizilişini ve ilk 11'ini ayarlarsın, maç öncesi konuşmanı yaparsın, devre arasında taktik ve değişiklik yaparsın.","A single match, any team against any team. Set your formation and XI, give your team talk, change tactics and make subs at half-time.","Un partido, cualquier equipo contra cualquiera. Elige formación y once, da la charla previa y cambia táctica y jugadores en el descanso."],["Senin takımın","Your team","Tu equipo"],["Rakip","Opponent","Rival"],["Berabere biterse uzatma ve penaltı","Extra time and penalties if level","Prórroga y penaltis si hay empate"],["· kapalıysa beraberlik geçerli","· if off, a draw stands","· si está apagado, vale el empate"],["Kadroyu ayarla ▶","Set up your squad ▶","Prepara la plantilla ▶"],["⚽ Santra: maçı başlat","⚽ Kick off","⚽ Empezar el partido"],["Takımları değiştir","Change teams","Cambiar equipos"],["⚽ Santra · tek maç","⚽ Kick-off · single match","⚽ Saque inicial · partido único"],["🏆 Kazandın!","🏆 You won!","🏆 ¡Ganaste!"],["😔 Kaybettin.","😔 You lost.","😔 Perdiste."],["🤝 Berabere.","🤝 Draw.","🤝 Empate."],["🔁 Rövanş","🔁 Rematch","🔁 Revancha"],["Kadroyu değiştir","Change squad","Cambiar plantilla"],["⚽ Yeni maç","⚽ New match","⚽ Nuevo partido"]);
 DICT_ROWS.push(["📊 Maç istatistikleri","📊 Match stats","📊 Estadísticas del partido"],["Maçın yıldızı:","Player of the match:","Jugador del partido:"]);
+DICT_ROWS.push(["Göster ▾","Show ▾","Mostrar ▾"],["Gizle ▴","Hide ▴","Ocultar ▴"]);
+DICT_ROWS.push(["Genel","Overview","General"],["Oyuncular","Players","Jugadores"],["Maçlar","Matches","Partidos"],["Biz","Us","Nosotros"],["Rakipler","Opponents","Rivales"],["Gol","Goals","Goles"],["İsabetli şut","Shots on target","Tiros a puerta"],["Sarı kart","Yellow cards","Amarillas"],["Kırmızı kart","Red cards","Rojas"],["⚽ Gol","⚽ Goals","⚽ Goles"],["📈 Ortalama not","📈 Average rating","📈 Nota media"],["🏅 Maçın oyuncusu","🏅 Player of the match","🏅 Jugador del partido"],["🎯 Şut","🎯 Shots","🎯 Tiros"],["Mvk","Pos","Pos"],["Dk","Min","Min"],["İsb","OT","AP"],["MO","PoM","JdP"],["Not","Rating","Nota"],["Sana gol atanlar:","Scored against you:","Te marcaron:"],["🧤 Kalende gol yok.","🧤 No goals conceded.","🧤 Portería a cero."],["Başlığa dokun, o sütuna göre sırala. Not 10 üzerinden: gol, asist, isabetli şut, kartlar, sonuç ve (defans/kaleci için) yenilen gole göre hesaplanır.","Tap a header to sort. Ratings are out of 10, based on goals, assists, shots on target, cards, the result and (for defenders/keepers) goals conceded.","Toca una cabecera para ordenar. Nota sobre 10 según goles, asistencias, tiros a puerta, tarjetas, resultado y (defensas/porteros) goles encajados."],["🏅 Maçın oyuncusu:","🏅 Player of the match:","🏅 Jugador del partido:"],["İsabet","On target","A puerta"],["Kart","Cards","Tarjetas"],["⭐ Maçın yıldızı","⭐ Star of the match","⭐ Estrella del partido"],["⭐ Turnuvanın yıldızı","⭐ Star of the tournament","⭐ Estrella del torneo"]);
+DICT_ROWS.push(["🎮 Efsaneler Draft'ı","🎮 Legends Draft","🎮 Draft de leyendas"],["🗓️ Günün Meydan Okuması","🗓️ Daily Challenge","🗓️ Reto del día"],["⚔️ Meydan okuma","⚔️ Challenge","⚔️ Desafío"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario."]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];
@@ -3332,63 +3404,125 @@ function renderSL(){
       return `<div class="sl-row"><span class="mut sl-i">${i+1}.</span><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><b>${esc(t.team)}</b><span class="mut sl-c">${coachOf(t)?esc(coachOf(t)):""}</span><span class="sl-p">${curPow(t)}</span></div>`; }).join("")}</div>`;
   toTop();
 }
-// ---------- turnuva sonu istatistikleri ----------
-// Her maçtan sonra tsRecord ile T.st'ye yazılır; sonuç ekranında tsHTML gösterir.
+// ---------- turnuva / maç sonu istatistikleri (FM tarzı) ----------
+// Her maçtan sonra tsRecord T.st'ye yazar: oyuncu başına dakika, gol, asist, şut, kart ve maç notu; maç başına takım sayıları.
+// tsHTML sonuç ekranında sekmeli (Genel / Oyuncular / Maçlar) kutuyu çizer.
 const TS_POSS = {"Topa sahip ol":7, "Önde baskı":2, "Uzun top":-3, "Kontra atak":-5, "Otobüsü çek":-8};
+const TS_SHOT = ["goal","save","post","wide","penS","penM"], TS_OT = ["goal","save","penS"];
+const tsClamp = (x,a,b) => Math.max(a, Math.min(b, x));
 function tsRecord(T, r, L, pw, opw, o){
   const st = T.st || (T.st = {pl:{}, m:[], opg:{}});
-  const P = (p) => st.pl[p.n] || (st.pl[p.n] = {n:p.n, pos:p.pos||"", ap:0, g:0, a:0, sh:0, y:0, r:0});
-  for (const p of L) P(p).ap++;
-  for (const s of (r.subs||[])) P(s.in).ap++;
-  const m = {opp:o.t.team, season:o.t.season, g1:r.g1, g2:r.g2, sh:[0,0], ot:[0,0], y:[0,0], rd:[0,0], poss:0};
+  const len = r.len || (r.et ? 120 : 90);
+  const P = p => st.pl[p.n] || (st.pl[p.n] = {n:p.n, role:p.role||"", pos:p.pos||"", ap:0, st:0, min:0, g:0, pg:0, a:0, sh:0, ot:0, y:0, r:0, mom:0, rts:[]});
+  // bu maçta oynayanlar ve dakikaları
+  const mins = {}, rows = {};
+  for (const p of L){ mins[p.n] = len; rows[p.n] = {p, start:true}; }
+  for (const e of r.ev){ if (e.side!==0) continue;
+    if (e.type==="sub" && e.o){ mins[e.o.n] = e.m; mins[e.p.n] = len - e.m; rows[e.p.n] = {p:e.p, start:false}; }
+    if (e.type==="inj"){ mins[e.p.n] = e.m; if (e.q){ mins[e.q.n] = len - e.m; rows[e.q.n] = {p:e.q, start:false}; } }
+    if (e.type==="red") mins[e.p.n] = e.m;
+  }
+  for (const s of (r.subs||[])) if (!rows[s.in.n]){ rows[s.in.n] = {p:s.in, start:false}; mins[s.in.n] = mins[s.in.n] ?? 30; }
+  const m = {opp:o.t.team, season:o.t.season, g1:r.g1, g2:r.g2, sh:[0,0], ot:[0,0], y:[0,0], rd:[0,0], poss:0, res: r.g1>r.g2?"W":r.g1<r.g2?"L":"D", rt:{}, mom:null};
+  const ev = {}; const E = n => ev[n] || (ev[n] = {g:0,pg:0,a:0,sh:0,ot:0,post:0,miss:0,y:0,r:0});
+  let saves = 0;
   for (const e of r.ev){
     const sd = e.side;
-    if (["goal","save","post","wide","penS","penM"].includes(e.type)) m.sh[sd]++;
-    if (["goal","save","penS"].includes(e.type)) m.ot[sd]++;
+    if (TS_SHOT.includes(e.type)) m.sh[sd]++;
+    if (TS_OT.includes(e.type)) m.ot[sd]++;
     if (e.type==="yellow") m.y[sd]++;
     if (e.type==="red") m.rd[sd]++;
+    if (sd===1 && (e.type==="save" || e.type==="penS")) saves++;
     if (sd===0 && e.p){
-      const x = P(e.p);
-      if (["goal","save","post","wide","penS","penM"].includes(e.type)) x.sh++;
-      if (e.type==="goal"){ x.g++; if (e.a) P(e.a).a++; }
+      const x = E(e.p.n);
+      if (TS_SHOT.includes(e.type)) x.sh++;
+      if (TS_OT.includes(e.type)) x.ot++;
+      if (e.type==="goal"){ x.g++; if (e.pen) x.pg++; if (e.a) E(e.a.n).a++; }
+      if (e.type==="post") x.post++;
+      if (e.type==="penM" || e.type==="penS") x.miss++;
       if (e.type==="yellow") x.y++;
       if (e.type==="red") x.r++;
     }
     if (sd===1 && e.type==="goal" && e.p){ const k = e.p.n+"|"+o.t.team; st.opg[k] = (st.opg[k]||0)+1; }
   }
-  m.poss = Math.round(Math.max(28, Math.min(72, 50 + ((pw.ovr||0)-(opw.ovr||0))*1.2 + (TS_POSS[T.style]||0) - (TS_POSS[o.pw.style]||0))));
+  const resB = m.res==="W" ? 0.35 : m.res==="L" ? -0.35 : 0;
+  let best = null;
+  for (const [n, row] of Object.entries(rows)){
+    const p = row.p, x = E(n), mn = tsClamp(mins[n] ?? len, 1, len), line = p.pos || LINE(p.role||"CM");
+    let rt = (row.start ? 6.55 : 6.35) + resB + x.g*(x.pg===x.g?0.7:1.0) + x.a*0.6 + x.ot*0.15 + x.post*0.1 - (x.sh-x.ot-x.post)*0.04 - x.miss*0.5 - x.y*0.3 - x.r*1.6;
+    if (line==="GK"){ rt += saves*0.18 + (r.g2===0 ? 0.7 : -0.28*r.g2); }
+    else if (line==="DF"){ rt += r.g2===0 ? 0.5 : -0.16*r.g2; }
+    else if (line==="MF"){ rt += r.g2===0 ? 0.15 : -0.05*r.g2; }
+    rt += (Math.random()-0.5)*0.6;
+    if (mn < 30) rt = 6.2 + (rt-6.2)*0.6;
+    rt = Math.round(tsClamp(rt, 4.5, 10)*10)/10;
+    m.rt[n] = rt;
+    const a = P(p); a.ap++; if (row.start) a.st++; a.min += mn; a.rts.push(rt);
+    a.g += x.g; a.pg += x.pg; a.a += x.a; a.sh += x.sh; a.ot += x.ot; a.y += x.y; a.r += x.r;
+    if (!best || rt > m.rt[best]) best = n;
+  }
+  if (best){ m.mom = best; P(rows[best].p).mom++; }
+  m.poss = Math.round(tsClamp(50 + ((pw.ovr||0)-(opw.ovr||0))*1.2 + (TS_POSS[T.style]||0) - (TS_POSS[o.pw.style]||0), 28, 72));
   st.m.push(m);
 }
-const tsScore = x => x.g*3 + x.a*2 + x.sh*0.3 + x.ap*0.5 - x.y*0.5 - x.r*2;
-function tsHTML(T){
-  const st = T.st; if (!st || !st.m.length) return "";
-  const M = st.m, n = M.length, sum = (f) => M.reduce((a,m)=>a+f(m),0);
+const tsAvg = x => x.rts.length ? x.rts.reduce((a,b)=>a+b,0)/x.rts.length : 0;
+const tsRtCls = v => v>=8 ? "r8" : v>=7.3 ? "r7" : v>=6.7 ? "r6" : "r5";
+const tsRt = v => `<span class="ts-rt ${tsRtCls(v)}">${v.toFixed(1)}</span>`;
+const tsLineOrd = {GK:0, DF:1, MF:2, FW:3};
+let TS_TAB = "gen", TS_SORT = "rt";
+function tsTab(k){ TS_TAB = k; const b = $("tsbox"); if (b && S.T) b.innerHTML = tsInner(S.T); }
+function tsSort(k){ TS_SORT = k; tsTab("pl"); }
+function tsHTML(T, open){
+  if (!T.st || !T.st.m.length) return "";
+  TS_TAB = "gen"; TS_SORT = "rt";
+  return `<details class="card ts-card" ${open?"open":""}><summary><h3>📊 ${T.single?"Maç istatistikleri":"Turnuva istatistikleri"}</h3><span class="ts-tog"><span class="ts-sh">Göster ▾</span><span class="ts-hd">Gizle ▴</span></span></summary><div id="tsbox">${tsInner(T)}</div></details>`;
+}
+function tsInner(T){
+  const st = T.st, M = st.m, n = M.length, sum = f => M.reduce((a,m)=>a+f(m),0);
   const pls = Object.values(st.pl).filter(x=>x.ap>0);
-  const star = [...pls].sort((a,b)=>tsScore(b)-tsScore(a))[0];
-  const tops = (k) => [...pls].filter(x=>x[k]>0).sort((a,b)=>b[k]-a[k]||b.g-a.g).slice(0,5);
-  const cs = M.filter(m=>m.g2===0).length;
-  const tile = (v,l) => `<div class="ts-tile"><b>${v}</b><span>${l}</span></div>`;
+  const sv = x => tsAvg(x) + x.g*0.12 + x.a*0.06 + x.mom*0.12; // yıldız: en az maçların yarısında oynamış olsun
+  const star = [...pls].filter(x=>x.ap>=Math.ceil(n/2)).sort((a,b)=>sv(b)-sv(a))[0];
+  const tabs = [["gen","Genel"],["pl","Oyuncular"],["mt",T.single?"Maç":"Maçlar"]];
+  const head = `<div class="ts-tabs">${tabs.map(([k,l])=>`<button class="ts-tb ${TS_TAB===k?"on":""}" onclick="tsTab('${k}')">${l}</button>`).join("")}</div>`;
+  if (TS_TAB==="pl") return head + tsPlayers(T, pls);
+  if (TS_TAB==="mt") return head + tsMatches(T, M);
+  // ---- Genel ----
+  const form = `<div class="ts-form">${M.map((m,i)=>`<span class="ts-fm ${m.res}" title="${esc(m.opp)} ${m.g1}-${m.g2}">${T.single?"":`<i>${SHORTST[i]}</i>`}${m.g1}-${m.g2}</span>`).join("")}</div>`;
+  const cmp = (l, a, b, fmt=x=>x) => { const t = a+b || 1; return `<div class="ts-cmp"><b>${fmt(a)}</b><div class="ts-bar"><i style="width:${a/t*100}%"></i><u style="width:${b/t*100}%"></u></div><b>${fmt(b)}</b><span>${l}</span></div>`; };
+  const possA = Math.round(sum(m=>m.poss)/n);
+  const leader = (title, arr, val) => `<div class="ts-lead"><h4>${title}</h4>${arr.length?arr.map((x,i)=>`<div class="ts-li"><span><i>${i+1}</i>${esc(short(x.n))}</span><b>${val(x)}</b></div>`).join(""):`<div class="mut">—</div>`}</div>`;
+  const top = (f, filt=()=>true) => [...pls].filter(filt).sort((a,b)=>f(b)-f(a)).slice(0,3);
   const opTop = Object.entries(st.opg).sort((a,b)=>b[1]-a[1]).slice(0,3);
-  const lst = (arr,k,ic) => arr.length ? arr.map(x=>`<div class="ts-li"><span>${esc(short(x.n))}</span><b>${x[k]} ${ic}</b></div>`).join("") : `<div class="mut">Yok</div>`;
-  return `<details class="card ts-card" open><summary><h3>📊 ${T.single?"Maç istatistikleri":"Turnuva istatistikleri"}</h3></summary>
-    <div class="ts-tiles">
-      ${tile(n,"Maç")}${tile(`${T.W}-${T.D}-${T.L}`,"G-B-M")}${tile(`${T.gf}-${T.ga}`,"Atılan-Yenilen")}
-      ${tile(`${sum(m=>m.sh[0])} / ${sum(m=>m.ot[0])}`,"Şut / isabet")}${tile("%"+Math.round(sum(m=>m.poss)/n),"Topa sahip olma")}
-      ${tile(cs,"Gol yemeden")}${tile(`${sum(m=>m.y[0])} / ${sum(m=>m.rd[0])}`,"Sarı / kırmızı")}${tile((T.gf/n).toFixed(1),"Maç başı gol")}
+  return head + `
+    ${form}
+    ${star?`<div class="ts-star"><div class="ts-star-rt">${tsRt(tsAvg(star))}</div><div><div class="mut ts-star-l">⭐ ${T.single?"Maçın yıldızı":"Turnuvanın yıldızı"}</div><div class="ts-star-n">${esc(star.n)}</div>
+      <div class="mut">${LABEL[star.role]||star.pos} · ${star.ap} maç · ${star.g} gol · ${star.a} asist${star.mom?` · ${star.mom}× maçın oyuncusu`:""}</div></div></div>`:""}
+    <div class="ts-cmpbox"><div class="ts-cmph"><span>Biz</span><span>${T.single?esc(M[0].opp):"Rakipler"}</span></div>
+      ${cmp("Gol", T.gf, T.ga)}${cmp("Şut", sum(m=>m.sh[0]), sum(m=>m.sh[1]))}${cmp("İsabetli şut", sum(m=>m.ot[0]), sum(m=>m.ot[1]))}
+      ${cmp("Topa sahip olma", possA, 100-possA, x=>"%"+x)}${cmp("Sarı kart", sum(m=>m.y[0]), sum(m=>m.y[1]))}${cmp("Kırmızı kart", sum(m=>m.rd[0]), sum(m=>m.rd[1]))}</div>
+    <div class="ts-leads">
+      ${leader("⚽ Gol", top(x=>x.g*100+x.a, x=>x.g>0), x=>x.g)}
+      ${leader("🅰️ Asist", top(x=>x.a*100+x.g, x=>x.a>0), x=>x.a)}
+      ${leader("📈 Ortalama not", top(tsAvg, x=>x.ap>=Math.ceil(n/2)), x=>tsRt(tsAvg(x)))}
+      ${T.single ? leader("🎯 Şut", top(x=>x.sh*10+x.ot, x=>x.sh>0), x=>`${x.ot}/${x.sh}`) : leader("🏅 Maçın oyuncusu", top(x=>x.mom*10+tsAvg(x), x=>x.mom>0), x=>x.mom+"×")}
     </div>
-    ${star?`<div class="ts-star">⭐ <b>${T.single?"Maçın yıldızı:":"Turnuvanın yıldızı:"}</b> ${esc(star.n)} <span class="mut">· ${star.g} gol · ${star.a} asist · ${star.ap} maç</span></div>`:""}
-    <div class="ts-cols">
-      <div><h4>⚽ Gol krallığı</h4>${lst(tops("g"),"g","gol")}</div>
-      <div><h4>🅰️ Asist</h4>${lst(tops("a"),"a","asist")}</div>
-      <div><h4>🎯 Rakiplerin golcüleri</h4>${opTop.length?opTop.map(([k,v])=>{ const [nm,tm]=k.split("|"); return `<div class="ts-li"><span>${esc(short(nm))} <span class="mut">${esc(tm)}</span></span><b>${v} gol</b></div>`; }).join(""):`<div class="mut">Kalende gol yok 🧤</div>`}</div>
-    </div>
-    <h4>Oyuncular</h4>
-    <div style="overflow-x:auto"><table class="ts-tbl"><tr><th style="text-align:left">Oyuncu</th><th>M</th><th>G</th><th>A</th><th>Şut</th><th>🟨</th><th>🟥</th></tr>
-      ${[...pls].sort((a,b)=>b.g-a.g||b.a-a.a||b.ap-a.ap).map(x=>`<tr><td style="text-align:left">${esc(short(x.n))}</td><td>${x.ap}</td><td>${x.g||""}</td><td>${x.a||""}</td><td>${x.sh||""}</td><td>${x.y||""}</td><td>${x.r||""}</td></tr>`).join("")}</table></div>
-    <h4>Maç maç</h4>
-    <div style="overflow-x:auto"><table class="ts-tbl"><tr><th></th><th style="text-align:left">Rakip</th><th>Skor</th><th>Şut</th><th>İsabet</th><th>Topa sahip</th></tr>
-      ${M.map((m,i)=>`<tr><td class="mut">${T.single?"":SHORTST[i]}</td><td style="text-align:left">${esc(m.opp)}</td><td><b>${m.g1}-${m.g2}</b></td><td>${m.sh[0]}-${m.sh[1]}</td><td>${m.ot[0]}-${m.ot[1]}</td><td>%${m.poss}</td></tr>`).join("")}</table></div>
-  </details>`;
+    ${opTop.length?`<div class="ts-opp mut">Sana gol atanlar: ${opTop.map(([k,v])=>{ const [nm,tm]=k.split("|"); return `<b>${esc(short(nm))}</b> (${esc(tm)}) ${v}`; }).join(" · ")}</div>`:`<div class="ts-opp mut">🧤 Kalende gol yok.</div>`}`;
+}
+function tsPlayers(T, pls){
+  const keys = {pos:x=>-(tsLineOrd[x.pos]??9)*100 - x.st, n:x=>0, ap:x=>x.ap*1000+x.min, min:x=>x.min, g:x=>x.g*100+x.a, a:x=>x.a*100+x.g, sh:x=>x.sh*10+x.ot, ot:x=>x.ot, y:x=>x.y, r:x=>x.r, mom:x=>x.mom*10+tsAvg(x), rt:x=>tsAvg(x)};
+  const list = TS_SORT==="n" ? [...pls].sort((a,b)=>a.n.localeCompare(b.n,"tr")) : [...pls].sort((a,b)=>keys[TS_SORT](b)-keys[TS_SORT](a));
+  const th = (k,l,t="") => `<th class="${TS_SORT===k?"on":""}" ${t?`title="${t}"`:""} onclick="tsSort('${k}')">${l}</th>`;
+  return `<div class="ts-scroll"><table class="ts-tbl ts-pl"><tr>${th("pos","Mvk","Mevki")}${th("n","Oyuncu")}${th("ap","M","Maç (ilk 11)")}${th("min","Dk","Dakika")}${th("g","G","Gol")}${th("a","A","Asist")}${th("sh","Şut")}${th("ot","İsb","İsabetli şut")}${th("y","🟨")}${th("r","🟥")}${th("mom","MO","Maçın oyuncusu")}${th("rt","Not","Ortalama not")}</tr>
+    ${list.map(x=>`<tr><td><span class="pos ${x.pos}">${LABEL[x.role]||x.pos}</span></td><td class="ts-nm">${esc(short(x.n))}</td><td>${x.ap}${x.ap>x.st?` <span class="mut">(${x.st})</span>`:""}</td><td>${x.min}</td><td>${x.g||"–"}</td><td>${x.a||"–"}</td><td>${x.sh||"–"}</td><td>${x.ot||"–"}</td><td>${x.y||""}</td><td>${x.r||""}</td><td>${x.mom||""}</td><td>${tsRt(tsAvg(x))}</td></tr>`).join("")}</table></div>
+    <p class="mut ts-note">Başlığa dokun, o sütuna göre sırala. Not 10 üzerinden: gol, asist, isabetli şut, kartlar, sonuç ve (defans/kaleci için) yenilen gole göre hesaplanır.</p>`;
+}
+function tsMatches(T, M){
+  return `<div class="ts-mlist">${M.map((m,i)=>{ const c = kitC(m.opp), mom = m.mom;
+    return `<div class="ts-m"><div class="ts-mh"><span class="ts-fm ${m.res}">${m.g1}-${m.g2}</span><span class="mut">${T.single?"Santra":STAGES[i]}</span><span class="ts-mo"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span>${esc(m.season)} ${esc(m.opp)}</span></div>
+      <div class="ts-mrow"><span>Şut <b>${m.sh[0]}-${m.sh[1]}</b></span><span>İsabet <b>${m.ot[0]}-${m.ot[1]}</b></span><span>Kart <b>${m.y[0]+m.rd[0]}-${m.y[1]+m.rd[1]}</b></span>
+      <span class="ts-pos">Topa sahip <div class="ts-bar"><i style="width:${m.poss}%"></i><u style="width:${100-m.poss}%"></u></div><b>%${m.poss}</b></span></div>
+      ${mom?`<div class="ts-mom">🏅 Maçın oyuncusu: <b>${esc(short(mom))}</b> ${tsRt(m.rt[mom])}</div>`:""}
+      <div class="ts-rts">${Object.entries(m.rt).sort((a,b)=>b[1]-a[1]).map(([nm,v])=>`<span>${esc(short(nm))} ${tsRt(v)}</span>`).join("")}</div></div>`; }).join("")}</div>`;
 }
 // ---------- Santra: istediğin iki takımla tek maç ----------
 // Takımlar: 2026-27 güncel kadrolar + 1980-2026 efsane sezonlar. Senin takımın gerçek takım akışıyla (diziliş, ilk 11) kurulur,
@@ -3446,7 +3580,7 @@ function santraAfter(T, res, r, pen, notes){
   const verdict = res==="W" ? "🏆 Kazandın!" : res==="L" ? "😔 Kaybettin." : "🤝 Berabere.";
   $("after").innerHTML = `<div class="sa-end"><b>${verdict}</b> <span class="mut">${esc(me?saLabel(me):myName())} ${r.g1}-${r.g2} ${esc(saLabel(ot))}${pen?` · pen. ${pen[0]}-${pen[1]}`:""}</span></div>
     <div class="row" style="margin-top:10px"><button class="btn gold" onclick="startSantra()">🔁 Rövanş</button><button class="btn" onclick="santraGo()">Kadroyu değiştir</button><button class="btn ghost" onclick="renderSantra()">⚽ Yeni maç</button><button class="btn ghost" onclick="saShare()">📤 Paylaş</button><span id="sashare" class="mut"></span></div>`;
-  try { $("mgrid").insertAdjacentHTML("afterend", tsHTML(T)); } catch(e){}
+  try { $("after").insertAdjacentHTML("beforeend", tsHTML(T)); } catch(e){}
 }
 async function saShare(){
   const T = S.T, r = T.res[0], me = findTeam(S.realId); if (!r) return;

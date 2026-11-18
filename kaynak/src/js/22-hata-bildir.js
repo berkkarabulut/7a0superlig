@@ -16,7 +16,7 @@ function openReport(season, team, player){
 }
 function closeReport(){ document.getElementById("repbox")?.remove(); }
 function openMultiReport(season, team){
-  const tm = (DATA[season]||[]).find(x=>x.team===team); if(!tm) return;
+  const tm = (DATA[season]||[]).find(x=>x.team===team) || (season===GUNCEL.sezon ? CUR.find(x=>x.team===team) : null); if(!tm) return;
   const m = document.createElement("div"); m.id="repbox"; m.className="modal";
   const types = ["İsmi yanlış yazılmış","O sezon bu takımda oynamadı","Mevkisi yanlış","Reytingi yanlış","Diğer"];
   m.innerHTML = `<div class="mbox"><div class="row" style="justify-content:space-between"><h3 style="margin:0">🚩 Kadroda hata bildir</h3><button class="chip" onclick="closeReport()">✕</button></div>

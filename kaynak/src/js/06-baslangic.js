@@ -2,6 +2,7 @@
 let S = { mode:"solo", form:"4-3-3", style:"Dengeli", almanac:false, speed:"Normal" };
 function renderStart(){
   if (S.sl) return renderSLSetup(); // SL modunda "baştan kur / yeni kadro" SL kurulum ekranına döner
+  if (S.homePick || S.challenge) return renderSetupPage(); // mod seçildiyse kurulum ayrı sayfa
   RNG = Math.random;
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);
@@ -27,8 +28,21 @@ function renderStart(){
       <button class="card mode sacard" onclick="renderSantra()"><b><span class="mi">⚽</span> Santra</b><span class="mut">İstediğin takımla istediğin takıma karşı tek maç oyna. 2000 Galatasaray mı, 2026-27 Fenerbahçe mi? Sen seç, maçı sen yönet.</span></button>
       <button class="card mode invcard" onclick="openInvite()"><b><span class="mi">📨</span> Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
-    ${S.homePick||S.challenge?`<div class="card" id="setupcard">
-      ${S.sl?`<div class="sl-ban">🏆 <b>${GUNCEL.sezon} Süper Lig modu</b> · Kurada bu sezonun Süper Lig takımları çıkar, rakiplerin de onlar. Bu modun sonuçları sıralamaya yazılmaz. <button class="btn ghost sl-off" onclick="S.sl=false;renderStart()">Kapat</button></div>`:""}
+    `;
+}
+function pickMode(m){
+  S.mode = m; S.homePick = true; S.sl = false; S.santraOn = false; renderStart();
+}
+// Efsaneler Draft'ı / Günün Meydan Okuması kurulumu: ayrı sayfa, üstte geri tuşu
+function renderSetupPage(){
+  RNG = Math.random;
+  const daily = store.get("daily:"+todayKey(), null);
+  const title = S.challenge ? "⚔️ Meydan okuma" : S.mode==="daily" ? "🗓️ Günün Meydan Okuması" : "🎮 Efsaneler Draft'ı";
+  const desc = S.challenge ? "" : S.mode==="daily" ? `Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.` : "1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.";
+  $("play").innerHTML = `${topBar("")}
+    <h1>${title}</h1>${desc?`<p class="mut">${desc}</p>`:""}
+    ${challengeBanner()}
+    ${`<div class="card" id="setupcard">
       <h3>Diziliş</h3>
       <div class="row">${Object.keys(FORMATIONS).map(f=>`<button class="chip ${f===S.form?"on":""}" onclick="S.form='${f}';renderStart()">${f}</button>`).join("")}</div>
       <h3 style="margin-top:16px">Oyun tarzı</h3>
@@ -40,10 +54,7 @@ function renderStart(){
       <div style="margin-top:20px" class="row">
         <button class="btn" onclick="startDraft()">${S.mode==="daily"?(daily?"Tekrar oyna (sayılmaz)":"Günün meydan okumasına başla"):"Kuraya başla"}</button>
       </div>
-    </div>`:""}`;
-}
-function pickMode(m){
-  S.mode = m; S.homePick = true; S.sl = false; S.santraOn = false; renderStart();
-  try { const c = $("setupcard"); if (c && c.scrollIntoView) c.scrollIntoView({behavior:"smooth", block:"start"}); } catch(e){}
+    </div>`}`;
+  toTop();
 }
 

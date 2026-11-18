@@ -46,9 +46,9 @@ function finish(){
         ${S.mode!=="daily"&&S.mode!=="real"&&S.seed!=null?`<button class="btn gold" onclick="shareChallenge()">⚔️ Arkadaşına meydan oku</button>`:""}
       </div><div id="chalout" style="max-width:520px;margin:8px auto 0"></div><p class="mut" id="cp" style="font-size:12px"></p>
     </div>
+    ${tsHTML(T)}
     ${T.res.length>3?`<div class="card" style="margin-top:16px"><h3>Eleme ağacı</h3>${bracketHTML()}</div>`:""}
-    <div class="grid" style="margin-top:16px"><div class="card"><h3>Maçlarımız</h3><table>${T.res.map((r,i)=>`<tr><td>${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}"><b>${r.g1}-${r.g2}</b>${r.pen?` (pen. ${r.pen[0]}-${r.pen[1]})`:""}</td></tr>`).join("")}</table></div><div>${pitchHTML()}${benchHTML()}</div></div>
-    ${tsHTML(T)}`;
+    <div class="grid" style="margin-top:16px"><div class="card"><h3>Maçlarımız</h3><table>${T.res.map((r,i)=>`<tr><td>${STAGES[i]}</td><td>${esc(r.opp)}</td><td class="${r.res}"><b>${r.g1}-${r.g2}</b>${r.pen?` (pen. ${r.pen[0]}-${r.pen[1]})`:""}</td></tr>`).join("")}</table></div><div>${pitchHTML()}${benchHTML()}</div></div>`;
 }
 const SHORTST = ["G1","G2","G3","S16","ÇF","YF","F"];
 function record(){ const w=S.T.res.filter(r=>r.res==="W").length; return [w,7-w]; }

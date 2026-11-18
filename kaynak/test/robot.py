@@ -78,7 +78,7 @@ def run(name, vp, b):
         chk("02-baslangic", ".mode", "#n-play", "#n-rank", "#n-squads")
         if pg.locator("#setupcard").count(): fails.append(f"[{name}] ana sayfada mod seçilmeden diziliş kartı görünüyor")
         click(".mode[onclick=\"pickMode('solo')\"]"); time.sleep(0.4)
-        chk("02b-mod-secildi", "#setupcard .chip", "#setupcard .btn")
+        chk("02b-mod-secildi", "#setupcard .chip", "#setupcard .btn", ".exitc")
     step("02-baslangic", s2)
     # 3) kadro kurma
     def s3():
@@ -172,7 +172,7 @@ def run(name, vp, b):
         click("#n-rank"); time.sleep(0.3)
         pg.evaluate("()=>renderRank(todayKey(),'week')"); time.sleep(0.4); chk("20-haftalik", "#rank .chip.on")
         if pg.locator("#sndbtn").count(): fails.append(f"[{name}] üstte ses ikonu hâlâ var")
-        click("#n-play"); pg.evaluate("()=>renderStart()"); time.sleep(0.3)
+        click("#n-play"); pg.evaluate("()=>{S.homePick=false;S.challenge=null;renderStart()}"); time.sleep(0.3)
         pg.evaluate("()=>{ const b=document.querySelector('.mode[onclick^=startQuiz]'); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
         chk("22-quiz", ".qopt", ".qpitch", ".exitc")
         for i in range(5):
@@ -214,7 +214,7 @@ def run(name, vp, b):
     step("15-beta", s15)
     def s16():
         ib = ".invmob" if name=="telefon" else "#n-invite"
-        pg.evaluate("()=>{show('play');renderStart()}"); time.sleep(0.3)
+        pg.evaluate("()=>{show('play');S.homePick=false;S.challenge=null;renderStart()}"); time.sleep(0.3)
         chk("31-davet-butonu", ib, "#play .invcard"); click(ib); time.sleep(0.4)
         chk("32-davet-pencere", "#invbox .invwa", "#inv_copy", "#inv_txt")
         if "?r=" not in pg.evaluate("()=>$('inv_txt').value"): fails.append(f"[{name}] davet linkinde ?r= yok")
@@ -239,10 +239,10 @@ def run(name, vp, b):
         chk("35-kufur-filtresi", "#terr")
         pg.fill("#tname", "ROBOT"); pg.dispatch_event("#tname", "input"); time.sleep(0.1)
         if pg.evaluate("()=>$('tgo').disabled"): fails.append(f"[{name}] küfür filtresi temiz adı engelledi")
-        pg.evaluate("()=>renderStart()")
+        pg.evaluate("()=>{S.homePick=false;S.challenge=null;renderStart()}")
     step("18-kufur", s18)
     def s19():
-        pg.evaluate("()=>{show('play');renderStart()}"); time.sleep(0.3)
+        pg.evaluate("()=>{show('play');S.homePick=false;S.challenge=null;renderStart()}"); time.sleep(0.3)
         chk("36-gercek-kart", "#play .realcard"); click("#play .realcard"); time.sleep(0.4)
         chk("37-gercek-secim", "#play .rl-card:not(.rl-lock)", "#play .rl-lock")
         click("#play .rl-card:not(.rl-lock)"); time.sleep(0.4)

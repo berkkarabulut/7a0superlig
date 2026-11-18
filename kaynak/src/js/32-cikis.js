@@ -12,4 +12,4 @@ function askExit(what){
   d.addEventListener("click", e=>{ if(e.target===d) d.remove(); });
   document.body.appendChild(d);
 }
-function goHome(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.T=null; S.Q=null; S.sl=false; S.santraOn=false; show("play"); renderStart(); try{ window.scrollTo(0,0); }catch(e){} }
+function goHome(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.T=null; S.Q=null; S.sl=false; S.santraOn=false; S.homePick=false; S.challenge=null; show("play"); renderStart(); try{ window.scrollTo(0,0); }catch(e){} }

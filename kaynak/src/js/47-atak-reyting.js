@@ -16,7 +16,13 @@ function atkInit(M, pw, opw){
 }
 function atkStep(M, upto, m){
   if (M._atk === undefined) M._atk = 0;
-  M._atk = M._atk * 0.8 + atkTarget(M, upto, m) * 0.2;
+  M._atk = M._atk * 0.65 + atkTarget(M, upto, m) * 0.35;
+  atkPaint(M._atk);
+}
+// gol: bar anında atan tarafa sert kayar
+function atkGoal(M, side){
+  const v = M._atk || 0;
+  M._atk = side===0 ? Math.min(1, Math.max(v, 0) + 0.6) : Math.max(-1, Math.min(v, 0) - 0.6);
   atkPaint(M._atk);
 }
 function atkPaint(v){
@@ -60,4 +66,6 @@ function liveRatings(M, upto, a, b){
     return Math.round(Math.max(4.5, Math.min(10, rt)) * 10) / 10;
   };
 }
-function lrTag(rt){ return `<span class="lr ${rt>=7.5?"lr-hi":rt<6?"lr-lo":""}">(${rt.toFixed(1)})</span>`; }
+// renkler: 5 altı kırmızı, 5-5.9 turuncu, 6-6.9 beyaz, 7-7.9 açık yeşil, 8-8.9 yeşil, 9+ altın
+const lrCls = r => r<5 ? "lr1" : r<6 ? "lr2" : r<7 ? "lr3" : r<8 ? "lr4" : r<9 ? "lr5" : "lr6";
+function lrTag(rt){ return `<span class="lr ${lrCls(rt)}">(${rt.toFixed(1)})</span>`; }

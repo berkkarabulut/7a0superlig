@@ -57,7 +57,7 @@ function oppXI(o){
   const pl=[...o.pl].sort((a,b)=>b.r-a.r), take=(g,n)=>pl.filter(p=>p.pos===g).slice(0,n);
   let xi=[...take("GK",1),...take("DF",4),...take("MF",4),...take("FW",2)];
   for (const p of pl){ if (xi.length>=11) break; if (!xi.includes(p) && p.pos!=="GK") xi.push(p); }
-  const Y={GK:7,DF:18,MF:30,FW:41}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
+  const Y={GK:5,DF:16,MF:29,FW:42}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
   return Object.entries(lines).flatMap(([g,ps])=>ps.map((p,i)=>({p, x: ps.length===1?50:12+i*76/(ps.length-1), y:Y[g]})));
 }
 // iki takım tek sahada: rakip üst yarı, sen alt yarı. edit=true iken (devre arası) senin oyuncuların sürüklenebilir.
@@ -66,7 +66,7 @@ function matchPitchHTML(M,T,o,ht){
   const sc = M._sc || M.g || [0,0], rate = liveRatings(M, M._shown ?? M.ev.length, sc[0], sc[1]);
   const mine = new Set(T.xi.map(s=>kitC(s.p.team)[0])), oc0 = kitC(o.t.team), oc = mine.has(oc0[0]) ? [oc0[1], oc0[0]] : oc0; // aynı renkse rakip deplasman formasıyla
   const opp = oppXI(o).map(({p,x,y})=>`<div class="slot full mp-o" style="--x:${x};--y:${y}">${SHIRT(oc, p.r)}${lrTag(rate(p,1))}<div class="nm">${esc(p.n)}</div></div>`).join("");
-  const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = s.pos==="GK" ? 92 : 54+Math.max(0,Math.min(64,s.y-13))*28/64;
+  const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = s.pos==="GK" ? 94.5 : 55+Math.max(0,Math.min(64,s.y-13))*29/64;
     if (!p) return `<div class="slot mp-m" style="--x:${s.x};--y:${y}"><div class="dot">🟥</div></div>`;
     const pen=penOf(p,s.pos), subIn=M.subs.some(x=>x.in.n===p.n), act = ht ? `data-drag="x:${k}" data-drop="x:${k}"` : "";
     let prev=""; if (selP && sel && sel[0]==="b"){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
@@ -124,7 +124,7 @@ async function runMatchInner(rid){
   const redsTxt = ()=>{ const rr=[missing,0]; M.ev.slice(0,ei).forEach(e=>{ if(e.type==="red"||(e.type==="inj"&&e.side===0&&/10 kişi/.test(e.text))) rr[e.side]++; }); return rr; };
   const anim = async (m0,m1) => { for (let m=m0;m<=m1;m++){
     while (ei<M.ev.length && M.ev[ei].m<=m){
-      const e=M.ev[ei++]; M._shown=ei; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; M._sc=[a,b]; const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); sfx("goal", e.side===0); goalFx(e.side===0); }
+      const e=M.ev[ei++]; M._shown=ei; if(e.type==="goal"){ if(e.side===0)a++; else b++; $("sc").textContent=`${a}-${b}`; M._sc=[a,b]; atkGoal(M, e.side); const sc=$("sc"); sc.classList.remove("flash"); void sc.offsetWidth; sc.classList.add("flash"); sfx("goal", e.side===0); goalFx(e.side===0); }
       add(`<li class="${e.side?"away":""} ev-${e.type}"><span class="m">${e.m>90?"U"+(e.m):e.m}'</span><span>${ICON[e.type]||""} ${esc(e.text)}</span></li>`);
       if (e.type!=="flow"){ const op=$("mpitch"); if(op && ms) op.innerHTML=matchPitchHTML(M,T,o); }
       if (e.type==="red"||e.type==="inj"){ const rr=redsTxt(); $("rc").innerHTML = (rr[0]?`🟥 Senin takım ${11-rr[0]} kişi `:"")+(rr[1]?` · 🟥 Rakip ${11-rr[1]} kişi`:""); }

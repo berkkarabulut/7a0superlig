@@ -23,10 +23,15 @@ function startTournament(){
   RNG = S.seed!=null && S.mode!=="daily" ? seeded(S.seed*7+13) : Math.random;
   const xi = S.slots.map(s=>({pos:s.pos, x:s.x, y:s.y, p:{...s.p, r:s.p.base}}));
   const bench = (S.bench||[]).filter(s=>s.p).map(s=>({...s.p}));
-  const others = shuffle(S.mode==="real" ? POOL.filter(t=>t.id!==S.realId) : POOL); RNG = Math.random;
-  const pots = [1,2,3].map(r=>others.filter(t=>t.rank===r));
+  const SL = slOn();
+  const others = shuffle(SL ? CUR.filter(t=>t.id!==S.realId) : S.mode==="real" ? POOL.filter(t=>t.id!==S.realId) : POOL);
+  // Süper Lig modunda torbalar güce göre üçe bölünür (güncel takımların sıralaması yok)
+  const pots = SL ? (() => { const s = [...others].sort((a,b)=>curPow(b)-curPow(a)), n = s.length; return [0,1,2].map(i=>shuffle(s.slice(Math.floor(i*n/3), Math.floor((i+1)*n/3)))); })()
+                  : [1,2,3].map(r=>others.filter(t=>t.rank===r));
+  RNG = Math.random;
   const gTeams = pots.map(p=>p[0]);
-  const rest = others.filter(t=>!gTeams.includes(t));
+  let rest = others.filter(t=>!gTeams.includes(t));
+  if (rest.length < 15) rest = [...rest, ...[...gTeams].sort((a,b)=>curPow(b)-curPow(a))].slice(0, 15);
   const group = gTeams.map(opp);
   const T = { xi, bench, orig: xi.map(s=>s.p.n), mor:{}, outs:{}, penOrder:null, style:S.style, group, pots, R:null, rest15: rest.slice(0,15), M:[], i:0, res:[], table:null, W:0,D:0,L:0,gf:0,ga:0, out:null, done:false };
   S.T = T;
@@ -35,7 +40,7 @@ function startTournament(){
   T.table = tbl;
   T.others = [[1,2],[0,2],[0,1]].map(([a,b])=>{ const x=group[a],y=group[b]; const r=simGoals(x.pw,y.pw,x.pl,y.pl); return {a:x.name,b:y.name,g1:r.g1,g2:r.g2}; });
   drawCeremony("Grup kurası", "Her torbadan bir takım senin grubuna düşecek. Topları tek tek çek ya da kurayı atla.",
-    group.map((g,i)=>({label:`${i+1}. Torba · ${["Şampiyonlar","İkinciler","Üçüncüler"][i]}`, pool:pots[i], res:g.t})),
+    group.map((g,i)=>({label:`${i+1}. Torba · ${(SL?["Güçlüler","Orta sıra","Diğerleri"]:["Şampiyonlar","İkinciler","Üçüncüler"])[i]}`, pool:pots[i], res:g.t})),
     "Grup maçlarına geç", () => preMatch());
 }
 function setupR16(){

@@ -14,11 +14,13 @@ function renderStart(){
       <button class="card mode ${S.homePick&&S.mode==="solo"?"on":""}" onclick="pickMode('solo')"><b><span class="mi">🎮</span> Tek oyunculu</b><span class="mut">Sınırsız oyun. İstediğin kadar kur, istediğin kadar dene.</span></button>
       <button class="card mode ${S.homePick&&S.mode==="daily"?"on":""}" onclick="pickMode('daily')"><b><span class="mi">🗓️</span> Günün Meydan Okuması</b><span class="mut">Herkese bugün aynı takımlar ve ${DAILY_BUDGET} M bütçe. Her oyuncunun bir fiyatı var. Günde bir kez sayılır.${daily?` <br>Bugünkü sonucun: <b style="color:var(--gold)">${esc(daily.title)}</b>`:""}<br>${streakHTML()}</span></button>
       <button class="card mode realcard" onclick="renderRealPicker()"><b>🏟️ Gerçek takımla oyna</b><span class="mut">Bir sezonun gerçek kadrosunu seç, onunla turnuvaya çık. 1998-99 Galatasaray ile 7-0 yapabilir misin?</span></button>
-      <button class="card mode dbcard" onclick="renderDerby()"><b><span class="mi">⚔️</span> Güncel derbi simülasyonu</b><span class="mut">${GUNCEL.sezon} kadrolarıyla Galatasaray, Fenerbahçe, Beşiktaş, Trabzonspor, Başakşehir. İki takımı seç, maçı oynat, 1.000 kere simüle et.</span></button>
+      <button class="card mode slcard ${S.sl?"on":""}" onclick="renderSL()"><b><span class="mi">🏆</span> ${GUNCEL.sezon} Süper Lig turnuvası</b><span class="mut">Rakiplerin bu sezonun ${CUR.length} Süper Lig takımı. Kendi 11'ini kur ya da güncel bir takımla gir.</span></button>
+      <button class="card mode dbcard" onclick="renderDerby()"><b><span class="mi">⚔️</span> Güncel derbi simülasyonu</b><span class="mut">${GUNCEL.sezon} kadrolarıyla iki Süper Lig takımını seç, maçı oynat, 1.000 kere simüle et.</span></button>
       <button class="card mode" onclick="startQuiz(false)"><b>🧠 Bu kadro hangi sezon?</b><span class="mut">Günlük bilgi yarışması: 11'i gör, hangi sezonun hangi takımı olduğunu bil. 5 soru.${store.get("quiz:"+todayKey(),null)?` <br>Bugünkü skorun: <b style="color:var(--gold)">${store.get("quiz:"+todayKey()).score}/5</b>`:""}</span></button>
       <button class="card mode invcard" onclick="openInvite()"><b>📨 Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
     ${S.homePick||S.challenge?`<div class="card" id="setupcard">
+      ${S.sl?`<div class="sl-ban">🏆 <b>${GUNCEL.sezon} Süper Lig modu</b> · Rakiplerin bu sezonun Süper Lig takımları. Bu modun sonuçları sıralamaya yazılmaz. <button class="btn ghost sl-off" onclick="S.sl=false;renderStart()">Kapat</button></div>`:""}
       <h3>Diziliş</h3>
       <div class="row">${Object.keys(FORMATIONS).map(f=>`<button class="chip ${f===S.form?"on":""}" onclick="S.form='${f}';renderStart()">${f}</button>`).join("")}</div>
       <h3 style="margin-top:16px">Oyun tarzı</h3>
@@ -33,7 +35,7 @@ function renderStart(){
     </div>`:""}`;
 }
 function pickMode(m){
-  S.mode = m; S.homePick = true; renderStart();
+  S.mode = m; S.homePick = true; S.sl = false; renderStart();
   try { const c = $("setupcard"); if (c && c.scrollIntoView) c.scrollIntoView({behavior:"smooth", block:"start"}); } catch(e){}
 }
 

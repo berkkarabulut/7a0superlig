@@ -32,7 +32,7 @@ function teamPower(players, style){
   return { att: att+st.att+chem-pen, def: def+st.def+chem-pen, chem, off, style: STYLES[style]?style:"Dengeli", ovr: Math.round(avg(players.map(p=>p.r))) };
 }
 const myPlayers = () => S.slots.filter(s=>s.p).map(s=>({...s.p,pos:LINE(s.pos),role:s.pos}));
-const oppPlayers = t => t.players.map(p=>({...p,pos:p.p[0]}));
+const oppPlayers = t => t.cur ? curXI(t) : t.players.map(p=>({...p,pos:p.p[0]}));
 function statsHTML(){
   const pl = myPlayers(); if(!pl.length) return "";
   const pw = teamPower(pl, S.style), A = S.almanac;

@@ -4,7 +4,10 @@ const SITE = IS_WEB ? (location.host+location.pathname).replace(/\/(index\.html)
 const SITE_URL = "https://"+SITE+"/";
 const COLORS = { "Galatasaray":["#a90432","#fdb912"], "Fenerbahçe":["#163962","#ffed00"], "Beşiktaş":["#111111","#ffffff"], "Trabzonspor":["#7b1e3a","#6cace4"],
   "Başakşehir":["#ed6b1f","#1a2b58"], "Samsunspor":["#e30613","#ffffff"], "Bursaspor":["#00873e","#ffffff"], "Konyaspor":["#00843d","#ffffff"], "Adanaspor":["#f58220","#ffffff"],
-  "Malatyaspor":["#ffd200","#111111"], "Gaziantepspor":["#d71920","#111111"], "Gençlerbirliği":["#d71920","#111111"], "Sivasspor":["#e30613","#ffffff"] };
+  "Malatyaspor":["#ffd200","#111111"], "Gaziantepspor":["#d71920","#111111"], "Gençlerbirliği":["#d71920","#111111"], "Sivasspor":["#e30613","#ffffff"],
+  "Kasımpaşa":["#0b2d6b","#ffffff"], "Rizespor":["#00843d","#1f5fae"], "Kocaelispor":["#00843d","#111111"], "Gaziantep FK":["#d71920","#111111"],
+  "Alanyaspor":["#f58220","#00843d"], "Göztepe":["#ffd200","#d71920"], "Eyüpspor":["#5b2a86","#ffd200"], "Amedspor":["#00843d","#d71920"],
+  "Çorum FK":["#d71920","#111111"], "Erzurumspor":["#1f5fae","#ffffff"] };
 const kitC = team => COLORS[team] || ["#6b4f86","#ffffff"];
 const kit = team => { const c=kitC(team); return `<span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span>`; };
 // sezon sonu teknik direktörü (bilinmeyenler boş)

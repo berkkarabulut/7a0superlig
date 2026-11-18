@@ -1,129 +1,3609 @@
 {
-  "sezon": "2026-27",
-  "guncelleme": "2026-11-18",
-  "kaynak": "Kulüp kadroları: Wikipedia 2026-27 sezon sayfaları (GS, FB), starting11.com (BJK, TS, Başakşehir), 18 Kasım 2026. Güçler oyunun kendi ölçeği.",
-  "teams": [
-    {"team": "Galatasaray", "coach": "Okan Buruk", "players": [
-      {"n": "Uğurcan Çakır", "p": ["GK"], "r": 85, "d": ["GK"]},
-      {"n": "Günay Güvenç", "p": ["GK"], "r": 76, "d": ["GK"]},
-      {"n": "Davinson Sánchez", "p": ["DF"], "r": 85, "d": ["CB"]},
-      {"n": "Kaan Ayhan", "p": ["DF"], "r": 85, "d": ["CB", "DM"]},
-      {"n": "Abdülkerim Bardakcı", "p": ["DF"], "r": 84, "d": ["CB"]},
-      {"n": "Wilfried Singo", "p": ["DF"], "r": 82, "d": ["RB", "CB"]},
-      {"n": "Ismail Jakobs", "p": ["DF"], "r": 82, "d": ["LB"]},
-      {"n": "Eren Elmalı", "p": ["DF"], "r": 79, "d": ["LB"]},
-      {"n": "El Chadaille Bitshiabu", "p": ["DF"], "r": 78, "d": ["CB"]},
-      {"n": "Lucas Torreira", "p": ["MF"], "r": 87, "d": ["DM"]},
-      {"n": "Gabriel Sara", "p": ["MF"], "r": 87, "d": ["CM", "AM"]},
-      {"n": "İlkay Gündoğan", "p": ["MF"], "r": 84, "d": ["CM", "AM"]},
-      {"n": "Aleksey Batrakov", "p": ["MF"], "r": 84, "d": ["AM", "CM"]},
-      {"n": "Mario Lemina", "p": ["MF"], "r": 82, "d": ["DM", "CM"]},
-      {"n": "Lesley Ugochukwu", "p": ["MF"], "r": 80, "d": ["DM", "CM"]},
-      {"n": "Leroy Sané", "p": ["MF"], "r": 86, "d": ["RW", "LW"]},
-      {"n": "Rafael Leão", "p": ["MF"], "r": 88, "d": ["LW", "ST"]},
-      {"n": "Yunus Akgün", "p": ["MF"], "r": 84, "d": ["RW"]},
-      {"n": "Roland Sallai", "p": ["MF"], "r": 80, "d": ["RW", "RB"]},
-      {"n": "Barış Alper Yılmaz", "p": ["FW"], "r": 87, "d": ["RW", "ST"]},
-      {"n": "Victor Osimhen", "p": ["FW"], "r": 92, "d": ["ST"]},
-      {"n": "Deniz Gül", "p": ["FW"], "r": 80, "d": ["ST"]}
-    ]},
-    {"team": "Fenerbahçe", "coach": "İsmail Kartal", "players": [
-      {"n": "Ederson", "p": ["GK"], "r": 86, "d": ["GK"]},
-      {"n": "Mert Günok", "p": ["GK"], "r": 79, "d": ["GK"]},
-      {"n": "Milan Škriniar", "p": ["DF"], "r": 84, "d": ["CB"]},
-      {"n": "Nathan Aké", "p": ["DF"], "r": 84, "d": ["CB", "LB"]},
-      {"n": "Mert Müldür", "p": ["DF"], "r": 84, "d": ["RB", "LB"]},
-      {"n": "Jayden Oosterwolde", "p": ["DF"], "r": 83, "d": ["LB", "CB"]},
-      {"n": "Nélson Semedo", "p": ["DF"], "r": 81, "d": ["RB"]},
-      {"n": "Kojo Peprah Oppong", "p": ["DF"], "r": 80, "d": ["CB"]},
-      {"n": "Archie Brown", "p": ["DF"], "r": 80, "d": ["LB"]},
-      {"n": "Yiğit Efe Demir", "p": ["DF"], "r": 78, "d": ["CB"]},
-      {"n": "N'Golo Kanté", "p": ["MF"], "r": 85, "d": ["DM", "CM"]},
-      {"n": "Mattéo Guendouzi", "p": ["MF"], "r": 84, "d": ["CM", "DM"]},
-      {"n": "İsmail Yüksek", "p": ["MF"], "r": 81, "d": ["DM"]},
-      {"n": "Mert Hakan Yandaş", "p": ["MF"], "r": 78, "d": ["CM"]},
-      {"n": "İrfan Can Kahveci", "p": ["MF"], "r": 86, "d": ["RM", "AM"]},
-      {"n": "Marco Asensio", "p": ["MF"], "r": 85, "d": ["AM", "RW"]},
-      {"n": "Oğuz Aydın", "p": ["MF"], "r": 80, "d": ["LW", "RW"]},
-      {"n": "Kerem Aktürkoğlu", "p": ["FW"], "r": 85, "d": ["LW"]},
-      {"n": "Mason Greenwood", "p": ["FW"], "r": 87, "d": ["RW", "ST"]},
-      {"n": "Dorgeles Nene", "p": ["FW"], "r": 81, "d": ["RW", "LW"]},
-      {"n": "Romelu Lukaku", "p": ["FW"], "r": 84, "d": ["ST"]},
-      {"n": "Vedat Muriqi", "p": ["FW"], "r": 84, "d": ["ST"]}
-    ]},
-    {"team": "Beşiktaş", "coach": "Vincenzo Italiano", "players": [
-      {"n": "Alexander Nübel", "p": ["GK"], "r": 83, "d": ["GK"]},
-      {"n": "Doğan Alemdar", "p": ["GK"], "r": 77, "d": ["GK"]},
-      {"n": "Emmanuel Agbadou", "p": ["DF"], "r": 82, "d": ["CB"]},
-      {"n": "Tiago Djaló", "p": ["DF"], "r": 81, "d": ["CB"]},
-      {"n": "Emirhan Topçu", "p": ["DF"], "r": 80, "d": ["CB"]},
-      {"n": "Ümit Akdağ", "p": ["DF"], "r": 78, "d": ["CB"]},
-      {"n": "Amir Murillo", "p": ["DF"], "r": 81, "d": ["RB"]},
-      {"n": "Taylan Bulut", "p": ["DF"], "r": 76, "d": ["RB"]},
-      {"n": "Rıdvan Yılmaz", "p": ["DF"], "r": 80, "d": ["LB"]},
-      {"n": "Kassoum Ouattara", "p": ["DF"], "r": 79, "d": ["LB"]},
-      {"n": "Wilfred Ndidi", "p": ["MF"], "r": 83, "d": ["DM"]},
-      {"n": "Salih Özcan", "p": ["MF"], "r": 82, "d": ["DM", "CM"]},
-      {"n": "Orkun Kökçü", "p": ["MF"], "r": 87, "d": ["CM", "AM"]},
-      {"n": "Junior Olaitan", "p": ["MF"], "r": 81, "d": ["CM", "AM"]},
-      {"n": "Fabio Miretti", "p": ["MF"], "r": 80, "d": ["CM", "AM"]},
-      {"n": "Kartal Kayra Yılmaz", "p": ["MF"], "r": 77, "d": ["CM"]},
-      {"n": "Leandro Trossard", "p": ["FW"], "r": 86, "d": ["LW", "AM"]},
-      {"n": "Václav Černý", "p": ["FW"], "r": 82, "d": ["RW"]},
-      {"n": "Milot Rashica", "p": ["FW"], "r": 79, "d": ["LW", "RW"]},
-      {"n": "Ernest Poku", "p": ["FW"], "r": 79, "d": ["RW", "LW"]},
-      {"n": "İlhan Fakılı", "p": ["FW"], "r": 77, "d": ["RW", "LW"]},
-      {"n": "Dušan Vlahović", "p": ["FW"], "r": 87, "d": ["ST"]},
-      {"n": "Oh Hyeon-gyu", "p": ["FW"], "r": 80, "d": ["ST"]},
-      {"n": "Semih Kılıçsoy", "p": ["FW"], "r": 78, "d": ["ST"]}
-    ]},
-    {"team": "Trabzonspor", "coach": "Thomas Reis", "players": [
-      {"n": "André Onana", "p": ["GK"], "r": 84, "d": ["GK"]},
-      {"n": "Stefan Savić", "p": ["DF"], "r": 80, "d": ["CB"]},
-      {"n": "Chibuike Nwaiwu", "p": ["DF"], "r": 79, "d": ["CB"]},
-      {"n": "Cenk Özkacar", "p": ["DF"], "r": 79, "d": ["CB"]},
-      {"n": "Samet Akaydın", "p": ["DF"], "r": 76, "d": ["CB"]},
-      {"n": "Wagner Pina", "p": ["DF"], "r": 79, "d": ["RB"]},
-      {"n": "Sidny Lopes Cabral", "p": ["DF"], "r": 79, "d": ["LB", "RB"]},
-      {"n": "Mustafa Eskihellaç", "p": ["DF"], "r": 78, "d": ["LB", "RB"]},
-      {"n": "Fabinho", "p": ["MF"], "r": 82, "d": ["DM"]},
-      {"n": "Ruslan Malinovskyi", "p": ["MF"], "r": 81, "d": ["CM", "AM"]},
-      {"n": "Okay Yokuşlu", "p": ["MF"], "r": 78, "d": ["DM"]},
-      {"n": "Ozan Tufan", "p": ["MF"], "r": 78, "d": ["DM", "CM"]},
-      {"n": "Batista Mendy", "p": ["MF"], "r": 78, "d": ["DM", "CM"]},
-      {"n": "Melih Kabasakal", "p": ["MF"], "r": 77, "d": ["DM"]},
-      {"n": "Benjamin Bouchouari", "p": ["MF"], "r": 77, "d": ["CM"]},
-      {"n": "Ernest Muçi", "p": ["MF"], "r": 83, "d": ["AM", "ST"]},
-      {"n": "Mohamed Salah", "p": ["FW"], "r": 88, "d": ["RW"]},
-      {"n": "Noah Saviolo", "p": ["FW"], "r": 80, "d": ["LW"]},
-      {"n": "Aral Şimşir", "p": ["FW"], "r": 79, "d": ["LW", "RW"]},
-      {"n": "Paul Onuachu", "p": ["FW"], "r": 84, "d": ["ST"]},
-      {"n": "Franculino Djú", "p": ["FW"], "r": 78, "d": ["ST"]},
-      {"n": "Umut Nayir", "p": ["FW"], "r": 76, "d": ["ST"]}
-    ]},
-    {"team": "Başakşehir", "coach": "Nuri Şahin", "players": [
-      {"n": "Muhammed Şengezer", "p": ["GK"], "r": 79, "d": ["GK"]},
-      {"n": "Volkan Babacan", "p": ["GK"], "r": 74, "d": ["GK"]},
-      {"n": "Jerome Opoku", "p": ["DF"], "r": 79, "d": ["CB"]},
-      {"n": "Emin Bayram", "p": ["DF"], "r": 78, "d": ["CB"]},
-      {"n": "Ousseynou Ba", "p": ["DF"], "r": 78, "d": ["CB"]},
-      {"n": "Michał Karbownik", "p": ["DF"], "r": 78, "d": ["RB", "LB"]},
-      {"n": "Christopher Operi", "p": ["DF"], "r": 77, "d": ["LB"]},
-      {"n": "Ömer Ali Şahiner", "p": ["DF"], "r": 76, "d": ["RB"]},
-      {"n": "Onur Bulut", "p": ["DF"], "r": 75, "d": ["RB"]},
-      {"n": "Olivier Kemen", "p": ["MF"], "r": 79, "d": ["DM", "CM"]},
-      {"n": "Jakub Kałuziński", "p": ["MF"], "r": 78, "d": ["DM"]},
-      {"n": "Berkay Özcan", "p": ["MF"], "r": 77, "d": ["CM", "AM"]},
-      {"n": "Onur Ergün", "p": ["MF"], "r": 74, "d": ["CM"]},
-      {"n": "Abbosbek Fayzullayev", "p": ["MF"], "r": 79, "d": ["AM", "LW"]},
-      {"n": "Ivan Brnić", "p": ["MF"], "r": 78, "d": ["AM", "LW"]},
-      {"n": "Edin Višća", "p": ["MF"], "r": 77, "d": ["RW"]},
-      {"n": "Andreas Skov Olsen", "p": ["FW"], "r": 81, "d": ["RW"]},
-      {"n": "Yusuf Sarı", "p": ["FW"], "r": 77, "d": ["RW", "LW"]},
-      {"n": "Eldor Shomurodov", "p": ["FW"], "r": 83, "d": ["ST", "AM"]},
-      {"n": "Davie Selke", "p": ["FW"], "r": 78, "d": ["ST"]},
-      {"n": "Umut Bozok", "p": ["FW"], "r": 78, "d": ["ST"]},
-      {"n": "Bertuğ Yıldırım", "p": ["FW"], "r": 78, "d": ["ST"]}
-    ]}
-  ]
+ "sezon": "2026-27",
+ "guncelleme": "2026-11-18",
+ "kaynak": "Kulüp kadroları: Wikipedia 2026-27 sezon sayfaları (GS, FB), starting11.com (diğer 16 takım), 18 Kasım 2026. Güçler oyunun kendi ölçeği.",
+ "teams": [
+  {
+   "team": "Galatasaray",
+   "coach": "Okan Buruk",
+   "players": [
+    {
+     "n": "Uğurcan Çakır",
+     "p": [
+      "GK"
+     ],
+     "r": 85,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Günay Güvenç",
+     "p": [
+      "GK"
+     ],
+     "r": 76,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Davinson Sánchez",
+     "p": [
+      "DF"
+     ],
+     "r": 85,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Kaan Ayhan",
+     "p": [
+      "DF"
+     ],
+     "r": 85,
+     "d": [
+      "CB",
+      "DM"
+     ]
+    },
+    {
+     "n": "Abdülkerim Bardakcı",
+     "p": [
+      "DF"
+     ],
+     "r": 84,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Wilfried Singo",
+     "p": [
+      "DF"
+     ],
+     "r": 82,
+     "d": [
+      "RB",
+      "CB"
+     ]
+    },
+    {
+     "n": "Ismail Jakobs",
+     "p": [
+      "DF"
+     ],
+     "r": 82,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Eren Elmalı",
+     "p": [
+      "DF"
+     ],
+     "r": 79,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "El Chadaille Bitshiabu",
+     "p": [
+      "DF"
+     ],
+     "r": 78,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Lucas Torreira",
+     "p": [
+      "MF"
+     ],
+     "r": 87,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Gabriel Sara",
+     "p": [
+      "MF"
+     ],
+     "r": 87,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "İlkay Gündoğan",
+     "p": [
+      "MF"
+     ],
+     "r": 84,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Aleksey Batrakov",
+     "p": [
+      "MF"
+     ],
+     "r": 84,
+     "d": [
+      "AM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Mario Lemina",
+     "p": [
+      "MF"
+     ],
+     "r": 82,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Lesley Ugochukwu",
+     "p": [
+      "MF"
+     ],
+     "r": 80,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Leroy Sané",
+     "p": [
+      "MF"
+     ],
+     "r": 86,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "Rafael Leão",
+     "p": [
+      "MF"
+     ],
+     "r": 88,
+     "d": [
+      "LW",
+      "ST"
+     ]
+    },
+    {
+     "n": "Yunus Akgün",
+     "p": [
+      "MF"
+     ],
+     "r": 84,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Roland Sallai",
+     "p": [
+      "MF"
+     ],
+     "r": 80,
+     "d": [
+      "RW",
+      "RB"
+     ]
+    },
+    {
+     "n": "Barış Alper Yılmaz",
+     "p": [
+      "FW"
+     ],
+     "r": 87,
+     "d": [
+      "RW",
+      "ST"
+     ]
+    },
+    {
+     "n": "Victor Osimhen",
+     "p": [
+      "FW"
+     ],
+     "r": 92,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Deniz Gül",
+     "p": [
+      "FW"
+     ],
+     "r": 80,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Fenerbahçe",
+   "coach": "Dirk Kuyt (geçici)",
+   "players": [
+    {
+     "n": "Ederson",
+     "p": [
+      "GK"
+     ],
+     "r": 86,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Mert Günok",
+     "p": [
+      "GK"
+     ],
+     "r": 79,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Milan Škriniar",
+     "p": [
+      "DF"
+     ],
+     "r": 84,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Nathan Aké",
+     "p": [
+      "DF"
+     ],
+     "r": 84,
+     "d": [
+      "CB",
+      "LB"
+     ]
+    },
+    {
+     "n": "Mert Müldür",
+     "p": [
+      "DF"
+     ],
+     "r": 84,
+     "d": [
+      "RB",
+      "LB"
+     ]
+    },
+    {
+     "n": "Jayden Oosterwolde",
+     "p": [
+      "DF"
+     ],
+     "r": 83,
+     "d": [
+      "LB",
+      "CB"
+     ]
+    },
+    {
+     "n": "Nélson Semedo",
+     "p": [
+      "DF"
+     ],
+     "r": 81,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Kojo Peprah Oppong",
+     "p": [
+      "DF"
+     ],
+     "r": 80,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Archie Brown",
+     "p": [
+      "DF"
+     ],
+     "r": 80,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Yiğit Efe Demir",
+     "p": [
+      "DF"
+     ],
+     "r": 78,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "N'Golo Kanté",
+     "p": [
+      "MF"
+     ],
+     "r": 85,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Mattéo Guendouzi",
+     "p": [
+      "MF"
+     ],
+     "r": 84,
+     "d": [
+      "CM",
+      "DM"
+     ]
+    },
+    {
+     "n": "İsmail Yüksek",
+     "p": [
+      "MF"
+     ],
+     "r": 81,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Mert Hakan Yandaş",
+     "p": [
+      "MF"
+     ],
+     "r": 78,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "İrfan Can Kahveci",
+     "p": [
+      "MF"
+     ],
+     "r": 86,
+     "d": [
+      "RM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Marco Asensio",
+     "p": [
+      "MF"
+     ],
+     "r": 85,
+     "d": [
+      "AM",
+      "RW"
+     ]
+    },
+    {
+     "n": "Oğuz Aydın",
+     "p": [
+      "MF"
+     ],
+     "r": 80,
+     "d": [
+      "LW",
+      "RW"
+     ]
+    },
+    {
+     "n": "Kerem Aktürkoğlu",
+     "p": [
+      "FW"
+     ],
+     "r": 85,
+     "d": [
+      "LW"
+     ]
+    },
+    {
+     "n": "Mason Greenwood",
+     "p": [
+      "FW"
+     ],
+     "r": 87,
+     "d": [
+      "RW",
+      "ST"
+     ]
+    },
+    {
+     "n": "Dorgeles Nene",
+     "p": [
+      "FW"
+     ],
+     "r": 81,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "Romelu Lukaku",
+     "p": [
+      "FW"
+     ],
+     "r": 84,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Vedat Muriqi",
+     "p": [
+      "FW"
+     ],
+     "r": 84,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Beşiktaş",
+   "coach": "Vincenzo Italiano",
+   "players": [
+    {
+     "n": "Alexander Nübel",
+     "p": [
+      "GK"
+     ],
+     "r": 83,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Doğan Alemdar",
+     "p": [
+      "GK"
+     ],
+     "r": 77,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Emmanuel Agbadou",
+     "p": [
+      "DF"
+     ],
+     "r": 82,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Tiago Djaló",
+     "p": [
+      "DF"
+     ],
+     "r": 81,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Emirhan Topçu",
+     "p": [
+      "DF"
+     ],
+     "r": 80,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Ümit Akdağ",
+     "p": [
+      "DF"
+     ],
+     "r": 78,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Amir Murillo",
+     "p": [
+      "DF"
+     ],
+     "r": 81,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Taylan Bulut",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Rıdvan Yılmaz",
+     "p": [
+      "DF"
+     ],
+     "r": 80,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Kassoum Ouattara",
+     "p": [
+      "DF"
+     ],
+     "r": 79,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Wilfred Ndidi",
+     "p": [
+      "MF"
+     ],
+     "r": 83,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Salih Özcan",
+     "p": [
+      "MF"
+     ],
+     "r": 82,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Orkun Kökçü",
+     "p": [
+      "MF"
+     ],
+     "r": 87,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Junior Olaitan",
+     "p": [
+      "MF"
+     ],
+     "r": 81,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Fabio Miretti",
+     "p": [
+      "MF"
+     ],
+     "r": 80,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Kartal Kayra Yılmaz",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Leandro Trossard",
+     "p": [
+      "FW"
+     ],
+     "r": 86,
+     "d": [
+      "LW",
+      "AM"
+     ]
+    },
+    {
+     "n": "Václav Černý",
+     "p": [
+      "FW"
+     ],
+     "r": 82,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Milot Rashica",
+     "p": [
+      "FW"
+     ],
+     "r": 79,
+     "d": [
+      "LW",
+      "RW"
+     ]
+    },
+    {
+     "n": "Ernest Poku",
+     "p": [
+      "FW"
+     ],
+     "r": 79,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "İlhan Fakılı",
+     "p": [
+      "FW"
+     ],
+     "r": 77,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "Dušan Vlahović",
+     "p": [
+      "FW"
+     ],
+     "r": 87,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Oh Hyeon-gyu",
+     "p": [
+      "FW"
+     ],
+     "r": 80,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Semih Kılıçsoy",
+     "p": [
+      "FW"
+     ],
+     "r": 78,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Trabzonspor",
+   "coach": "Thomas Reis",
+   "players": [
+    {
+     "n": "André Onana",
+     "p": [
+      "GK"
+     ],
+     "r": 84,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Stefan Savić",
+     "p": [
+      "DF"
+     ],
+     "r": 80,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Chibuike Nwaiwu",
+     "p": [
+      "DF"
+     ],
+     "r": 79,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Cenk Özkacar",
+     "p": [
+      "DF"
+     ],
+     "r": 79,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Samet Akaydın",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Wagner Pina",
+     "p": [
+      "DF"
+     ],
+     "r": 79,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Sidny Lopes Cabral",
+     "p": [
+      "DF"
+     ],
+     "r": 79,
+     "d": [
+      "LB",
+      "RB"
+     ]
+    },
+    {
+     "n": "Mustafa Eskihellaç",
+     "p": [
+      "DF"
+     ],
+     "r": 78,
+     "d": [
+      "LB",
+      "RB"
+     ]
+    },
+    {
+     "n": "Fabinho",
+     "p": [
+      "MF"
+     ],
+     "r": 82,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Ruslan Malinovskyi",
+     "p": [
+      "MF"
+     ],
+     "r": 81,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Okay Yokuşlu",
+     "p": [
+      "MF"
+     ],
+     "r": 78,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Ozan Tufan",
+     "p": [
+      "MF"
+     ],
+     "r": 78,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Batista Mendy",
+     "p": [
+      "MF"
+     ],
+     "r": 78,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Melih Kabasakal",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Benjamin Bouchouari",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Ernest Muçi",
+     "p": [
+      "MF"
+     ],
+     "r": 83,
+     "d": [
+      "AM",
+      "ST"
+     ]
+    },
+    {
+     "n": "Mohamed Salah",
+     "p": [
+      "FW"
+     ],
+     "r": 88,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Noah Saviolo",
+     "p": [
+      "FW"
+     ],
+     "r": 80,
+     "d": [
+      "LW"
+     ]
+    },
+    {
+     "n": "Aral Şimşir",
+     "p": [
+      "FW"
+     ],
+     "r": 79,
+     "d": [
+      "LW",
+      "RW"
+     ]
+    },
+    {
+     "n": "Paul Onuachu",
+     "p": [
+      "FW"
+     ],
+     "r": 84,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Franculino Djú",
+     "p": [
+      "FW"
+     ],
+     "r": 78,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Umut Nayir",
+     "p": [
+      "FW"
+     ],
+     "r": 76,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Başakşehir",
+   "coach": "Nuri Şahin",
+   "players": [
+    {
+     "n": "Muhammed Şengezer",
+     "p": [
+      "GK"
+     ],
+     "r": 79,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Volkan Babacan",
+     "p": [
+      "GK"
+     ],
+     "r": 74,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Jerome Opoku",
+     "p": [
+      "DF"
+     ],
+     "r": 79,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Emin Bayram",
+     "p": [
+      "DF"
+     ],
+     "r": 78,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Ousseynou Ba",
+     "p": [
+      "DF"
+     ],
+     "r": 78,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Michał Karbownik",
+     "p": [
+      "DF"
+     ],
+     "r": 78,
+     "d": [
+      "RB",
+      "LB"
+     ]
+    },
+    {
+     "n": "Christopher Operi",
+     "p": [
+      "DF"
+     ],
+     "r": 77,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Ömer Ali Şahiner",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Onur Bulut",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Olivier Kemen",
+     "p": [
+      "MF"
+     ],
+     "r": 79,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Jakub Kałuziński",
+     "p": [
+      "MF"
+     ],
+     "r": 78,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Berkay Özcan",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Onur Ergün",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Abbosbek Fayzullayev",
+     "p": [
+      "MF"
+     ],
+     "r": 79,
+     "d": [
+      "AM",
+      "LW"
+     ]
+    },
+    {
+     "n": "Ivan Brnić",
+     "p": [
+      "MF"
+     ],
+     "r": 78,
+     "d": [
+      "AM",
+      "LW"
+     ]
+    },
+    {
+     "n": "Edin Višća",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Andreas Skov Olsen",
+     "p": [
+      "FW"
+     ],
+     "r": 81,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Yusuf Sarı",
+     "p": [
+      "FW"
+     ],
+     "r": 77,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "Eldor Shomurodov",
+     "p": [
+      "FW"
+     ],
+     "r": 83,
+     "d": [
+      "ST",
+      "AM"
+     ]
+    },
+    {
+     "n": "Davie Selke",
+     "p": [
+      "FW"
+     ],
+     "r": 78,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Umut Bozok",
+     "p": [
+      "FW"
+     ],
+     "r": 78,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Bertuğ Yıldırım",
+     "p": [
+      "FW"
+     ],
+     "r": 78,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Kasımpaşa",
+   "coach": "Emre Belözoğlu",
+   "players": [
+    {
+     "n": "Andreas Gianniotis",
+     "p": [
+      "GK"
+     ],
+     "r": 78,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Cláudio Winck",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Kévin Mouanga",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Ilie",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Arous",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Ayberk Karapo",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Jessen",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Kerem Demirbay",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "DM",
+      "CM"
+     ]
+    },
+    {
+     "n": "Elson Mendes",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Baldursson",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Haris Hajradinović",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Rafferty",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Kol",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Jesurun Rak-Sakyi",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "AM",
+      "RW"
+     ]
+    },
+    {
+     "n": "Güven Yalçın",
+     "p": [
+      "FW"
+     ],
+     "r": 76,
+     "d": [
+      "ST",
+      "LW"
+     ]
+    },
+    {
+     "n": "Adrian Benedyczak",
+     "p": [
+      "FW"
+     ],
+     "r": 78,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Thiemoko Diarra",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "RW",
+      "ST"
+     ]
+    },
+    {
+     "n": "Diabaté",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Rizespor",
+   "coach": "Recep Uçar",
+   "players": [
+    {
+     "n": "Yahia Fofana",
+     "p": [
+      "GK"
+     ],
+     "r": 78,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Zafer Görgen",
+     "p": [
+      "GK"
+     ],
+     "r": 72,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Pala",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Modibo Sagnan",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Attila Mocsi",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Bakayoko",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Tayyip Talha Sanuç",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Ariss",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Taylan Antalyalı",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Qazim Laçi",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Ibrahim Olawoyin",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Moussa Diakité",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Awokoya-Mebude",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "RM",
+      "RW"
+     ]
+    },
+    {
+     "n": "Ahmed Kutucu",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "AM",
+      "ST"
+     ]
+    },
+    {
+     "n": "Valentin Mihăilă",
+     "p": [
+      "FW"
+     ],
+     "r": 76,
+     "d": [
+      "LW",
+      "RW"
+     ]
+    },
+    {
+     "n": "Ali Sowe",
+     "p": [
+      "FW"
+     ],
+     "r": 76,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Borrelli",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Bulut",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Kocaelispor",
+   "coach": "Selçuk İnan",
+   "players": [
+    {
+     "n": "Serhat Öztaşdelen",
+     "p": [
+      "GK"
+     ],
+     "r": 74,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Aleksandar Jovanović",
+     "p": [
+      "GK"
+     ],
+     "r": 73,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "U. Yıldız",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Dijksteel",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Zoukrou",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Ortakaya",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Maglica",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Massadio Haïdara",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Mahamadou Susoho",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM",
+      "DM"
+     ]
+    },
+    {
+     "n": "Kutlu",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Show",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Agyei",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Ridle Baku",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "RM",
+      "RB"
+     ]
+    },
+    {
+     "n": "Gulliksen",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Sousa",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Altunbaş",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Florian Ayé",
+     "p": [
+      "FW"
+     ],
+     "r": 76,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Bruno Petković",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Gaziantep FK",
+   "coach": "Orhan Ak",
+   "players": [
+    {
+     "n": "Kacper Tobiasz",
+     "p": [
+      "GK"
+     ],
+     "r": 76,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Dadakdeniz",
+     "p": [
+      "GK"
+     ],
+     "r": 72,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Luis Pérez",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Myenty Abena",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Arda Kızıldağ",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Sylla",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Çalhanoğlu",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Alexandru Maxim",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Juninho Bacuna",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Camara",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Gidado",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Meleke",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Kacper Kozłowski",
+     "p": [
+      "MF"
+     ],
+     "r": 77,
+     "d": [
+      "LM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Deian Sorescu",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "RM",
+      "RB"
+     ]
+    },
+    {
+     "n": "Halil Dervişoğlu",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Stewart",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Serdar Dursun",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Hansen",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "ST",
+      "LW"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Alanyaspor",
+   "coach": "João Pereira",
+   "players": [
+    {
+     "n": "Paulo Victor",
+     "p": [
+      "GK"
+     ],
+     "r": 75,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Lima",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Fidan Aliti",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB",
+      "LB"
+     ]
+    },
+    {
+     "n": "Aksoy",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Özyurt",
+     "p": [
+      "DF"
+     ],
+     "r": 71,
+     "d": [
+      "CB",
+      "RB"
+     ]
+    },
+    {
+     "n": "Florent Hadërgjonaj",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "RM",
+      "RB"
+     ]
+    },
+    {
+     "n": "Gaïus Makouta",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "CM",
+      "DM"
+     ]
+    },
+    {
+     "n": "Baran Ali Gezek",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM",
+      "DM"
+     ]
+    },
+    {
+     "n": "Maestro",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Ianis Hagi",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Keskin",
+     "p": [
+      "MF"
+     ],
+     "r": 71,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Kaya",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "LW"
+     ]
+    },
+    {
+     "n": "Meschack Elia",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Ruan",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST",
+      "RW"
+     ]
+    },
+    {
+     "n": "Hwang Ui-jo",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Ahmet Usluoğlu",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Cédric",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Samsunspor",
+   "coach": "Nenad Bjelica",
+   "players": [
+    {
+     "n": "Okan Kocuk",
+     "p": [
+      "GK"
+     ],
+     "r": 76,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Bayazıt",
+     "p": [
+      "GK"
+     ],
+     "r": 71,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Mendes",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Guarino",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Eraković",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Yunus Emre Çift",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Igor Drapiński",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Logi Tómasson",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Elliot Watt",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Celil Yüksel",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Samed Onur",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Kayan",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Tanguy Coulibaly",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "AM",
+      "LW"
+     ]
+    },
+    {
+     "n": "Antoine Sekongo",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Emre Kılınç",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "Bayo",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Jarju",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "LW",
+      "ST"
+     ]
+    },
+    {
+     "n": "Tavşan",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "RW"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Göztepe",
+   "coach": "Stanimir Stoilov",
+   "players": [
+    {
+     "n": "Luka Gugeshashvili",
+     "p": [
+      "GK"
+     ],
+     "r": 74,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Özçimen",
+     "p": [
+      "GK"
+     ],
+     "r": 73,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Bokele",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Altıkardeş",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Sonko-Sundberg",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Godói",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Arda Okan Kurtulan",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "RM",
+      "RB"
+     ]
+    },
+    {
+     "n": "Rhaldney",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Novatus Dismas",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "CM",
+      "DM"
+     ]
+    },
+    {
+     "n": "Matos",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Tino Anjorin",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Efkan Bekiroğlu",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Richard Akonnor",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "LM",
+      "LW"
+     ]
+    },
+    {
+     "n": "Juan",
+     "p": [
+      "FW"
+     ],
+     "r": 77,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Janderson",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "André Henrique",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Antunes",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "LW",
+      "RW"
+     ]
+    },
+    {
+     "n": "Sinclair Armstrong",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Gençlerbirliği",
+   "coach": "Bernd Storck",
+   "players": [
+    {
+     "n": "İrfan Can Eğribayat",
+     "p": [
+      "GK"
+     ],
+     "r": 75,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Gökhan Akkan",
+     "p": [
+      "GK"
+     ],
+     "r": 71,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Pereira",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Dimitrios Goutas",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Metehan Baltacı",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Kelven",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Dursun",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Üzüm",
+     "p": [
+      "DF"
+     ],
+     "r": 71,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Diabate",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Franco Tongya",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Oğulcan Ülgün",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Traoré",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Salih Uçan",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Gouveia",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "LM"
+     ]
+    },
+    {
+     "n": "Luís",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Niasse",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Mendes",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Koïta",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Konyaspor",
+   "coach": "İlhan Palut",
+   "players": [
+    {
+     "n": "Bahadır Güngördü",
+     "p": [
+      "GK"
+     ],
+     "r": 74,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Deniz Ertaş",
+     "p": [
+      "GK"
+     ],
+     "r": 70,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Yazğılı",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Adil Demirbağ",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Chidozie Awaziem",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Rayyan Baniya",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Arthur Masuaku",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Yhoan Andzouana",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "RB",
+      "LW"
+     ]
+    },
+    {
+     "n": "Melih İbrahimoğlu",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Marko Jevtović",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Tóth",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Diogo Gonçalves",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "AM",
+      "RW"
+     ]
+    },
+    {
+     "n": "Enis Bardhi",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Ebrima Colley",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "AM",
+      "LW"
+     ]
+    },
+    {
+     "n": "Dompé",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "LW"
+     ]
+    },
+    {
+     "n": "Türüç",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Jackson Muleka",
+     "p": [
+      "FW"
+     ],
+     "r": 76,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Mohamed",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Eyüpspor",
+   "coach": "Mustafa Dalcı",
+   "players": [
+    {
+     "n": "Horațiu Moldovan",
+     "p": [
+      "GK"
+     ],
+     "r": 75,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Bilgin",
+     "p": [
+      "GK"
+     ],
+     "r": 70,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Ülvan",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Jawad El Yamiq",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Jules",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Simone Giordano",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Massanga",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Yao",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "David Costa",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Bilal Boutobba",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM",
+      "AM"
+     ]
+    },
+    {
+     "n": "Lenny Pintor",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "AM",
+      "LW"
+     ]
+    },
+    {
+     "n": "Abdelhamid Sabiri",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Akman",
+     "p": [
+      "MF"
+     ],
+     "r": 71,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Michalak",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "Abdullahi",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Barası",
+     "p": [
+      "FW"
+     ],
+     "r": 72,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "M. Demir",
+     "p": [
+      "FW"
+     ],
+     "r": 71,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Amedspor",
+   "coach": "Besnik Hasi",
+   "players": [
+    {
+     "n": "Alban Lafont",
+     "p": [
+      "GK"
+     ],
+     "r": 77,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Bozan",
+     "p": [
+      "GK"
+     ],
+     "r": 71,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "David Bates",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Dellova",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Yeşil",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Umut Meraş",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Bülbül",
+     "p": [
+      "DF"
+     ],
+     "r": 70,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Rayan Raveloson",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Soyalp",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Krasniqi",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Samuel Ballet",
+     "p": [
+      "MF"
+     ],
+     "r": 75,
+     "d": [
+      "AM",
+      "RW"
+     ]
+    },
+    {
+     "n": "Sabia",
+     "p": [
+      "MF"
+     ],
+     "r": 76,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Khalil",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "AM"
+     ]
+    },
+    {
+     "n": "Gül",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Lutin",
+     "p": [
+      "MF"
+     ],
+     "r": 71,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Gift Orban",
+     "p": [
+      "FW"
+     ],
+     "r": 80,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Mbaye Diagne",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Çorum FK",
+   "coach": "Tamer Sivrikaya",
+   "players": [
+    {
+     "n": "Marcos Felipe",
+     "p": [
+      "GK"
+     ],
+     "r": 76,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Erentürk",
+     "p": [
+      "GK"
+     ],
+     "r": 71,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Çağlar Söyüncü",
+     "p": [
+      "DF"
+     ],
+     "r": 76,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Smolčić",
+     "p": [
+      "DF"
+     ],
+     "r": 75,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Saatçı",
+     "p": [
+      "DF"
+     ],
+     "r": 71,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Şengül",
+     "p": [
+      "DF"
+     ],
+     "r": 70,
+     "d": [
+      "CB",
+      "RB"
+     ]
+    },
+    {
+     "n": "Andrei Borza",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Ylber Ramadani",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "DM"
+     ]
+    },
+    {
+     "n": "Diomandé",
+     "p": [
+      "MF"
+     ],
+     "r": 74,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Sazdağı",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Özdemir",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Fredy",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Kyziridis",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "AM",
+      "LW"
+     ]
+    },
+    {
+     "n": "Ermin Mahmić",
+     "p": [
+      "MF"
+     ],
+     "r": 71,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Karlsbakk",
+     "p": [
+      "MF"
+     ],
+     "r": 71,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Cengiz Ünder",
+     "p": [
+      "FW"
+     ],
+     "r": 78,
+     "d": [
+      "RW"
+     ]
+    },
+    {
+     "n": "Ramírez",
+     "p": [
+      "FW"
+     ],
+     "r": 75,
+     "d": [
+      "ST"
+     ]
+    },
+    {
+     "n": "Mame Thiam",
+     "p": [
+      "FW"
+     ],
+     "r": 71,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  },
+  {
+   "team": "Erzurumspor",
+   "coach": "Serkan Özbalta",
+   "players": [
+    {
+     "n": "Ertuğrul Taşkıran",
+     "p": [
+      "GK"
+     ],
+     "r": 72,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Orbanić",
+     "p": [
+      "GK"
+     ],
+     "r": 70,
+     "d": [
+      "GK"
+     ]
+    },
+    {
+     "n": "Ovacıklı",
+     "p": [
+      "DF"
+     ],
+     "r": 71,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Festy Ebosele",
+     "p": [
+      "DF"
+     ],
+     "r": 72,
+     "d": [
+      "RB"
+     ]
+    },
+    {
+     "n": "Gerxhaliu",
+     "p": [
+      "DF"
+     ],
+     "r": 74,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Mujakić",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Kırtay",
+     "p": [
+      "DF"
+     ],
+     "r": 70,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Mustafa Yumlu",
+     "p": [
+      "DF"
+     ],
+     "r": 70,
+     "d": [
+      "CB"
+     ]
+    },
+    {
+     "n": "Guram Giorbelidze",
+     "p": [
+      "DF"
+     ],
+     "r": 73,
+     "d": [
+      "LB"
+     ]
+    },
+    {
+     "n": "Baiye",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Owusu",
+     "p": [
+      "MF"
+     ],
+     "r": 73,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Fettahoğlu",
+     "p": [
+      "MF"
+     ],
+     "r": 72,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Akgün",
+     "p": [
+      "MF"
+     ],
+     "r": 71,
+     "d": [
+      "CM"
+     ]
+    },
+    {
+     "n": "Gyrano Kerk",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "RW",
+      "LW"
+     ]
+    },
+    {
+     "n": "Cardoso",
+     "p": [
+      "FW"
+     ],
+     "r": 74,
+     "d": [
+      "LW",
+      "ST"
+     ]
+    },
+    {
+     "n": "Tozlu",
+     "p": [
+      "FW"
+     ],
+     "r": 73,
+     "d": [
+      "ST"
+     ]
+    }
+   ]
+  }
+ ]
 }

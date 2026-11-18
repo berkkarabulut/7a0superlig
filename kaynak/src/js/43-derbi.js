@@ -63,8 +63,8 @@ async function dbShare(){
 }
 function dbPick(k){
   const D = dbPair();
-  return `<div class="db-pick"><div class="mut db-lab">${k==="a"?"Ev sahibi":"Deplasman"}</div><div class="row">${CUR.map(t => { const c = kitC(t.team);
-    return `<button class="chip ${D[k]===t.id?"on":""}" onclick="dbSet('${k}','${esc(t.id)}')"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span> ${esc(t.team)}</button>`; }).join("")}</div></div>`;
+  const c = kitC(dbTeam(D[k]).team);
+  return `<div class="db-pick"><div class="mut db-lab">${k==="a"?"Ev sahibi":"Deplasman"}</div><div class="db-selw"><span class="kit" style="--c1:${c[0]};--c2:${c[1]}"></span><select class="db-sel" onchange="dbSet('${k}',this.value)">${CUR.map(t => `<option value="${esc(t.id)}" ${D[k]===t.id?"selected":""}>${esc(t.team)}</option>`).join("")}</select></div></div>`;
 }
 function renderDerby(){
   const D = dbPair(), TA = dbTeam(D.a), TB = dbTeam(D.b);

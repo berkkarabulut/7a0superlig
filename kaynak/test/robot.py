@@ -174,7 +174,7 @@ def run(name, vp, b):
         if pg.locator("#sndbtn").count(): fails.append(f"[{name}] üstte ses ikonu hâlâ var")
         click("#n-play"); pg.evaluate("()=>{S.homePick=false;S.challenge=null;renderStart()}"); time.sleep(0.3)
         pg.evaluate("()=>{ const b=document.querySelector('.mode[onclick^=startQuiz]'); b.scrollIntoView({block:'center'}); b.click(); }"); time.sleep(0.4)
-        chk("22-quiz", ".qopt", ".qpitch", ".exitc")
+        chk("22-quiz", ".qopt", ".qz-pitch, .qpitch", ".exitc")
         for i in range(5):
             click(".qopt"); chk(f"22b-quiz-{i}", ".quiz .btn.gold"); click(".quiz .btn.gold")
         chk("23-quiz-sonuc", ".result .btn.gold", ".result .btn.ghost")

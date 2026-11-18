@@ -26,3 +26,8 @@
 .qpitch.qbig .qp{font-size:15px}
 @media (min-width:700px){ .qpitch.qbig{min-height:420px;padding:24px 16px} .qpitch.qbig .qp{font-size:16px} }
 @media (max-width:640px){ .quiz .qopts{grid-template-columns:1fr 1fr;gap:6px} .quiz .qopt{padding:9px 8px;font-size:14px} }
+.quiz .qz-pitch{margin-top:14px;max-width:520px;margin-left:auto;margin-right:auto;aspect-ratio:4/5}
+.quiz .qz-pitch .qz-form{position:absolute;left:8px;bottom:8px;background:#0d0216d9;padding:2px 8px;border-radius:3px;font-weight:800;font-size:13px;z-index:2}
+.quiz .qz-pitch .shirt .rb{font-size:11px;min-width:30px}
+.quiz .qz-pitch .nm{font-size:12px}
+@media (max-width:900px){ .quiz .qz-pitch{aspect-ratio:4/5} .quiz .qz-pitch .slot{width:86px} .quiz .qz-pitch .shirt{width:40px;height:38px} .quiz .qz-pitch .nm{font-size:11px;max-width:86px} }

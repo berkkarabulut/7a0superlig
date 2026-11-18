@@ -431,6 +431,11 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .qpitch.qbig .qp{font-size:15px}
 @media (min-width:700px){ .qpitch.qbig{min-height:420px;padding:24px 16px} .qpitch.qbig .qp{font-size:16px} }
 @media (max-width:640px){ .quiz .qopts{grid-template-columns:1fr 1fr;gap:6px} .quiz .qopt{padding:9px 8px;font-size:14px} }
+.quiz .qz-pitch{margin-top:14px;max-width:520px;margin-left:auto;margin-right:auto;aspect-ratio:4/5}
+.quiz .qz-pitch .qz-form{position:absolute;left:8px;bottom:8px;background:#0d0216d9;padding:2px 8px;border-radius:3px;font-weight:800;font-size:13px;z-index:2}
+.quiz .qz-pitch .shirt .rb{font-size:11px;min-width:30px}
+.quiz .qz-pitch .nm{font-size:12px}
+@media (max-width:900px){ .quiz .qz-pitch{aspect-ratio:4/5} .quiz .qz-pitch .slot{width:86px} .quiz .qz-pitch .shirt{width:40px;height:38px} .quiz .qz-pitch .nm{font-size:11px;max-width:86px} }
 
 /* ===== çıkış butonu ===== */
 .pathbar{display:flex;justify-content:flex-start;margin:0 0 12px}
@@ -2583,6 +2588,14 @@ function quizBest11(t){
   if (xi.length<11) xi = xi.concat(t.players.filter(p=>!xi.includes(p)).sort((a,b)=>b.r-a.r).slice(0,11-xi.length));
   return xi;
 }
+// kadroyu gerçek sahada, dizilişteki yerleriyle göster (forma üstünde mevki); diziliş kurulamazsa satır görünümü
+function quizPitch(t, lines){
+  const b = realBest(t);
+  if (!b) return `<div class="qpitch qbig">${lines.map(ps=>`<div class="qline">${ps.map(p=>`<span class="qp"><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r])[0]}</span>${esc(p.n)}</span>`).join("")}</div>`).join("")}</div>`;
+  const F = FORMATIONS[b.form], c = ["#ece6f7","#6b4f86"];
+  return `<div class="pitch mp qz-pitch">${b.pick.map((j,i)=>{ const p = t.players[j], [pos,x,y] = F[i];
+    return `<div class="slot full ${pos==="GK"?"gk":""}" style="--x:${x};--y:${y}">${SHIRT(c, LABEL[pos])}<div class="nm">${esc(short(p.n))}</div></div>`; }).join("")}<span class="qz-form">${b.form}</span></div>`;
+}
 function startQuiz(practice){
   navPush("quiz", () => startQuiz(practice));
   toTop();
@@ -2606,7 +2619,7 @@ function renderQuiz(){
     <div class="qopts">${q.opts.map((o,k)=>{ const cls = done ? (o===q.t?"right":(Q.ans[Q.i]===k?"wrong":"")) : "";
       return `<button class="card qopt ${cls}" ${done?"disabled":`onclick="quizAnswer(${k})"`}>${kit(o.team)}<b>${o.season}</b> ${esc(o.team)}</button>`; }).join("")}</div>
     ${done?`<div class="row" style="margin-top:10px"><button class="btn gold" onclick="quizNext()">${Q.i+1<QN?"Sonraki soru ▶":"Sonucu gör ▶"}</button></div>`:""}
-    <div class="qpitch qbig">${lines.map(ps=>`<div class="qline">${ps.map(p=>`<span class="qp"><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r])[0]}</span>${esc(p.n)}</span>`).join("")}</div>`).join("")}</div>
+    ${quizPitch(q.t, lines)}
     </div>`;
 }
 function quizAnswer(k){ const Q=S.Q; if (Q.ans.length>Q.i) return; Q.ans.push(k); renderQuiz(); }

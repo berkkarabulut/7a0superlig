@@ -6,6 +6,14 @@ function quizBest11(t){
   if (xi.length<11) xi = xi.concat(t.players.filter(p=>!xi.includes(p)).sort((a,b)=>b.r-a.r).slice(0,11-xi.length));
   return xi;
 }
+// kadroyu gerçek sahada, dizilişteki yerleriyle göster (forma üstünde mevki); diziliş kurulamazsa satır görünümü
+function quizPitch(t, lines){
+  const b = realBest(t);
+  if (!b) return `<div class="qpitch qbig">${lines.map(ps=>`<div class="qline">${ps.map(p=>`<span class="qp"><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r])[0]}</span>${esc(p.n)}</span>`).join("")}</div>`).join("")}</div>`;
+  const F = FORMATIONS[b.form], c = ["#ece6f7","#6b4f86"];
+  return `<div class="pitch mp qz-pitch">${b.pick.map((j,i)=>{ const p = t.players[j], [pos,x,y] = F[i];
+    return `<div class="slot full ${pos==="GK"?"gk":""}" style="--x:${x};--y:${y}">${SHIRT(c, LABEL[pos])}<div class="nm">${esc(short(p.n))}</div></div>`; }).join("")}<span class="qz-form">${b.form}</span></div>`;
+}
 function startQuiz(practice){
   navPush("quiz", () => startQuiz(practice));
   toTop();
@@ -29,7 +37,7 @@ function renderQuiz(){
     <div class="qopts">${q.opts.map((o,k)=>{ const cls = done ? (o===q.t?"right":(Q.ans[Q.i]===k?"wrong":"")) : "";
       return `<button class="card qopt ${cls}" ${done?"disabled":`onclick="quizAnswer(${k})"`}>${kit(o.team)}<b>${o.season}</b> ${esc(o.team)}</button>`; }).join("")}</div>
     ${done?`<div class="row" style="margin-top:10px"><button class="btn gold" onclick="quizNext()">${Q.i+1<QN?"Sonraki soru ▶":"Sonucu gör ▶"}</button></div>`:""}
-    <div class="qpitch qbig">${lines.map(ps=>`<div class="qline">${ps.map(p=>`<span class="qp"><span class="pos ${p.p[0]}">${roles(p).map(r=>LABEL[r])[0]}</span>${esc(p.n)}</span>`).join("")}</div>`).join("")}</div>
+    ${quizPitch(q.t, lines)}
     </div>`;
 }
 function quizAnswer(k){ const Q=S.Q; if (Q.ans.length>Q.i) return; Q.ans.push(k); renderQuiz(); }

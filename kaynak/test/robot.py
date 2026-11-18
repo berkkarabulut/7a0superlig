@@ -107,9 +107,12 @@ def run(name, vp, b):
     step("05-kura", s5)
     # 6) maç önü
     def s6():
-        chk("07-mac-onu", ".exitc", "#play .talk", "#play .chip", "#lpbox [data-drag^='x:']", "#lpbox [data-drag^='b:']", "#play .btn")
+        chk("07-mac-onu", ".exitc", ".wz-steps", "#play .chip", "#play .btn")
+        click("button[onclick='preStep(1)']"); time.sleep(0.3)
+        chk("07a-kadro-adimi", "#lpbox [data-drag^='x:']", "#lpbox [data-drag^='b:']")
         click("#lpbox [data-drag='b:0']"); click("#lpbox [data-drag='x:9']")
         chk("07b-degisiklik", ".tacnote", "button[onclick='resetXi()']")
+        click("button[onclick='preStep(2)']"); time.sleep(0.3)
         click("#play .talk")
         chk("07c-konusma", ".talkres", "#play .btn.gold")
     step("06-mac-onu", s6)
@@ -128,7 +131,9 @@ def run(name, vp, b):
         pg.evaluate("()=>{ runMatch(); }"); time.sleep(1)
         chk("08-mac", "#sc", "#clk", "#ev")
         pg.wait_for_selector("#htbox", timeout=40000); time.sleep(0.5)
-        chk("09-devre-arasi", "#htbox .chip", "#mgrid [data-drag^='x:']", "#mgrid [data-drag^='b:']", "#mgrid .btn.gold")
+        chk("09-devre-arasi", "#htbox .chip", "#htbox .wz-steps")
+        click("button[onclick='window.__hst(1)']"); time.sleep(0.2); click("button[onclick='window.__hst(2)']"); time.sleep(0.3)
+        chk("09a-degisiklik-adimi", "#mgrid [data-drag^='x:']", "#mgrid [data-drag^='b:']", "#mgrid .btn.gold")
         for k in (8, 3):
             click("#mgrid [data-drag^='b:']"); click(f"#mgrid [data-drop='x:{k}']")
         if pg.locator("#htbox").count() == 0: fails.append(f"[{name}] devre arası: değişiklikten sonra panel kapandı")

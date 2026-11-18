@@ -3,7 +3,8 @@ function talkCtx(T,o){ const me=teamPower(lineup(T),T.style), d=(me.att+me.def)-
 function preMatch(){
   const T=S.T, i=T.i, isKo=i>=3, o = T.single ? T.group[0] : isKo ? T.R[i-3][1] : T.group[i];
   T.o = o; T.ref = pickRef(o.t.season);
-  if (T.prepFor!==i){ T.prepFor=i; T.notes = []; T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; }
+  if (T.prepFor!==i){ T.prepFor=i; T.notes = []; T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; T.preStep=0; }
+  if (mustFix(T)) T.preStep = 1;
   renderPre();
   const miss = missingStarters(T);
   if (miss.length && T.alerted!==i){ T.alerted=i; showMissAlert(miss); }
@@ -36,9 +37,14 @@ function renderPre(){
   const mor = n => { const v=T.mor[n]||0; return v>0?`<span class="mor up">▲${v}</span>`:v<0?`<span class="mor dn">▼${-v}</span>`:""; };
   const stat = p => isOut(T,p.n) ? `<span class="tag nr">${T.outs[p.n].k==="susp"?"🟥 cezalı":"🚑 sakat"}</span>` : "";
   const selP = T.selXi!=null ? T.xi[T.selXi] : null;
+  const step = T.preStep||0, fix = mustFix(T);
+  const go = fix ? `<button class="btn" disabled>Önce eksik oyuncunun yerine birini koy</button>` : `<button class="btn ${T.talked?"gold":""}" onclick="runMatch()">${T.talked?"Maça çık ▶":"Konuşmadan maça çık ▶"}</button>`;
+  const quick = fix ? "" : `<button class="btn ghost wz-quick" onclick="runMatch()">⏩ Direkt maça çık</button>`;
+  const nav = step===0 ? `<button class="btn" onclick="preStep(1)">İleri: Kadro ▶</button>${quick}`
+            : step===1 ? `<button class="btn ghost" onclick="preStep(0)">◀ Taktik</button>${fix?`<button class="btn" disabled>Önce eksik oyuncunun yerine birini koy</button>`:`<button class="btn" onclick="preStep(2)">İleri: Konuşma ▶</button>`}${quick}`
+            : `<button class="btn ghost" onclick="preStep(1)">◀ Kadro</button>${go}`;
   $("play").innerHTML = `${pathHTML()}
-  <div class="grid">
-    <div>
+  <div class="wz">
       <div class="card">
         <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${T.single?"Santra":STAGES[i]} · Maç önü</div>
         <div class="score pre"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
@@ -49,20 +55,15 @@ function renderPre(){
         ${T.notes.length?`<div class="hint card" style="margin-top:10px">${T.notes.join("<br>")}</div>`:""}
         ${missBanner(T)}
       </div>
-      <div class="card" style="margin-top:14px">
+    ${wzSteps(["📋 Taktik","👥 Kadro","🗣️ Konuşma","⚽ Maç"], step)}
+    ${step===0 ? `<div class="wz-body">
+      <div class="card">
         <h3>📋 Taktik</h3>
         <p class="mut" style="font-size:13px;margin-top:0">Rakibin oyun tarzı: <b style="color:var(--txt)">${STYLES[os].e} ${esc(os)}</b>${coachOf(o.t)&&COACH_STYLE[coachOf(o.t)]?` (${esc(coachOf(o.t))} böyle oynatır)`:""}. ${beats(os).length?`Buna karşı etkili: <b style="color:var(--win)">${beats(os).map(esc).join(", ")}</b>.`:""}</p>
         <div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===T.style?"on":""}" onclick="setStyleT('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>
         <p class="mut" style="font-size:13px;margin:8px 0 0">${STYLES[T.style].e} <b style="color:var(--txt)">${esc(T.style)}:</b> ${esc(STYLES[T.style].d)}. ${ctrOf(T.style,os)>0?`<span style="color:var(--win)">✓ Rakibe karşı avantajlısın.</span>`:ctrOf(os,T.style)>0?`<span style="color:var(--loss)">⚠ Rakibin tarzı buna karşı avantajlı.</span>`:""}</p>
       </div>
-      <div class="card" style="margin-top:14px">
-        <h3>🗣️ Soyunma odası konuşması</h3>
-        <p class="mut" style="font-size:13px;margin-top:0">${ctx==="fav"?"Kağıt üstünde favorisin. Rehavete dikkat.":ctx==="dog"?"Rakip daha güçlü görünüyor. Oyuncuları ateşlemen lazım.":"Başa baş bir maç bekleniyor."} Konuşman oyuncuların moralini yükseltebilir de düşürebilir de.</p>
-        ${T.talked ? `<div class="talkres">${T.talkRes}</div>` :
-          `<div class="talks">${TALKS.map((t,k)=>`<button class="card talk" onclick="doTalk(${k})"><span style="font-size:22px">${t.e}</span><span>“${esc(t.t)}”</span></button>`).join("")}</div>`}
-      </div>
-      <div class="row" style="margin-top:14px">${mustFix(T) ? `<button class="btn" disabled>Önce eksik oyuncunun yerine birini koy</button>` : `<button class="btn ${T.talked?"gold":""}" onclick="runMatch()">${T.talked?"Maça çık ▶":"Konuşmadan maça çık ▶"}</button>`}</div>
-    </div>
+    </div>` : step===1 ? `<div class="wz-body">
     <div class="card">
       <div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">İlk 11'ini ayarla</h3>${T.xi.some((s,k)=>s.p.n!==T.orig[k])?`<button class="chip" onclick="resetXi()">↺ Kurduğum 11'e dön</button>`:""}</div>
       <p class="mut" style="font-size:13px;margin:4px 0 8px">Oyuncuyu sürükleyip başka bir mevkiye ya da yedeğin üstüne bırak, veya önce birine sonra diğerine dokun. Kırmızı reyting: oyuncu mevkisi dışında, gücü düşüyor. Maç içindeki değişiklikler sonraki maça taşınmaz.</p>
@@ -75,7 +76,19 @@ function renderPre(){
       <p class="mut" style="font-size:12px;margin-top:10px">Rakibin 11'i</p>
       <div style="font-size:13px">${o.pl.slice(0,16).map(p=>`<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${p.pos}">${roles(p).map(r=>LABEL[r]).join("/")}</span>${esc(p.n)}<span class="rt"><span class="rv ${tier(p.r)}">${showR(p.r)}</span></span></div>`).join("")}</div>
     </div>
+    </div>` : `<div class="wz-body">
+      <div class="card">
+        <h3>🗣️ Soyunma odası konuşması</h3>
+        <p class="mut" style="font-size:13px;margin-top:0">${ctx==="fav"?"Kağıt üstünde favorisin. Rehavete dikkat.":ctx==="dog"?"Rakip daha güçlü görünüyor. Oyuncuları ateşlemen lazım.":"Başa baş bir maç bekleniyor."} Konuşman oyuncuların moralini yükseltebilir de düşürebilir de.</p>
+        ${T.talked ? `<div class="talkres">${T.talkRes}</div>` :
+          `<div class="talks">${TALKS.map((t,k)=>`<button class="card talk" onclick="doTalk(${k})"><span style="font-size:22px">${t.e}</span><span>“${esc(t.t)}”</span></button>`).join("")}</div>`}
+      </div>
+    </div>`}
+    <div class="row wz-nav">${nav}</div>
   </div>`;
   T.msg=null;
-  enableDrag($("lpbox"), doMove, tapSel);
+  if ($("lpbox")) enableDrag($("lpbox"), doMove, tapSel);
 }
+function preStep(k){ S.T.preStep = k; renderPre(); toTop(); }
+// adım çubuğu (maç öncesi ve devre arası)
+function wzSteps(labels, cur){ return `<div class="wz-steps">${labels.map((l,k)=>`<span class="wz-st ${k===cur?"on":k<cur?"done":""}"><b>${k+1}</b>${l}</span>`).join("")}</div>`; }

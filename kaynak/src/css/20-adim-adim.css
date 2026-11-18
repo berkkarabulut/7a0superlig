@@ -1,0 +1,19 @@
+
+/* ===== maç öncesi / devre arası adım adım ===== */
+.wz{max-width:880px;margin:0 auto}
+.wz-steps{display:flex;gap:6px;margin:14px 0 12px;flex-wrap:wrap}
+.wz-st{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:6px;background:var(--card);border:1px solid var(--line);color:var(--mut);font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wz-st b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#ffffff14;font-size:12px;flex:0 0 auto}
+.wz-st.on{color:var(--txt);border-color:var(--gold);background:rgba(255,183,3,.08)}
+.wz-st.on b{background:var(--gold);color:#1d1200}
+.wz-st.done{color:var(--txt)}
+.wz-st.done b{background:var(--teal);color:#04170c}
+.wz-body>.card{margin:0}
+.wz-nav{margin-top:14px;gap:8px}
+.wz-nav .wz-quick{margin-left:auto}
+.ht .wz-steps{margin:8px 0 12px}
+.ht .wz-nav{margin-top:12px}
+@media (max-width:640px){
+  .wz-st{padding:7px 6px;font-size:11px;gap:4px}
+  .wz-nav .wz-quick{margin-left:0}
+}

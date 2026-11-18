@@ -50,3 +50,4 @@
 .mgrid .minisc .ms-s{font-family:var(--cond);font-size:26px;color:var(--gold);background:var(--acc);color:#fff;border-radius:4px;padding:0 10px;line-height:1.25}
 .mgrid .minisc .ms-c{font-size:13px;color:var(--mut);min-width:34px;text-align:center}
 .mgrid #after{scroll-margin-top:60px}
+.mgrid:has(#htbox) .minisc .ms-ev{display:none}

@@ -2,7 +2,7 @@
 const MENTS = { "Aynen devam":{att:0,def:0}, "Hücuma geç":{att:2,def:-2}, "Skoru koru":{att:-2,def:2} };
 function halfTime(M, a, b){
   return new Promise(res => {
-    const T=S.T; let style=T.style, ment="Aynen devam", sel=null, msg=null;
+    const T=S.T; let style=T.style, ment="Aynen devam", sel=null, msg=null, hstep=0;
     const cur = k => slotPlayer(M,T,k);
     const benchAv = () => { const used=new Set(M.pl[0].map(p=>p.n)); return T.bench.map((p,i)=>({p,i})).filter(x=>!isOut(T,x.p.n)&&!used.has(x.p.n)); };
     const doSub = (k, bi) => { const outP=cur(k), bp=T.bench[bi], pos=T.xi[k].pos; if(!outP||!bp) return;
@@ -21,22 +21,28 @@ function halfTime(M, a, b){
       const bl = benchAv();
       const benchHTML2 = `<div class="ph" style="margin-top:10px">Kulübe</div>${bl.length&&M.subsLeft()?`<div class="lineup">${bl.map(({p,i})=>`<div class="lrow bench2 ${sel==="b:"+i?"sel":""}" data-drag="b:${i}" data-drop="b:${i}"><span class="grip">⠿</span><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.base)}">${showR(p.base)}</span></div>`).join("")}</div>`:`<p class="mut">${M.subsLeft()?"Kulübede girebilecek oyuncu kalmadı.":"Değişiklik hakkın bitti."}</p>`}`;
       const goHTML = `<div class="row" style="margin-top:12px"><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button></div>`;
+      const quick = `<button class="btn ghost wz-quick" onclick="window.__hgo()">⏩ Direkt başlat</button>`;
+      const navH = hstep===0 ? `<button class="btn" onclick="window.__hst(1)">İleri: Anlayış ▶</button>${quick}`
+                 : hstep===1 ? `<button class="btn ghost" onclick="window.__hst(0)">◀ Taktik</button><button class="btn" onclick="window.__hst(2)">İleri: Değişiklik ▶</button>${quick}`
+                 : `<button class="btn ghost" onclick="window.__hst(1)">◀ Anlayış</button><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button>`;
       $("after").innerHTML = `<div class="card ht" id="htbox"><h3 style="margin-top:0">⏸️ Devre arası · ${a}-${b}</h3>
         <p class="mut" style="margin:0 0 8px;font-size:13px">${a<b?"Gerideysin. Hücuma geçmenin ya da tarzı değiştirmenin tam zamanı.":a>b?"Öndesin. Skoru korumak isteyebilirsin.":"Eşitlik var. İkinci yarı için planın ne?"} Rakip: ${STYLES[os].e} ${esc(os)}</p>
-        <div class="ph">Oyun tarzı</div><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>
-        <div class="ph" style="margin-top:10px">Anlayış</div><div class="row">${Object.keys(MENTS).map(k=>`<button class="chip ${k===ment?"on":""}" onclick="window.__hm('${k}')">${k}${MENTS[k].att?` <span class="mut">(${MENTS[k].att>0?"+":""}${MENTS[k].att} hücum, ${MENTS[k].def>0?"+":""}${MENTS[k].def} savunma)</span>`:""}</button>`).join("")}</div>
-        <div class="ph" style="margin-top:10px">Oyuncu değişikliği <span class="mut" style="text-transform:none">· ${M.subsLeft()} hakkın kaldı</span></div>
+        ${wzSteps(["📋 Taktik","🎯 Anlayış","🔁 Değişiklik","⚽ 2. yarı"], hstep)}
+        ${hstep===0?`<div class="ph">Oyun tarzı</div><p class="mut" style="font-size:13px;margin:0 0 6px">${STYLES[style].e} <b style="color:var(--txt)">${esc(style)}:</b> ${esc(STYLES[style].d)}. ${ctrOf(style,os)>0?`<span style="color:var(--win)">✓ Rakibe karşı avantajlı.</span>`:ctrOf(os,style)>0?`<span style="color:var(--loss)">⚠ Rakibin tarzı buna karşı avantajlı.</span>`:""}</p><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>`:""}
+        ${hstep===1?`<div class="ph">Anlayış</div><p class="mut" style="font-size:13px;margin:0 0 6px">Takım ikinci yarıda nasıl oynasın? Hücuma geçersen gol şansın artar ama arkada boşluk verirsin.</p><div class="row">${Object.keys(MENTS).map(k=>`<button class="chip ${k===ment?"on":""}" onclick="window.__hm('${k}')">${k}${MENTS[k].att?` <span class="mut">(${MENTS[k].att>0?"+":""}${MENTS[k].att} hücum, ${MENTS[k].def>0?"+":""}${MENTS[k].def} savunma)</span>`:""}</button>`).join("")}</div>`:""}
+        ${hstep===2?`<div class="ph">Oyuncu değişikliği <span class="mut" style="text-transform:none">· ${M.subsLeft()} hakkın kaldı</span></div>
         <p class="mut" style="font-size:13px;margin:0 0 6px">Yedeği sahadaki oyuncunun üstüne sürükle ya da önce yedeğe sonra çıkacak oyuncuya dokun. İstediğin kadar değişiklik yap, bitince ikinci yarıyı başlat.</p>
         ${pitch}
         ${msg?`<div class="tacnote ${msg[0]}" style="margin-top:6px">${msg[1]}</div>`:""}
         ${M.subs.length?`<div class="mut" style="font-size:13px;margin-top:6px">${M.subs.map(s=>`🔁 ${esc(short(s.out.n))} → ${esc(short(s.in.n))}`).join(" · ")}</div>`:""}
-        ${inline ? benchHTML2 : ""}
-        ${inline ? goHTML : ""}</div>`;
-      if (!inline){ if ($("mbench")) $("mbench").innerHTML = `<div class="card mbench">${benchHTML2}</div>`; if ($("mgo")) $("mgo").innerHTML = `<div class="mgo">${goHTML.replace('style="margin-top:12px"','')}</div>`; }
+        ${inline ? benchHTML2 : ""}`:""}
+        <div class="row wz-nav">${navH}</div></div>`;
+      if (!inline){ if ($("mbench")) $("mbench").innerHTML = hstep===2 ? `<div class="card mbench">${benchHTML2}</div>` : ""; if ($("mgo")) $("mgo").innerHTML = hstep===2 ? `<div class="mgo">${goHTML.replace('style="margin-top:12px"','')}</div>` : ""; }
       msg=null;
       enableDrag($("mgrid")||$("htbox"), move, tap); };
     window.__hs = k => { style=k; draw(); };
     window.__hm = k => { ment=k; draw(); };
+    window.__hst = k => { hstep=k; sel=null; draw(); try{ $("htbox").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){} };
     window.__ho = n => { const k=T.xi.findIndex((s,kk)=>cur(kk)?.n===n); if(k>=0){ sel="x:"+k; draw(); } };
     window.__hi = bi => { if (sel && sel[0]==="x") move(sel,"b:"+bi); };
     window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; if ($("mbench")) $("mbench").innerHTML=""; if ($("mgo")) $("mgo").innerHTML=""; if ($("mpitch")){ $("mpitch").style.display=""; $("mpitch").innerHTML = matchPitchHTML(M,T,T.o); } res({style,ment}); };

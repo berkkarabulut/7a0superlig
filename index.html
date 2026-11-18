@@ -555,6 +555,7 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .mgrid .minisc .ms-s{font-family:var(--cond);font-size:26px;color:var(--gold);background:var(--acc);color:#fff;border-radius:4px;padding:0 10px;line-height:1.25}
 .mgrid .minisc .ms-c{font-size:13px;color:var(--mut);min-width:34px;text-align:center}
 .mgrid #after{scroll-margin-top:60px}
+.mgrid:has(#htbox) .minisc .ms-ev{display:none}
 
 /* ===== nasıl oynanır ===== */
 .howtoc{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
@@ -705,6 +706,25 @@ body.yayin main{padding-top:6px}
 @media (max-width:480px){
   .ts-leads{grid-template-columns:1fr}
   .ts-tb{padding:9px 10px;font-size:12px}
+}
+
+/* ===== maç öncesi / devre arası adım adım ===== */
+.wz{max-width:880px;margin:0 auto}
+.wz-steps{display:flex;gap:6px;margin:14px 0 12px;flex-wrap:wrap}
+.wz-st{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:6px;background:var(--card);border:1px solid var(--line);color:var(--mut);font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wz-st b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#ffffff14;font-size:12px;flex:0 0 auto}
+.wz-st.on{color:var(--txt);border-color:var(--gold);background:rgba(255,183,3,.08)}
+.wz-st.on b{background:var(--gold);color:#1d1200}
+.wz-st.done{color:var(--txt)}
+.wz-st.done b{background:var(--teal);color:#04170c}
+.wz-body>.card{margin:0}
+.wz-nav{margin-top:14px;gap:8px}
+.wz-nav .wz-quick{margin-left:auto}
+.ht .wz-steps{margin:8px 0 12px}
+.ht .wz-nav{margin-top:12px}
+@media (max-width:640px){
+  .wz-st{padding:7px 6px;font-size:11px;gap:4px}
+  .wz-nav .wz-quick{margin-left:0}
 }
 </style>
 </head>
@@ -1513,7 +1533,8 @@ function talkCtx(T,o){ const me=teamPower(lineup(T),T.style), d=(me.att+me.def)-
 function preMatch(){
   const T=S.T, i=T.i, isKo=i>=3, o = T.single ? T.group[0] : isKo ? T.R[i-3][1] : T.group[i];
   T.o = o; T.ref = pickRef(o.t.season);
-  if (T.prepFor!==i){ T.prepFor=i; T.notes = []; T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; }
+  if (T.prepFor!==i){ T.prepFor=i; T.notes = []; T.talked=false; T.talkRes=null; T.selXi=null; T.sel=null; T.preStep=0; }
+  if (mustFix(T)) T.preStep = 1;
   renderPre();
   const miss = missingStarters(T);
   if (miss.length && T.alerted!==i){ T.alerted=i; showMissAlert(miss); }
@@ -1546,9 +1567,14 @@ function renderPre(){
   const mor = n => { const v=T.mor[n]||0; return v>0?`<span class="mor up">▲${v}</span>`:v<0?`<span class="mor dn">▼${-v}</span>`:""; };
   const stat = p => isOut(T,p.n) ? `<span class="tag nr">${T.outs[p.n].k==="susp"?"🟥 cezalı":"🚑 sakat"}</span>` : "";
   const selP = T.selXi!=null ? T.xi[T.selXi] : null;
+  const step = T.preStep||0, fix = mustFix(T);
+  const go = fix ? `<button class="btn" disabled>Önce eksik oyuncunun yerine birini koy</button>` : `<button class="btn ${T.talked?"gold":""}" onclick="runMatch()">${T.talked?"Maça çık ▶":"Konuşmadan maça çık ▶"}</button>`;
+  const quick = fix ? "" : `<button class="btn ghost wz-quick" onclick="runMatch()">⏩ Direkt maça çık</button>`;
+  const nav = step===0 ? `<button class="btn" onclick="preStep(1)">İleri: Kadro ▶</button>${quick}`
+            : step===1 ? `<button class="btn ghost" onclick="preStep(0)">◀ Taktik</button>${fix?`<button class="btn" disabled>Önce eksik oyuncunun yerine birini koy</button>`:`<button class="btn" onclick="preStep(2)">İleri: Konuşma ▶</button>`}${quick}`
+            : `<button class="btn ghost" onclick="preStep(1)">◀ Kadro</button>${go}`;
   $("play").innerHTML = `${pathHTML()}
-  <div class="grid">
-    <div>
+  <div class="wz">
       <div class="card">
         <div class="mut" style="text-align:center;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${T.single?"Santra":STAGES[i]} · Maç önü</div>
         <div class="score pre"><div class="tn">${esc(myName())}<div class="mut" style="font-size:12px;font-weight:400">${S.form} · ${STYLES[T.style].e} ${esc(T.style)}</div></div>
@@ -1559,20 +1585,15 @@ function renderPre(){
         ${T.notes.length?`<div class="hint card" style="margin-top:10px">${T.notes.join("<br>")}</div>`:""}
         ${missBanner(T)}
       </div>
-      <div class="card" style="margin-top:14px">
+    ${wzSteps(["📋 Taktik","👥 Kadro","🗣️ Konuşma","⚽ Maç"], step)}
+    ${step===0 ? `<div class="wz-body">
+      <div class="card">
         <h3>📋 Taktik</h3>
         <p class="mut" style="font-size:13px;margin-top:0">Rakibin oyun tarzı: <b style="color:var(--txt)">${STYLES[os].e} ${esc(os)}</b>${coachOf(o.t)&&COACH_STYLE[coachOf(o.t)]?` (${esc(coachOf(o.t))} böyle oynatır)`:""}. ${beats(os).length?`Buna karşı etkili: <b style="color:var(--win)">${beats(os).map(esc).join(", ")}</b>.`:""}</p>
         <div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===T.style?"on":""}" onclick="setStyleT('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>
         <p class="mut" style="font-size:13px;margin:8px 0 0">${STYLES[T.style].e} <b style="color:var(--txt)">${esc(T.style)}:</b> ${esc(STYLES[T.style].d)}. ${ctrOf(T.style,os)>0?`<span style="color:var(--win)">✓ Rakibe karşı avantajlısın.</span>`:ctrOf(os,T.style)>0?`<span style="color:var(--loss)">⚠ Rakibin tarzı buna karşı avantajlı.</span>`:""}</p>
       </div>
-      <div class="card" style="margin-top:14px">
-        <h3>🗣️ Soyunma odası konuşması</h3>
-        <p class="mut" style="font-size:13px;margin-top:0">${ctx==="fav"?"Kağıt üstünde favorisin. Rehavete dikkat.":ctx==="dog"?"Rakip daha güçlü görünüyor. Oyuncuları ateşlemen lazım.":"Başa baş bir maç bekleniyor."} Konuşman oyuncuların moralini yükseltebilir de düşürebilir de.</p>
-        ${T.talked ? `<div class="talkres">${T.talkRes}</div>` :
-          `<div class="talks">${TALKS.map((t,k)=>`<button class="card talk" onclick="doTalk(${k})"><span style="font-size:22px">${t.e}</span><span>“${esc(t.t)}”</span></button>`).join("")}</div>`}
-      </div>
-      <div class="row" style="margin-top:14px">${mustFix(T) ? `<button class="btn" disabled>Önce eksik oyuncunun yerine birini koy</button>` : `<button class="btn ${T.talked?"gold":""}" onclick="runMatch()">${T.talked?"Maça çık ▶":"Konuşmadan maça çık ▶"}</button>`}</div>
-    </div>
+    </div>` : step===1 ? `<div class="wz-body">
     <div class="card">
       <div class="row" style="justify-content:space-between;align-items:center"><h3 style="margin:0">İlk 11'ini ayarla</h3>${T.xi.some((s,k)=>s.p.n!==T.orig[k])?`<button class="chip" onclick="resetXi()">↺ Kurduğum 11'e dön</button>`:""}</div>
       <p class="mut" style="font-size:13px;margin:4px 0 8px">Oyuncuyu sürükleyip başka bir mevkiye ya da yedeğin üstüne bırak, veya önce birine sonra diğerine dokun. Kırmızı reyting: oyuncu mevkisi dışında, gücü düşüyor. Maç içindeki değişiklikler sonraki maça taşınmaz.</p>
@@ -1585,10 +1606,22 @@ function renderPre(){
       <p class="mut" style="font-size:12px;margin-top:10px">Rakibin 11'i</p>
       <div style="font-size:13px">${o.pl.slice(0,16).map(p=>`<div class="row" style="gap:6px;padding:2px 0"><span class="pos ${p.pos}">${roles(p).map(r=>LABEL[r]).join("/")}</span>${esc(p.n)}<span class="rt"><span class="rv ${tier(p.r)}">${showR(p.r)}</span></span></div>`).join("")}</div>
     </div>
+    </div>` : `<div class="wz-body">
+      <div class="card">
+        <h3>🗣️ Soyunma odası konuşması</h3>
+        <p class="mut" style="font-size:13px;margin-top:0">${ctx==="fav"?"Kağıt üstünde favorisin. Rehavete dikkat.":ctx==="dog"?"Rakip daha güçlü görünüyor. Oyuncuları ateşlemen lazım.":"Başa baş bir maç bekleniyor."} Konuşman oyuncuların moralini yükseltebilir de düşürebilir de.</p>
+        ${T.talked ? `<div class="talkres">${T.talkRes}</div>` :
+          `<div class="talks">${TALKS.map((t,k)=>`<button class="card talk" onclick="doTalk(${k})"><span style="font-size:22px">${t.e}</span><span>“${esc(t.t)}”</span></button>`).join("")}</div>`}
+      </div>
+    </div>`}
+    <div class="row wz-nav">${nav}</div>
   </div>`;
   T.msg=null;
-  enableDrag($("lpbox"), doMove, tapSel);
+  if ($("lpbox")) enableDrag($("lpbox"), doMove, tapSel);
 }
+function preStep(k){ S.T.preStep = k; renderPre(); toTop(); }
+// adım çubuğu (maç öncesi ve devre arası)
+function wzSteps(labels, cur){ return `<div class="wz-steps">${labels.map((l,k)=>`<span class="wz-st ${k===cur?"on":k<cur?"done":""}"><b>${k+1}</b>${l}</span>`).join("")}</div>`; }
 // ---------- sürükle bırak / dokun seç ----------
 function enableDrag(root, onDrop, onTap){
   if (!root || !root.querySelectorAll) return;
@@ -1672,7 +1705,7 @@ function choosePens(avail){
 const MENTS = { "Aynen devam":{att:0,def:0}, "Hücuma geç":{att:2,def:-2}, "Skoru koru":{att:-2,def:2} };
 function halfTime(M, a, b){
   return new Promise(res => {
-    const T=S.T; let style=T.style, ment="Aynen devam", sel=null, msg=null;
+    const T=S.T; let style=T.style, ment="Aynen devam", sel=null, msg=null, hstep=0;
     const cur = k => slotPlayer(M,T,k);
     const benchAv = () => { const used=new Set(M.pl[0].map(p=>p.n)); return T.bench.map((p,i)=>({p,i})).filter(x=>!isOut(T,x.p.n)&&!used.has(x.p.n)); };
     const doSub = (k, bi) => { const outP=cur(k), bp=T.bench[bi], pos=T.xi[k].pos; if(!outP||!bp) return;
@@ -1691,22 +1724,28 @@ function halfTime(M, a, b){
       const bl = benchAv();
       const benchHTML2 = `<div class="ph" style="margin-top:10px">Kulübe</div>${bl.length&&M.subsLeft()?`<div class="lineup">${bl.map(({p,i})=>`<div class="lrow bench2 ${sel==="b:"+i?"sel":""}" data-drag="b:${i}" data-drop="b:${i}"><span class="grip">⠿</span><span class="pos ${p.p[0]}">${roles(p).map(x=>LABEL[x]).join("/")}</span><span class="ln">${esc(p.n)}</span><span class="rv ${tier(p.base)}">${showR(p.base)}</span></div>`).join("")}</div>`:`<p class="mut">${M.subsLeft()?"Kulübede girebilecek oyuncu kalmadı.":"Değişiklik hakkın bitti."}</p>`}`;
       const goHTML = `<div class="row" style="margin-top:12px"><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button></div>`;
+      const quick = `<button class="btn ghost wz-quick" onclick="window.__hgo()">⏩ Direkt başlat</button>`;
+      const navH = hstep===0 ? `<button class="btn" onclick="window.__hst(1)">İleri: Anlayış ▶</button>${quick}`
+                 : hstep===1 ? `<button class="btn ghost" onclick="window.__hst(0)">◀ Taktik</button><button class="btn" onclick="window.__hst(2)">İleri: Değişiklik ▶</button>${quick}`
+                 : `<button class="btn ghost" onclick="window.__hst(1)">◀ Anlayış</button><button class="btn gold" onclick="window.__hgo()">İkinci yarıyı başlat ▶</button>`;
       $("after").innerHTML = `<div class="card ht" id="htbox"><h3 style="margin-top:0">⏸️ Devre arası · ${a}-${b}</h3>
         <p class="mut" style="margin:0 0 8px;font-size:13px">${a<b?"Gerideysin. Hücuma geçmenin ya da tarzı değiştirmenin tam zamanı.":a>b?"Öndesin. Skoru korumak isteyebilirsin.":"Eşitlik var. İkinci yarı için planın ne?"} Rakip: ${STYLES[os].e} ${esc(os)}</p>
-        <div class="ph">Oyun tarzı</div><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>
-        <div class="ph" style="margin-top:10px">Anlayış</div><div class="row">${Object.keys(MENTS).map(k=>`<button class="chip ${k===ment?"on":""}" onclick="window.__hm('${k}')">${k}${MENTS[k].att?` <span class="mut">(${MENTS[k].att>0?"+":""}${MENTS[k].att} hücum, ${MENTS[k].def>0?"+":""}${MENTS[k].def} savunma)</span>`:""}</button>`).join("")}</div>
-        <div class="ph" style="margin-top:10px">Oyuncu değişikliği <span class="mut" style="text-transform:none">· ${M.subsLeft()} hakkın kaldı</span></div>
+        ${wzSteps(["📋 Taktik","🎯 Anlayış","🔁 Değişiklik","⚽ 2. yarı"], hstep)}
+        ${hstep===0?`<div class="ph">Oyun tarzı</div><p class="mut" style="font-size:13px;margin:0 0 6px">${STYLES[style].e} <b style="color:var(--txt)">${esc(style)}:</b> ${esc(STYLES[style].d)}. ${ctrOf(style,os)>0?`<span style="color:var(--win)">✓ Rakibe karşı avantajlı.</span>`:ctrOf(os,style)>0?`<span style="color:var(--loss)">⚠ Rakibin tarzı buna karşı avantajlı.</span>`:""}</p><div class="row">${Object.keys(STYLES).map(k=>`<button class="chip ${k===style?"on":""}" onclick="window.__hs('${k}')">${STYLES[k].e} ${k}${ctrOf(k,os)>0?" ✓":ctrOf(os,k)>0?" ⚠":""}</button>`).join("")}</div>`:""}
+        ${hstep===1?`<div class="ph">Anlayış</div><p class="mut" style="font-size:13px;margin:0 0 6px">Takım ikinci yarıda nasıl oynasın? Hücuma geçersen gol şansın artar ama arkada boşluk verirsin.</p><div class="row">${Object.keys(MENTS).map(k=>`<button class="chip ${k===ment?"on":""}" onclick="window.__hm('${k}')">${k}${MENTS[k].att?` <span class="mut">(${MENTS[k].att>0?"+":""}${MENTS[k].att} hücum, ${MENTS[k].def>0?"+":""}${MENTS[k].def} savunma)</span>`:""}</button>`).join("")}</div>`:""}
+        ${hstep===2?`<div class="ph">Oyuncu değişikliği <span class="mut" style="text-transform:none">· ${M.subsLeft()} hakkın kaldı</span></div>
         <p class="mut" style="font-size:13px;margin:0 0 6px">Yedeği sahadaki oyuncunun üstüne sürükle ya da önce yedeğe sonra çıkacak oyuncuya dokun. İstediğin kadar değişiklik yap, bitince ikinci yarıyı başlat.</p>
         ${pitch}
         ${msg?`<div class="tacnote ${msg[0]}" style="margin-top:6px">${msg[1]}</div>`:""}
         ${M.subs.length?`<div class="mut" style="font-size:13px;margin-top:6px">${M.subs.map(s=>`🔁 ${esc(short(s.out.n))} → ${esc(short(s.in.n))}`).join(" · ")}</div>`:""}
-        ${inline ? benchHTML2 : ""}
-        ${inline ? goHTML : ""}</div>`;
-      if (!inline){ if ($("mbench")) $("mbench").innerHTML = `<div class="card mbench">${benchHTML2}</div>`; if ($("mgo")) $("mgo").innerHTML = `<div class="mgo">${goHTML.replace('style="margin-top:12px"','')}</div>`; }
+        ${inline ? benchHTML2 : ""}`:""}
+        <div class="row wz-nav">${navH}</div></div>`;
+      if (!inline){ if ($("mbench")) $("mbench").innerHTML = hstep===2 ? `<div class="card mbench">${benchHTML2}</div>` : ""; if ($("mgo")) $("mgo").innerHTML = hstep===2 ? `<div class="mgo">${goHTML.replace('style="margin-top:12px"','')}</div>` : ""; }
       msg=null;
       enableDrag($("mgrid")||$("htbox"), move, tap); };
     window.__hs = k => { style=k; draw(); };
     window.__hm = k => { ment=k; draw(); };
+    window.__hst = k => { hstep=k; sel=null; draw(); try{ $("htbox").scrollIntoView({block:"start",behavior:"smooth"}); }catch(e){} };
     window.__ho = n => { const k=T.xi.findIndex((s,kk)=>cur(kk)?.n===n); if(k>=0){ sel="x:"+k; draw(); } };
     window.__hi = bi => { if (sel && sel[0]==="x") move(sel,"b:"+bi); };
     window.__hgo = () => { M.setTactic(style, MENTS[ment]); T.htStyle=style; $("after").innerHTML=""; if ($("mbench")) $("mbench").innerHTML=""; if ($("mgo")) $("mgo").innerHTML=""; if ($("mpitch")){ $("mpitch").style.display=""; $("mpitch").innerHTML = matchPitchHTML(M,T,T.o); } res({style,ment}); };
@@ -2890,6 +2929,7 @@ DICT_ROWS.push(["Göster ▾","Show ▾","Mostrar ▾"],["Gizle ▴","Hide ▴",
 DICT_ROWS.push(["Genel","Overview","General"],["Oyuncular","Players","Jugadores"],["Maçlar","Matches","Partidos"],["Biz","Us","Nosotros"],["Rakipler","Opponents","Rivales"],["Gol","Goals","Goles"],["İsabetli şut","Shots on target","Tiros a puerta"],["Sarı kart","Yellow cards","Amarillas"],["Kırmızı kart","Red cards","Rojas"],["⚽ Gol","⚽ Goals","⚽ Goles"],["📈 Ortalama not","📈 Average rating","📈 Nota media"],["🏅 Maçın oyuncusu","🏅 Player of the match","🏅 Jugador del partido"],["🎯 Şut","🎯 Shots","🎯 Tiros"],["Mvk","Pos","Pos"],["Dk","Min","Min"],["İsb","OT","AP"],["MO","PoM","JdP"],["Not","Rating","Nota"],["Sana gol atanlar:","Scored against you:","Te marcaron:"],["🧤 Kalende gol yok.","🧤 No goals conceded.","🧤 Portería a cero."],["Başlığa dokun, o sütuna göre sırala. Not 10 üzerinden: gol, asist, isabetli şut, kartlar, sonuç ve (defans/kaleci için) yenilen gole göre hesaplanır.","Tap a header to sort. Ratings are out of 10, based on goals, assists, shots on target, cards, the result and (for defenders/keepers) goals conceded.","Toca una cabecera para ordenar. Nota sobre 10 según goles, asistencias, tiros a puerta, tarjetas, resultado y (defensas/porteros) goles encajados."],["🏅 Maçın oyuncusu:","🏅 Player of the match:","🏅 Jugador del partido:"],["İsabet","On target","A puerta"],["Kart","Cards","Tarjetas"],["⭐ Maçın yıldızı","⭐ Star of the match","⭐ Estrella del partido"],["⭐ Turnuvanın yıldızı","⭐ Star of the tournament","⭐ Estrella del torneo"]);
 DICT_ROWS.push(["🎮 Efsaneler Draft'ı","🎮 Legends Draft","🎮 Draft de leyendas"],["🗓️ Günün Meydan Okuması","🗓️ Daily Challenge","🗓️ Reto del día"],["⚔️ Meydan okuma","⚔️ Challenge","⚔️ Desafío"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario."]);
 DICT_ROWS.push(["← Geri","← Back","← Atrás"],["⌂ Ana sayfa","⌂ Home","⌂ Inicio"],["Bir önceki ekrana dönülsün mü?","Go back to the previous screen?","¿Volver a la pantalla anterior?"],["Maç yarıda kalacak.","The match will be abandoned.","El partido quedará a medias."]);
+DICT_ROWS.push(["📋 Taktik","📋 Tactics","📋 Táctica"],["👥 Kadro","👥 Squad","👥 Plantilla"],["🗣️ Konuşma","🗣️ Team talk","🗣️ Charla"],["⚽ Maç","⚽ Match","⚽ Partido"],["🎯 Anlayış","🎯 Approach","🎯 Planteamiento"],["🔁 Değişiklik","🔁 Subs","🔁 Cambios"],["⚽ 2. yarı","⚽ 2nd half","⚽ 2ª parte"],["İleri: Kadro ▶","Next: Squad ▶","Siguiente: Plantilla ▶"],["İleri: Konuşma ▶","Next: Team talk ▶","Siguiente: Charla ▶"],["İleri: Anlayış ▶","Next: Approach ▶","Siguiente: Planteamiento ▶"],["İleri: Değişiklik ▶","Next: Subs ▶","Siguiente: Cambios ▶"],["◀ Taktik","◀ Tactics","◀ Táctica"],["◀ Kadro","◀ Squad","◀ Plantilla"],["◀ Anlayış","◀ Approach","◀ Planteamiento"],["⏩ Direkt maça çık","⏩ Skip to the match","⏩ Ir al partido"],["⏩ Direkt başlat","⏩ Start now","⏩ Empezar ya"]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];

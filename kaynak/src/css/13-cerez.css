@@ -8,3 +8,8 @@
 .ftr{text-align:center;font-size:13px;color:var(--mut,#a99bbd);padding:26px 12px 90px;opacity:.85}
 .ftr a{color:inherit;text-decoration:underline;cursor:pointer}
 @media(max-width:700px){ .cerezbar{left:8px;right:8px;bottom:8px;font-size:13px} .cerezbar .czbtn{width:100%} .cerezbar .czbtn .btn{flex:1} }
+.ftr .sosyal{display:flex;justify-content:center;gap:10px;margin:0 0 6px}
+.ftr .sos-ad{font-weight:800;font-size:13px;color:#fff;opacity:.85;margin:0 0 14px}
+.ftr .sosyal a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#fff;font-weight:800;font-size:14px;padding:8px 16px;border-radius:24px;background:linear-gradient(45deg,#f09433,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888);box-shadow:0 3px 10px #0006}
+.ftr .sosyal a:hover{filter:brightness(1.1)}
+.ftr .sosyal .sos-tt{background:#111;box-shadow:-2px -2px 0 #25f4ee inset,2px 2px 0 #fe2c55 inset,0 3px 10px #0006}

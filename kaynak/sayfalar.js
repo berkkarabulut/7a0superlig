@@ -75,7 +75,7 @@ ${ld ? `<script type="application/ld+json">${JSON.stringify(ld)}</script>` : ""}
 <main>
 ${body}
 </main>
-<footer><a href="/">Süper Lig 7-0</a> · <a href="/kadro/">Tüm kadrolar</a> · <a href="/gizlilik.html">Gizlilik politikası</a> · <a href="mailto:7a0superlig@gmail.com">İletişim</a><br>Reytingler oyun için hazırlanmış tahmini değerlerdir; resmi bir kaynağa dayanmaz.</footer>
+<footer>Takip et: <a href="https://www.instagram.com/7a0superlig/" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@7a0superlig" target="_blank" rel="noopener">TikTok</a> · @7a0superlig<br><a href="/">Süper Lig 7-0</a> · <a href="/kadro/">Tüm kadrolar</a> · <a href="/gizlilik.html">Gizlilik politikası</a> · <a href="mailto:7a0superlig@gmail.com">İletişim</a><br>Reytingler oyun için hazırlanmış tahmini değerlerdir; resmi bir kaynağa dayanmaz.</footer>
 </body>
 </html>
 `;

@@ -3,7 +3,7 @@ function startDraft(){
   toTop();
   if (S.mode==="daily"){ const k=todayKey(); RNG = seeded([...k].reduce((a,c)=>a*31+c.charCodeAt(0),7)); S.deck = shuffle(POOL).slice(0,40); S.deckI = 0; }
   else { if (S.challenge){ S.form = S.challenge.form; S.seed = S.challenge.seed; } else S.seed = Math.floor(Math.random()*2e9);
-    RNG = seeded(S.seed); S.deck = shuffle(POOL); S.deckI = 0; }
+    RNG = seeded(S.seed); S.deck = shuffle(S.sl ? CUR : POOL); S.deckI = 0; }
   bump("g");
   S.slots = FORMATIONS[S.form].map(([pos,x,y])=>({pos,x,y,p:null}));
   S.phase = "xi"; S.bench = [];
@@ -28,9 +28,10 @@ function roll(){
   if (S.deck){ let k=0; do { t = S.deck[S.deckI % S.deck.length]; S.deckI++; k++; } while (k<S.deck.length && !t.players.some(p=>!inSquad(p.n) && openSlots().some(s=>natural(p,s.pos)))); }
   else {
     const useful = x => x.players.some(p => !inSquad(p.n) && openSlots().some(s=>natural(p,s.pos)));
-    let c = POOL.filter(x=>!S.drawn.has(x.id) && useful(x));
-    if(!c.length){ S.drawn.clear(); c = POOL.filter(useful); }
-    if(!c.length) c = POOL;
+    const PL = S.sl ? CUR : POOL;
+    let c = PL.filter(x=>!S.drawn.has(x.id) && useful(x));
+    if(!c.length){ S.drawn.clear(); c = PL.filter(useful); }
+    if(!c.length) c = PL;
     t = rnd(c);
   }
   S.drawn.add(t.id); S.cur = t; S.rolls++; S.sel = null;

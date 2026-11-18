@@ -8,7 +8,7 @@ function readChallengeFromUrl(){
   const seed = parseInt(m, 36); if (!isFinite(seed)) return;
   const form = FORMATIONS[q.get("d")] ? q.get("d") : "4-3-3";
   S.challenge = { seed, form, rec: (q.get("s")||"").slice(0,5), from: (q.get("n")||"Bir arkadaşın").slice(0,24) };
-  S.mode = "solo"; S.form = form;
+  S.mode = "solo"; S.form = form; S.sl = q.get("l")==="1";
   try { history.replaceState(null, "", location.pathname); } catch(e){}
 }
 function challengeBanner(){
@@ -26,7 +26,7 @@ function challengeResultHTML(){
 }
 function challengeLink(){
   const base = IS_WEB ? location.origin+location.pathname : SITE_URL;
-  return `${base}?m=${(S.seed>>>0).toString(36)}&d=${encodeURIComponent(S.form)}&s=${recStr()}&n=${encodeURIComponent(myName())}`;
+  return `${base}?m=${(S.seed>>>0).toString(36)}&d=${encodeURIComponent(S.form)}&s=${recStr()}&n=${encodeURIComponent(myName())}${S.sl?"&l=1":""}`;
 }
 async function shareChallenge(){
   const url = challengeLink(), txt = LANG==="tr" ? `⚔️ ${myName()} sana Süper Lig 7-0'da meydan okuyor! Ben ${recStr()} yaptım, aynı kurayla sen kaç yaparsın?` : LANG==="en" ? `⚔️ ${myName()} challenges you on Süper Lig 7-0! I went ${recStr()}, what can you do with the same draw?` : `⚔️ ¡${myName()} te reta en Süper Lig 7-0! Yo hice ${recStr()}, ¿cuánto haces tú con el mismo sorteo?`;

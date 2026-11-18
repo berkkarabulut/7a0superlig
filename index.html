@@ -928,7 +928,7 @@ function renderStart(){
       <button class="card mode invcard" onclick="openInvite()"><b>📨 Arkadaşını davet et</b><span class="mut">Linki WhatsApp'tan at, bakalım o 7-0 yapabilecek mi.</span></button>
     </div>
     ${S.homePick||S.challenge?`<div class="card" id="setupcard">
-      ${S.sl?`<div class="sl-ban">🏆 <b>${GUNCEL.sezon} Süper Lig modu</b> · Rakiplerin bu sezonun Süper Lig takımları. Bu modun sonuçları sıralamaya yazılmaz. <button class="btn ghost sl-off" onclick="S.sl=false;renderStart()">Kapat</button></div>`:""}
+      ${S.sl?`<div class="sl-ban">🏆 <b>${GUNCEL.sezon} Süper Lig modu</b> · Kurada bu sezonun Süper Lig takımları çıkar, rakiplerin de onlar. Bu modun sonuçları sıralamaya yazılmaz. <button class="btn ghost sl-off" onclick="S.sl=false;renderStart()">Kapat</button></div>`:""}
       <h3>Diziliş</h3>
       <div class="row">${Object.keys(FORMATIONS).map(f=>`<button class="chip ${f===S.form?"on":""}" onclick="S.form='${f}';renderStart()">${f}</button>`).join("")}</div>
       <h3 style="margin-top:16px">Oyun tarzı</h3>
@@ -952,7 +952,7 @@ function startDraft(){
   toTop();
   if (S.mode==="daily"){ const k=todayKey(); RNG = seeded([...k].reduce((a,c)=>a*31+c.charCodeAt(0),7)); S.deck = shuffle(POOL).slice(0,40); S.deckI = 0; }
   else { if (S.challenge){ S.form = S.challenge.form; S.seed = S.challenge.seed; } else S.seed = Math.floor(Math.random()*2e9);
-    RNG = seeded(S.seed); S.deck = shuffle(POOL); S.deckI = 0; }
+    RNG = seeded(S.seed); S.deck = shuffle(S.sl ? CUR : POOL); S.deckI = 0; }
   bump("g");
   S.slots = FORMATIONS[S.form].map(([pos,x,y])=>({pos,x,y,p:null}));
   S.phase = "xi"; S.bench = [];
@@ -977,9 +977,10 @@ function roll(){
   if (S.deck){ let k=0; do { t = S.deck[S.deckI % S.deck.length]; S.deckI++; k++; } while (k<S.deck.length && !t.players.some(p=>!inSquad(p.n) && openSlots().some(s=>natural(p,s.pos)))); }
   else {
     const useful = x => x.players.some(p => !inSquad(p.n) && openSlots().some(s=>natural(p,s.pos)));
-    let c = POOL.filter(x=>!S.drawn.has(x.id) && useful(x));
-    if(!c.length){ S.drawn.clear(); c = POOL.filter(useful); }
-    if(!c.length) c = POOL;
+    const PL = S.sl ? CUR : POOL;
+    let c = PL.filter(x=>!S.drawn.has(x.id) && useful(x));
+    if(!c.length){ S.drawn.clear(); c = PL.filter(useful); }
+    if(!c.length) c = PL;
     t = rnd(c);
   }
   S.drawn.add(t.id); S.cur = t; S.rolls++; S.sel = null;
@@ -2341,7 +2342,7 @@ function readChallengeFromUrl(){
   const seed = parseInt(m, 36); if (!isFinite(seed)) return;
   const form = FORMATIONS[q.get("d")] ? q.get("d") : "4-3-3";
   S.challenge = { seed, form, rec: (q.get("s")||"").slice(0,5), from: (q.get("n")||"Bir arkadaşın").slice(0,24) };
-  S.mode = "solo"; S.form = form;
+  S.mode = "solo"; S.form = form; S.sl = q.get("l")==="1";
   try { history.replaceState(null, "", location.pathname); } catch(e){}
 }
 function challengeBanner(){
@@ -2359,7 +2360,7 @@ function challengeResultHTML(){
 }
 function challengeLink(){
   const base = IS_WEB ? location.origin+location.pathname : SITE_URL;
-  return `${base}?m=${(S.seed>>>0).toString(36)}&d=${encodeURIComponent(S.form)}&s=${recStr()}&n=${encodeURIComponent(myName())}`;
+  return `${base}?m=${(S.seed>>>0).toString(36)}&d=${encodeURIComponent(S.form)}&s=${recStr()}&n=${encodeURIComponent(myName())}${S.sl?"&l=1":""}`;
 }
 async function shareChallenge(){
   const url = challengeLink(), txt = LANG==="tr" ? `⚔️ ${myName()} sana Süper Lig 7-0'da meydan okuyor! Ben ${recStr()} yaptım, aynı kurayla sen kaç yaparsın?` : LANG==="en" ? `⚔️ ${myName()} challenges you on Süper Lig 7-0! I went ${recStr()}, what can you do with the same draw?` : `⚔️ ¡${myName()} te reta en Süper Lig 7-0! Yo hice ${recStr()}, ¿cuánto haces tú con el mismo sorteo?`;
@@ -2708,7 +2709,7 @@ const DICT_ROWS = [
 ];
 DICT_ROWS.push([". Buna karşı etkili:",". Works well against it:",". Funciona contra él:"],["Ne şiş yansın ne kebap.","Safe and steady.","Ni fu ni fa."],["— boş (oyundan çıktı)","— empty (left the pitch)","— vacío (fuera del campo)"],["Yedek seçerken oyuncuya dokunman yeter, kulübede uygun yere kendisi geçer. Sarı: asıl mevkisi. Turuncu: mevki dışı (oyuncu −4, takım gücü −2.5). Kadro başına 2 yeniden çekme hakkın var.","When picking subs, just tap a player and he takes the right bench spot. Yellow: natural position. Orange: out of position (player −4, team strength −2.5). You have 2 redraws per squad.","Al elegir suplentes, toca un jugador y se coloca solo en el banquillo. Amarillo: su posición. Naranja: fuera de posición (jugador −4, fuerza −2.5). Tienes 2 cambios de sorteo por plantilla."],["G1","G1","G1"],["G2","G2","G2"],["G3","G3","G3"],["S16","R16","OCT"],["ÇF","QF","CU"],["YF","SF","SF"],["F","F","F"],["Sen de 11'ini kur","Build your own XI","Crea tu propio once"],["SÜPER LİG","SÜPER LİG","SÜPER LİG"],["Maç önü","Pre-match","Previa"],["Günün meydan okuması","Daily challenge","Reto del día"]);
 DICT_ROWS.push(["⚔️ Güncel derbi simülasyonu","⚔️ Current derby simulator","⚔️ Simulador de derbi actual"],["Güncel derbi simülasyonu","Current derby simulator","Simulador de derbi actual"],["⚔️ Güncel kadrolarla derbi simülasyonu","⚔️ Derby simulator with current squads","⚔️ Simulador de derbi con plantillas actuales"],["Ev sahibi","Home","Local"],["Deplasman","Away","Visitante"],["⇅ Yer değiştir","⇅ Swap","⇅ Cambiar"],["VS","VS","VS"],["▶️ Maçı oynat","▶️ Play the match","▶️ Jugar el partido"],["📤 Paylaş","📤 Share","📤 Compartir"],["Kopyalandı ✓","Copied ✓","Copiado ✓"],["Kopyalanamadı","Couldn't copy","No se pudo copiar"],["Berabere","Draw","Empate"],["Gol yok, 0-0.","No goals, 0-0.","Sin goles, 0-0."],["beraberlik","draw","empate"],["GÜNCEL","CURRENT","ACTUAL"],["Güncel kadro yok.","No current squads.","No hay plantillas actuales."]);
-DICT_ROWS.push(["🎮 Kendi 11'ini kur","🎮 Build your own XI","🎮 Crea tu propio once"],["Kendi 11'ini kur","Build your own XI","Crea tu propio once"],["Efsanelerden draft yap, bu sezonun Süper Lig takımlarına karşı oyna. Sonuç sıralamaya yazılmaz.","Draft from the legends and play this season's Süper Lig teams. The result isn't ranked.","Elige leyendas y juega contra los equipos de la Süper Lig de esta temporada. El resultado no entra en la clasificación."],["🏟️ Güncel bir takımla gir","🏟️ Enter with a current team","🏟️ Entra con un equipo actual"],["Güncel bir takımla gir","Enter with a current team","Entra con un equipo actual"],["Takımlar ve güçleri","Teams and their strength","Equipos y su fuerza"],[" · Rakiplerin bu sezonun Süper Lig takımları. Bu modun sonuçları sıralamaya yazılmaz."," · Your opponents are this season's Süper Lig teams. Results in this mode aren't ranked."," · Tus rivales son los equipos de la Süper Lig de esta temporada. Los resultados de este modo no se clasifican."],["Kapat","Close","Cerrar"],["Güçlüler","Strongest","Los fuertes"],["Orta sıra","Mid-table","Zona media"],["Diğerleri","The rest","El resto"]);
+DICT_ROWS.push(["🎮 Kendi 11'ini kur","🎮 Build your own XI","🎮 Crea tu propio once"],["Kendi 11'ini kur","Build your own XI","Crea tu propio once"],["Bu sezonun Süper Lig takımlarından takım çek, oyuncularını seç, 11'ini kur ve yine güncel takımlara karşı oyna. Sonuç sıralamaya yazılmaz.","Draw this season's Süper Lig teams, pick their players, build your XI and play the current teams. The result isn't ranked.","Saca equipos de la Süper Lig de esta temporada, elige sus jugadores, arma tu once y juega contra los equipos actuales. El resultado no entra en la clasificación."],["🏟️ Güncel bir takımla gir","🏟️ Enter with a current team","🏟️ Entra con un equipo actual"],["Güncel bir takımla gir","Enter with a current team","Entra con un equipo actual"],["Takımlar ve güçleri","Teams and their strength","Equipos y su fuerza"],[" · Kurada bu sezonun Süper Lig takımları çıkar, rakiplerin de onlar. Bu modun sonuçları sıralamaya yazılmaz."," · You draw this season's Süper Lig teams and play against them too. Results in this mode aren't ranked."," · En el sorteo salen equipos de la Süper Lig de esta temporada y también son tus rivales. Los resultados de este modo no se clasifican."],["Kapat","Close","Cerrar"],["Güçlüler","Strongest","Los fuertes"],["Orta sıra","Mid-table","Zona media"],["Diğerleri","The rest","El resto"]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];
@@ -3338,7 +3339,7 @@ function renderSL(){
     <h1>🏆 ${GUNCEL.sezon} Süper Lig turnuvası</h1>
     <p class="mut">Bildiğin turnuva: 3 grup maçı, sonra son 16, çeyrek final, yarı final, final. Bu sefer rakiplerin bu sezonun ${CUR.length} Süper Lig takımı, güncel kadrolarıyla. Kadrolar ${GUNCEL.guncelleme.split("-").reverse().join(".")} itibarıyla.</p>
     <div class="modes sl-modes">
-      <button class="card mode" onclick="slDraft()"><b><span class="mi">🎮</span> Kendi 11'ini kur</b><span class="mut">Efsanelerden draft yap, bu sezonun Süper Lig takımlarına karşı oyna. Sonuç sıralamaya yazılmaz.</span></button>
+      <button class="card mode" onclick="slDraft()"><b><span class="mi">🎮</span> Kendi 11'ini kur</b><span class="mut">Bu sezonun Süper Lig takımlarından takım çek, oyuncularını seç, 11'ini kur ve yine güncel takımlara karşı oyna. Sonuç sıralamaya yazılmaz.</span></button>
       <button class="card mode" onclick="renderRealPicker('Güncel ${GUNCEL.sezon}')"><b><span class="mi">🏟️</span> Güncel bir takımla gir</b><span class="mut">Takımını seç, diğer ${CUR.length-1} takıma karşı şampiyonluğa oyna. Sonuç gerçek takım tablosuna yazılır.</span></button>
     </div>
     <h3 style="margin-top:18px">Takımlar ve güçleri</h3>

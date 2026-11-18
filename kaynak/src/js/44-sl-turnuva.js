@@ -17,7 +17,7 @@ function renderSL(){
     <h1>🏆 ${GUNCEL.sezon} Süper Lig turnuvası</h1>
     <p class="mut">Bildiğin turnuva: 3 grup maçı, sonra son 16, çeyrek final, yarı final, final. Bu sefer rakiplerin bu sezonun ${CUR.length} Süper Lig takımı, güncel kadrolarıyla. Kadrolar ${GUNCEL.guncelleme.split("-").reverse().join(".")} itibarıyla.</p>
     <div class="modes sl-modes">
-      <button class="card mode" onclick="slDraft()"><b><span class="mi">🎮</span> Kendi 11'ini kur</b><span class="mut">Efsanelerden draft yap, bu sezonun Süper Lig takımlarına karşı oyna. Sonuç sıralamaya yazılmaz.</span></button>
+      <button class="card mode" onclick="slDraft()"><b><span class="mi">🎮</span> Kendi 11'ini kur</b><span class="mut">Bu sezonun Süper Lig takımlarından takım çek, oyuncularını seç, 11'ini kur ve yine güncel takımlara karşı oyna. Sonuç sıralamaya yazılmaz.</span></button>
       <button class="card mode" onclick="renderRealPicker('Güncel ${GUNCEL.sezon}')"><b><span class="mi">🏟️</span> Güncel bir takımla gir</b><span class="mut">Takımını seç, diğer ${CUR.length-1} takıma karşı şampiyonluğa oyna. Sonuç gerçek takım tablosuna yazılır.</span></button>
     </div>
     <h3 style="margin-top:18px">Takımlar ve güçleri</h3>

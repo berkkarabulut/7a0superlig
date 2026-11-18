@@ -19,6 +19,9 @@ eval(s+`;choosePens=async a=>kickOrder(a).slice(0,5).map(p=>p.n);
  for(const t of legends){ try{ pickReal(t.id); S.mode="solo"; S.sl=true; await run("draft "+t.id,stats2); }catch(e){errs++;console.log("HATA",e)} }
  console.log("güncel takımla 54 turnuva:",JSON.stringify(stats));
  console.log("efsane kadroyla SL 30 turnuva:",JSON.stringify(stats2),"hata:",errs);
+ pickMode("solo"); S.sl=true; startDraft(); for(let i=0;i<30;i++){ if(!S.cur.cur){console.log("HATA draft güncel olmayan takım",S.cur.id);errs++;break} S.rerolls=5; reroll(); }
+ if(!challengeLink().includes("l=1")){console.log("HATA meydan linkinde SL yok");errs++}
+ console.log("SL draft: 30 çekilişin hepsi güncel takım");
  S.sl=false; pickMode("solo"); if(S.sl) {console.log("HATA sl sıfırlanmadı");errs++}
  if(errs) process.exitCode=1;
 })();`);

@@ -57,20 +57,38 @@ function oppXI(o){
   const pl=[...o.pl].sort((a,b)=>b.r-a.r), take=(g,n)=>pl.filter(p=>p.pos===g).slice(0,n);
   let xi=[...take("GK",1),...take("DF",4),...take("MF",4),...take("FW",2)];
   for (const p of pl){ if (xi.length>=11) break; if (!xi.includes(p) && p.pos!=="GK") xi.push(p); }
-  const Y={GK:5,DF:16,MF:29,FW:42}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
+  const Y={GK:4,DF:14.5,MF:26,FW:37.5}, lines={GK:[],DF:[],MF:[],FW:[]}; xi.forEach(p=>lines[p.pos].push(p));
   return Object.entries(lines).flatMap(([g,ps])=>ps.map((p,i)=>({p, x: ps.length===1?50:12+i*76/(ps.length-1), y:Y[g]})));
 }
 // iki takım tek sahada: rakip üst yarı, sen alt yarı. edit=true iken (devre arası) senin oyuncuların sürüklenebilir.
+// bizim yarı sahadaki dikey konumlar: aşağıdan (kaleci) yukarı yerleştirilir; aynı kolondaki (yatayda yakın) her oyuncu
+// altındakinden en az MP_GAP yukarıda durur. Yer yetmezse hepsi orantılı sıkıştırılır (MP_TOP ile kaleci arası).
+const MP_GAP = 11.5, MP_TOP = 46, MP_GK = 96;
+function mpYs(xi){
+  const base = s => s.pos==="GK" ? MP_GK : 52 + Math.max(0, Math.min(64, s.y-13)) * 35/64;
+  const Y = new Array(xi.length), order = xi.map((s,i)=>i).sort((i,j)=>xi[j].y - xi[i].y || (xi[j].pos==="GK") - (xi[i].pos==="GK"));
+  const done = [];
+  for (const i of order){
+    let y = base(xi[i]);
+    for (const j of done) if (Math.abs(xi[i].x - xi[j].x) < 21 && xi[j].y >= xi[i].y) y = Math.min(y, Y[j] - MP_GAP);
+    Y[i] = y; done.push(i);
+  }
+  // yer yetmezse sahadaki oyuncular (kaleci hariç) en alttaki oyuncuya sabitlenerek yukarıdan sıkıştırılır
+  const out = Y.filter((y,i)=>xi[i].pos!=="GK"), lo = Math.min(...out), hi = Math.max(...out);
+  if (lo < MP_TOP && hi > lo) for (let i = 0; i < Y.length; i++) if (xi[i].pos!=="GK") Y[i] = MP_TOP + (Y[i] - lo) * (hi - MP_TOP) / (hi - lo);
+  return Y;
+}
 function matchPitchHTML(M,T,o,ht){
   const sel = ht && ht.sel, selP = ht && ht.selP;
   const sc = M._sc || M.g || [0,0], rate = liveRatings(M, M._shown ?? M.ev.length, sc[0], sc[1]);
   const mine = new Set(T.xi.map(s=>kitC(s.p.team)[0])), oc0 = kitC(o.t.team), oc = mine.has(oc0[0]) ? [oc0[1], oc0[0]] : oc0; // aynı renkse rakip deplasman formasıyla
-  const opp = oppXI(o).map(({p,x,y})=>`<div class="slot full mp-o" style="--x:${x};--y:${y}">${SHIRT(oc, p.r)}${lrTag(rate(p,1))}<div class="nm">${esc(p.n)}</div></div>`).join("");
-  const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = s.pos==="GK" ? 94.5 : 55+Math.max(0,Math.min(64,s.y-13))*29/64;
+  const opp = oppXI(o).map(({p,x,y})=>`<div class="slot full mp-o" style="--x:${x};--y:${y}">${SHIRT(oc, p.r)}${lrTag(rate(p,1))}<div class="nm" title="${esc(p.n)}">${esc(short(p.n))}</div></div>`).join("");
+  const YS = mpYs(T.xi);
+  const me = T.xi.map((s,k)=>{ const p=slotPlayer(M,T,k), y = YS[k];
     if (!p) return `<div class="slot mp-m" style="--x:${s.x};--y:${y}"><div class="dot">🟥</div></div>`;
     const pen=penOf(p,s.pos), subIn=M.subs.some(x=>x.in.n===p.n), act = ht ? `data-drag="x:${k}" data-drop="x:${k}"` : "";
     let prev=""; if (selP && sel && sel[0]==="b"){ const pp=penOf(selP,s.pos), pr=Math.round(effR(T,selP,s.pos)); prev=`<div class="prev ${pp?"bad":"good"}">${pp?"▼":"✓"} ${pr}</div>`; }
-    return `<div class="slot full mp-m ${sel==="x:"+k?"selx":""} ${pen?"offp":""}" style="--x:${s.x};--y:${y}" ${act}>${SHIRT(kitC(p.team), p.r, pen>0)}${lrTag(rate(p,0))}<div class="nm">${subIn?"🔁 ":""}${esc(p.n)}</div>${prev}</div>`; }).join("");
+    return `<div class="slot full mp-m ${sel==="x:"+k?"selx":""} ${pen?"offp":""}" style="--x:${s.x};--y:${y}" ${act}>${SHIRT(kitC(p.team), p.r, pen>0)}${lrTag(rate(p,0))}<div class="nm" title="${esc(p.n)}">${subIn?"🔁 ":""}${esc(short(p.n))}</div>${prev}</div>`; }).join("");
   return `<div class="pitch mp ${ht?"mp-edit":""}"><div class="mp-lbl mp-lt">${kit(o.t.team)}${esc(o.name)}</div><div class="mp-lbl mp-lb">${esc(myName())}</div>${opp}${me}</div>`;
 }
 function onPitchHTML(M,T){

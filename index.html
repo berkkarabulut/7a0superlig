@@ -2485,7 +2485,18 @@ async function bump(path){
   try { const db = await fb(); const ref = db.ref("stats/"+todayKey()+"/"+path);
     if (ref.transaction) await ref.transaction(v => (v||0)+1); } catch(e){}
 }
+// Google Analytics (GA4): sadece "Kabul et" diyenlerde, sadece canlı sitede yüklenir
+const GA_ID = "G-ZE84DSPDQ5";
+function loadGA(){
+  try {
+    if (typeof IS_WEB==="undefined" || !IS_WEB || !consentOK() || window.__ga) return; window.__ga = true;
+    window.dataLayer = window.dataLayer || []; window.gtag = function(){ dataLayer.push(arguments); };
+    gtag("js", new Date()); gtag("config", GA_ID);
+    const sc = document.createElement("script"); sc.async = true; sc.src = "https://www.googletagmanager.com/gtag/js?id="+GA_ID; document.head.appendChild(sc);
+  } catch(e){}
+}
 async function trackVisit(){
+  loadGA();
   try {
     const db = await fb(), day = todayKey();
     bump("v");
@@ -2498,7 +2509,7 @@ async function trackVisit(){
     bump("dev/"+(window.innerWidth<=700?"telefon":"bilgisayar"));
   } catch(e){}
 }
-function onConsentGranted(){ if (typeof IS_WEB!=="undefined" && IS_WEB) fb().then(db=>db.ref(`stats/${todayKey()}/u/${visitorId()}`).set(true)).catch(()=>{}); }
+function onConsentGranted(){ loadGA(); if (typeof IS_WEB!=="undefined" && IS_WEB) fb().then(db=>db.ref(`stats/${todayKey()}/u/${visitorId()}`).set(true)).catch(()=>{}); }
 async function renderStats(){
   show("play");
   $("play").innerHTML = `${topBar("")}<h1>📊 Site istatistikleri</h1><div class="card" id="statbox"><p class="mut">Yükleniyor…</p></div>`;

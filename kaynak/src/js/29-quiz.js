@@ -7,6 +7,7 @@ function quizBest11(t){
   return xi;
 }
 function startQuiz(practice){
+  navPush("quiz", () => startQuiz(practice));
   toTop();
   const day = todayKey(), seed = practice ? Math.floor(Math.random()*1e9) : [...("quiz"+day)].reduce((a,c)=>a*31+c.charCodeAt(0),11);
   const R = seeded(seed), pick = a => a[Math.floor(R()*a.length)];

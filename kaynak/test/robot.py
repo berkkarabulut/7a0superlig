@@ -192,7 +192,7 @@ def run(name, vp, b):
         pg.evaluate("()=>{ if(S.phase==='bench') skipBench(); SPEEDS['Hızlı']=40; S.speed='Hızlı'; startTournament(); }"); time.sleep(0.3)
         pg.evaluate("()=>{ $('kskip').click(); }"); time.sleep(0.5); pg.evaluate("()=>{ $('kgo').click(); }"); time.sleep(0.4)
         pg.evaluate("()=>{ if (mustFix(S.T)) autoFixMiss(); document.getElementById('missmodal')?.remove(); runMatch(); }"); time.sleep(1.2)
-        chk("26-mac-ici-cikis", ".exitc"); click(".exitc"); time.sleep(0.3)
+        chk("26-mac-ici-cikis", ".exitc"); click(".exitc.exith"); time.sleep(0.3)
         chk("26b-cikis-onay", "#exitmodal .btn", "#exitmodal .btn.ghost"); click("#exitmodal .btn:not(.ghost)"); time.sleep(2.5)
         if not pg.evaluate("()=>!!document.querySelector('.modes')"): fails.append(f"[{name}] çıkış: ana sayfaya dönmedi")
         chk("26c-ana-sayfa", ".modes .mode")

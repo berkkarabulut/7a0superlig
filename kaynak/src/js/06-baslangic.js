@@ -3,6 +3,7 @@ let S = { mode:"solo", form:"4-3-3", style:"Dengeli", almanac:false, speed:"Norm
 function renderStart(){
   if (S.sl) return renderSLSetup(); // SL modunda "baştan kur / yeni kadro" SL kurulum ekranına döner
   if (S.homePick || S.challenge) return renderSetupPage(); // mod seçildiyse kurulum ayrı sayfa
+  NAV.length = 0; navPush("home", () => { S.homePick=false; S.challenge=null; S.sl=false; S.santraOn=false; renderStart(); });
   RNG = Math.random;
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);
@@ -35,6 +36,7 @@ function pickMode(m){
 }
 // Efsaneler Draft'ı / Günün Meydan Okuması kurulumu: ayrı sayfa, üstte geri tuşu
 function renderSetupPage(){
+  { const m=S.mode, ch=S.challenge; navPush("setup:"+m+(ch?":ch":""), () => { S.mode=m; S.challenge=ch; S.homePick=true; S.sl=false; S.santraOn=false; renderStart(); }); }
   RNG = Math.random;
   const daily = store.get("daily:"+todayKey(), null);
   const title = S.challenge ? "⚔️ Meydan okuma" : S.mode==="daily" ? "🗓️ Günün Meydan Okuması" : "🎮 Efsaneler Draft'ı";

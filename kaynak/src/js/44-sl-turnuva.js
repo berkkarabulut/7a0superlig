@@ -12,6 +12,7 @@ function curXI(t){
 const curPow = t => t.cur ? (t._pw ?? (t._pw = teamPower(curXI(t), oppStyle(t)).ovr)) : 0;
 function slDraft(){ S.mode = "solo"; S.homePick = true; S.challenge = null; S.sl = true; renderSLSetup(); }
 function renderSLSetup(){
+  navPush("slsetup", () => slDraft());
   RNG = Math.random;
   $("play").innerHTML = `${topBar("")}
     <h1>🎮 ${GUNCEL.sezon} · Kendi 11'ini kur</h1>
@@ -28,6 +29,7 @@ function renderSLSetup(){
   toTop();
 }
 function renderSL(){
+  navPush("sl", () => { S.sl=false; renderSL(); });
   const list = [...CUR].sort((a,b)=>curPow(b)-curPow(a));
   $("play").innerHTML = `${topBar("")}
     <h1>🏆 ${GUNCEL.sezon} Süper Lig turnuvası</h1>

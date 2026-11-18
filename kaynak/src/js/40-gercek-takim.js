@@ -34,6 +34,7 @@ function realBest(t){
 const realOk = t => !!realBest(t);
 const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
 function renderRealPicker(club){
+  navPush("real", () => renderRealPicker(S.realClub));
   S.sl = false; S.santraOn = false;
   S.realClub = club || S.realClub || "Tümü";
   const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);

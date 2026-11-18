@@ -430,6 +430,8 @@ th{text-transform:uppercase;font-family:var(--cond);letter-spacing:.5px}
 .pathbar{display:flex;justify-content:flex-start;margin:0 0 12px}
 .exitc{background:transparent;border:1px solid var(--line);color:var(--mut);font:700 14px var(--cond);letter-spacing:.6px;text-transform:uppercase;padding:6px 12px;border-radius:3px;cursor:pointer}
 .exitc:hover{color:#fff;border-color:var(--acc)}
+.pathbar .exitc+.exitc{margin-left:8px}
+.exitc.exith{color:var(--txt)}
 
 /* ===== ayarlar butonu ===== */
 .setbtn{white-space:nowrap}
@@ -992,6 +994,7 @@ let S = { mode:"solo", form:"4-3-3", style:"Dengeli", almanac:false, speed:"Norm
 function renderStart(){
   if (S.sl) return renderSLSetup(); // SL modunda "baştan kur / yeni kadro" SL kurulum ekranına döner
   if (S.homePick || S.challenge) return renderSetupPage(); // mod seçildiyse kurulum ayrı sayfa
+  NAV.length = 0; navPush("home", () => { S.homePick=false; S.challenge=null; S.sl=false; S.santraOn=false; renderStart(); });
   RNG = Math.random;
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);
@@ -1024,6 +1027,7 @@ function pickMode(m){
 }
 // Efsaneler Draft'ı / Günün Meydan Okuması kurulumu: ayrı sayfa, üstte geri tuşu
 function renderSetupPage(){
+  { const m=S.mode, ch=S.challenge; navPush("setup:"+m+(ch?":ch":""), () => { S.mode=m; S.challenge=ch; S.homePick=true; S.sl=false; S.santraOn=false; renderStart(); }); }
   RNG = Math.random;
   const daily = store.get("daily:"+todayKey(), null);
   const title = S.challenge ? "⚔️ Meydan okuma" : S.mode==="daily" ? "🗓️ Günün Meydan Okuması" : "🎮 Efsaneler Draft'ı";
@@ -1262,6 +1266,7 @@ function statsHTML(){
     ${(()=>{ const c=chemistry(pl); return c.parts.length?`<div class="chemlist">⚗️ Kimya${c.total>=5?" (en fazla +5)":""}: ${c.parts.map(esc).join(" · ")}</div>`:`<div class="chemlist mut">⚗️ Kimya için aynı kulüpten 3+ oyuncu ya da efsane ikililer topla.</div>`; })()}`;
 }
 function renderReady(){
+  { const so=S.santraOn, md=S.mode, sl=S.sl; navPush("ready", () => { S.santraOn=so; S.mode=md; S.sl=sl; S.T=null; S.phase="ready"; renderReady(); }); }
   const fresh = S.phase !== "ready"; S.phase = "ready"; S.sel = null;
   $("play").innerHTML = `${topBar("Kurduğun kadro silinecek.")}
   <div class="grid">
@@ -1412,7 +1417,7 @@ function addTbl(n,gf,ga){ const r=S.T.table[n]; r.O++; r.A+=gf; r.Y+=ga; if(gf>g
 function sortedTable(){ return Object.values(S.T.table).sort((a,b)=>b.P-a.P||(b.A-b.Y)-(a.A-a.Y)||b.A-a.A); }
 
 function pathHTML(){
-  const T=S.T; if (T.single) return `<div class="pathbar">${exitBtn("")}</div><div class="path"><span class="cur">⚽ Santra · tek maç</span></div>`; return `<div class="pathbar">${exitBtn(T.done?"":"Turnuvan yarıda kalacak, bu kadroyla oynadıkların kaybolur.")}</div><div class="path">${STAGES.map((s,i)=>`<span class="${i<T.res.length?T.res[i].res:(i===T.i&&!T.done?"cur":"")}">${s}${i<T.res.length?` ${T.res[i].g1}-${T.res[i].g2}`:""}</span>`).join("")}</div>`;
+  const T=S.T; if (T.single) return `<div class="pathbar">${exitBtn(T.done?"":"Maç yarıda kalacak.")}</div><div class="path"><span class="cur">⚽ Santra · tek maç</span></div>`; return `<div class="pathbar">${exitBtn(T.done?"":"Turnuvan yarıda kalacak, bu kadroyla oynadıkların kaybolur.")}</div><div class="path">${STAGES.map((s,i)=>`<span class="${i<T.res.length?T.res[i].res:(i===T.i&&!T.done?"cur":"")}">${s}${i<T.res.length?` ${T.res[i].g1}-${T.res[i].g2}`:""}</span>`).join("")}</div>`;
 }
 function tableHTML(){
   return `<table><tr><th>Grup</th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>P</th></tr>${sortedTable().map(r=>`<tr class="${r.n===myName()?"me":""}"><td>${esc(r.n)}</td><td>${r.O}</td><td>${r.G}</td><td>${r.B}</td><td>${r.M}</td><td>${r.A}</td><td>${r.Y}</td><td>${r.P}</td></tr>`).join("")}</table>`;
@@ -1439,6 +1444,7 @@ function autoFix(T){
   return notes;
 }
 function startTournament(){
+  navPush("tour", () => {});
   RNG = S.seed!=null && S.mode!=="daily" ? seeded(S.seed*7+13) : Math.random;
   const xi = S.slots.map(s=>({pos:s.pos, x:s.x, y:s.y, p:{...s.p, r:s.p.base}}));
   const bench = (S.bench||[]).filter(s=>s.p).map(s=>({...s.p}));
@@ -2572,6 +2578,7 @@ function quizBest11(t){
   return xi;
 }
 function startQuiz(practice){
+  navPush("quiz", () => startQuiz(practice));
   toTop();
   const day = todayKey(), seed = practice ? Math.floor(Math.random()*1e9) : [...("quiz"+day)].reduce((a,c)=>a*31+c.charCodeAt(0),11);
   const R = seeded(seed), pick = a => a[Math.floor(R()*a.length)];
@@ -2650,21 +2657,40 @@ function goalFx(mine){
   box.style.position="relative"; box.appendChild(d); setTimeout(()=>d.remove(), 1500);
 }
 function paintSoundBtn(){ /* ses ayarı sadece ⚙️ Ayarlar menüsünde */ }
-// ---------- her ekranda ana sayfaya çıkış ----------
-const exitBtn = (what) => `<button class="exitc" onclick="askExit('${what||""}')">← Ana sayfa</button>`;
+// ---------- her ekranda: ← Geri (bir önceki ekran) ve ⌂ Ana sayfa ----------
+// Sayfa çizen her fonksiyon navPush ile kendini geçmişe yazar; aynı sayfanın yeniden çizimi kaydı tekrarlamaz, sadece günceller.
+const NAV = [];
+function navPush(key, fn){
+  const top = NAV.at(-1);
+  if (top && top.key===key){ top.fn = fn; return; }
+  const i = NAV.findIndex(x=>x.key===key);
+  if (i>=0) NAV.splice(i); // aynı sayfaya geri gelindiyse arkasındakiler düşer
+  NAV.push({key, fn}); if (NAV.length>30) NAV.shift();
+}
+const exitBtn = (what) => { const w = (what||"").replace(/'/g,"\\'");
+  return `<button class="exitc" onclick="askBack('${w}')">← Geri</button><button class="exitc exith" onclick="askExit('${w}')">⌂ Ana sayfa</button>`; };
 const topBar = (what) => `<div class="pathbar">${exitBtn(what)}</div>`;
 const toTop = () => { try { window.scrollTo(0,0); } catch(e){} };
-function askExit(what){
-  if (typeof document==="undefined" || !document.createElement) return goHome();
-  if (!what) return goHome();
+function exitModal(title, what, go){
+  if (typeof document==="undefined" || !document.createElement || !what) return go();
   document.getElementById("exitmodal")?.remove();
   const d=document.createElement("div"); d.id="exitmodal"; d.className="modal";
-  d.innerHTML = `<div class="mbox"><h3 style="margin-top:0">Ana sayfaya dönülsün mü?</h3><p>${what}</p>
-    <div class="row"><button class="btn" onclick="goHome()">Evet, çık</button><button class="btn ghost" onclick="document.getElementById('exitmodal').remove()">Devam et</button></div></div>`;
+  d.innerHTML = `<div class="mbox"><h3 style="margin-top:0">${title}</h3><p>${what}</p>
+    <div class="row"><button class="btn" id="exitgo">Evet, çık</button><button class="btn ghost" onclick="document.getElementById('exitmodal').remove()">Devam et</button></div></div>`;
   d.addEventListener("click", e=>{ if(e.target===d) d.remove(); });
   document.body.appendChild(d);
+  document.getElementById("exitgo").onclick = go;
 }
-function goHome(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.T=null; S.Q=null; S.sl=false; S.santraOn=false; S.homePick=false; S.challenge=null; show("play"); renderStart(); try{ window.scrollTo(0,0); }catch(e){} }
+function askExit(what){ exitModal("Ana sayfaya dönülsün mü?", what, goHome); }
+function askBack(what){ exitModal("Bir önceki ekrana dönülsün mü?", what, goBack); }
+function stopRun(){ document.getElementById?.("exitmodal")?.remove?.(); S.runId=(S.runId||0)+1; S.Q=null; }
+function goBack(){
+  stopRun();
+  NAV.pop(); const prev = NAV.pop();
+  if (!prev) return goHome();
+  show("play"); prev.fn(); toTop();
+}
+function goHome(){ stopRun(); NAV.length=0; S.T=null; S.sl=false; S.santraOn=false; S.homePick=false; S.challenge=null; show("play"); renderStart(); toTop(); }
 // ---------- temalar: aynı tasarım, farklı renk paleti (TV yayını renkleri çalışma anında eşlenir) ----------
 const THEMES = {
   tv:     { ad:"📺 TV Yayını", meta:"#14061f", map:{} },
@@ -2843,6 +2869,7 @@ DICT_ROWS.push(["📊 Maç istatistikleri","📊 Match stats","📊 Estadística
 DICT_ROWS.push(["Göster ▾","Show ▾","Mostrar ▾"],["Gizle ▴","Hide ▴","Ocultar ▴"]);
 DICT_ROWS.push(["Genel","Overview","General"],["Oyuncular","Players","Jugadores"],["Maçlar","Matches","Partidos"],["Biz","Us","Nosotros"],["Rakipler","Opponents","Rivales"],["Gol","Goals","Goles"],["İsabetli şut","Shots on target","Tiros a puerta"],["Sarı kart","Yellow cards","Amarillas"],["Kırmızı kart","Red cards","Rojas"],["⚽ Gol","⚽ Goals","⚽ Goles"],["📈 Ortalama not","📈 Average rating","📈 Nota media"],["🏅 Maçın oyuncusu","🏅 Player of the match","🏅 Jugador del partido"],["🎯 Şut","🎯 Shots","🎯 Tiros"],["Mvk","Pos","Pos"],["Dk","Min","Min"],["İsb","OT","AP"],["MO","PoM","JdP"],["Not","Rating","Nota"],["Sana gol atanlar:","Scored against you:","Te marcaron:"],["🧤 Kalende gol yok.","🧤 No goals conceded.","🧤 Portería a cero."],["Başlığa dokun, o sütuna göre sırala. Not 10 üzerinden: gol, asist, isabetli şut, kartlar, sonuç ve (defans/kaleci için) yenilen gole göre hesaplanır.","Tap a header to sort. Ratings are out of 10, based on goals, assists, shots on target, cards, the result and (for defenders/keepers) goals conceded.","Toca una cabecera para ordenar. Nota sobre 10 según goles, asistencias, tiros a puerta, tarjetas, resultado y (defensas/porteros) goles encajados."],["🏅 Maçın oyuncusu:","🏅 Player of the match:","🏅 Jugador del partido:"],["İsabet","On target","A puerta"],["Kart","Cards","Tarjetas"],["⭐ Maçın yıldızı","⭐ Star of the match","⭐ Estrella del partido"],["⭐ Turnuvanın yıldızı","⭐ Star of the tournament","⭐ Estrella del torneo"]);
 DICT_ROWS.push(["🎮 Efsaneler Draft'ı","🎮 Legends Draft","🎮 Draft de leyendas"],["🗓️ Günün Meydan Okuması","🗓️ Daily Challenge","🗓️ Reto del día"],["⚔️ Meydan okuma","⚔️ Challenge","⚔️ Desafío"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario."]);
+DICT_ROWS.push(["← Geri","← Back","← Atrás"],["⌂ Ana sayfa","⌂ Home","⌂ Inicio"],["Bir önceki ekrana dönülsün mü?","Go back to the previous screen?","¿Volver a la pantalla anterior?"],["Maç yarıda kalacak.","The match will be abandoned.","El partido quedará a medias."]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
 for (const k of ["Dengeli","Topa sahip ol","Önde baskı","Kontra atak","Kanat oyunu","Uzun top","Otobüsü çek"]) DICT[k+":"] = [DICT[k][0]+":", DICT[k][1]+":"];
 DICT["GOL!"] = ["GOAL!","¡GOL!"]; DICT["GOL…"] = ["GOAL…","GOL…"];
@@ -3127,6 +3154,7 @@ function realBest(t){
 const realOk = t => !!realBest(t);
 const realLabel = () => { const t = findTeam(S.realId); return t ? `${t.season} ${t.team}` : ""; };
 function renderRealPicker(club){
+  navPush("real", () => renderRealPicker(S.realClub));
   S.sl = false; S.santraOn = false;
   S.realClub = club || S.realClub || "Tümü";
   const GN = "Güncel "+GUNCEL.sezon, clubs = ["Tümü",GN,"Galatasaray","Fenerbahçe","Beşiktaş","Trabzonspor","Diğer"], big = clubs.slice(2,6);
@@ -3375,6 +3403,7 @@ function curXI(t){
 const curPow = t => t.cur ? (t._pw ?? (t._pw = teamPower(curXI(t), oppStyle(t)).ovr)) : 0;
 function slDraft(){ S.mode = "solo"; S.homePick = true; S.challenge = null; S.sl = true; renderSLSetup(); }
 function renderSLSetup(){
+  navPush("slsetup", () => slDraft());
   RNG = Math.random;
   $("play").innerHTML = `${topBar("")}
     <h1>🎮 ${GUNCEL.sezon} · Kendi 11'ini kur</h1>
@@ -3391,6 +3420,7 @@ function renderSLSetup(){
   toTop();
 }
 function renderSL(){
+  navPush("sl", () => { S.sl=false; renderSL(); });
   const list = [...CUR].sort((a,b)=>curPow(b)-curPow(a));
   $("play").innerHTML = `${topBar("")}
     <h1>🏆 ${GUNCEL.sezon} Süper Lig turnuvası</h1>
@@ -3551,6 +3581,7 @@ function saSelect(k){
     <div class="mut sa-meta">${t.cur?"":`${esc(t.note||"")} · `}güç ${t.cur?curPow(t):teamPower(oppPlayers(t), oppStyle(t)).ovr}${coachOf(t)?` · TD ${esc(coachOf(t))}`:""}</div></div>`;
 }
 function renderSantra(){
+  navPush("santra", () => renderSantra());
   S.santraOn = false; S.sl = false;
   const A = saState();
   $("play").innerHTML = `${topBar("")}
@@ -3565,6 +3596,7 @@ function santraGo(){ const A = saState(); pickReal(A.me); S.santraOn = true; ren
 // rakip de gerçek takım: senin takımın gibi tam kimya bonusu alsın (yoksa seçen taraf hep avantajlı olur)
 function saOpp(t){ const o = opp(t); o.pw = teamPower(o.pl.map(p=>({...p, key:t.id, team:t.team})), o.pw.style); return o; }
 function startSantra(){
+  navPush("tour", () => {});
   const A = saState(), ot = findTeam(A.op); if (!ot) return renderSantra();
   RNG = Math.random;
   const xi = S.slots.map(s=>({pos:s.pos, x:s.x, y:s.y, p:{...s.p, r:s.p.base}}));

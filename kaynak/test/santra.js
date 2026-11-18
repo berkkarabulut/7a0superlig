@@ -19,6 +19,13 @@ eval(s+`;choosePens=async a=>kickOrder(a).slice(0,5).map(p=>p.n);
    st[r.res]++; if(r.pen) st.pen++;
    const before=S.T; startSantra(); if(S.T===before||S.T.res.length) throw "rövanş yeni maç kurmadı";
  }catch(e){errs++;console.log("HATA",e)} }
+ // geri tuşu zinciri: ana sayfa -> santra -> kadro -> maç; geri -> kadro -> santra -> ana sayfa
+ goHome(); renderSantra(); santraGo(); startSantra(); goBack(); if(!els.play.innerHTML.includes("startSantra()")) {console.log("HATA geri: kadro ekranına dönmedi");errs++}
+ goBack(); if(!els.play.innerHTML.includes("sa-sel")) {console.log("HATA geri: Santra seçimine dönmedi");errs++}
+ goBack(); if(!els.play.innerHTML.includes("renderSantra()")||els.play.innerHTML.includes("sa-sel")) {console.log("HATA geri: ana sayfaya dönmedi");errs++}
+ renderSL(); slDraft(); goBack(); if(!els.play.innerHTML.includes("sl-row")) {console.log("HATA geri: SL kurulumdan SL menüsüne dönmedi");errs++}
+ renderRealPicker("Tümü"); goBack(); if(!els.play.innerHTML.includes("sl-row")) {console.log("HATA geri: gerçek takımdan SL menüsüne dönmedi");errs++}
+ console.log("geri tuşu zinciri kontrol edildi");
  console.log("40 santra maçı:",JSON.stringify(st),"hata:",errs);
  if(errs) process.exitCode=1;
 })();`);

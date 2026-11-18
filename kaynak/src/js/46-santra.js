@@ -25,6 +25,7 @@ function saSelect(k){
     <div class="mut sa-meta">${t.cur?"":`${esc(t.note||"")} · `}güç ${t.cur?curPow(t):teamPower(oppPlayers(t), oppStyle(t)).ovr}${coachOf(t)?` · TD ${esc(coachOf(t))}`:""}</div></div>`;
 }
 function renderSantra(){
+  navPush("santra", () => renderSantra());
   S.santraOn = false; S.sl = false;
   const A = saState();
   $("play").innerHTML = `${topBar("")}
@@ -39,6 +40,7 @@ function santraGo(){ const A = saState(); pickReal(A.me); S.santraOn = true; ren
 // rakip de gerçek takım: senin takımın gibi tam kimya bonusu alsın (yoksa seçen taraf hep avantajlı olur)
 function saOpp(t){ const o = opp(t); o.pw = teamPower(o.pl.map(p=>({...p, key:t.id, team:t.team})), o.pw.style); return o; }
 function startSantra(){
+  navPush("tour", () => {});
   const A = saState(), ot = findTeam(A.op); if (!ot) return renderSantra();
   RNG = Math.random;
   const xi = S.slots.map(s=>({pos:s.pos, x:s.x, y:s.y, p:{...s.p, r:s.p.base}}));

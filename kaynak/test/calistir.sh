@@ -5,6 +5,7 @@ HTML="${HTML:-$(cd ..; cd ..; pwd)/index.html}"; export HTML
 fail=0
 run(){ echo "▶ $1"; out=$(timeout 600 node "$1.js" 2>&1); echo "$out" | grep -v "^    at" | tail -4; if echo "$out" | grep -q "HATA\|SyntaxError\|ReferenceError\|TypeError"; then echo "   ❌ $1"; fail=1; fi; }
 run kadro-tekrar; run kura-kilit; run turnuva; run skor-oranlar; run ilk11-kalicilik; run gercek-takim; run sl-turnuva; run santra; run atak-bar; run saha-hatlar; run firebase
+echo "▶ kayıt / devam et"; python3 kayit.py "$HTML" || fail=1
 echo "▶ saha çakışma"; python3 saha-cakisma.py "$HTML" || fail=1
 echo "▶ ekran robotu (Türkçe)"; python3 robot.py "$HTML" || fail=1
 echo "▶ ekran robotu (İngilizce)"; DIL=en python3 robot.py "$HTML" || fail=1

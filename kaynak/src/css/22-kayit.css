@@ -1,0 +1,7 @@
+/* yarım kalan oyun: ana sayfanın en üstünde devam notu */
+.devam-kart{border:2px solid var(--gold);background:linear-gradient(135deg,#3a1d00cc,#1d0b2ccc);margin:4px 0 16px;padding:14px 16px}
+.devam-ust{font-size:16px}
+.devam-ozet{margin-top:6px;font-size:15px}
+.devam-not{margin-top:4px;font-size:13px}
+.devam-btn{margin-top:10px;gap:8px}
+.devam-btn .btn{flex:1 1 auto}

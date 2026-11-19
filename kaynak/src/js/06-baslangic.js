@@ -8,6 +8,7 @@ function renderStart(){
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);
   $("play").innerHTML = `
+    ${kayitBanner()}
     <h1>${esc(myName())}, efsane 11'ini kur, 7-0 yap.</h1>
     <p class="mut">Süper Lig'de 1980'den bugüne her sezonun ilk 3'ü: ${seasons.length} sezon, ${POOL.length} takım, ${POOL.reduce((a,t)=>a+t.players.length,0)} oyuncu.
     Takım çek, her takımdan bir oyuncu seç, 11'i tamamla, turnuvaya çık. Hedef: 7 maç, 7 galibiyet, kalende tek gol yok.</p>

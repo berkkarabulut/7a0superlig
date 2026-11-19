@@ -99,6 +99,7 @@ function benchHTML(){
     return `<div class="bslot ${rsel?"rsel":""} ${rok?"rok":""} ${s.p?"full":""} ${ok?"ok":""}" ${S.phase==="ready"&&s.p?`onclick="readyTap('b',${si})"`:ok?`onclick="place(${si})"`:""}>${s.p?`<span class="rv ${tier(s.p.base)}">${showR(s.p.base)}</span><span class="bn">${esc(short(s.p.n))}</span>`:`<span class="bl">${LABEL[s.pos]}</span>`}</div>`; }).join("")}</div></div>`;
 }
 function renderDraft(){
+  kayitAl("draft");
   const bp = S.phase==="bench", filled = curSlots().filter(s=>s.p).length, t = S.cur, free = !anyPickable(), tc = kitC(t.team);
   const natOK = p => canPick(p) && openSlots().some(s=>natural(p,s.pos));
   const natList = t.players.filter(natOK);

@@ -110,7 +110,8 @@ async function runMatchInner(rid){
   const boost = STAGE_BOOST[i]||0; if (boost>0){ pw.att+=boost*0.5; pw.def+=boost; }
   const opw = {...o.pw}; if (boost<0){ opw.att-=boost; opw.def-=boost; }
   const pickSub = (role, used) => { const b=bestSub(T, role, used); if(!b) return null; return {...b, r:Math.round(effR(T,b,role)), pos:LINE(role), role}; };
-  const M = makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
+  const M = zarliMac(T, () => makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team}));
+  kayitAl("live");
   M._shown = 0; M._sc = [0,0];
   $("play").innerHTML = `
     ${pathHTML()}
@@ -193,7 +194,8 @@ async function runMatchInner(rid){
   tsRecord(T, r, L, pw, opw, o);
   let msg="";
   const sideNotes = [...r.reds.map(n=>`🟥 ${esc(n)} bir sonraki maçta cezalı.`), ...r.injs.map(n=>`🚑 ${esc(n)} ${T.outs[n].n} maç yok.`)];
-  if (T.single){ santraAfter(T, res, r, pen, sideNotes); return; }
+  T.mseed = null;
+  if (T.single){ kayitSil(); santraAfter(T, res, r, pen, sideNotes); return; }
   if (!isKo){
     addTbl(myName(), r.g1, r.g2); addTbl(o.name, r.g2, r.g1);
     const om = T.others[i]; addTbl(om.a,om.g1,om.g2); addTbl(om.b,om.g2,om.g1);
@@ -210,6 +212,7 @@ async function runMatchInner(rid){
   T.i++;
   const last = T.out || T.i===7;
   $("after").innerHTML = `${msg}${sideNotes.length&&!last?`<div class="mut" style="margin-top:6px">${sideNotes.join("<br>")}</div>`:""}${tsHTML(T,false,true)}<div class="row" style="margin-top:10px"><button class="btn ${last?"gold":""}" onclick="${last?"finish()":"nextStep()"}">${last?"Sonucu gör":"Sonraki maç: "+STAGES[T.i]}</button></div>`;
+  kayitAl("after");
 }
 
 // asıl skor tabelası görünmüyorsa üstte küçük skor şeridini göster; skor ve dakika #sc / #clk'tan kopyalanır

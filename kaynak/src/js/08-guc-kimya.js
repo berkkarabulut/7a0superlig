@@ -46,6 +46,7 @@ function statsHTML(){
     ${(()=>{ const c=chemistry(pl); return c.parts.length?`<div class="chemlist">⚗️ Kimya${c.total>=5?" (en fazla +5)":""}: ${c.parts.map(esc).join(" · ")}</div>`:`<div class="chemlist mut">⚗️ Kimya için aynı kulüpten 3+ oyuncu ya da efsane ikililer topla.</div>`; })()}`;
 }
 function renderReady(){
+  kayitAl("ready");
   { const so=S.santraOn, md=S.mode, sl=S.sl; navPush("ready", () => { S.santraOn=so; S.mode=md; S.sl=sl; S.T=null; S.phase="ready"; renderReady(); }); }
   const fresh = S.phase !== "ready"; S.phase = "ready"; S.sel = null;
   $("play").innerHTML = `${topBar("Kurduğun kadro silinecek.")}

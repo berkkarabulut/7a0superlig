@@ -33,6 +33,7 @@ function showMissAlert(m){
   document.body.appendChild(d);
 }
 function renderPre(){
+  kayitAl(S.T && S.T.mseed != null ? "live" : "pre");
   const T=S.T, i=T.i, o=T.o, isKo=i>=3, L=lineup(T), pw=teamPower(L,T.style), ctx=talkCtx(T,o), os=o.pw.style;
   const mor = n => { const v=T.mor[n]||0; return v>0?`<span class="mor up">▲${v}</span>`:v<0?`<span class="mor dn">▼${-v}</span>`:""; };
   const stat = p => isOut(T,p.n) ? `<span class="tag nr">${T.outs[p.n].k==="susp"?"🟥 cezalı":"🚑 sakat"}</span>` : "";

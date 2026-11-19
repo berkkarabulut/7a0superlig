@@ -769,6 +769,13 @@ body.yayin main{padding-top:6px}
 .minisc .atk-tr{height:9px}
 .lr{position:absolute;left:50%;top:13px;transform:translateX(-50%);background:#0b0312d9;padding:2px 4px;border-radius:4px;font:800 12.5px/1 var(--cond),sans-serif;color:#fff;white-space:nowrap;pointer-events:none;z-index:2}
 .lr.lr1{color:#ff4d4d}.lr.lr2{color:#ffa94d}.lr.lr3{color:#fff}.lr.lr4{color:#9dffa8}.lr.lr5{color:#2bff6a}.lr.lr6{color:#ffd23f}
+/* yarım kalan oyun: ana sayfanın en üstünde devam notu */
+.devam-kart{border:2px solid var(--gold);background:linear-gradient(135deg,#3a1d00cc,#1d0b2ccc);margin:4px 0 16px;padding:14px 16px}
+.devam-ust{font-size:16px}
+.devam-ozet{margin-top:6px;font-size:15px}
+.devam-not{margin-top:4px;font-size:13px}
+.devam-btn{margin-top:10px;gap:8px}
+.devam-btn .btn{flex:1 1 auto}
 </style>
 </head>
 <body>
@@ -1074,6 +1081,7 @@ function renderStart(){
   const seasons = Object.keys(DATA);
   const daily = store.get("daily:"+todayKey(), null);
   $("play").innerHTML = `
+    ${kayitBanner()}
     <h1>${esc(myName())}, efsane 11'ini kur, 7-0 yap.</h1>
     <p class="mut">Süper Lig'de 1980'den bugüne her sezonun ilk 3'ü: ${seasons.length} sezon, ${POOL.length} takım, ${POOL.reduce((a,t)=>a+t.players.length,0)} oyuncu.
     Takım çek, her takımdan bir oyuncu seç, 11'i tamamla, turnuvaya çık. Hedef: 7 maç, 7 galibiyet, kalende tek gol yok.</p>
@@ -1227,6 +1235,7 @@ function benchHTML(){
     return `<div class="bslot ${rsel?"rsel":""} ${rok?"rok":""} ${s.p?"full":""} ${ok?"ok":""}" ${S.phase==="ready"&&s.p?`onclick="readyTap('b',${si})"`:ok?`onclick="place(${si})"`:""}>${s.p?`<span class="rv ${tier(s.p.base)}">${showR(s.p.base)}</span><span class="bn">${esc(short(s.p.n))}</span>`:`<span class="bl">${LABEL[s.pos]}</span>`}</div>`; }).join("")}</div></div>`;
 }
 function renderDraft(){
+  kayitAl("draft");
   const bp = S.phase==="bench", filled = curSlots().filter(s=>s.p).length, t = S.cur, free = !anyPickable(), tc = kitC(t.team);
   const natOK = p => canPick(p) && openSlots().some(s=>natural(p,s.pos));
   const natList = t.players.filter(natOK);
@@ -1341,6 +1350,7 @@ function statsHTML(){
     ${(()=>{ const c=chemistry(pl); return c.parts.length?`<div class="chemlist">⚗️ Kimya${c.total>=5?" (en fazla +5)":""}: ${c.parts.map(esc).join(" · ")}</div>`:`<div class="chemlist mut">⚗️ Kimya için aynı kulüpten 3+ oyuncu ya da efsane ikililer topla.</div>`; })()}`;
 }
 function renderReady(){
+  kayitAl("ready");
   { const so=S.santraOn, md=S.mode, sl=S.sl; navPush("ready", () => { S.santraOn=so; S.mode=md; S.sl=sl; S.T=null; S.phase="ready"; renderReady(); }); }
   const fresh = S.phase !== "ready"; S.phase = "ready"; S.sel = null;
   $("play").innerHTML = `${topBar("Kurduğun kadro silinecek.")}
@@ -1607,6 +1617,7 @@ function showMissAlert(m){
   document.body.appendChild(d);
 }
 function renderPre(){
+  kayitAl(S.T && S.T.mseed != null ? "live" : "pre");
   const T=S.T, i=T.i, o=T.o, isKo=i>=3, L=lineup(T), pw=teamPower(L,T.style), ctx=talkCtx(T,o), os=o.pw.style;
   const mor = n => { const v=T.mor[n]||0; return v>0?`<span class="mor up">▲${v}</span>`:v<0?`<span class="mor dn">▼${-v}</span>`:""; };
   const stat = p => isOut(T,p.n) ? `<span class="tag nr">${T.outs[p.n].k==="susp"?"🟥 cezalı":"🚑 sakat"}</span>` : "";
@@ -1857,7 +1868,8 @@ async function runMatchInner(rid){
   const boost = STAGE_BOOST[i]||0; if (boost>0){ pw.att+=boost*0.5; pw.def+=boost; }
   const opw = {...o.pw}; if (boost<0){ opw.att-=boost; opw.def-=boost; }
   const pickSub = (role, used) => { const b=bestSub(T, role, used); if(!b) return null; return {...b, r:Math.round(effR(T,b,role)), pos:LINE(role), role}; };
-  const M = makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team});
+  const M = zarliMac(T, () => makeMatch(pw, opw, L, o.pl, {ref:T.ref, startRed:missing, pickSub, penOrder:T.penOrder, myName:myName(), oppName:o.t.team}));
+  kayitAl("live");
   M._shown = 0; M._sc = [0,0];
   $("play").innerHTML = `
     ${pathHTML()}
@@ -1940,7 +1952,8 @@ async function runMatchInner(rid){
   tsRecord(T, r, L, pw, opw, o);
   let msg="";
   const sideNotes = [...r.reds.map(n=>`🟥 ${esc(n)} bir sonraki maçta cezalı.`), ...r.injs.map(n=>`🚑 ${esc(n)} ${T.outs[n].n} maç yok.`)];
-  if (T.single){ santraAfter(T, res, r, pen, sideNotes); return; }
+  T.mseed = null;
+  if (T.single){ kayitSil(); santraAfter(T, res, r, pen, sideNotes); return; }
   if (!isKo){
     addTbl(myName(), r.g1, r.g2); addTbl(o.name, r.g2, r.g1);
     const om = T.others[i]; addTbl(om.a,om.g1,om.g2); addTbl(om.b,om.g2,om.g1);
@@ -1957,6 +1970,7 @@ async function runMatchInner(rid){
   T.i++;
   const last = T.out || T.i===7;
   $("after").innerHTML = `${msg}${sideNotes.length&&!last?`<div class="mut" style="margin-top:6px">${sideNotes.join("<br>")}</div>`:""}${tsHTML(T,false,true)}<div class="row" style="margin-top:10px"><button class="btn ${last?"gold":""}" onclick="${last?"finish()":"nextStep()"}">${last?"Sonucu gör":"Sonraki maç: "+STAGES[T.i]}</button></div>`;
+  kayitAl("after");
 }
 
 // asıl skor tabelası görünmüyorsa üstte küçük skor şeridini göster; skor ve dakika #sc / #clk'tan kopyalanır
@@ -2009,6 +2023,7 @@ function ourMatchesHTML(){
   return `<table>${S.T.res.map((r,i)=>`<tr><td class="mut" style="white-space:nowrap">${STAGES[i]}</td><td>${r.team?kit(r.team):""}${esc(r.opp)}</td><td class="${r.res}" style="white-space:nowrap"><b>${r.g1}-${r.g2}</b>${r.et&&!r.pen?` <small>(uz.)</small>`:""}${r.pen?` <small>(uz., pen. ${r.pen[0]}-${r.pen[1]})</small>`:""}</td></tr>`).join("")}</table>`;
 }
 function finish(){
+  kayitSil();
   toTop();
   const T=S.T; T.done=true;
   if (T.R && T.i>3 || (T.R && T.res.length>3)) finishBracket();
@@ -3012,7 +3027,7 @@ DICT_ROWS.push(["Göster ▾","Show ▾","Mostrar ▾"],["Gizle ▴","Hide ▴",
 DICT_ROWS.push(["Genel","Overview","General"],["Oyuncular","Players","Jugadores"],["Maçlar","Matches","Partidos"],["Biz","Us","Nosotros"],["Rakipler","Opponents","Rivales"],["Gol","Goals","Goles"],["İsabetli şut","Shots on target","Tiros a puerta"],["Sarı kart","Yellow cards","Amarillas"],["Kırmızı kart","Red cards","Rojas"],["⚽ Gol","⚽ Goals","⚽ Goles"],["📈 Ortalama not","📈 Average rating","📈 Nota media"],["🏅 Maçın oyuncusu","🏅 Player of the match","🏅 Jugador del partido"],["🎯 Şut","🎯 Shots","🎯 Tiros"],["Mvk","Pos","Pos"],["Dk","Min","Min"],["İsb","OT","AP"],["MO","PoM","JdP"],["Not","Rating","Nota"],["Sana gol atanlar:","Scored against you:","Te marcaron:"],["🧤 Kalende gol yok.","🧤 No goals conceded.","🧤 Portería a cero."],["Başlığa dokun, o sütuna göre sırala. Not 10 üzerinden: gol, asist, isabetli şut, kartlar, sonuç ve (defans/kaleci için) yenilen gole göre hesaplanır.","Tap a header to sort. Ratings are out of 10, based on goals, assists, shots on target, cards, the result and (for defenders/keepers) goals conceded.","Toca una cabecera para ordenar. Nota sobre 10 según goles, asistencias, tiros a puerta, tarjetas, resultado y (defensas/porteros) goles encajados."],["🏅 Maçın oyuncusu:","🏅 Player of the match:","🏅 Jugador del partido:"],["İsabet","On target","A puerta"],["Kart","Cards","Tarjetas"],["⭐ Maçın yıldızı","⭐ Star of the match","⭐ Estrella del partido"],["⭐ Turnuvanın yıldızı","⭐ Star of the tournament","⭐ Estrella del torneo"]);
 DICT_ROWS.push(["🎮 Efsaneler Draft'ı","🎮 Legends Draft","🎮 Draft de leyendas"],["🗓️ Günün Meydan Okuması","🗓️ Daily Challenge","🗓️ Reto del día"],["⚔️ Meydan okuma","⚔️ Challenge","⚔️ Desafío"],["1980'den 2026'ya her sezonun ilk 3'ünden takım çek, her takımdan bir oyuncu al, efsane 11'ini kur.","Draw teams from every season's top 3 from 1980 to 2026, take one player from each and build your legendary XI.","Saca equipos del top 3 de cada temporada de 1980 a 2026, toma un jugador de cada uno y arma tu once legendario."]);
 DICT_ROWS.push(["← Geri","← Back","← Atrás"],["⌂ Ana sayfa","⌂ Home","⌂ Inicio"],["Bir önceki ekrana dönülsün mü?","Go back to the previous screen?","¿Volver a la pantalla anterior?"],["Maç yarıda kalacak.","The match will be abandoned.","El partido quedará a medias."]);
-DICT_ROWS.push(["Bu maç","This match","Este partido"],["Turnuva","Tournament","Torneo"],["Maçın oyuncusu","Player of the match","Jugador del partido"],["Atak","Attack","Ataque"],["Şampiyon","Champions","Campeón"],["1 · Sezon","1 · Season","1 · Temporada"],["2 · Takım","2 · Team","2 · Equipo"],["Bu takımla oyna ▶","Play with this team ▶","Jugar con este equipo ▶"],["Bir sezonun gerçek kadrosunu seç, 7-0 yapabilecek misin?","Pick a real squad from any season. Can you go 7-0?","Elige una plantilla real de cualquier temporada. ¿Puedes hacer 7-0?"],["Bu sezonda oynanabilir kadro yok.","No playable squad in this season.","No hay plantillas jugables en esta temporada."],["Güncel","Current","Actual"],["Beta sürüm:","Beta version:","Versión beta:"],["Kadrolar güncel olmayabilir. Şikayet ve önerilerini","Squads may not be up to date. Send complaints and suggestions via the","Las plantillas pueden no estar actualizadas. Envía quejas y sugerencias desde la pestaña"],["sekmesinden bekliyoruz.","tab.","."]);
+DICT_ROWS.push(["Yarım kalan oyunun var","You have an unfinished game","Tienes una partida sin terminar"],["Kaldığın yerden devam edebilirsin. Devam etmek istiyorsan \"Devam et\"e tıkla.","You can pick up where you left off. Tap \"Continue\" to carry on.","Puedes seguir donde lo dejaste. Toca \"Continuar\" para seguir."],["▶ Devam et","▶ Continue","▶ Continuar"],["✕ Sil, yeni oyun","✕ Delete, new game","✕ Borrar, nueva partida"],["Turnuva öncesi","Before the tournament","Antes del torneo"],["Maç öncesi","Before the match","Antes del partido"],["Maç oynanıyordu","Match in progress","Partido en curso"],["Bu maç","This match","Este partido"],["Turnuva","Tournament","Torneo"],["Maçın oyuncusu","Player of the match","Jugador del partido"],["Atak","Attack","Ataque"],["Şampiyon","Champions","Campeón"],["1 · Sezon","1 · Season","1 · Temporada"],["2 · Takım","2 · Team","2 · Equipo"],["Bu takımla oyna ▶","Play with this team ▶","Jugar con este equipo ▶"],["Bir sezonun gerçek kadrosunu seç, 7-0 yapabilecek misin?","Pick a real squad from any season. Can you go 7-0?","Elige una plantilla real de cualquier temporada. ¿Puedes hacer 7-0?"],["Bu sezonda oynanabilir kadro yok.","No playable squad in this season.","No hay plantillas jugables en esta temporada."],["Güncel","Current","Actual"],["Beta sürüm:","Beta version:","Versión beta:"],["Kadrolar güncel olmayabilir. Şikayet ve önerilerini","Squads may not be up to date. Send complaints and suggestions via the","Las plantillas pueden no estar actualizadas. Envía quejas y sugerencias desde la pestaña"],["sekmesinden bekliyoruz.","tab.","."]);
 DICT_ROWS.push(["Kendi 11'i","Own XI","Once propio"],["2026-27 Süper Lig","2026-27 Süper Lig","Süper Lig 2026-27"],["2026-27 Süper Lig turnuvasında rakiplerin bu sezonun gerçek kadroları. İster kendi 11'ini bu sezonun oyuncularından kur, ister güncel bir takımla gir; tabloya her takımın günün en iyi sonucu yazılır. Sıralama: galibiyet sayısı, averaj, atılan gol.","In the 2026-27 Süper Lig tournament your opponents are this season's real squads. Build your own XI from this season's players or enter with a current team; each team's best result of the day goes on the table. Ranking: wins, goal difference, goals scored.","En el torneo de la Süper Lig 2026-27 tus rivales son las plantillas reales de esta temporada. Arma tu once con jugadores de esta temporada o entra con un equipo actual; en la tabla queda el mejor resultado del día de cada equipo. Orden: victorias, diferencia de goles, goles a favor."]);
 DICT_ROWS.push(["📋 Taktik","📋 Tactics","📋 Táctica"],["👥 Kadro","👥 Squad","👥 Plantilla"],["🗣️ Konuşma","🗣️ Team talk","🗣️ Charla"],["⚽ Maç","⚽ Match","⚽ Partido"],["🎯 Anlayış","🎯 Approach","🎯 Planteamiento"],["🔁 Değişiklik","🔁 Subs","🔁 Cambios"],["⚽ 2. yarı","⚽ 2nd half","⚽ 2ª parte"],["İleri: Kadro ▶","Next: Squad ▶","Siguiente: Plantilla ▶"],["İleri: Konuşma ▶","Next: Team talk ▶","Siguiente: Charla ▶"],["İleri: Anlayış ▶","Next: Approach ▶","Siguiente: Planteamiento ▶"],["İleri: Değişiklik ▶","Next: Subs ▶","Siguiente: Cambios ▶"],["◀ Taktik","◀ Tactics","◀ Táctica"],["◀ Kadro","◀ Squad","◀ Plantilla"],["◀ Anlayış","◀ Approach","◀ Planteamiento"],["⏩ Direkt maça çık","⏩ Skip to the match","⏩ Ir al partido"],["⏩ Direkt başlat","⏩ Start now","⏩ Empezar ya"]);
 const DICT = {}; for (const r of DICT_ROWS) DICT[r[0]] = [r[1], r[2]];
@@ -3867,6 +3882,128 @@ function liveRatings(M, upto, a, b){
 // renkler: 5 altı kırmızı, 5-5.9 turuncu, 6-6.9 beyaz, 7-7.9 açık yeşil, 8-8.9 yeşil, 9+ altın
 const lrCls = r => r<5 ? "lr1" : r<6 ? "lr2" : r<7 ? "lr3" : r<8 ? "lr4" : r<9 ? "lr5" : "lr6";
 function lrTag(rt){ return `<span class="lr ${lrCls(rt)}">(${rt.toFixed(1)})</span>`; }
+// ---------- otomatik kayıt: telefon sekmeyi öldürse de kaldığın yerden devam ----------
+// Oyunun tüm durumu (S, içindeki turnuva T dahil) her önemli adımda bu cihaza (localStorage) yazılır.
+// Takım ve oyuncu nesneleri veri dosyasındaki asıllarına referansla, ortak/çevrimsel nesneler kimlikleri korunarak saklanır.
+// Kayıt noktaları: draft (her seçim), hazır ekranı, maç öncesi, maç başlarken (maçın zarı ile), maç sonu.
+const KAYIT_KEY = "sl70:kayit", KAYIT_V = 1;
+
+function kayitRefs(){
+  const T = new Map(), P = new Map();
+  for (const t of [...POOL, ...CUR]){ T.set(t, t.id); t.players.forEach((p,i)=>P.set(p, [t.id, i])); }
+  return {T, P};
+}
+function kayitKodla(root){
+  const {T:TR, P:PR} = kayitRefs(), ids = new Map(), out = [];
+  const e = v => {
+    if (v === null || typeof v !== "object") return typeof v === "function" ? undefined : v;
+    if (typeof Node !== "undefined" && v instanceof Node) return undefined;
+    const tid = TR.get(v); if (tid) return {$t: tid};
+    const pr = PR.get(v); if (pr) return {$p: pr};
+    if (ids.has(v)) return {$r: ids.get(v)};
+    const id = out.length; ids.set(v, id); out.push(null);
+    let o, kind;
+    const nz = x => { const y = e(x); return y === undefined ? null : y; };
+    if (Array.isArray(v)){ kind = 1; o = v.map(nz); }
+    else if (v instanceof Set){ kind = 2; o = [...v].map(nz); }
+    else if (v instanceof Map){ kind = 3; o = [...v].map(([k, x]) => [nz(k), nz(x)]); }
+    else { kind = 0; o = {}; for (const k of Object.keys(v)){ const y = e(v[k]); if (y !== undefined) o[k] = y; } }
+    out[id] = [kind, o];
+    return {$r: id};
+  };
+  return {root: e(root), out};
+}
+function kayitCoz(enc){
+  const objs = enc.out.map(([k]) => k === 1 ? [] : k === 2 ? new Set() : k === 3 ? new Map() : {});
+  const d = v => {
+    if (v === null || typeof v !== "object") return v;
+    if (v.$t) return findTeam(v.$t);
+    if (v.$p){ const t = findTeam(v.$p[0]); return t ? t.players[v.$p[1]] : null; }
+    if ("$r" in v) return objs[v.$r];
+    return v;
+  };
+  enc.out.forEach(([kind, o], i) => {
+    const tgt = objs[i];
+    if (kind === 1) o.forEach((x, j) => tgt[j] = d(x));
+    else if (kind === 2) o.forEach(x => tgt.add(d(x)));
+    else if (kind === 3) o.forEach(([k, x]) => tgt.set(d(k), d(x)));
+    else for (const k of Object.keys(o)) tgt[k] = d(o[k]);
+  });
+  return d(enc.root);
+}
+
+// nerede: "draft" | "ready" | "pre" | "live" | "after"
+function kayitAl(nerede){
+  try {
+    if (typeof stIsOn === "function" && stIsOn()) return;     // TikTok yayın modunda kayıt yok
+    const veri = { v: KAYIT_V, t: Date.now(), nerede, ozet: kayitOzet(nerede), S: kayitKodla(S) };
+    localStorage.setItem(KAYIT_KEY, JSON.stringify(veri));
+  } catch(e){ /* depolama dolu ya da kapalı: oyun yine çalışır */ }
+}
+function kayitSil(){ try { localStorage.removeItem(KAYIT_KEY); } catch(e){} }
+function kayitOku(){
+  try {
+    const v = JSON.parse(localStorage.getItem(KAYIT_KEY) || "null");
+    if (!v || v.v !== KAYIT_V) return null;
+    if (Date.now() - v.t > 7*24*3600e3){ kayitSil(); return null; }   // bir haftadan eski kayıt silinir
+    return v;
+  } catch(e){ return null; }
+}
+function kayitOzet(nerede){
+  const T = S.T, mod = S.santraOn ? "Santra" : slOn() ? "2026-27 Süper Lig" : S.mode==="daily" ? "Günün meydan okuması" : S.mode==="real" ? "Gerçek takım" : "Efsaneler Draft'ı";
+  let yer = "";
+  if (nerede === "draft") yer = `Draft · ${(S.slots||[]).filter(s=>s.p).length}/11 oyuncu`;
+  else if (nerede === "ready") yer = "Turnuva öncesi";
+  else if (T && T.single) yer = nerede === "live" ? "Maç oynanıyordu" : "Maç öncesi";
+  else if (T){
+    const st = STAGES[Math.min(T.i, STAGES.length-1)];
+    yer = nerede === "after" ? `${STAGES[T.i] ? STAGES[T.i]+" öncesi" : "Turnuva sonu"}` : nerede === "live" ? `${st} oynanıyordu` : `${st} öncesi`;
+    const w = T.res.filter(r=>r.res==="W").length; if (T.res.length) yer += ` · ${T.res.length} maç, ${w} galibiyet`;
+  }
+  return {mod, yer};
+}
+
+function devamEt(){
+  const k = kayitOku(); if (!k) return renderStart();
+  let yeni;
+  try { yeni = kayitCoz(k.S); } catch(e){ kayitSil(); return renderStart(); }
+  for (const key of Object.keys(S)) delete S[key];
+  Object.assign(S, yeni);
+  S.runId = (S.runId||0) + 1;
+  NAV.length = 0; navPush("home", () => { S.T=null; S.sl=false; S.santraOn=false; S.homePick=false; S.challenge=null; renderStart(); });
+  show("play");
+  const T = S.T;
+  try {
+    if (k.nerede === "draft") renderDraft();
+    else if (k.nerede === "ready") renderReady();
+    else if (T && k.nerede === "pre") renderPre();
+    else if (T && k.nerede === "live"){ renderPre(); setTimeout(() => runMatch(), 0); }   // maç ortasında kalan maç: direkt aynı maça dön (taktik değiştirip yeniden deneme yok)
+    else if (T && k.nerede === "after"){ if (T.single || T.done) { kayitSil(); renderStart(); } else if (T.i >= STAGES.length || T.out) finish(); else nextStep(); }
+    else renderStart();
+  } catch(e){ console.error(e); kayitSil(); renderStart(); }
+  toTop();
+}
+function kayitBanner(){
+  const k = kayitOku(); if (!k) return "";
+  const dk = Math.max(1, Math.round((Date.now() - k.t) / 60000)), ne = dk < 60 ? `${dk} dk önce` : dk < 1440 ? `${Math.round(dk/60)} saat önce` : `${Math.round(dk/1440)} gün önce`;
+  return `<div class="card devam-kart" id="devamkart">
+    <div class="devam-ust">⏸️ <b>Yarım kalan oyunun var</b> <span class="mut">· ${ne}</span></div>
+    <div class="devam-ozet"><b>${esc(k.ozet.mod)}</b> · ${esc(k.ozet.yer)}</div>
+    <div class="mut devam-not">Kaldığın yerden devam edebilirsin. Devam etmek istiyorsan "Devam et"e tıkla.</div>
+    <div class="row devam-btn"><button class="btn gold" onclick="devamEt()">▶ Devam et</button><button class="btn ghost" onclick="kayitSil();document.getElementById('devamkart').remove()">✕ Sil, yeni oyun</button></div>
+  </div>`;
+}
+
+// maçın zarı: aynı maç tekrar açılırsa birebir aynı oynanır (çıkıp girerek kaybedilen maçı yeniden deneme olmasın)
+function zarliMac(T, olustur){
+  if (T.mseed == null) T.mseed = Math.floor(Math.random() * 2147483647);
+  let s = T.mseed | 0;
+  const rng = () => { s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const sar = (f, ctx) => (...a) => { const R = Math.random; Math.random = rng; try { return f.apply(ctx, a); } finally { Math.random = R; } };
+  const M = sar(olustur, null)();
+  for (const k of Object.keys(M)) if (typeof M[k] === "function") M[k] = sar(M[k], M);
+  return M;
+}
 // ---------- açılış ----------
 applyTheme();
 applyI18nData();

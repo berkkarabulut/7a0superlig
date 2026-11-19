@@ -1,4 +1,5 @@
 function finish(){
+  kayitSil();
   toTop();
   const T=S.T; T.done=true;
   if (T.R && T.i>3 || (T.R && T.res.length>3)) finishBracket();

@@ -4183,7 +4183,8 @@ function modBind(c) {
 // Gizli giriş: logodaki yazıya hızlıca 5 kez dokun (butonlar hariç)
 (() => {
   let taps = 0, tt = 0;
-  const lg = document.querySelector(".hdr .logo"); if (!lg) return;
+  if (typeof document === "undefined" || typeof document.querySelector !== "function") return;
+  const lg = document.querySelector(".hdr .logo"); if (!lg || !lg.addEventListener) return;
   lg.addEventListener("click", e => {
     if (e.target.closest("button")) return;
     const n = Date.now(); taps = n - tt < 700 ? taps + 1 : 1; tt = n;

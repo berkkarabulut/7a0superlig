@@ -18,8 +18,8 @@
         ".write": "!data.exists()",
         ".validate": "newData.hasChildren(['n','t']) && newData.child('n').isString() && newData.child('n').val().length >= 4 && newData.child('n').val().length <= 40 && newData.child('t').val() <= now && !newData.child('n').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/)"
       },
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
     },
     "daily": {
       "$day": {
@@ -28,7 +28,7 @@
           ".write": "!data.exists()",
           ".validate": "newData.hasChildren(['name','w','gf','ga','spent','ovr','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').isNumber() && newData.child('gf').val() <= 80 && newData.child('ga').isNumber() && newData.child('ga').val() <= 80 && newData.child('spent').isNumber() && newData.child('spent').val() <= 100 && newData.child('t').val() <= now && !newData.child('name').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/)"
         },
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
       }
     },
     "solo": {
@@ -38,7 +38,7 @@
           ".write": true,
           ".validate": "newData.hasChildren(['name','w','gf','ga','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').val() <= 80 && newData.child('ga').val() <= 80 && !newData.child('name').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/)"
         },
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
       }
     },
     "reports": {
@@ -46,8 +46,8 @@
         ".write": "!data.exists()",
         ".validate": "newData.hasChildren(['season','team','player','type','t']) && newData.child('player').val().length <= 60 && (!newData.child('msg').exists() || newData.child('msg').val().length <= 300) && newData.child('t').val() <= now"
       },
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
       ".indexOn": [
         "t"
       ]
@@ -106,7 +106,7 @@
           ".write": true,
           ".validate": "newData.hasChildren(['name','w','gf','ga','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').val() <= 80 && newData.child('ga').val() <= 80 && !newData.child('name').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/) && (!newData.child('team').exists() || (newData.child('team').isString() && newData.child('team').val().length <= 40))"
         },
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
       }
     },
     "sl": {
@@ -116,12 +116,12 @@
           ".write": true,
           ".validate": "newData.hasChildren(['name','w','gf','ga','t']) && newData.child('name').isString() && newData.child('name').val().length <= 40 && newData.child('w').isNumber() && newData.child('w').val() >= 0 && newData.child('w').val() <= 7 && newData.child('gf').val() <= 80 && newData.child('ga').val() <= 80 && !newData.child('name').val().toLowerCase().matches(/.*(orospu|siktir|sikerim|sikeyim|yarrak|amcık|amcik|amına|pezevenk|kahpe|ibne|kürt|kürd|kurd|ermeni|yahudi|çingene|cingene|zenci|gavur|nazi|hitler|pkk|fetö).*/) && (!newData.child('team').exists() || (newData.child('team').isString() && newData.child('team').val().length <= 40))"
         },
-        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
+        ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)"
       }
     },
     "mods": {
-      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
-      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com')",
+      ".read": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com' || root.child('mods').child(auth.token.email.replace('.', ',')).val() == true)",
+      ".write": "auth != null && auth.token.email_verified == true && (auth.token.email == '7a0superlig@gmail.com' || auth.token.email == 'berkordr2@gmail.com' || auth.token.email == 'mberkarabulut@gmail.com')",
       "$k": {
         ".validate": "newData.val() === true"
       }
